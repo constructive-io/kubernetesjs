@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import { ParsedArgs } from 'minimist';
 
 import { readAndParsePackageJson } from './package';
@@ -15,8 +15,8 @@ export const extractFirst = (argv: Partial<ParsedArgs>) => {
 // Function to display the version information
 export function displayVersion() {
   const pkg = readAndParsePackageJson();
-  console.log(chalk.green(`Name: ${pkg.name}`));
-  console.log(chalk.blue(`Version: ${pkg.version}`));
+  console.log(yanse.green(`Name: ${pkg.name}`));
+  console.log(yanse.blue(`Version: ${pkg.version}`));
 }
 
 export const usageText = `

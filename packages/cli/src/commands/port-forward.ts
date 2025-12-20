@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import { spawn } from 'child_process';
 import { CLIOptions, Inquirerer, Question } from 'inquirerer';
 import { KubernetesClient } from 'kubernetesjs';
@@ -19,7 +19,7 @@ async function promptServiceName(
     });
     
     if (!services.items || services.items.length === 0) {
-      console.log(chalk.yellow(`No services found in namespace ${namespace}`));
+      console.log(yanse.yellow(`No services found in namespace ${namespace}`));
       return '';
     }
     
@@ -40,7 +40,7 @@ async function promptServiceName(
     const { serviceName } = await prompter.prompt(argv, [question]);
     return serviceName;
   } catch (error) {
-    console.error(chalk.red(`Error getting services: ${error}`));
+    console.error(yanse.red(`Error getting services: ${error}`));
     return '';
   }
 }
@@ -64,7 +64,7 @@ async function promptPortMapping(
     });
     
     if (!service.spec || !service.spec.ports || service.spec.ports.length === 0) {
-      console.log(chalk.yellow(`No ports found in service ${serviceName}`));
+      console.log(yanse.yellow(`No ports found in service ${serviceName}`));
       return '';
     }
     
@@ -97,7 +97,7 @@ async function promptPortMapping(
     const { portMapping } = await prompter.prompt(argv, [portMappingQuestion]);
     return portMapping;
   } catch (error) {
-    console.error(chalk.red(`Error getting service ports: ${error}`));
+    console.error(yanse.red(`Error getting service ports: ${error}`));
     return '';
   }
 }
@@ -108,8 +108,8 @@ async function portForward(
   resourceName: string,
   portMapping: string
 ): Promise<void> {
-  console.log(chalk.blue(`Forwarding ports ${portMapping} to ${resourceType}/${resourceName} in namespace ${namespace}...`));
-  console.log(chalk.yellow('Press Ctrl+C to stop port forwarding'));
+  console.log(yanse.blue(`Forwarding ports ${portMapping} to ${resourceType}/${resourceName} in namespace ${namespace}...`));
+  console.log(yanse.yellow('Press Ctrl+C to stop port forwarding'));
   
   const kubectlArgs = [
     'port-forward',
@@ -186,6 +186,6 @@ export default async (
     
     await portForward(namespace as string, resourceType, resourceName, portMapping);
   } catch (error) {
-    console.error(chalk.red(`Error: ${error}`));
+    console.error(yanse.red(`Error: ${error}`));
   }
 };

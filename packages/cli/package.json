@@ -53,11 +53,11 @@
     "makage": "^0.1.8"
   },
   "dependencies": {
-    "chalk": "^4.1.0",
     "deepmerge": "^4.3.1",
     "inquirerer": "^2.0.8",
     "js-yaml": "^4.1.0",
     "kubernetesjs": "workspace:^",
-    "minimist": "^1.2.8"
+    "minimist": "^1.2.8",
+    "yanse": "^0.1.8"
   }
 }

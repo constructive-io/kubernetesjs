@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import { CLIOptions, Inquirerer, Question } from 'inquirerer';
 import { KubernetesClient } from 'kubernetesjs';
 import { ParsedArgs } from 'minimist';
@@ -66,12 +66,12 @@ async function promptResourceName(
     break;
       
   default:
-    console.log(chalk.yellow(`Resource type '${resourceType}' not implemented yet for selection`));
+    console.log(yanse.yellow(`Resource type '${resourceType}' not implemented yet for selection`));
     return '';
   }
   
   if (resources.length === 0) {
-    console.log(chalk.yellow(`No ${resourceType}s found in namespace ${namespace}`));
+    console.log(yanse.yellow(`No ${resourceType}s found in namespace ${namespace}`));
     return '';
   }
   
@@ -94,26 +94,26 @@ async function promptResourceName(
 }
 
 function describePod(pod: any): void {
-  console.log(chalk.bold(`Name:         ${pod.metadata.name}`));
-  console.log(chalk.bold(`Namespace:    ${pod.metadata.namespace}`));
-  console.log(chalk.bold(`Priority:     ${pod.spec.priority || 0}`));
-  console.log(chalk.bold(`Node:         ${pod.spec.nodeName || '<none>'}`));
-  console.log(chalk.bold(`Start Time:   ${pod.status.startTime || '<unknown>'}`));
+  console.log(yanse.bold(`Name:         ${pod.metadata.name}`));
+  console.log(yanse.bold(`Namespace:    ${pod.metadata.namespace}`));
+  console.log(yanse.bold(`Priority:     ${pod.spec.priority || 0}`));
+  console.log(yanse.bold(`Node:         ${pod.spec.nodeName || '<none>'}`));
+  console.log(yanse.bold(`Start Time:   ${pod.status.startTime || '<unknown>'}`));
   
-  console.log(chalk.bold('\nLabels:'));
+  console.log(yanse.bold('\nLabels:'));
   if (pod.metadata.labels) {
     Object.entries(pod.metadata.labels).forEach(([key, value]) => {
       console.log(`  ${key}=${value}`);
     });
   }
   
-  console.log(chalk.bold('\nStatus:       ' + pod.status.phase));
-  console.log(chalk.bold('IP:           ' + pod.status.podIP));
+  console.log(yanse.bold('\nStatus:       ' + pod.status.phase));
+  console.log(yanse.bold('IP:           ' + pod.status.podIP));
   
-  console.log(chalk.bold('\nContainers:'));
+  console.log(yanse.bold('\nContainers:'));
   if (pod.spec.containers) {
     pod.spec.containers.forEach((container: any) => {
-      console.log(chalk.bold(`  ${container.name}:`));
+      console.log(yanse.bold(`  ${container.name}:`));
       console.log(`    Image:      ${container.image}`);
       console.log(`    Ports:      ${container.ports?.map((p: any) => p.containerPort).join(', ') || '<none>'}`);
       
@@ -138,45 +138,45 @@ function describePod(pod: any): void {
     });
   }
   
-  console.log(chalk.bold('Events:'));
+  console.log(yanse.bold('Events:'));
   console.log('  <Events not available in this implementation>');
 }
 
 function describeService(service: any): void {
-  console.log(chalk.bold(`Name:              ${service.metadata.name}`));
-  console.log(chalk.bold(`Namespace:         ${service.metadata.namespace}`));
-  console.log(chalk.bold(`Labels:            ${JSON.stringify(service.metadata.labels || {})}`));
-  console.log(chalk.bold(`Selector:          ${JSON.stringify(service.spec.selector || {})}`));
-  console.log(chalk.bold(`Type:              ${service.spec.type}`));
-  console.log(chalk.bold(`IP:                ${service.spec.clusterIP}`));
+  console.log(yanse.bold(`Name:              ${service.metadata.name}`));
+  console.log(yanse.bold(`Namespace:         ${service.metadata.namespace}`));
+  console.log(yanse.bold(`Labels:            ${JSON.stringify(service.metadata.labels || {})}`));
+  console.log(yanse.bold(`Selector:          ${JSON.stringify(service.spec.selector || {})}`));
+  console.log(yanse.bold(`Type:              ${service.spec.type}`));
+  console.log(yanse.bold(`IP:                ${service.spec.clusterIP}`));
   
   if (service.spec.ports) {
-    console.log(chalk.bold('\nPorts:'));
+    console.log(yanse.bold('\nPorts:'));
     service.spec.ports.forEach((port: any) => {
       console.log(`  ${port.name || '<unnamed>'}: ${port.port}/${port.protocol} -> ${port.targetPort}`);
     });
   }
   
-  console.log(chalk.bold('\nSession Affinity: ' + (service.spec.sessionAffinity || 'None')));
+  console.log(yanse.bold('\nSession Affinity: ' + (service.spec.sessionAffinity || 'None')));
   
-  console.log(chalk.bold('\nEvents:'));
+  console.log(yanse.bold('\nEvents:'));
   console.log('  <Events not available in this implementation>');
 }
 
 function describeDeployment(deployment: any): void {
-  console.log(chalk.bold(`Name:               ${deployment.metadata.name}`));
-  console.log(chalk.bold(`Namespace:          ${deployment.metadata.namespace}`));
-  console.log(chalk.bold(`CreationTimestamp:  ${deployment.metadata.creationTimestamp}`));
-  console.log(chalk.bold(`Labels:             ${JSON.stringify(deployment.metadata.labels || {})}`));
-  console.log(chalk.bold(`Annotations:        ${JSON.stringify(deployment.metadata.annotations || {})}`));
-  console.log(chalk.bold(`Selector:           ${JSON.stringify(deployment.spec.selector.matchLabels || {})}`));
-  console.log(chalk.bold(`Replicas:           ${deployment.status.replicas || 0} desired | ${deployment.status.updatedReplicas || 0} updated | ${deployment.status.readyReplicas || 0} ready | ${deployment.status.availableReplicas || 0} available`));
-  console.log(chalk.bold(`StrategyType:       ${deployment.spec.strategy.type}`));
+  console.log(yanse.bold(`Name:               ${deployment.metadata.name}`));
+  console.log(yanse.bold(`Namespace:          ${deployment.metadata.namespace}`));
+  console.log(yanse.bold(`CreationTimestamp:  ${deployment.metadata.creationTimestamp}`));
+  console.log(yanse.bold(`Labels:             ${JSON.stringify(deployment.metadata.labels || {})}`));
+  console.log(yanse.bold(`Annotations:        ${JSON.stringify(deployment.metadata.annotations || {})}`));
+  console.log(yanse.bold(`Selector:           ${JSON.stringify(deployment.spec.selector.matchLabels || {})}`));
+  console.log(yanse.bold(`Replicas:           ${deployment.status.replicas || 0} desired | ${deployment.status.updatedReplicas || 0} updated | ${deployment.status.readyReplicas || 0} ready | ${deployment.status.availableReplicas || 0} available`));
+  console.log(yanse.bold(`StrategyType:       ${deployment.spec.strategy.type}`));
   
   if (deployment.spec.template && deployment.spec.template.spec.containers) {
-    console.log(chalk.bold('\nContainers:'));
+    console.log(yanse.bold('\nContainers:'));
     deployment.spec.template.spec.containers.forEach((container: any) => {
-      console.log(chalk.bold(`  ${container.name}:`));
+      console.log(yanse.bold(`  ${container.name}:`));
       console.log(`    Image:      ${container.image}`);
       console.log(`    Ports:      ${container.ports?.map((p: any) => p.containerPort).join(', ') || '<none>'}`);
       console.log(`    Environment: ${container.env?.map((e: any) => `${e.name}=${e.value}`).join(', ') || '<none>'}`);
@@ -185,14 +185,14 @@ function describeDeployment(deployment: any): void {
   }
   
   if (deployment.status.conditions) {
-    console.log(chalk.bold('\nConditions:'));
-    console.log(chalk.bold('  Type           Status  Reason'));
+    console.log(yanse.bold('\nConditions:'));
+    console.log(yanse.bold('  Type           Status  Reason'));
     deployment.status.conditions.forEach((condition: any) => {
       console.log(`  ${condition.type.padEnd(15)}${condition.status.padEnd(8)}${condition.reason || ''}`);
     });
   }
   
-  console.log(chalk.bold('\nEvents:'));
+  console.log(yanse.bold('\nEvents:'));
   console.log('  <Events not available in this implementation>');
 }
 
@@ -216,7 +216,7 @@ export default async (
       return;
     }
     
-    console.log(chalk.blue(`Describing ${resourceType} ${resourceName} in namespace ${namespace}...`));
+    console.log(yanse.blue(`Describing ${resourceType} ${resourceName} in namespace ${namespace}...`));
     
     switch (resourceType) {
     case 'pod':
@@ -259,9 +259,9 @@ export default async (
       break;
         
     default:
-      console.log(chalk.yellow(`Resource type '${resourceType}' not implemented yet`));
+      console.log(yanse.yellow(`Resource type '${resourceType}' not implemented yet`));
     }
   } catch (error) {
-    console.error(chalk.red(`Error: ${error}`));
+    console.error(yanse.red(`Error: ${error}`));
   }
 };

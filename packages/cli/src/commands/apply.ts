@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import * as fs from 'fs';
 import { CLIOptions, Inquirerer, Question } from 'inquirerer';
 import { KubernetesClient } from 'kubernetesjs';
@@ -26,7 +26,7 @@ async function applyResource(client: KubernetesClient, resource: any, namespace:
     throw new Error('Resource must have a name');
   }
   
-  console.log(chalk.blue(`Applying ${kind} "${name}" in namespace ${namespace}...`));
+  console.log(yanse.blue(`Applying ${kind} "${name}" in namespace ${namespace}...`));
   
   try {
     switch (kind) {
@@ -39,7 +39,7 @@ async function applyResource(client: KubernetesClient, resource: any, namespace:
         },
         body: resource
       });
-      console.log(chalk.green(`Deployment "${name}" created/updated successfully`));
+      console.log(yanse.green(`Deployment "${name}" created/updated successfully`));
       break;
         
     case 'service':
@@ -51,7 +51,7 @@ async function applyResource(client: KubernetesClient, resource: any, namespace:
         },
         body: resource
       });
-      console.log(chalk.green(`Service "${name}" created/updated successfully`));
+      console.log(yanse.green(`Service "${name}" created/updated successfully`));
       break;
         
     case 'pod':
@@ -63,7 +63,7 @@ async function applyResource(client: KubernetesClient, resource: any, namespace:
         },
         body: resource
       });
-      console.log(chalk.green(`Pod "${name}" created/updated successfully`));
+      console.log(yanse.green(`Pod "${name}" created/updated successfully`));
       break;
         
     case 'configmap':
@@ -75,7 +75,7 @@ async function applyResource(client: KubernetesClient, resource: any, namespace:
         },
         body: resource
       });
-      console.log(chalk.green(`ConfigMap "${name}" created/updated successfully`));
+      console.log(yanse.green(`ConfigMap "${name}" created/updated successfully`));
       break;
         
     case 'secret':
@@ -87,14 +87,14 @@ async function applyResource(client: KubernetesClient, resource: any, namespace:
         },
         body: resource
       });
-      console.log(chalk.green(`Secret "${name}" created/updated successfully`));
+      console.log(yanse.green(`Secret "${name}" created/updated successfully`));
       break;
         
     default:
-      console.log(chalk.yellow(`Resource kind "${kind}" not implemented yet`));
+      console.log(yanse.yellow(`Resource kind "${kind}" not implemented yet`));
     }
   } catch (error) {
-    console.error(chalk.red(`Error applying ${kind} "${name}": ${error}`));
+    console.error(yanse.red(`Error applying ${kind} "${name}": ${error}`));
     throw error;
   }
 }
@@ -112,12 +112,12 @@ export default async (
     const filePath = argv.f || argv._?.[0] || await promptYamlFilePath(prompter, argv);
     
     if (!filePath) {
-      console.error(chalk.red('No file path provided'));
+      console.error(yanse.red('No file path provided'));
       return;
     }
     
     if (!fs.existsSync(filePath)) {
-      console.error(chalk.red(`File not found: ${filePath}`));
+      console.error(yanse.red(`File not found: ${filePath}`));
       return;
     }
     
@@ -133,7 +133,7 @@ export default async (
         resources = [content];
       }
     } catch (error) {
-      console.error(chalk.red(`Error parsing YAML file: ${error}`));
+      console.error(yanse.red(`Error parsing YAML file: ${error}`));
       return;
     }
     
@@ -142,12 +142,12 @@ export default async (
         const namespace = resource.metadata?.namespace || argv.n || argv.namespace || 'default';
         await applyResource(client, resource, namespace);
       } catch (error) {
-        console.error(chalk.red(`Failed to apply resource: ${error}`));
+        console.error(yanse.red(`Failed to apply resource: ${error}`));
       }
     }
     
-    console.log(chalk.green('Apply completed'));
+    console.log(yanse.green('Apply completed'));
   } catch (error) {
-    console.error(chalk.red(`Error: ${error}`));
+    console.error(yanse.red(`Error: ${error}`));
   }
 };

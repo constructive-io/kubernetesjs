@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import { CLIOptions, Inquirerer, Question } from 'inquirerer';
 import { KubernetesClient } from 'kubernetesjs';
 import { ParsedArgs } from 'minimist';
@@ -16,7 +16,7 @@ async function promptNamespace(
     });
     
     if (!namespaces.items || namespaces.items.length === 0) {
-      console.log(chalk.yellow('No namespaces found'));
+      console.log(yanse.yellow('No namespaces found'));
       return '';
     }
     
@@ -37,7 +37,7 @@ async function promptNamespace(
     const { namespace } = await prompter.prompt(argv, [question]);
     return namespace;
   } catch (error) {
-    console.error(chalk.red(`Error getting namespaces: ${error}`));
+    console.error(yanse.red(`Error getting namespaces: ${error}`));
     return '';
   }
 }
@@ -56,13 +56,13 @@ export default async (
     
     if (subcommand === 'get-context') {
       const namespace = getCurrentNamespace();
-      console.log(chalk.green(`Current namespace: ${namespace}`));
+      console.log(yanse.green(`Current namespace: ${namespace}`));
       return;
     }
     
     if (subcommand === 'set-context') {
       if (argv.current !== true) {
-        console.error(chalk.red('Missing --current flag'));
+        console.error(yanse.red('Missing --current flag'));
         return;
       }
       
@@ -75,14 +75,14 @@ export default async (
       }
       
       setCurrentNamespace(namespace as string);
-      console.log(chalk.green(`Namespace set to "${namespace}"`));
+      console.log(yanse.green(`Namespace set to "${namespace}"`));
       return;
     }
     
-    console.log(chalk.blue('Available config commands:'));
+    console.log(yanse.blue('Available config commands:'));
     console.log('  get-context                  Display the current context');
     console.log('  set-context --current --namespace=<namespace>  Set the current namespace');
   } catch (error) {
-    console.error(chalk.red(`Error: ${error}`));
+    console.error(yanse.red(`Error: ${error}`));
   }
 };

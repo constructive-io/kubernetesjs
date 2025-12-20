@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import { spawn } from 'child_process';
 import { CLIOptions, Inquirerer, Question } from 'inquirerer';
 import { KubernetesClient } from 'kubernetesjs';
@@ -19,7 +19,7 @@ async function promptPodName(
     });
     
     if (!pods.items || pods.items.length === 0) {
-      console.log(chalk.yellow(`No pods found in namespace ${namespace}`));
+      console.log(yanse.yellow(`No pods found in namespace ${namespace}`));
       return '';
     }
     
@@ -40,7 +40,7 @@ async function promptPodName(
     const { podName } = await prompter.prompt(argv, [question]);
     return podName;
   } catch (error) {
-    console.error(chalk.red(`Error getting pods: ${error}`));
+    console.error(yanse.red(`Error getting pods: ${error}`));
     return '';
   }
 }
@@ -64,7 +64,7 @@ async function promptContainerName(
     });
     
     if (!pod.spec || !pod.spec.containers || pod.spec.containers.length === 0) {
-      console.log(chalk.yellow(`No containers found in pod ${podName}`));
+      console.log(yanse.yellow(`No containers found in pod ${podName}`));
       return '';
     }
     
@@ -89,7 +89,7 @@ async function promptContainerName(
     const { containerName } = await prompter.prompt(argv, [question]);
     return containerName;
   } catch (error) {
-    console.error(chalk.red(`Error getting containers: ${error}`));
+    console.error(yanse.red(`Error getting containers: ${error}`));
     return '';
   }
 }
@@ -100,7 +100,7 @@ async function execInPod(
   containerName: string,
   command: string[]
 ): Promise<void> {
-  console.log(chalk.blue(`Executing command in ${containerName ? 'container ' + containerName + ' of ' : ''}pod ${podName} in namespace ${namespace}...`));
+  console.log(yanse.blue(`Executing command in ${containerName ? 'container ' + containerName + ' of ' : ''}pod ${podName} in namespace ${namespace}...`));
   
   const kubectlArgs = [
     'exec',
@@ -183,6 +183,6 @@ export default async (
     
     await execInPod(namespace as string, podName, containerName as string, command);
   } catch (error) {
-    console.error(chalk.red(`Error: ${error}`));
+    console.error(yanse.red(`Error: ${error}`));
   }
 };

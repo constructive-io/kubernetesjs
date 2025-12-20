@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import * as fs from 'fs';
 import { CLIOptions, Inquirerer } from 'inquirerer';
 import { ParsedArgs } from 'minimist';
@@ -26,7 +26,7 @@ export default async (
   const configPath = argv.config as string;
 
   if (!fs.existsSync(configPath)) {
-    console.error(chalk.red(`Config file not found: ${configPath}`));
+    console.error(yanse.red(`Config file not found: ${configPath}`));
     return true;
   }
 
@@ -35,7 +35,7 @@ export default async (
     
     const resourceType = inferResourceType(resource);
     
-    console.log(chalk.blue(`Detected resource type: ${resourceType}`));
+    console.log(yanse.blue(`Detected resource type: ${resourceType}`));
     
     let command: string;
     
@@ -50,12 +50,12 @@ export default async (
     if (commandMap[command]) {
       await commandMap[command](newArgv, prompter, options);
     } else {
-      console.error(chalk.red(`No command found for resource type: ${resourceType}`));
+      console.error(yanse.red(`No command found for resource type: ${resourceType}`));
     }
     
     return true;
   } catch (error) {
-    console.error(chalk.red(`Error processing config file: ${error}`));
+    console.error(yanse.red(`Error processing config file: ${error}`));
     return true;
   }
 };

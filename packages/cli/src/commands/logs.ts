@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import { CLIOptions, Inquirerer, Question } from 'inquirerer';
 import { KubernetesClient } from 'kubernetesjs';
 import { ParsedArgs } from 'minimist';
@@ -18,7 +18,7 @@ async function promptPodName(
     });
     
     if (!pods.items || pods.items.length === 0) {
-      console.log(chalk.yellow(`No pods found in namespace ${namespace}`));
+      console.log(yanse.yellow(`No pods found in namespace ${namespace}`));
       return '';
     }
     
@@ -39,7 +39,7 @@ async function promptPodName(
     const { podName } = await prompter.prompt(argv, [question]);
     return podName;
   } catch (error) {
-    console.error(chalk.red(`Error getting pods: ${error}`));
+    console.error(yanse.red(`Error getting pods: ${error}`));
     return '';
   }
 }
@@ -63,7 +63,7 @@ async function promptContainerName(
     });
     
     if (!pod.spec || !pod.spec.containers || pod.spec.containers.length === 0) {
-      console.log(chalk.yellow(`No containers found in pod ${podName}`));
+      console.log(yanse.yellow(`No containers found in pod ${podName}`));
       return '';
     }
     
@@ -88,7 +88,7 @@ async function promptContainerName(
     const { containerName } = await prompter.prompt(argv, [question]);
     return containerName;
   } catch (error) {
-    console.error(chalk.red(`Error getting containers: ${error}`));
+    console.error(yanse.red(`Error getting containers: ${error}`));
     return '';
   }
 }
@@ -119,7 +119,7 @@ export default async (
       }
     }
     
-    console.log(chalk.blue(`Getting logs for ${containerName ? 'container ' + containerName + ' in ' : ''}pod ${podName} in namespace ${namespace}...`));
+    console.log(yanse.blue(`Getting logs for ${containerName ? 'container ' + containerName + ' in ' : ''}pod ${podName} in namespace ${namespace}...`));
     
     const logs = await client.readCoreV1NamespacedPodLog({
       path: { 
@@ -136,6 +136,6 @@ export default async (
     
     console.log(logs);
   } catch (error) {
-    console.error(chalk.red(`Error: ${error}`));
+    console.error(yanse.red(`Error: ${error}`));
   }
 };

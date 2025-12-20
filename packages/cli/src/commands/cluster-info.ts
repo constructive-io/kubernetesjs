@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import { CLIOptions, Inquirerer } from 'inquirerer';
 import { KubernetesClient } from 'kubernetesjs';
 import { ParsedArgs } from 'minimist';
@@ -13,7 +13,7 @@ export default async (
       restEndpoint: _argv.clientUrl
     });
 
-    console.log(chalk.blue('Kubernetes cluster info:'));
+    console.log(yanse.blue('Kubernetes cluster info:'));
     
     const apiVersions = await client.getAPIVersions({
       params: {
@@ -23,12 +23,12 @@ export default async (
         
       }
     });
-    console.log(chalk.bold('\nAPI Versions:'));
+    console.log(yanse.bold('\nAPI Versions:'));
     if (apiVersions.apiVersion) {
       console.log(apiVersions.apiVersion);
     }
     
   } catch (error) {
-    console.error(chalk.red(`Error: ${error}`));
+    console.error(yanse.red(`Error: ${error}`));
   }
 };

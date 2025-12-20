@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import * as fs from 'fs';
 import { CLIOptions, Inquirerer, OptionValue, Question } from 'inquirerer';
 import { KubernetesClient } from 'kubernetesjs';
@@ -82,12 +82,12 @@ async function promptResourceSelection(
     break;
       
   default:
-    console.log(chalk.yellow(`Resource type '${resourceType}' not implemented yet for selection`));
+    console.log(yanse.yellow(`Resource type '${resourceType}' not implemented yet for selection`));
     return [];
   }
   
   if (resources.length === 0) {
-    console.log(chalk.yellow(`No ${resourceType}s found in namespace ${namespace}`));
+    console.log(yanse.yellow(`No ${resourceType}s found in namespace ${namespace}`));
     return [];
   }
   
@@ -130,7 +130,7 @@ async function deleteResource(
             
         }
       });
-      console.log(chalk.green(`Pod "${resourceName}" deleted successfully`));
+      console.log(yanse.green(`Pod "${resourceName}" deleted successfully`));
       break;
         
     case 'service':
@@ -143,7 +143,7 @@ async function deleteResource(
             
         }
       });
-      console.log(chalk.green(`Service "${resourceName}" deleted successfully`));
+      console.log(yanse.green(`Service "${resourceName}" deleted successfully`));
       break;
         
     case 'deployment':
@@ -156,7 +156,7 @@ async function deleteResource(
             
         }
       });
-      console.log(chalk.green(`Deployment "${resourceName}" deleted successfully`));
+      console.log(yanse.green(`Deployment "${resourceName}" deleted successfully`));
       break;
         
     case 'configmap':
@@ -169,7 +169,7 @@ async function deleteResource(
             
         }
       });
-      console.log(chalk.green(`ConfigMap "${resourceName}" deleted successfully`));
+      console.log(yanse.green(`ConfigMap "${resourceName}" deleted successfully`));
       break;
         
     case 'secret':
@@ -182,14 +182,14 @@ async function deleteResource(
             
         }
       });
-      console.log(chalk.green(`Secret "${resourceName}" deleted successfully`));
+      console.log(yanse.green(`Secret "${resourceName}" deleted successfully`));
       break;
         
     default:
-      console.log(chalk.yellow(`Resource type '${resourceType}' not implemented yet for deletion`));
+      console.log(yanse.yellow(`Resource type '${resourceType}' not implemented yet for deletion`));
     }
   } catch (error) {
-    console.error(chalk.red(`Error deleting ${resourceType} "${resourceName}": ${error}`));
+    console.error(yanse.red(`Error deleting ${resourceType} "${resourceName}": ${error}`));
   }
 }
 
@@ -207,14 +207,14 @@ async function deleteFromYaml(client: KubernetesClient, filePath: string, namesp
       const ns = resource.metadata?.namespace || namespace;
       
       if (!name) {
-        console.error(chalk.red('Resource must have a name'));
+        console.error(yanse.red('Resource must have a name'));
         continue;
       }
       
       await deleteResource(client, kind, name, ns);
     }
   } catch (error) {
-    console.error(chalk.red(`Error processing YAML file: ${error}`));
+    console.error(yanse.red(`Error processing YAML file: ${error}`));
   }
 }
 
@@ -234,7 +234,7 @@ export default async (
       const filePath = argv.f || argv.filename;
       
       if (!fs.existsSync(filePath as string)) {
-        console.error(chalk.red(`File not found: ${filePath}`));
+        console.error(yanse.red(`File not found: ${filePath}`));
         return;
       }
       
@@ -258,7 +258,7 @@ export default async (
       );
       
       if (selectedResources.length === 0) {
-        console.log(chalk.yellow('No resources selected for deletion'));
+        console.log(yanse.yellow('No resources selected for deletion'));
         return;
       }
       
@@ -272,7 +272,7 @@ export default async (
       const { confirmDelete } = await prompter.prompt(argv, [confirmQuestion]);
       
       if (!confirmDelete) {
-        console.log(chalk.yellow('Deletion cancelled'));
+        console.log(yanse.yellow('Deletion cancelled'));
         return;
       }
       
@@ -281,6 +281,6 @@ export default async (
       }
     }
   } catch (error) {
-    console.error(chalk.red(`Error: ${error}`));
+    console.error(yanse.red(`Error: ${error}`));
   }
 };

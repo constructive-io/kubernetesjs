@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import yanse from 'yanse';
 import { CLIOptions, Inquirerer, Question } from 'inquirerer';
 import { KubernetesClient } from 'kubernetesjs';
 import { ParsedArgs } from 'minimist';
@@ -40,7 +40,7 @@ function formatPodData(pod: any): void {
   const age = new Date(pod.metadata.creationTimestamp).toLocaleString();
 
   console.log(
-    chalk.green(name.padEnd(50)) +
+    yanse.green(name.padEnd(50)) +
     ready.padEnd(10) +
     status.padEnd(15) +
     restarts.toString().padEnd(10) +
@@ -57,7 +57,7 @@ function formatServiceData(service: any): void {
   const age = new Date(service.metadata.creationTimestamp).toLocaleString();
 
   console.log(
-    chalk.green(name.padEnd(30)) +
+    yanse.green(name.padEnd(30)) +
     type.padEnd(15) +
     clusterIP.padEnd(20) +
     externalIP.padEnd(20) +
@@ -74,7 +74,7 @@ function formatDeploymentData(deployment: any): void {
   const age = new Date(deployment.metadata.creationTimestamp).toLocaleString();
 
   console.log(
-    chalk.green(name.padEnd(30)) +
+    yanse.green(name.padEnd(30)) +
     ready.padEnd(10) +
     upToDate.toString().padEnd(10) +
     available.toString().padEnd(10) +
@@ -90,8 +90,8 @@ async function getAllResources(client: KubernetesClient, namespace: string): Pro
     });
     
     if (pods.items && pods.items.length > 0) {
-      console.log(chalk.bold('\nPODS:'));
-      console.log(chalk.bold('NAME'.padEnd(50) + 'READY'.padEnd(10) + 'STATUS'.padEnd(15) + 'RESTARTS'.padEnd(10) + 'AGE'));
+      console.log(yanse.bold('\nPODS:'));
+      console.log(yanse.bold('NAME'.padEnd(50) + 'READY'.padEnd(10) + 'STATUS'.padEnd(15) + 'RESTARTS'.padEnd(10) + 'AGE'));
       pods.items.forEach(formatPodData);
     }
 
@@ -101,8 +101,8 @@ async function getAllResources(client: KubernetesClient, namespace: string): Pro
     });
     
     if (services.items && services.items.length > 0) {
-      console.log(chalk.bold('\nSERVICES:'));
-      console.log(chalk.bold('NAME'.padEnd(30) + 'TYPE'.padEnd(15) + 'CLUSTER-IP'.padEnd(20) + 'EXTERNAL-IP'.padEnd(20) + 'PORT(S)'.padEnd(20) + 'AGE'));
+      console.log(yanse.bold('\nSERVICES:'));
+      console.log(yanse.bold('NAME'.padEnd(30) + 'TYPE'.padEnd(15) + 'CLUSTER-IP'.padEnd(20) + 'EXTERNAL-IP'.padEnd(20) + 'PORT(S)'.padEnd(20) + 'AGE'));
       services.items.forEach(formatServiceData);
     }
 
@@ -112,12 +112,12 @@ async function getAllResources(client: KubernetesClient, namespace: string): Pro
     });
     
     if (deployments.items && deployments.items.length > 0) {
-      console.log(chalk.bold('\nDEPLOYMENTS:'));
-      console.log(chalk.bold('NAME'.padEnd(30) + 'READY'.padEnd(10) + 'UP-TO-DATE'.padEnd(10) + 'AVAILABLE'.padEnd(10) + 'AGE'));
+      console.log(yanse.bold('\nDEPLOYMENTS:'));
+      console.log(yanse.bold('NAME'.padEnd(30) + 'READY'.padEnd(10) + 'UP-TO-DATE'.padEnd(10) + 'AVAILABLE'.padEnd(10) + 'AGE'));
       deployments.items.forEach(formatDeploymentData);
     }
   } catch (error) {
-    console.error(chalk.red(`Error getting resources: ${error}`));
+    console.error(yanse.red(`Error getting resources: ${error}`));
   }
 }
 
@@ -135,7 +135,7 @@ export default async (
     
     const resourceType = argv._?.[0] || await promptResourceType(prompter, argv);
 
-    console.log(chalk.blue(`Getting ${resourceType} in namespace ${namespace}...`));
+    console.log(yanse.blue(`Getting ${resourceType} in namespace ${namespace}...`));
 
     if (resourceType === 'all') {
       await getAllResources(client, namespace as string);
@@ -149,12 +149,12 @@ export default async (
         query: { limit: 100 }
       });
         
-      console.log(chalk.bold('NAME'.padEnd(50) + 'READY'.padEnd(10) + 'STATUS'.padEnd(15) + 'RESTARTS'.padEnd(10) + 'AGE'));
+      console.log(yanse.bold('NAME'.padEnd(50) + 'READY'.padEnd(10) + 'STATUS'.padEnd(15) + 'RESTARTS'.padEnd(10) + 'AGE'));
         
       if (pods.items && pods.items.length > 0) {
         pods.items.forEach(formatPodData);
       } else {
-        console.log(chalk.yellow('No pods found'));
+        console.log(yanse.yellow('No pods found'));
       }
       break;
         
@@ -164,12 +164,12 @@ export default async (
         query: { limit: 100 }
       });
         
-      console.log(chalk.bold('NAME'.padEnd(30) + 'TYPE'.padEnd(15) + 'CLUSTER-IP'.padEnd(20) + 'EXTERNAL-IP'.padEnd(20) + 'PORT(S)'.padEnd(20) + 'AGE'));
+      console.log(yanse.bold('NAME'.padEnd(30) + 'TYPE'.padEnd(15) + 'CLUSTER-IP'.padEnd(20) + 'EXTERNAL-IP'.padEnd(20) + 'PORT(S)'.padEnd(20) + 'AGE'));
         
       if (services.items && services.items.length > 0) {
         services.items.forEach(formatServiceData);
       } else {
-        console.log(chalk.yellow('No services found'));
+        console.log(yanse.yellow('No services found'));
       }
       break;
         
@@ -179,19 +179,19 @@ export default async (
         query: { limit: 100 }
       });
         
-      console.log(chalk.bold('NAME'.padEnd(30) + 'READY'.padEnd(10) + 'UP-TO-DATE'.padEnd(10) + 'AVAILABLE'.padEnd(10) + 'AGE'));
+      console.log(yanse.bold('NAME'.padEnd(30) + 'READY'.padEnd(10) + 'UP-TO-DATE'.padEnd(10) + 'AVAILABLE'.padEnd(10) + 'AGE'));
         
       if (deployments.items && deployments.items.length > 0) {
         deployments.items.forEach(formatDeploymentData);
       } else {
-        console.log(chalk.yellow('No deployments found'));
+        console.log(yanse.yellow('No deployments found'));
       }
       break;
         
     default:
-      console.log(chalk.yellow(`Resource type '${resourceType}' not implemented yet`));
+      console.log(yanse.yellow(`Resource type '${resourceType}' not implemented yet`));
     }
   } catch (error) {
-    console.error(chalk.red(`Error: ${error}`));
+    console.error(yanse.red(`Error: ${error}`));
   }
 };
