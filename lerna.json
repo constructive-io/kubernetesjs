@@ -7,13 +7,10 @@
     "create": {
       "homepage": "https://github.com/constructive-io/kubernetesjs",
       "license": "MIT",
-      "access": "public"
+      "access": "restricted"
     },
     "version": {
-      "syncWorkspaceLock": true,
-      "ignoreChanges": [
-        "apps/**"
-      ]
+      "syncWorkspaceLock": true
     },
     "publish": {
       "allowBranch": "main",

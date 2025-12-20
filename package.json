@@ -1,5 +1,5 @@
 {
-  "name": "kubernetesjs",
+  "name": "@kubernetesjs/workspace",
   "version": "2.0.0",
   "author": "Constructive <developers@constructive.io>",
   "private": true,
@@ -39,18 +39,5 @@
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.1.6"
-  },
-  "pnpm": {
-    "publicHoistPattern": [
-      "@jest/test-sequencer"
-    ],
-    "packageExtensions": {
-      "jest-config@*": {
-        "dependencies": {
-          "@jest/test-sequencer": "^29.7.0"
-        }
-      }
-    },
-    "onlyBuiltDependencies": []
   }
 }
