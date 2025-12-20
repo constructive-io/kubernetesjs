@@ -1,6 +1,6 @@
 {
   "name": "@kubernetesjs/react",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "author": "Constructive <developers@constructive.io>",
   "description": "Fully Typed Kubernetes React Hooks",
   "keywords": [

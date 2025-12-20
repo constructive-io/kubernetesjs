@@ -1,6 +1,6 @@
 {
   "name": "@kubernetesjs/ops",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Constructive <developers@constructive.io>",
   "description": "KubernetesJS Ops library",
   "main": "index.js",

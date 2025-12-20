@@ -1,6 +1,6 @@
 {
   "name": "@kubernetesjs/manifests",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Constructive <developers@constructive.io>",
   "description": "Curated operator manifests for KubernetesJS ops",
   "main": "index.js",
