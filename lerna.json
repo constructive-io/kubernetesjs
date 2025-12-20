@@ -1,17 +1,24 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "version": "independent",
-  "useWorkspaces": true,
   "npmClient": "pnpm",
+  "registry": "https://registry.npmjs.org",
   "command": {
+    "create": {
+      "homepage": "https://github.com/constructive-io/kubernetesjs",
+      "license": "MIT",
+      "access": "public"
+    },
     "version": {
+      "syncWorkspaceLock": true,
       "ignoreChanges": [
         "apps/**"
       ]
     },
     "publish": {
-      "conventionalCommits": true,
-      "message": "chore(release): publish"
+      "allowBranch": "main",
+      "message": "chore(release): publish",
+      "conventionalCommits": true
     }
   }
 }
