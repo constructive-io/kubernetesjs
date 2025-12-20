@@ -55,7 +55,7 @@
     "embla-carousel-react": "^8.5.2",
     "gray-matter": "^4.0.3",
     "js-yaml": "^4.1.0",
-    "kubernetesjs": "^0.6.1",
+    "kubernetesjs": "workspace:^",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.454.0",
     "match-sorter": "^8.0.0",
