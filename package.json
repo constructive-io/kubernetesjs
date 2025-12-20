@@ -24,6 +24,7 @@
     "deps": "pnpm up -r -i -L"
   },
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
     "@jest/test-sequencer": "^30.2.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.12.7",
