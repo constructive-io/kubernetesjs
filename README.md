@@ -1,14 +1,14 @@
 # KubernetesJS
 
 <p align="center" width="100%">
-  <img src="https://github.com/hyperweb-io/interweb-utils/assets/545047/89c743c4-be88-409f-9a77-4b02cd7fe9a4" width="80">
+  <img src="https://raw.githubusercontent.com/constructive-io/.github/refs/heads/main/assets/logo.svg" alt="constructive" width="80"><br />
   <br/>
   TypeScript Client for Kubernetes
   <br />
-   <a href="https://github.com/hyperweb-io/kubernetesjs/actions/workflows/ci.yml">
-    <img height="20" src="https://github.com/hyperweb-io/kubernetesjs/actions/workflows/ci.yml/badge.svg"/>
+   <a href="https://github.com/constructive-io/kubernetesjs/actions/workflows/ci.yml">
+    <img height="20" src="https://github.com/constructive-io/kubernetesjs/actions/workflows/ci.yml/badge.svg"/>
   </a>
-   <a href="https://github.com/hyperweb-io/kubernetesjs/blob/main/LICENSE">
+   <a href="https://github.com/constructive-io/kubernetesjs/blob/main/LICENSE">
     <img height="20" src="https://img.shields.io/badge/license-MIT-blue.svg"/>
   </a>
 </p>
@@ -206,17 +206,16 @@ kubectl proxy --port=8001 --accept-hosts='^.*$' --address='0.0.0.0'
 
 Checkout these related projects:
 
-* [`schema-typescript`](https://github.com/hyperweb-io/schema-typescript/tree/main/packages/schema-typescript)  
+* [`schema-typescript`](https://github.com/constructive-io/dev-utils/tree/main/packages/schema-typescript)  
   Provides robust tools for handling JSON schemas and converting them to TypeScript interfaces with ease and efficiency.
-* [`@schema-typescript/cli`](https://github.com/hyperweb-io/schema-typescript/tree/main/packages/cli)  
+* [`@schema-typescript/cli`](https://github.com/constructive-io/dev-utils/tree/main/packages/cli)  
   CLI is the command line utility for `schema-typescript`.
-* [`schema-sdk`](https://github.com/hyperweb-io/schema-typescript/tree/main/packages/schema-sdk)  
+* [`schema-sdk`](https://github.com/constructive-io/dev-utils/tree/main/packages/schema-sdk)  
   Provides robust tools for handling OpenAPI schemas and converting them to TypeScript clients with ease and efficiency.
-* [`starship`](https://github.com/hyperweb-io/starship) Unified Testing and Development for the Interchain.
 
 ## Credits
 
-🛠 Built by [Interweb](https://interweb.co) — if you like our tools, please checkout and contribute [https://interweb.co](https://interweb.co)
+**🛠 Built by the [Constructive](https://constructive.io) team — creators of modular Postgres tooling for secure, composable backends. If you like our work, contribute on [GitHub](https://github.com/constructive-io).**
 
 ## Disclaimer
 

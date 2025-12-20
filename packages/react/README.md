@@ -1,14 +1,14 @@
 # @kubernetesjs/react
 
 <p align="center" width="100%">
-  <img src="https://github.com/hyperweb-io/interweb-utils/assets/545047/89c743c4-be88-409f-9a77-4b02cd7fe9a4" width="80">
+  <img src="https://raw.githubusercontent.com/constructive-io/.github/refs/heads/main/assets/logo.svg" alt="constructive" width="80"><br />
   <br/>
   React Hooks for Kubernetes
   <br />
-   <a href="https://github.com/hyperweb-io/kubernetesjs/actions/workflows/ci.yml">
-    <img height="20" src="https://github.com/hyperweb-io/kubernetesjs/actions/workflows/ci.yml/badge.svg"/>
+   <a href="https://github.com/constructive-io/kubernetesjs/actions/workflows/ci.yml">
+    <img height="20" src="https://github.com/constructive-io/kubernetesjs/actions/workflows/ci.yml/badge.svg"/>
   </a>
-   <a href="https://github.com/hyperweb-io/kubernetesjs/blob/main/LICENSE">
+   <a href="https://github.com/constructive-io/kubernetesjs/blob/main/LICENSE">
     <img height="20" src="https://img.shields.io/badge/license-MIT-blue.svg"/>
   </a>
 </p>
@@ -267,12 +267,12 @@ Access the underlying KubernetesClient instance and configuration.
 
 ## Related
 
-- [`kubernetesjs`](https://github.com/hyperweb-io/kubernetesjs/tree/main/packages/kubernetesjs) - The core TypeScript client for Kubernetes
+- [`kubernetesjs`](https://github.com/constructive-io/kubernetesjs/tree/main/packages/kubernetesjs) - The core TypeScript client for Kubernetes
 - [`@tanstack/react-query`](https://tanstack.com/query) - The powerful async state management library powering our hooks
 
 ## Credits
 
-🛠 Built by [Interweb](https://interweb.co) — if you like our tools, please checkout and contribute [https://interweb.co](https://interweb.co)
+**🛠 Built by the [Constructive](https://constructive.io) team — creators of modular Postgres tooling for secure, composable backends. If you like our work, contribute on [GitHub](https://github.com/constructive-io).**
 
 ## Disclaimer
 

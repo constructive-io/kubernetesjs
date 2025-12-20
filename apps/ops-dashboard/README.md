@@ -1,13 +1,13 @@
-# Hyperweb Dashboard
+# Constructive Dashboard
 
 <p align="center" width="100%">
-   <img src="https://raw.githubusercontent.com/hyperweb-io/.github/refs/heads/main/assets/logo.svg" alt="hyperweb" width="80"><br />
+   <img src="https://raw.githubusercontent.com/constructive-io/.github/refs/heads/main/assets/logo.svg" alt="constructive" width="80"><br />
 </p>
 
-A modern, React-based dashboard for interacting with Kubernetes clusters, powered by Hyperweb. Provides an intuitive UI to view and manage resources like pods, deployments, services, and more.
+A modern, React-based dashboard for interacting with Kubernetes clusters, powered by Constructive. Provides an intuitive UI to view and manage resources like pods, deployments, services, and more.
 
 <p align="center" width="100%">
-   <img src="assets/screenshot.png" alt="hyperweb dashboard" width="500">
+   <img src="assets/screenshot.png" alt="constructive dashboard" width="500">
 </p>
 
 ## Table of Contents
@@ -40,11 +40,11 @@ A modern, React-based dashboard for interacting with Kubernetes clusters, powere
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/hyperweb-io/dashboard.git
+   git clone https://github.com/constructive-io/kubernetesjs.git
    ```
 2. Navigate to the React package:
    ```bash
-   cd dashboard/
+   cd apps/op-dashboard/
    ```
 3. Install dependencies:
    ```bash
@@ -70,13 +70,9 @@ A modern, React-based dashboard for interacting with Kubernetes clusters, powere
 - `pnpm --filter @interweb/dashboard start` - Start the production build
 - `pnpm --filter @interweb/dashboard lint` - Run linter checks
 
-## Contributing
-
-Contributions are welcome! Feel free to open issues or submit pull requests on the [GitHub repository](https://github.com/hyperweb-io/dashboard).
-
 ## Credits
 
-🛠 Built by [Interweb](https://interweb.co) — if you like our tools, please checkout and contribute [https://interweb.co](https://interweb.co)
+**🛠 Built by the [Constructive](https://constructive.io) team — creators of modular Postgres tooling for secure, composable backends. If you like our work, contribute on [GitHub](https://github.com/constructive-io).**
 
 ## Disclaimer
 

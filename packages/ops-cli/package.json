@@ -1,20 +1,33 @@
 {
   "name": "@kubernetesjs/ops-cli",
   "version": "0.0.2",
-  "author": "Anmol1696 <anmol1696@gmail.com>",
+  "author": "Constructive <developers@constructive.io>",
   "description": "KubernetesJS Ops CLI",
-  "main": "./index.js",
-  "types": "./index.d.ts",
-  "module": "./esm/index.js",
+  "main": "index.js",
+  "module": "esm/index.js",
+  "types": "index.d.ts",
+  "homepage": "https://github.com/constructive-io/kubernetesjs",
+  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/constructive-io/kubernetesjs"
+  },
+  "bugs": {
+    "url": "https://github.com/constructive-io/kubernetesjs/issues"
+  },
+  "bin": {
+    "k8sops": "index.js"
+  },
   "scripts": {
-    "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
-    "clean": "rimraf dist",
-    "prepare": "pnpm run build",
-    "build": "pnpm run clean && tsc && tsc -p tsconfig.esm.json && pnpm run copy",
+    "clean": "makage clean",
+    "prepack": "npm run build",
+    "build": "makage build",
+    "build:dev": "makage build --dev",
+    "lint": "eslint . --fix",
     "test": "jest",
     "test:watch": "jest --watch"
   },
@@ -26,10 +39,7 @@
     "inquirer": "^9.2.0"
   },
   "devDependencies": {
-    "@types/inquirer": "^9.0.3"
-  },
-  "bin": {
-    "k8sops": "./index.js"
-  },
-  "gitHead": "c10664b145a63bb4cda0896246a3613c7867379b"
+    "@types/inquirer": "^9.0.3",
+    "makage": "^0.1.8"
+  }
 }

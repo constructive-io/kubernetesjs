@@ -1,7 +1,7 @@
 {
   "name": "@kubernetesjs/cli",
   "version": "0.3.4",
-  "author": "Anmol1696 <anmol1696@gmail.com>",
+  "author": "Constructive <developers@constructive.io>",
   "description": "KubernetesJS CLI",
   "keywords": [
     "kubernetes",
@@ -20,36 +20,37 @@
   "main": "index.js",
   "module": "esm/index.js",
   "types": "index.d.ts",
-  "homepage": "https://github.com/hyperweb-io/kubernetes",
-  "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://github.com/constructive-io/kubernetesjs",
+  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hyperweb-io/kubernetes"
+    "url": "https://github.com/constructive-io/kubernetesjs"
   },
   "bugs": {
-    "url": "https://github.com/hyperweb-io/kubernetes/issues"
+    "url": "https://github.com/constructive-io/kubernetesjs/issues"
   },
   "bin": {
     "k8s": "index.js",
     "kubernetes": "index.js"
   },
   "scripts": {
-    "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
-    "clean": "rimraf dist/**",
-    "prepare": "npm run build",
-    "build": "npm run clean; tsc; tsc -p tsconfig.esm.json; npm run copy",
-    "build:dev": "npm run clean; tsc --declarationMap; tsc -p tsconfig.esm.json; npm run copy",
+    "clean": "makage clean",
+    "prepack": "npm run build",
+    "build": "makage build",
+    "build:dev": "makage build --dev",
     "lint": "eslint . --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "dev": "ts-node src/index.ts"
   },
   "devDependencies": {
-    "@types/js-yaml": "^4.0.9"
+    "@types/js-yaml": "^4.0.9",
+    "@types/minimist": "^1.2.5",
+    "makage": "^0.1.8"
   },
   "dependencies": {
     "chalk": "^4.1.0",
@@ -58,6 +59,5 @@
     "js-yaml": "^4.1.0",
     "kubernetesjs": "^0.7.4",
     "minimist": "^1.2.8"
-  },
-  "gitHead": "c10664b145a63bb4cda0896246a3613c7867379b"
+  }
 }

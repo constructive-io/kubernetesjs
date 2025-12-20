@@ -1,20 +1,30 @@
 {
   "name": "@kubernetesjs/client",
   "version": "0.0.2",
-  "author": "Anmol1696 <anmol1696@gmail.com>",
+  "author": "Constructive <developers@constructive.io>",
   "description": "Client for KubernetesJS ops workflows",
-  "main": "./index.js",
-  "types": "./index.d.ts",
-  "module": "./esm/index.js",
+  "main": "index.js",
+  "module": "esm/index.js",
+  "types": "index.d.ts",
+  "homepage": "https://github.com/constructive-io/kubernetesjs",
+  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/constructive-io/kubernetesjs"
+  },
+  "bugs": {
+    "url": "https://github.com/constructive-io/kubernetesjs/issues"
+  },
   "scripts": {
-    "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
-    "clean": "rimraf dist",
-    "prepare": "pnpm run build",
-    "build": "pnpm run clean && tsc && tsc -p tsconfig.esm.json && pnpm run copy",
+    "clean": "makage clean",
+    "prepack": "npm run build",
+    "build": "makage build",
+    "build:dev": "makage build --dev",
+    "lint": "eslint . --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "tests:unit": "jest --selectProjects unit",
@@ -35,7 +45,7 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.5",
     "@types/pg": "^8.11.10",
+    "makage": "^0.1.8",
     "ts-node": "^10.9.2"
-  },
-  "gitHead": "c10664b145a63bb4cda0896246a3613c7867379b"
+  }
 }
