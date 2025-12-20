@@ -1,6 +1,6 @@
 {
   "name": "@kubernetesjs/client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Constructive <developers@constructive.io>",
   "description": "Client for KubernetesJS ops workflows",
   "main": "index.js",

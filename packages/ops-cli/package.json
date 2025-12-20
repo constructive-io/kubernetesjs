@@ -1,6 +1,6 @@
 {
   "name": "@kubernetesjs/ops-cli",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Constructive <developers@constructive.io>",
   "description": "KubernetesJS Ops CLI",
   "main": "index.js",
