@@ -52,10 +52,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build dashboard
-        run: |
-          cd apps/ops-dashboard
-          pnpm build
+      - name: Build all packages
+        run: pnpm build:all
 
       - name: Install Playwright browsers
         run: |
