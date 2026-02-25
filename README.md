@@ -202,6 +202,10 @@ Start the Kubernetes API proxy to allow local access:
 kubectl proxy --port=8001 --accept-hosts='^.*$' --address='0.0.0.0'
 ```
 
+## Documentation
+
+Explore the full architecture and internals via [DeepWiki](https://deepwiki.com/constructive-io/kubernetesjs).
+
 ## Related
 
 Checkout these related projects:

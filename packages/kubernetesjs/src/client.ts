@@ -1,3 +1,7 @@
+const SA_TOKEN_PATH = '/var/run/secrets/kubernetes.io/serviceaccount/token';
+const SA_CA_PATH = '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt';
+const DEFAULT_ENDPOINT = 'http://127.0.0.1:8001';
+
 interface RequestOptions<Params> {
   hostname?: string;
   path: string;
@@ -10,6 +14,9 @@ interface RequestOptions<Params> {
 
 export interface APIClientOptions {
   restEndpoint: string;
+  token?: string;
+  headers?: Record<string, string>;
+  timeout?: number;
 }
 
 export interface APIClientRequestHeaders {
@@ -102,11 +109,118 @@ export type APIClientRequestOpts = {
 
 export class APIClient {
   private baseUrl: string;
-  private defaultTimeout: number = 10000; // 10 seconds
+  private defaultTimeout: number;
+  private defaultToken?: string;
+  private defaultHeaders: Record<string, string>;
 
   constructor(options: APIClientOptions) {
     this.baseUrl = options.restEndpoint;
+    this.defaultTimeout = options.timeout ?? 10000;
+    this.defaultToken = options.token;
+    this.defaultHeaders = options.headers ?? {};
   }
+
+  // ---------------------------------------------------------------------------
+  // Static helpers — inherited by KubernetesClient
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Detect the Kubernetes API endpoint from environment variables.
+   *
+   * Priority:
+   *   1. KUBERNETES_API_URL (explicit override)
+   *   2. KUBERNETES_SERVICE_HOST + KUBERNETES_SERVICE_PORT (in-cluster)
+   *   3. fallback (defaults to http://127.0.0.1:8001, i.e. kubectl proxy)
+   */
+  static detectEndpoint(fallback: string = DEFAULT_ENDPOINT): string {
+    if (typeof process !== 'undefined' && process.env) {
+      if (process.env.KUBERNETES_API_URL) {
+        return process.env.KUBERNETES_API_URL;
+      }
+      if (process.env.KUBERNETES_SERVICE_HOST) {
+        const host = process.env.KUBERNETES_SERVICE_HOST;
+        const port = process.env.KUBERNETES_SERVICE_PORT ?? '443';
+        return `https://${host}:${port}`;
+      }
+    }
+    return fallback;
+  }
+
+  /**
+   * Read the mounted service account bearer token (Node.js only).
+   * Returns undefined if not running in a pod or the token file is unreadable.
+   */
+  static readServiceAccountToken(path: string = SA_TOKEN_PATH): string | undefined {
+    try {
+      const fs = require('node:fs');
+      return fs.readFileSync(path, 'utf-8').trim();
+    } catch {
+      return undefined;
+    }
+  }
+
+  /**
+   * Check whether the service account CA certificate exists at the standard
+   * mount path. When it does, callers should set the NODE_EXTRA_CA_CERTS
+   * environment variable before starting Node so that fetch() trusts the
+   * cluster's API server certificate.
+   */
+  static getServiceAccountCAPath(): string | undefined {
+    try {
+      const fs = require('node:fs');
+      fs.accessSync(SA_CA_PATH);
+      return SA_CA_PATH;
+    } catch {
+      return undefined;
+    }
+  }
+
+  /**
+   * Build configuration for in-cluster usage (inside a Kubernetes pod).
+   * Reads the service account token and detects the API server endpoint
+   * from KUBERNETES_SERVICE_HOST / KUBERNETES_SERVICE_PORT.
+   *
+   * Equivalent to client-go's `rest.InClusterConfig()`.
+   *
+   * @throws If the token file or required environment variables are missing.
+   */
+  static getInClusterConfig(): APIClientOptions {
+    const restEndpoint = APIClient.detectEndpoint();
+    const token = APIClient.readServiceAccountToken();
+
+    if (!token) {
+      throw new Error(
+        'Unable to load in-cluster config: service account token not found at ' +
+        SA_TOKEN_PATH + '. Are you running inside a Kubernetes pod?'
+      );
+    }
+    if (restEndpoint === DEFAULT_ENDPOINT) {
+      throw new Error(
+        'Unable to load in-cluster config: KUBERNETES_SERVICE_HOST is not set. ' +
+        'Are you running inside a Kubernetes pod?'
+      );
+    }
+
+    return { restEndpoint, token };
+  }
+
+  /**
+   * Build configuration with automatic detection: tries in-cluster first,
+   * falls back to kubectl proxy at localhost:8001.
+   *
+   * Equivalent to client-go's `BuildConfigFromFlags("", "")`.
+   */
+  static getDefaultConfig(fallbackEndpoint: string = DEFAULT_ENDPOINT): APIClientOptions {
+    try {
+      return APIClient.getInClusterConfig();
+    } catch {
+      return { restEndpoint: fallbackEndpoint };
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Internal HTTP helpers
+  // ---------------------------------------------------------------------------
 
   private buildFullPath(endpoint: string, query?: { [key: string]: any }): string {
     // If baseUrl is a relative proxy path (e.g. '/api/k8s'), build manually
@@ -135,14 +249,27 @@ export class APIClient {
 
   private async request<Resp>(options: RequestOptions<any>): Promise<Resp> {
     const { path, headers, method, params, body, timeout } = options;
-    const url = this.buildFullPath(path, method === 'GET' ? params : undefined);
+    const url = this.buildFullPath(
+      path,
+      method === 'GET' || method === 'DELETE' ? params : undefined
+    );
 
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout || this.defaultTimeout);
 
+    // Merge default headers, auth token, and per-request headers.
+    // Per-request headers take highest priority.
+    const mergedHeaders: Record<string, string> = { ...this.defaultHeaders };
+    if (this.defaultToken) {
+      mergedHeaders['Authorization'] = `Bearer ${this.defaultToken}`;
+    }
+    if (headers) {
+      Object.assign(mergedHeaders, headers);
+    }
+
     const fetchOptions: RequestInit = {
       method,
-      headers,
+      headers: mergedHeaders,
       signal: controller.signal,
       body: method !== 'GET' && method !== 'DELETE' ? JSON.stringify(body) : null,
     };
@@ -162,6 +289,10 @@ export class APIClient {
       throw error;
     }
   }
+
+  // ---------------------------------------------------------------------------
+  // HTTP method helpers
+  // ---------------------------------------------------------------------------
 
   get<Resp = unknown>(
     endpoint: string,
@@ -217,7 +348,7 @@ export class APIClient {
       };
     const bodyContent = opts.isFormData
       ? new URLSearchParams(body as any).toString()
-      : JSON.stringify(body);
+      : body;
 
     return this.request<Resp>({
       path: endpoint,
@@ -225,7 +356,7 @@ export class APIClient {
       // @ts-ignore
       headers,
       timeout: opts.timeout || this.defaultTimeout,
-      params: bodyContent,
+      body: bodyContent,
     });
   }
 
@@ -239,7 +370,6 @@ export class APIClient {
       'Content-Type': 'application/json',
       ...opts.headers,
     };
-    const bodyContent = JSON.stringify(body);
 
     return this.request<Resp>({
       path: endpoint,
@@ -247,7 +377,7 @@ export class APIClient {
       // @ts-ignore
       headers,
       timeout: opts.timeout || this.defaultTimeout,
-      params: bodyContent,
+      body,
     });
   }
 

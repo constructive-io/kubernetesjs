@@ -6,6 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 KubernetesJS is a monorepo providing a fully-typed, zero-dependency TypeScript client for the entire Kubernetes API, plus React hooks, CLIs, and operational tooling. Code is generated from the Kubernetes OpenAPI spec using `schema-sdk`.
 
+## DeepWiki
+
+- **This repo**: https://deepwiki.com/constructive-io/kubernetesjs
+- **Kubernetes client-go** (reference Go client): https://deepwiki.com/kubernetes/client-go
+
 ## Build & Development Commands
 
 ```bash
