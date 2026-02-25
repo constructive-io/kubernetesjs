@@ -1,6 +1,6 @@
 {
   "name": "@kubernetesjs/cli",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "author": "Constructive <developers@constructive.io>",
   "description": "KubernetesJS CLI",
   "keywords": [

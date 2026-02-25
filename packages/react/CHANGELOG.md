@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.8](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/react@0.7.7...@kubernetesjs/react@0.7.8) (2026-02-25)
+
+**Note:** Version bump only for package @kubernetesjs/react
+
 ## [0.7.7](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/react@0.7.6...@kubernetesjs/react@0.7.7) (2025-12-20)
 
 **Note:** Version bump only for package @kubernetesjs/react

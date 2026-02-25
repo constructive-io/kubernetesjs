@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.7](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/cli@0.3.6...@kubernetesjs/cli@0.3.7) (2026-02-25)
+
+**Note:** Version bump only for package @kubernetesjs/cli
+
 ## [0.3.6](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/cli@0.3.5...@kubernetesjs/cli@0.3.6) (2025-12-20)
 
 **Note:** Version bump only for package @kubernetesjs/cli
