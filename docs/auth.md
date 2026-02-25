@@ -229,56 +229,127 @@ The `InClusterConfig()` flow specifically:
 
 ## Future Work
 
-### Kubeconfig Support
+The following sections describe features that client-go provides which we plan to port to kubernetesjs. Each section includes the client-go reference, proposed TypeScript API, and implementation notes.
 
-Parsing `~/.kube/config` (or `$KUBECONFIG`) to extract cluster endpoints, contexts, and user credentials. This would enable:
+### Priority 1: Kubeconfig Support
+
+**client-go reference**: `clientcmd.LoadFromFile()`, `ClientConfigLoadingRules`, `DirectClientConfig`
+
+Parsing `~/.kube/config` (or `$KUBECONFIG`) to extract cluster endpoints, contexts, and user credentials.
+
+**Kubeconfig YAML structure** (all fields we need to parse):
+
+```yaml
+apiVersion: v1
+kind: Config
+current-context: my-context
+clusters:
+- name: my-cluster
+  cluster:
+    server: https://api.example.com:6443
+    certificate-authority: /path/to/ca.crt      # or inline:
+    certificate-authority-data: <base64-pem>
+    insecure-skip-tls-verify: false
+    tls-server-name: custom-sni.example.com
+    proxy-url: socks5://proxy:1080
+users:
+- name: my-user
+  user:
+    token: static-bearer-token
+    tokenFile: /path/to/token
+    client-certificate: /path/to/cert.crt       # or inline:
+    client-certificate-data: <base64-pem>
+    client-key: /path/to/key.pem                 # or inline:
+    client-key-data: <base64-pem>
+    username: basic-auth-user
+    password: basic-auth-pass
+    exec:                                        # exec-based plugin
+      command: gke-gcloud-auth-plugin
+      args: ["--flag"]
+      env: [{name: "FOO", value: "bar"}]
+      apiVersion: client.authentication.k8s.io/v1
+      provideClusterInfo: true
+      installHint: "Install via: gcloud components install gke-gcloud-auth-plugin"
+    auth-provider:                               # OIDC/OAuth2
+      name: oidc
+      config:
+        idp-issuer-url: https://accounts.google.com
+        client-id: my-client-id
+contexts:
+- name: my-context
+  context:
+    cluster: my-cluster
+    user: my-user
+    namespace: default
+```
+
+**Proposed API**:
 
 ```typescript
-// Future API
+// Load from default location (~/.kube/config or $KUBECONFIG)
+const client = new KubernetesClient(KubernetesClient.fromKubeConfig());
+
+// Load from specific file with context override
 const client = new KubernetesClient(
-  KubernetesClient.fromKubeConfig({ context: 'my-cluster' })
+  KubernetesClient.fromKubeConfig({
+    kubeconfig: '/path/to/config',
+    context: 'staging-cluster',
+  })
 );
 ```
 
-**Challenge**: Requires a YAML parser. Options include adding `js-yaml` as an optional peer dependency, or implementing minimal YAML parsing for the kubeconfig subset.
+**client-go merge rules** (to implement):
+- `KUBECONFIG` can list multiple files separated by `:` (Unix) or `;` (Windows)
+- Map entries (clusters, users, contexts): **first file wins**
+- Scalar values (current-context): **last file wins**
+- Relative paths resolved against each file's directory
+- If no kubeconfig found, fall back to in-cluster config
 
-### TLS / CA Certificate Handling
+**Implementation notes**:
+- Requires a YAML parser — options: `js-yaml` as optional peer dep, or minimal JSON-subset parser for kubeconfig
+- Should support both file paths and inline data (`-data` fields are base64-encoded PEM)
+- The `KUBECONFIG` env var handling should match client-go exactly
 
-Native support for custom CA certificates without relying on `NODE_EXTRA_CA_CERTS`. This would require creating a custom `fetch` agent with TLS options:
+### Priority 2: TLS / CA Certificate Handling
+
+**client-go reference**: `TLSClientConfig`, `transport.TLSConfigFor()`
+
+client-go builds a `tls.Config` with:
+- `RootCAs` from `CAFile`/`CAData` for server verification
+- Minimum TLS 1.2
+- Optional `InsecureSkipVerify` for dev
+- SNI via `ServerName`
+
+**Proposed API**:
 
 ```typescript
-// Future API
 const client = new KubernetesClient({
   restEndpoint: 'https://my-cluster:6443',
   token: myToken,
   tls: {
     caFile: '/path/to/ca.crt',
-    // or caData: Buffer.from('...')
-    insecureSkipVerify: false,  // for dev only
+    caData: '<base64-pem>',            // inline CA (overrides caFile)
+    insecureSkipVerify: false,          // for dev only
+    serverName: 'custom-sni.example.com',
   }
 });
 ```
 
-### Client Certificate Auth (mTLS)
+**Implementation notes**:
+- Node.js `fetch` (undici) supports custom `dispatcher` with TLS options as of Node 18.x
+- For the `ca` option, use `node:tls` to create a custom agent
+- `NODE_EXTRA_CA_CERTS` remains the simplest approach for in-cluster; native TLS config is for advanced use cases
+- Browser environments don't support custom CA certs — document this limitation
+
+### Priority 3: Token File Watching
+
+**client-go reference**: `BearerTokenFile` field, `BearerAuthWithRefreshRoundTripper`
+
+In client-go, when `BearerTokenFile` is set, the token is re-read from disk on every request. This supports Kubernetes bound service account tokens which rotate automatically (default expiry: 1 hour).
+
+**Proposed API**:
 
 ```typescript
-// Future API
-const client = new KubernetesClient({
-  restEndpoint: 'https://my-cluster:6443',
-  tls: {
-    certFile: '/path/to/client.crt',
-    keyFile: '/path/to/client.key',
-    caFile: '/path/to/ca.crt',
-  }
-});
-```
-
-### Token File Watching
-
-Automatic re-reading of the SA token file on each request (or periodically), supporting Kubernetes bound service account token rotation:
-
-```typescript
-// Future API
 const client = new KubernetesClient({
   restEndpoint: 'https://...',
   tokenFile: '/var/run/secrets/kubernetes.io/serviceaccount/token',
@@ -286,35 +357,211 @@ const client = new KubernetesClient({
 });
 ```
 
-### Exec-Based Credential Plugins
+**Implementation notes**:
+- Read token on each `request()` call (like client-go's round tripper)
+- Cache the token + file mtime to avoid unnecessary reads
+- Fall back to static `token` if `tokenFile` read fails after initial success
+- `tokenFile` takes precedence over `token` (matching client-go behavior)
 
-Support for external credential commands (used by GKE, EKS, AKS):
+### Priority 4: Client Certificate Auth (mTLS)
+
+**client-go reference**: `TLSClientConfig.CertFile/CertData/KeyFile/KeyData`
+
+Used when kubeconfig specifies `client-certificate` and `client-key`.
 
 ```typescript
-// Future API
 const client = new KubernetesClient({
-  restEndpoint: 'https://...',
-  exec: {
-    command: 'gke-gcloud-auth-plugin',
-    apiVersion: 'client.authentication.k8s.io/v1beta1',
+  restEndpoint: 'https://my-cluster:6443',
+  tls: {
+    certFile: '/path/to/client.crt',
+    certData: '<base64-pem>',
+    keyFile: '/path/to/client.key',
+    keyData: '<base64-pem>',
+    caFile: '/path/to/ca.crt',
   }
 });
 ```
 
-### OIDC / Auth Provider Plugins
+**Implementation notes**:
+- Requires `node:https` Agent with `cert`/`key`/`ca` options
+- Inline data (`-Data` fields) takes precedence over file paths (matching client-go)
+- Certificate rotation: client-go uses `GetClientCertificate` callback to reload certs, with a 5-minute refresh interval
 
-OpenID Connect token authentication for identity-based access.
+### Priority 5: Exec-Based Credential Plugins
 
-### Impersonation
+**client-go reference**: `ExecProvider`, `exec.Authenticator`
+
+This is how GKE, EKS, and AKS authenticate — an external command produces credentials.
+
+**Protocol**:
+1. Client executes the command with `KUBERNETES_EXEC_INFO` env var containing a JSON `ExecCredential` object
+2. Plugin outputs a JSON `ExecCredential` with `status.token` or `status.clientCertificateData`/`status.clientKeyData`
+3. Client caches credentials until `status.expirationTimestamp`
+
+**ExecCredential format**:
+
+```json
+{
+  "apiVersion": "client.authentication.k8s.io/v1",
+  "kind": "ExecCredential",
+  "spec": {
+    "interactive": false,
+    "cluster": {
+      "server": "https://...",
+      "certificateAuthorityData": "...",
+      "config": null
+    }
+  },
+  "status": {
+    "token": "the-bearer-token",
+    "expirationTimestamp": "2024-01-01T00:00:00Z"
+  }
+}
+```
+
+**Proposed API**:
 
 ```typescript
-// Future API
+const client = new KubernetesClient({
+  restEndpoint: 'https://...',
+  exec: {
+    command: 'gke-gcloud-auth-plugin',
+    args: ['--flag'],
+    env: [{ name: 'FOO', value: 'bar' }],
+    apiVersion: 'client.authentication.k8s.io/v1',
+    provideClusterInfo: true,
+    installHint: 'Install via: gcloud components install gke-gcloud-auth-plugin',
+  }
+});
+```
+
+**Implementation notes**:
+- Use `node:child_process.execFile` (not `exec`, to prevent shell injection)
+- Cache credentials based on `expirationTimestamp`
+- Show `installHint` when command is not found
+- `provideClusterInfo: true` passes cluster server + CA data to the plugin via `KUBERNETES_EXEC_INFO`
+
+### Priority 6: Watch / Streaming Connections
+
+**client-go reference**: `Watcher`, `Reflector`, `SharedInformer`
+
+client-go's watch system:
+1. Makes HTTP GET with `?watch=true` query param
+2. API server streams line-delimited JSON `WatchEvent` objects
+3. Each event has `type` (ADDED/MODIFIED/DELETED/BOOKMARK/ERROR) and `object`
+4. On disconnect, reconnects using `resourceVersion` to resume
+5. `SharedInformer` provides a local cache with event handlers
+
+**Proposed API**:
+
+```typescript
+// Low-level watch (returns async iterator)
+const watcher = await client.watchCoreV1NamespacedPod({
+  path: { namespace: 'default' },
+  query: { resourceVersion: '12345' },
+});
+
+for await (const event of watcher) {
+  console.log(event.type, event.object.metadata.name);
+  // event.type: 'ADDED' | 'MODIFIED' | 'DELETED' | 'BOOKMARK' | 'ERROR'
+}
+
+// High-level informer (future)
+const informer = client.inform('v1', 'pods', 'default');
+informer.on('add', (pod) => { ... });
+informer.on('update', (oldPod, newPod) => { ... });
+informer.on('delete', (pod) => { ... });
+await informer.start();
+```
+
+**Implementation notes**:
+- Use `fetch` with streaming response body (`response.body` is a `ReadableStream`)
+- Parse line-delimited JSON using a `TransformStream` or manual line splitting
+- Track `resourceVersion` from each event for reconnection
+- Watch requests should NOT be rate-limited (matching client-go)
+- Implement reconnection with exponential backoff
+- `SharedInformer` pattern: single watch connection + local cache + event distribution
+
+### Priority 7: Impersonation
+
+**client-go reference**: `Impersonate` in `rest.Config`
+
+```typescript
 const client = new KubernetesClient({
   restEndpoint: 'https://...',
   token: adminToken,
   impersonate: {
     user: 'jane@example.com',
-    groups: ['developers'],
+    uid: '12345',
+    groups: ['developers', 'qa'],
+    extra: { 'scopes': ['view', 'edit'] },
   }
 });
 ```
+
+Injects headers: `Impersonate-User`, `Impersonate-Uid`, `Impersonate-Group`, `Impersonate-Extra-<key>`.
+
+### Priority 8: Rate Limiting & Retry
+
+**client-go reference**: `QPS`/`Burst` fields, `BackoffManager`, `Retry-After` handling
+
+client-go defaults: QPS=5, Burst=10. Uses token bucket rate limiter. Retries on 429 and 5xx with `Retry-After` header respect.
+
+**Proposed API**:
+
+```typescript
+const client = new KubernetesClient({
+  restEndpoint: 'https://...',
+  rateLimiter: {
+    qps: 5,
+    burst: 10,
+  },
+  retry: {
+    maxRetries: 3,
+    retryOn: [429, 500, 502, 503, 504],
+    respectRetryAfter: true,
+  }
+});
+```
+
+### Priority 9: Connection Pooling & HTTP/2
+
+**client-go reference**: `http.Transport` settings
+
+client-go defaults:
+- `MaxIdleConnsPerHost`: 25
+- `IdleConnTimeout`: 90s (Go default)
+- HTTP/2 enabled by default via ALPN `["h2", "http/1.1"]`
+
+In Node.js, `fetch` (undici) handles connection pooling internally. HTTP/2 support depends on the Node.js version and server configuration. These settings would be exposed via the custom dispatcher/agent.
+
+### Priority 10: Patch Helpers
+
+**client-go reference**: `types.JSONPatchType`, `types.MergePatchType`, `types.StrategicMergePatchType`, `types.ApplyPatchType`
+
+Kubernetes supports four patch strategies:
+- **JSON Patch** (`application/json-patch+json`) — RFC 6902 operations array
+- **Merge Patch** (`application/merge-patch+json`) — partial JSON merge
+- **Strategic Merge Patch** (`application/strategic-merge-patch+json`) — K8s-aware list merging
+- **Server-Side Apply** (`application/apply-patch+yaml`) — field ownership management
+
+Currently kubernetesjs uses `Content-Type: application/json` for PATCH. We should support setting the patch type:
+
+```typescript
+await client.patchCoreV1NamespacedPod({
+  path: { namespace: 'default', name: 'my-pod' },
+  body: [{ op: 'replace', path: '/metadata/labels/app', value: 'new-value' }],
+}, { patchType: 'json' });
+
+// Server-side apply
+await client.patchCoreV1NamespacedDeployment({
+  path: { namespace: 'default', name: 'my-deploy' },
+  body: deploymentManifest,
+  query: { fieldManager: 'my-controller', force: true },
+}, { patchType: 'apply' });
+```
+
+### Not Planned
+
+- **Basic auth** (`username`/`password`) — deprecated in Kubernetes, removed from most distributions
+- **OIDC auth provider plugin** — deprecated in client-go in favor of exec-based plugins
