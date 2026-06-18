@@ -1,6 +1,6 @@
 {
   "name": "@kubernetesjs/ops-dashboard",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "private": true,
   "publishConfig": {
     "access": "public"
