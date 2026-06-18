@@ -1,4 +1,4 @@
-import { InterwebClient as InterwebKubernetesClient } from "@kubernetesjs/ops";
+import { KubernetesClient } from "@kubernetesjs/ops";
 import { SetupClient } from "../../src/setup";
 import type { ClusterSetupConfig, OperatorConfig } from "../../src/types";
 
@@ -60,7 +60,7 @@ function resolveOperatorOrder(requested: string[]): string[] {
 }
 
 describe("SetupClient E2E (matrix): install operators", () => {
-  const api = new InterwebKubernetesClient({ restEndpoint: K8S_API } as any);
+  const api = new KubernetesClient({ restEndpoint: K8S_API } as any);
   const setup = new SetupClient(api as any);
 
   // Allow single or comma/space-separated list via OPERATOR or OPERATORS

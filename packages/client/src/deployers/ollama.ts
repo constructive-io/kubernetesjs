@@ -1,5 +1,5 @@
 import {
-  InterwebClient as InterwebKubernetesClient,
+  KubernetesClient,
   Namespace,
   AppsV1Deployment,
   Service,
@@ -141,11 +141,11 @@ export interface OllamaDeployResult {
 }
 
 export class OllamaDeployer {
-  private kube: InterwebKubernetesClient;
+  private kube: KubernetesClient;
   private setup: SetupClient;
   private log: (msg: string) => void;
 
-  constructor(kube: InterwebKubernetesClient, setup: SetupClient, log: (msg: string) => void = console.log) {
+  constructor(kube: KubernetesClient, setup: SetupClient, log: (msg: string) => void = console.log) {
     this.kube = kube;
     this.setup = setup;
     this.log = log;

@@ -1,5 +1,5 @@
 import {
-  InterwebClient as InterwebKubernetesClient,
+  KubernetesClient,
   Namespace,
   Secret,
   PostgresqlCnpgIoV1Cluster,
@@ -268,11 +268,11 @@ export interface DeployResult {
 }
 
 export class PostgresDeployer {
-  private kube: InterwebKubernetesClient;
+  private kube: KubernetesClient;
   private setup: SetupClient;
   private log: (msg: string) => void;
 
-  constructor(kube: InterwebKubernetesClient, setup: SetupClient, log: (msg: string) => void = console.log) {
+  constructor(kube: KubernetesClient, setup: SetupClient, log: (msg: string) => void = console.log) {
     this.kube = kube;
     this.setup = setup;
     this.log = log;

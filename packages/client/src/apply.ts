@@ -1,4 +1,4 @@
-import { InterwebClient as InterwebKubernetesClient, APIResourceList, APIResource, KubernetesResource, ObjectMeta } from '@kubernetesjs/ops';
+import { KubernetesClient, APIResourceList, APIResource, KubernetesResource, ObjectMeta } from '@kubernetesjs/ops';
 
 type GroupVersion = { group: string | null; version: string; key: string };
 
@@ -26,11 +26,11 @@ const parseApiVersion = (apiVersion: string): GroupVersion => {
 };
 
 export class K8sApplier {
-  private client: InterwebKubernetesClient;
+  private client: KubernetesClient;
   private opts: Required<ApplyOptions>;
   private discovery: Map<string, APIResourceList> = new Map();
 
-  constructor(client: InterwebKubernetesClient, opts: ApplyOptions = {}) {
+  constructor(client: KubernetesClient, opts: ApplyOptions = {}) {
     this.client = client;
     this.opts = {
       defaultNamespace: opts.defaultNamespace ?? 'default',
@@ -530,7 +530,7 @@ export class K8sApplier {
 }
 
 export async function applyKubernetesResource(
-  client: InterwebKubernetesClient,
+  client: KubernetesClient,
   manifest: KubernetesResource,
   opts: ApplyOptions = {}
 ): Promise<void> {
@@ -539,7 +539,7 @@ export async function applyKubernetesResource(
 }
 
 export async function applyKubernetesResources(
-  client: InterwebKubernetesClient,
+  client: KubernetesClient,
   manifests: KubernetesResource[],
   opts: ApplyOptions = {}
 ): Promise<void> {
@@ -548,7 +548,7 @@ export async function applyKubernetesResources(
 }
 
 export async function deleteKubernetesResource(
-  client: InterwebKubernetesClient,
+  client: KubernetesClient,
   manifest: KubernetesResource,
   opts: ApplyOptions = {}
 ): Promise<void> {
@@ -557,7 +557,7 @@ export async function deleteKubernetesResource(
 }
 
 export async function deleteKubernetesResources(
-  client: InterwebKubernetesClient,
+  client: KubernetesClient,
   manifests: KubernetesResource[],
   opts: ApplyOptions = {}
 ): Promise<void> {

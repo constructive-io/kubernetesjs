@@ -1,4 +1,4 @@
-import { InterwebClient as InterwebKubernetesClient } from '@kubernetesjs/ops';
+import { KubernetesClient } from '@kubernetesjs/ops';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: Promise<{ namespace: string; name: string }> }
 ) {
   const restEndpoint = process.env.KUBERNETES_PROXY_URL || 'http://127.0.0.1:8001';
-  const kube = new InterwebKubernetesClient({ restEndpoint } as any);
+  const kube = new KubernetesClient({ restEndpoint } as any);
   const { namespace: ns, name } = await params;
 
   try {

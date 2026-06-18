@@ -1,4 +1,4 @@
-import { InterwebClient as InterwebKubernetesClient } from "@kubernetesjs/ops";
+import { KubernetesClient } from "@kubernetesjs/ops";
 import { SetupClient } from "../../src/setup";
 import { Client } from "../../src/client";
 import { PostgresDeployer } from "../../src/deployers/postgres";
@@ -17,7 +17,7 @@ const CNPG_VERSION = "1.25.2";
 const CNPG_NAMESPACE = "cnpg-system";
 
 describe("Postgres deploy (CloudNativePG) end-to-end", () => {
-  const api = new InterwebKubernetesClient({ restEndpoint: K8S_API } as any);
+  const api = new KubernetesClient({ restEndpoint: K8S_API } as any);
   const setup = new SetupClient(api as any);
   const client = new Client({
     restEndpoint: K8S_API,

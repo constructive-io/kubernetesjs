@@ -1,5 +1,5 @@
 import { SimpleTemplateDeployer, SimpleTemplateConfig } from './simple';
-import { InterwebClient as InterwebKubernetesClient } from '@kubernetesjs/ops';
+import { KubernetesClient } from '@kubernetesjs/ops';
 
 const minioConfig: SimpleTemplateConfig = {
   image: 'minio/minio:latest',
@@ -25,7 +25,7 @@ const minioConfig: SimpleTemplateConfig = {
 
 export class MinioDeployer extends SimpleTemplateDeployer {
   constructor(
-    kubeClient: InterwebKubernetesClient,
+    kubeClient: KubernetesClient,
     logger?: (message: string) => void
   ) {
     super(kubeClient, 'minio', minioConfig, logger);

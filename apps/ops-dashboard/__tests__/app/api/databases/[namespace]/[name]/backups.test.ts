@@ -4,7 +4,7 @@ import { GET, POST } from '@/app/api/databases/[namespace]/[name]/backups/route'
 
 // Mock the dependencies
 jest.mock('@kubernetesjs/ops', () => ({
-  InterwebClient: jest.fn().mockImplementation(() => ({
+  KubernetesClient: jest.fn().mockImplementation(() => ({
     readPostgresqlCnpgIoV1NamespacedCluster: jest.fn(),
     listPostgresqlCnpgIoV1NamespacedBackup: jest.fn(),
     get: jest.fn(),
@@ -55,9 +55,9 @@ describe('/api/databases/[namespace]/[name]/backups', () => {
           .mockResolvedValueOnce({}) // snapshot API
       };
 
-      // Mock the InterwebClient constructor
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      // Mock the KubernetesClient constructor
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/backups');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });
@@ -84,8 +84,8 @@ describe('/api/databases/[namespace]/[name]/backups', () => {
           .mockResolvedValueOnce({})
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/backups');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });
@@ -108,8 +108,8 @@ describe('/api/databases/[namespace]/[name]/backups', () => {
           .mockResolvedValueOnce({})
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/backups');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });
@@ -135,10 +135,10 @@ describe('/api/databases/[namespace]/[name]/backups', () => {
         createBackup: jest.fn().mockResolvedValue({ name: 'backup-123' })
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
+      const { KubernetesClient } = require('@kubernetesjs/ops');
       const { PostgresDeployer } = require('@kubernetesjs/client');
       
-      InterwebClient.mockImplementation(() => mockKube);
+      KubernetesClient.mockImplementation(() => mockKube);
       PostgresDeployer.mockImplementation(() => mockPg);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/backups', {
@@ -171,8 +171,8 @@ describe('/api/databases/[namespace]/[name]/backups', () => {
         post: jest.fn().mockResolvedValue({ name: 'scheduled-backup-123' })
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/backups', {
         method: 'POST',
@@ -242,8 +242,8 @@ describe('/api/databases/[namespace]/[name]/backups', () => {
         get: jest.fn().mockResolvedValue(null) // no snapshot API
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/backups', {
         method: 'POST',
@@ -294,8 +294,8 @@ describe('/api/databases/[namespace]/[name]/backups', () => {
         readPostgresqlCnpgIoV1NamespacedCluster: jest.fn().mockRejectedValue(new Error('Unexpected error'))
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/backups', {
         method: 'POST',

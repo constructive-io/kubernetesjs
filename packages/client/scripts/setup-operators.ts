@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { load as loadYaml } from 'js-yaml';
 import { spawnSync } from 'child_process';
-import { InterwebClient as InterwebKubernetesClient } from '@kubernetesjs/ops';
+import { KubernetesClient } from '@kubernetesjs/ops';
 import { getOperatorIds } from '@kubernetesjs/manifests';
 import { SetupClient } from '../src/setup';
 import { ClusterSetupConfig, OperatorConfig } from '../src/types';
@@ -93,7 +93,7 @@ function createSetupClient(config: ClusterSetupConfig, options: OperatorScriptOp
     clientOpts.kubeconfig = options.kubeconfig;
   }
 
-  const kubeClient = new InterwebKubernetesClient(clientOpts as any);
+  const kubeClient = new KubernetesClient(clientOpts as any);
   return new SetupClient(kubeClient, defaultNamespace);
 }
 

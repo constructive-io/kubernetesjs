@@ -38580,7 +38580,7 @@ export interface WatchStorageV1VolumeAttachmentRequest {
 }
 export interface GetServiceAccountIssuerOpenIDKeysetRequest {}
 export interface GetCodeVersionRequest {}
-export class InterwebClient extends APIClient {
+export class KubernetesClient extends APIClient {
   constructor(options: APIClientOptions) {
     super(options);
   }
