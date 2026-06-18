@@ -1,6 +1,6 @@
 {
   "name": "@kubernetesjs/ops",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Constructive <developers@constructive.io>",
   "description": "KubernetesJS Ops library",
   "main": "index.js",
@@ -32,6 +32,6 @@
   },
   "devDependencies": {
     "makage": "^0.1.8",
-    "schema-sdk": "^0.15.0"
+    "schema-sdk": "^0.16.4"
   }
 }
