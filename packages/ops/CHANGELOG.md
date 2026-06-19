@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/ops@0.1.0...@kubernetesjs/ops@1.0.0) (2026-06-19)
+
+**Note:** Version bump only for package @kubernetesjs/ops
+
 # [0.1.0](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/ops@0.0.4...@kubernetesjs/ops@0.1.0) (2026-06-18)
 
 ### Bug Fixes
