@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { InterwebClient as InterwebKubernetesClient } from "@kubernetesjs/ops";
+import { KubernetesClient } from "@kubernetesjs/ops";
 import { ConfigLoader } from "./config-loader";
 import { SetupClient } from "./setup";
 import {
@@ -22,10 +22,10 @@ import {
   ClusterSetupConfig,
   ApplicationConfig,
   DeploymentStatus,
-  InterwebClientConfig,
+  KubernetesClientConfig,
 } from "./types";
 
-export interface InterwebContext {
+export interface KubernetesContext {
   namespace?: string;
   kubeconfig?: string;
   context?: string;
@@ -36,14 +36,14 @@ export interface InterwebContext {
 
 export class Client {
   private setupClient: SetupClient;
-  private ctx: InterwebContext;
-  private kubeClient: InterwebKubernetesClient;
+  private ctx: KubernetesContext;
+  private kubeClient: KubernetesClient;
   private pg?: PostgresDeployer;
   private templateDeployers: Map<string, BaseTemplateDeployer> = new Map();
 
-  constructor(ctx: InterwebContext = {}) {
+  constructor(ctx: KubernetesContext = {}) {
     this.ctx = ctx;
-    this.kubeClient = new InterwebKubernetesClient({
+    this.kubeClient = new KubernetesClient({
       kubeconfig: ctx.kubeconfig,
       namespace: ctx.namespace,
       context: ctx.context,

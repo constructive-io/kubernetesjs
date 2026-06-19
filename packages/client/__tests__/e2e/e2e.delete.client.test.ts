@@ -1,5 +1,5 @@
 import * as path from "path";
-import { InterwebClient as InterwebKubernetesClient } from "@kubernetesjs/ops";
+import { KubernetesClient } from "@kubernetesjs/ops";
 import { SetupClient } from "../../src/setup";
 import { ConfigLoader } from "../../src/config-loader";
 import type { ClusterSetupConfig } from "../../src/types";
@@ -13,7 +13,7 @@ jest.setTimeout(60_000);
 const K8S_API = process.env.K8S_API || "http://127.0.0.1:8001";
 
 describe("SetupClient deleteOperators: basic flow with config", () => {
-  const api = new InterwebKubernetesClient({ restEndpoint: K8S_API } as any);
+  const api = new KubernetesClient({ restEndpoint: K8S_API } as any);
   const setup = new SetupClient(api as any);
 
   const cfgPath = path.join(

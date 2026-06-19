@@ -1,9 +1,9 @@
-import { InterwebClient } from '@kubernetesjs/ops';
+import { KubernetesClient } from '@kubernetesjs/ops';
 import { expect,Page } from '@playwright/test';
 
 import { verifyPageLoadedSuccessfully } from './page-verification';
 
-const interweb = new InterwebClient({
+const client = new KubernetesClient({
   restEndpoint: 'http://127.0.0.1:8001',
   kubeconfig: '',
   namespace: 'default',
@@ -101,7 +101,7 @@ export async function verifyOperatorInstallation(page: Page, operatorName: strin
 }
 
 export async function verifyOperatorInstalled(operatorName: string) {
-  const crds = await interweb.listApiextensionsV1CustomResourceDefinition({query: {}});
+  const crds = await client.listApiextensionsV1CustomResourceDefinition({query: {}});
   const crdsNames = crds.items.map(crd => crd.metadata?.name ?? '');
   expect(crdsNames.some(crdName => new RegExp(operatorName).test(crdName))).toBe(true);
 }

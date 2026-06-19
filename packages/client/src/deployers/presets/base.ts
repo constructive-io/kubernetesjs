@@ -1,4 +1,4 @@
-import { InterwebClient as InterwebKubernetesClient } from '@kubernetesjs/ops';
+import { KubernetesClient } from '@kubernetesjs/ops';
 
 export interface TemplateDeployOptions {
   name?: string;
@@ -36,12 +36,12 @@ export interface TemplateUninstallResult {
 }
 
 export abstract class BaseTemplateDeployer {
-  protected kube: InterwebKubernetesClient;
+  protected kube: KubernetesClient;
   protected templateId: string;
   protected log: (message: string) => void;
 
   constructor(
-    kubeClient: InterwebKubernetesClient,
+    kubeClient: KubernetesClient,
     templateId: string,
     logger?: (message: string) => void
   ) {

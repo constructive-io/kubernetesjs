@@ -1,5 +1,5 @@
 import {
-  InterwebClient as InterwebKubernetesClient,
+  KubernetesClient,
   KubernetesResource,
 } from "@kubernetesjs/ops";
 import {
@@ -12,7 +12,7 @@ import {
   ClusterSetupConfig,
   ApplicationConfig,
   DeploymentStatus,
-  InterwebClientConfig,
+  KubernetesClientConfig,
   OperatorConfig,
   OperatorInfo,
   ClusterOverview,
@@ -26,11 +26,11 @@ import {
 } from "./apply";
 
 export class SetupClient {
-  private client: InterwebKubernetesClient;
+  private client: KubernetesClient;
   private defaultNamespace: string;
 
   constructor(
-    client: InterwebKubernetesClient,
+    client: KubernetesClient,
     defaultNamespace: string = "default"
   ) {
     this.client = client;

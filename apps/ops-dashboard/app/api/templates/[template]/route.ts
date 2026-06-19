@@ -1,5 +1,5 @@
 import { Client, SetupClient } from '@kubernetesjs/client';
-import { InterwebClient as InterwebKubernetesClient } from '@kubernetesjs/ops';
+import { KubernetesClient } from '@kubernetesjs/ops';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Initialize client with dashboard context
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // Ensure CloudNativePG operator is installed and ready before deploying Postgres
     if (template === 'postgres') {
       const restEndpoint = process.env.KUBERNETES_PROXY_URL || 'http://127.0.0.1:8001';
-      const kube = new InterwebKubernetesClient({ restEndpoint } as any);
+      const kube = new KubernetesClient({ restEndpoint } as any);
       const setupClient = new SetupClient(kube, namespace);
 
       const connected = await setupClient.checkConnection();

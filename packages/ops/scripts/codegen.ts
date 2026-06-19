@@ -5,7 +5,7 @@ import schema from './swagger.json';
 
 const options = getDefaultSchemaSDKOptions({
   includePropertyComments: true,
-  clientName: 'InterwebClient',
+  clientName: 'KubernetesClient',
   includeSwaggerUrl: true,
 });
 // Apply IntOrString patch once (mutating a cloned schema)

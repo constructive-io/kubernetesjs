@@ -1,5 +1,5 @@
 import { SimpleTemplateDeployer, SimpleTemplateConfig } from './simple';
-import { InterwebClient as InterwebKubernetesClient } from '@kubernetesjs/ops';
+import { KubernetesClient } from '@kubernetesjs/ops';
 
 const ollamaConfig: SimpleTemplateConfig = {
   image: 'ollama/ollama:latest',
@@ -22,7 +22,7 @@ const ollamaConfig: SimpleTemplateConfig = {
 
 export class OllamaDeployer extends SimpleTemplateDeployer {
   constructor(
-    kubeClient: InterwebKubernetesClient,
+    kubeClient: KubernetesClient,
     logger?: (message: string) => void
   ) {
     super(kubeClient, 'ollama', ollamaConfig, logger);

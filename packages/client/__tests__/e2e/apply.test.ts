@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as yaml from "js-yaml";
-import { InterwebClient as InterwebKubernetesClient } from "@kubernetesjs/ops";
+import { KubernetesClient } from "@kubernetesjs/ops";
 import { SetupClient } from "../../src/setup";
 
 // Assumes a local cluster is reachable via kubectl proxy.
@@ -16,7 +16,7 @@ const NS = "interweb-apply-test";
 const CM_NAME = "apply-test-config";
 
 describe("apply: custom manifest create/replace", () => {
-  const api = new InterwebKubernetesClient({ restEndpoint: K8S_API } as any);
+  const api = new KubernetesClient({ restEndpoint: K8S_API } as any);
   const setup = new SetupClient(api as any);
 
   async function ensureNamespaceAbsent(name: string) {

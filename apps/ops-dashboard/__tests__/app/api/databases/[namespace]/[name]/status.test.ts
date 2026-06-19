@@ -4,7 +4,7 @@ import { GET } from '@/app/api/databases/[namespace]/[name]/status/route';
 
 // Mock the dependencies
 jest.mock('@kubernetesjs/ops', () => ({
-  InterwebClient: jest.fn().mockImplementation(() => ({
+  KubernetesClient: jest.fn().mockImplementation(() => ({
     get: jest.fn(),
     readCoreV1NamespacedPod: jest.fn(),
     listCoreV1NamespacedPod: jest.fn(),
@@ -97,8 +97,8 @@ describe('/api/databases/[namespace]/[name]/status', () => {
           }) // pooler pods
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/status');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });
@@ -141,8 +141,8 @@ describe('/api/databases/[namespace]/[name]/status', () => {
         get: jest.fn().mockRejectedValue(new Error('status: 404'))
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/status');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });
@@ -164,8 +164,8 @@ describe('/api/databases/[namespace]/[name]/status', () => {
         get: jest.fn().mockRejectedValue(new Error('not found'))
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/status');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });
@@ -205,8 +205,8 @@ describe('/api/databases/[namespace]/[name]/status', () => {
         listCoreV1NamespacedPod: jest.fn().mockResolvedValue({ items: [] })
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/status');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });
@@ -243,8 +243,8 @@ describe('/api/databases/[namespace]/[name]/status', () => {
         listCoreV1NamespacedPod: jest.fn().mockResolvedValue({ items: [] })
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/status');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });
@@ -281,8 +281,8 @@ describe('/api/databases/[namespace]/[name]/status', () => {
         listCoreV1NamespacedPod: jest.fn().mockResolvedValue({ items: [] })
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/status');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });
@@ -303,8 +303,8 @@ describe('/api/databases/[namespace]/[name]/status', () => {
         get: jest.fn().mockRejectedValue(new Error('Unexpected error'))
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/status');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });
@@ -324,8 +324,8 @@ describe('/api/databases/[namespace]/[name]/status', () => {
         get: jest.fn().mockRejectedValue(new Error('Unexpected error'))
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation((config) => {
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation((config) => {
         expect(config.restEndpoint).toBe('http://custom-proxy:8001');
         return mockKube;
       });
@@ -381,8 +381,8 @@ describe('/api/databases/[namespace]/[name]/status', () => {
         listCoreV1NamespacedPod: jest.fn().mockResolvedValue({ items: [] })
       };
 
-      const { InterwebClient } = require('@kubernetesjs/ops');
-      InterwebClient.mockImplementation(() => mockKube);
+      const { KubernetesClient } = require('@kubernetesjs/ops');
+      KubernetesClient.mockImplementation(() => mockKube);
 
       const request = new NextRequest('http://localhost:3000/api/databases/test-ns/test-cluster/status');
       const params = Promise.resolve({ namespace: 'test-ns', name: 'test-cluster' });

@@ -115,7 +115,7 @@ export interface DeploymentStatus {
   }>;
 }
 
-export interface InterwebClientConfig {
+export interface KubernetesClientConfig {
   kubeconfig?: string;
   namespace?: string;
   context?: string;

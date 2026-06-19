@@ -1,7 +1,7 @@
-import { InterwebClient } from '@kubernetesjs/ops';
+import { KubernetesClient } from '@kubernetesjs/ops';
 
 // Singleton instance
-let client: InterwebClient | null = null;
+let client: KubernetesClient | null = null;
 let authHeaders: any = {};
 
 export interface K8sConfig {
@@ -10,8 +10,8 @@ export interface K8sConfig {
   namespace?: string
 }
 
-export function initializeClient(config: K8sConfig): InterwebClient {
-  client = new InterwebClient({
+export function initializeClient(config: K8sConfig): KubernetesClient {
+  client = new KubernetesClient({
     restEndpoint: config.endpoint,
     kubeconfig: '', // Add required properties
     namespace: config.namespace || 'default',
@@ -28,10 +28,10 @@ export function initializeClient(config: K8sConfig): InterwebClient {
   return client;
 }
 
-export function getClient(): InterwebClient {
+export function getClient(): KubernetesClient {
   if (!client) {
     // Default to local kubectl proxy
-    client = new InterwebClient({
+    client = new KubernetesClient({
       restEndpoint: 'http://localhost:8001',
       kubeconfig: '',
       namespace: 'default',

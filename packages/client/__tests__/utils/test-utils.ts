@@ -1,10 +1,10 @@
-import { InterwebClient as InterwebKubernetesClient } from '@kubernetesjs/ops';
+import { KubernetesClient } from '@kubernetesjs/ops';
 
 /**
  * Ensures a namespace is ready for use by waiting for any terminating namespace to be fully deleted
  */
 export async function ensureNamespaceReady(
-  api: InterwebKubernetesClient, 
+  api: KubernetesClient, 
   name: string, 
   maxWaitMs = 180000 // 3 minutes
 ): Promise<void> {
@@ -48,7 +48,7 @@ export async function ensureNamespaceReady(
  * Force delete a namespace and wait for it to be fully removed
  */
 export async function forceDeleteNamespace(
-  api: InterwebKubernetesClient, 
+  api: KubernetesClient, 
   name: string,
   maxWaitMs = 120000
 ): Promise<void> {
@@ -94,7 +94,7 @@ export async function forceDeleteNamespace(
  * Ensure namespace exists and is ready, creating it if necessary
  */
 export async function ensureNamespaceExists(
-  api: InterwebKubernetesClient,
+  api: KubernetesClient,
   name: string,
   maxWaitMs = 180000 // 3 minutes
 ): Promise<void> {
@@ -130,7 +130,7 @@ export async function ensureNamespaceExists(
 /**
  * Helper function to create a namespace
  */
-async function createNamespace(api: InterwebKubernetesClient, name: string): Promise<void> {
+async function createNamespace(api: KubernetesClient, name: string): Promise<void> {
   const namespaceManifest = {
     apiVersion: 'v1',
     kind: 'Namespace',
@@ -161,7 +161,7 @@ async function createNamespace(api: InterwebKubernetesClient, name: string): Pro
  * Clean up multiple namespaces in parallel
  */
 export async function cleanupNamespaces(
-  api: InterwebKubernetesClient,
+  api: KubernetesClient,
   namespaces: string[]
 ): Promise<void> {
   const cleanupPromises = namespaces.map(ns => 

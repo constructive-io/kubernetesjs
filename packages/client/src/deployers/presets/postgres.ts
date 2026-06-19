@@ -6,13 +6,13 @@ import {
   TemplateUninstallResult,
 } from './base';
 import { PostgresDeployer, PostgresDeployOptions, DeployResult, connectionInfo } from '../postgres';
-import { InterwebClient as InterwebKubernetesClient } from '@kubernetesjs/ops';
+import { KubernetesClient } from '@kubernetesjs/ops';
 
 /**
  * Wrapper to adapt PostgresDeployer to the template interface
  */
 export class PostgresTemplateWrapper extends BaseTemplateDeployer {
-  constructor(private postgresDeployer: PostgresDeployer, kube: InterwebKubernetesClient, log: (msg: string) => void) {
+  constructor(private postgresDeployer: PostgresDeployer, kube: KubernetesClient, log: (msg: string) => void) {
     super(kube, 'postgres', log);
   }
 

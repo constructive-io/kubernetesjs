@@ -1,5 +1,5 @@
 import {
-  InterwebClient as InterwebKubernetesClient,
+  KubernetesClient,
   Namespace,
   Secret,
   AppsV1Deployment,
@@ -216,11 +216,11 @@ export interface MinioDeployResult {
 }
 
 export class MinioDeployer {
-  private kube: InterwebKubernetesClient;
+  private kube: KubernetesClient;
   private setup: SetupClient;
   private log: (msg: string) => void;
 
-  constructor(kube: InterwebKubernetesClient, setup: SetupClient, log: (msg: string) => void = console.log) {
+  constructor(kube: KubernetesClient, setup: SetupClient, log: (msg: string) => void = console.log) {
     this.kube = kube;
     this.setup = setup;
     this.log = log;

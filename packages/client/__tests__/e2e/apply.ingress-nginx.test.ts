@@ -1,4 +1,4 @@
-import { InterwebClient as InterwebKubernetesClient } from "@kubernetesjs/ops";
+import { KubernetesClient } from "@kubernetesjs/ops";
 import { getOperatorResources } from "@kubernetesjs/manifests";
 import { SetupClient } from "../../src/setup";
 import { ensureNamespaceReady, ensureNamespaceExists, forceDeleteNamespace } from "../utils/test-utils";
@@ -10,7 +10,7 @@ const K8S_API = process.env.K8S_API || "http://127.0.0.1:8001";
 const nsName = "ingress-nginx";
 
 describe("FULL APPLY: ingress-nginx operator", () => {
-  const api = new InterwebKubernetesClient({ restEndpoint: K8S_API } as any);
+  const api = new KubernetesClient({ restEndpoint: K8S_API } as any);
   const setup = new SetupClient(api as any);
 
   beforeAll(async () => {
