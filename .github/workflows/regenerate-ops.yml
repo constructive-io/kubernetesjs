@@ -1,0 +1,209 @@
+name: Regenerate Ops Client
+
+on:
+  workflow_dispatch:
+    inputs:
+      tekton:
+        description: 'Install Tekton Pipelines'
+        type: boolean
+        default: true
+      traefik:
+        description: 'Install Traefik'
+        type: boolean
+        default: true
+      cert_manager:
+        description: 'Install cert-manager'
+        type: boolean
+        default: true
+      prometheus:
+        description: 'Install Prometheus Operator CRDs'
+        type: boolean
+        default: true
+      knative_serving:
+        description: 'Install Knative Serving'
+        type: boolean
+        default: true
+      cloudnative_pg:
+        description: 'Install CloudNative PG'
+        type: boolean
+        default: true
+      minio:
+        description: 'Install MinIO Operator'
+        type: boolean
+        default: true
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.12.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: v1.31.3
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.16.0
+
+      - name: Create Kind cluster
+        uses: helm/kind-action@v1.12.0
+        with:
+          cluster_name: ops-codegen
+          kubectl_version: v1.31.3
+          wait: 300s
+
+      - name: Install cert-manager
+        if: ${{ inputs.cert_manager }}
+        run: |
+          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
+          kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
+
+      - name: Install Prometheus Operator CRDs
+        if: ${{ inputs.prometheus }}
+        run: |
+          kubectl apply --server-side -f https://github.com/prometheus-operator/prometheus-operator/releases/latest/download/stripped-down-crds.yaml
+
+      - name: Install Knative Serving
+        if: ${{ inputs.knative_serving }}
+        run: |
+          kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-crds.yaml
+          kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-core.yaml
+          kubectl wait --for=condition=Available deployment/controller -n knative-serving --timeout=120s || true
+
+      - name: Install Tekton Pipelines
+        if: ${{ inputs.tekton }}
+        run: |
+          kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+          kubectl wait --for=condition=established --timeout=60s crd/pipelines.tekton.dev
+          kubectl wait --for=condition=established --timeout=60s crd/pipelineruns.tekton.dev
+          kubectl wait --for=condition=established --timeout=60s crd/tasks.tekton.dev
+          kubectl wait --for=condition=established --timeout=60s crd/taskruns.tekton.dev
+
+      - name: Install Traefik CRDs
+        if: ${{ inputs.traefik }}
+        run: |
+          # Install CRDs directly (helm install --wait times out in Kind due to LoadBalancer)
+          helm repo add traefik https://traefik.github.io/charts
+          helm repo update
+          helm template traefik traefik/traefik | kubectl apply --server-side -f - || true
+          # Ensure Traefik CRDs are also applied from source (covers all CRDs)
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_ingressroutes.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_ingressroutetcps.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_ingressrouteudps.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_middlewares.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_middlewaretcps.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_serverstransports.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_serverstransporttcps.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_tlsoptions.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_tlsstores.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_traefikservices.yaml
+          kubectl wait --for=condition=established --timeout=60s crd/ingressroutes.traefik.io
+
+      - name: Install CloudNative PG
+        if: ${{ inputs.cloudnative_pg }}
+        run: |
+          kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/releases/cnpg-1.25.0.yaml
+          kubectl wait --for=condition=established --timeout=60s crd/clusters.postgresql.cnpg.io || true
+
+      - name: Install MinIO Operator CRDs
+        if: ${{ inputs.minio }}
+        run: |
+          helm repo add minio-operator https://operator.min.io/
+          helm repo update
+          helm template minio-operator operator --repo https://operator.min.io/ --namespace minio-operator | kubectl apply --server-side -f - || true
+          kubectl wait --for=condition=established --timeout=60s crd/tenants.minio.min.io || true
+
+      - name: Wait for all CRDs to register
+        run: |
+          echo "Waiting for API server to aggregate CRD schemas..."
+          sleep 30
+          kubectl api-resources --api-group=tekton.dev 2>/dev/null || true
+          kubectl api-resources --api-group=traefik.io 2>/dev/null || true
+          kubectl api-resources --api-group=serving.knative.dev 2>/dev/null || true
+          kubectl api-resources --api-group=cert-manager.io 2>/dev/null || true
+          kubectl api-resources --api-group=monitoring.coreos.com 2>/dev/null || true
+          kubectl api-resources --api-group=postgresql.cnpg.io 2>/dev/null || true
+
+      - name: Start kubectl proxy
+        run: |
+          kubectl proxy --port=8001 --accept-hosts='^.*$' --address='0.0.0.0' &
+          sleep 5
+          curl -f http://127.0.0.1:8001/api || (echo 'proxy failed' && exit 1)
+
+      - name: Fetch swagger spec
+        working-directory: packages/ops
+        run: |
+          pnpm ts-node scripts/fetch-swagger.ts --out scripts/swagger.json
+
+      - name: Report swagger contents
+        run: |
+          python3 -c "
+          import json
+          with open('packages/ops/scripts/swagger.json') as f:
+            d = json.load(f)
+          paths = d.get('paths', {})
+          defs = d.get('definitions', {})
+          print(f'Total paths: {len(paths)}')
+          print(f'Total definitions: {len(defs)}')
+          import re
+          groups = {}
+          for p in paths:
+            m = re.match(r'/apis/([^/]+)/', p)
+            if m:
+              g = m.group(1)
+              groups[g] = groups.get(g, 0) + 1
+          print()
+          print('API groups:')
+          for g in sorted(groups):
+            print(f'  {g}: {groups[g]} paths')
+          "
+
+      - name: Run codegen
+        working-directory: packages/ops
+        run: pnpm codegen
+
+      - name: Verify build
+        run: pnpm build
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'feat(ops): regenerate client with updated CRD specs'
+          title: 'feat(ops): regenerate client with updated CRD specs'
+          body: |
+            Regenerated `@kubernetesjs/ops` client from a Kind cluster with:
+            - cert-manager: ${{ inputs.cert_manager }}
+            - Prometheus Operator: ${{ inputs.prometheus }}
+            - Knative Serving: ${{ inputs.knative_serving }}
+            - Tekton Pipelines: ${{ inputs.tekton }}
+            - Traefik: ${{ inputs.traefik }}
+            - CloudNative PG: ${{ inputs.cloudnative_pg }}
+            - MinIO Operator: ${{ inputs.minio }}
+
+            Triggered by workflow_dispatch.
+          branch: feat/regenerate-ops-client
+          delete-branch: true
