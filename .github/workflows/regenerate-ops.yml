@@ -27,10 +27,7 @@ on:
         description: 'Install CloudNative PG'
         type: boolean
         default: true
-      minio:
-        description: 'Install MinIO Operator'
-        type: boolean
-        default: false
+
 
 jobs:
   regenerate:
@@ -128,13 +125,6 @@ jobs:
           kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/releases/cnpg-1.25.0.yaml
           kubectl wait --for=condition=established --timeout=60s crd/clusters.postgresql.cnpg.io || true
 
-      - name: Install MinIO Operator CRDs
-        if: ${{ inputs.minio }}
-        run: |
-          helm repo add minio-operator https://operator.min.io/
-          helm repo update
-          helm template minio-operator operator --repo https://operator.min.io/ --namespace minio-operator | kubectl apply --server-side -f - || true
-          kubectl wait --for=condition=established --timeout=60s crd/tenants.minio.min.io || true
 
       - name: Wait for all CRDs to register
         run: |
@@ -202,7 +192,6 @@ jobs:
             - Tekton Pipelines: ${{ inputs.tekton }}
             - Traefik: ${{ inputs.traefik }}
             - CloudNative PG: ${{ inputs.cloudnative_pg }}
-            - MinIO Operator: ${{ inputs.minio }}
 
             Triggered by workflow_dispatch.
           branch: feat/regenerate-ops-client
