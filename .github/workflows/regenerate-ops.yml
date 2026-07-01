@@ -30,7 +30,7 @@ on:
       minio:
         description: 'Install MinIO Operator'
         type: boolean
-        default: true
+        default: false
 
 jobs:
   regenerate:
