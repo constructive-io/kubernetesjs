@@ -1,10 +1,4 @@
 import { APIClient, APIClientRequestOpts, APIClientOptions } from "./client";
-/* com.coreos.monitoring.v1.Alertmanager */
-/* The `Alertmanager` custom resource definition (CRD) defines a desired [Alertmanager](https://prometheus.io/docs/alerting) setup to run in a Kubernetes cluster. It allows to specify many options such as the number of replicas, persistent storage and many more.
-
-For each `Alertmanager` resource, the Operator deploys a `StatefulSet` in the same namespace. When there are two or more configured replicas, the Operator runs the Alertmanager instances in high-availability mode.
-
-The resource defines via label and namespace selectors which `AlertmanagerConfig` objects should be associated to the deployed Alertmanager instances. */
 export interface MonitoringCoreosComV1Alertmanager {
   apiVersion?: string;
   kind?: string;
@@ -213,6 +207,7 @@ export interface MonitoringCoreosComV1Alertmanager {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -324,6 +319,13 @@ export interface MonitoringCoreosComV1Alertmanager {
         jira?: {
           apiURL?: string;
         };
+        mattermost?: {
+          webhookURL?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
         opsGenieApiKey?: {
           key: string;
           name?: string;
@@ -367,6 +369,7 @@ export interface MonitoringCoreosComV1Alertmanager {
             optional?: boolean;
           };
           authUsername?: string;
+          forceImplicitTLS?: boolean;
           from?: string;
           hello?: string;
           requireTLS?: boolean;
@@ -550,6 +553,12 @@ export interface MonitoringCoreosComV1Alertmanager {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -705,6 +714,13 @@ export interface MonitoringCoreosComV1Alertmanager {
         };
       };
       restartPolicy?: string;
+      restartPolicyRules?: {
+        action: string;
+        exitCodes?: {
+          operator: string;
+          values?: number[];
+        };
+      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -804,6 +820,7 @@ export interface MonitoringCoreosComV1Alertmanager {
       hostnames: string[];
       ip: string;
     }[];
+    hostNetwork?: boolean;
     hostUsers?: boolean;
     image?: string;
     imagePullPolicy?: "" | "Always" | "Never" | "IfNotPresent";
@@ -825,6 +842,12 @@ export interface MonitoringCoreosComV1Alertmanager {
           fieldRef?: {
             apiVersion?: string;
             fieldPath: string;
+          };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
           };
           resourceFieldRef?: {
             containerName?: string;
@@ -981,6 +1004,13 @@ export interface MonitoringCoreosComV1Alertmanager {
         };
       };
       restartPolicy?: string;
+      restartPolicyRules?: {
+        action: string;
+        exitCodes?: {
+          operator: string;
+          values?: number[];
+        };
+      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -1079,6 +1109,7 @@ export interface MonitoringCoreosComV1Alertmanager {
       whenDeleted?: string;
       whenScaled?: string;
     };
+    podManagementPolicy?: "OrderedReady" | "Parallel";
     podMetadata?: {
       annotations?: {
         [key: string]: unknown;
@@ -1105,6 +1136,7 @@ export interface MonitoringCoreosComV1Alertmanager {
     };
     retention?: string;
     routePrefix?: string;
+    schedulerName?: string;
     secrets?: string[];
     securityContext?: {
       appArmorProfile?: {
@@ -1296,6 +1328,12 @@ export interface MonitoringCoreosComV1Alertmanager {
       topologyKey: string;
       whenUnsatisfiable: string;
     }[];
+    updateStrategy?: {
+      rollingUpdate?: {
+        maxUnavailable?: any;
+      };
+      type: "OnDelete" | "RollingUpdate";
+    };
     version?: string;
     volumeMounts?: {
       mountPath: string;
@@ -1551,6 +1589,17 @@ export interface MonitoringCoreosComV1Alertmanager {
               };
             }[];
           };
+          podCertificate?: {
+            certificateChainPath?: string;
+            credentialBundlePath?: string;
+            keyPath?: string;
+            keyType: string;
+            maxExpirationSeconds?: number;
+            signerName: string;
+            userAnnotations?: {
+              [key: string]: unknown;
+            };
+          };
           secret?: {
             items?: {
               key: string;
@@ -1683,7 +1732,7 @@ export interface MonitoringCoreosComV1Alertmanager {
     };
   };
   status?: {
-    availableReplicas: number;
+    availableReplicas?: number;
     conditions?: {
       lastTransitionTime: string;
       message?: string;
@@ -1692,11 +1741,11 @@ export interface MonitoringCoreosComV1Alertmanager {
       status: string;
       type: string;
     }[];
-    paused: boolean;
-    replicas: number;
+    paused?: boolean;
+    replicas?: number;
     selector?: string;
-    unavailableReplicas: number;
-    updatedReplicas: number;
+    unavailableReplicas?: number;
+    updatedReplicas?: number;
   };
 }
 /* com.coreos.monitoring.v1.AlertmanagerList */
@@ -1707,15 +1756,6 @@ export interface MonitoringCoreosComV1AlertmanagerList {
   kind?: string;
   metadata?: ListMeta;
 }
-/* com.coreos.monitoring.v1.PodMonitor */
-/* The `PodMonitor` custom resource definition (CRD) defines how `Prometheus` and `PrometheusAgent` can scrape metrics from a group of pods.
-Among other things, it allows to specify:
-* The pods to scrape via label selectors.
-* The container ports to scrape.
-* Authentication credentials to use.
-* Target and metric relabeling.
-
-`Prometheus` and `PrometheusAgent` objects select `PodMonitor` objects using label and namespace selectors. */
 export interface MonitoringCoreosComV1PodMonitor {
   apiVersion?: string;
   kind?: string;
@@ -1865,7 +1905,7 @@ export interface MonitoringCoreosComV1PodMonitor {
         sourceLabels?: string[];
         targetLabel?: string;
       }[];
-      scheme?: "http" | "https";
+      scheme?: "http" | "https" | "HTTP" | "HTTPS";
       scrapeTimeout?: string;
       targetPort?: any;
       tlsConfig?: {
@@ -1909,6 +1949,7 @@ export interface MonitoringCoreosComV1PodMonitor {
     sampleLimit?: number;
     scrapeClass?: string;
     scrapeClassicHistograms?: boolean;
+    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     selector: {
       matchExpressions?: {
@@ -1923,6 +1964,22 @@ export interface MonitoringCoreosComV1PodMonitor {
     selectorMechanism?: "RelabelConfig" | "RoleSelector";
     targetLimit?: number;
   };
+  status?: {
+    bindings?: {
+      conditions?: {
+        lastTransitionTime: string;
+        message?: string;
+        observedGeneration?: number;
+        reason?: string;
+        status: string;
+        type: "Accepted";
+      }[];
+      group: "monitoring.coreos.com";
+      name: string;
+      namespace: string;
+      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
+    }[];
+  };
 }
 /* com.coreos.monitoring.v1.PodMonitorList */
 /* PodMonitorList is a list of PodMonitor */
@@ -1932,14 +1989,6 @@ export interface MonitoringCoreosComV1PodMonitorList {
   kind?: string;
   metadata?: ListMeta;
 }
-/* com.coreos.monitoring.v1.Probe */
-/* The `Probe` custom resource definition (CRD) defines how to scrape metrics from prober exporters such as the [blackbox exporter](https://github.com/prometheus/blackbox_exporter).
-
-The `Probe` resource needs 2 pieces of information:
-* The list of probed addresses which can be defined statically or by discovering Kubernetes Ingress objects.
-* The prober which exposes the availability of probed endpoints (over various protocols such HTTP, TCP, ICMP, ...) as Prometheus metrics.
-
-`Prometheus` and `PrometheusAgent` objects select `Probe` objects using label and namespace selectors. */
 export interface MonitoringCoreosComV1Probe {
   apiVersion?: string;
   kind?: string;
@@ -1971,7 +2020,9 @@ export interface MonitoringCoreosComV1Probe {
       optional?: boolean;
     };
     convertClassicHistogramsToNHCB?: boolean;
+    enableHttp2?: boolean;
     fallbackScrapeProtocol?: "PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0";
+    followRedirects?: boolean;
     interval?: string;
     jobName?: string;
     keepDroppedTargets?: number;
@@ -2067,12 +2118,13 @@ export interface MonitoringCoreosComV1Probe {
       };
       proxyFromEnvironment?: boolean;
       proxyUrl?: string;
-      scheme?: "http" | "https";
+      scheme?: "http" | "https" | "HTTP" | "HTTPS";
       url: string;
     };
     sampleLimit?: number;
     scrapeClass?: string;
     scrapeClassicHistograms?: boolean;
+    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     scrapeTimeout?: string;
     targetLimit?: number;
@@ -2154,6 +2206,22 @@ export interface MonitoringCoreosComV1Probe {
       serverName?: string;
     };
   };
+  status?: {
+    bindings?: {
+      conditions?: {
+        lastTransitionTime: string;
+        message?: string;
+        observedGeneration?: number;
+        reason?: string;
+        status: string;
+        type: "Accepted";
+      }[];
+      group: "monitoring.coreos.com";
+      name: string;
+      namespace: string;
+      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
+    }[];
+  };
 }
 /* com.coreos.monitoring.v1.ProbeList */
 /* ProbeList is a list of Probe */
@@ -2163,14 +2231,6 @@ export interface MonitoringCoreosComV1ProbeList {
   kind?: string;
   metadata?: ListMeta;
 }
-/* com.coreos.monitoring.v1.Prometheus */
-/* The `Prometheus` custom resource definition (CRD) defines a desired [Prometheus](https://prometheus.io/docs/prometheus) setup to run in a Kubernetes cluster. It allows to specify many options such as the number of replicas, persistent storage, and Alertmanagers where firing alerts should be sent and many more.
-
-For each `Prometheus` resource, the Operator deploys one or several `StatefulSet` objects in the same namespace. The number of StatefulSets is equal to the number of shards which is 1 by default.
-
-The resource defines via label and namespace selectors which `ServiceMonitor`, `PodMonitor`, `Probe` and `PrometheusRule` objects should be associated to the deployed Prometheus instances.
-
-The Operator continuously reconciles the scrape and rules configuration and a sidecar container running in the Prometheus pods triggers a reload of the configuration when needed. */
 export interface MonitoringCoreosComV1Prometheus {
   apiVersion?: string;
   kind?: string;
@@ -2395,13 +2455,14 @@ export interface MonitoringCoreosComV1Prometheus {
           sourceLabels?: string[];
           targetLabel?: string;
         }[];
-        scheme?: string;
+        scheme?: "http" | "https" | "HTTP" | "HTTPS";
         sigv4?: {
           accessKey?: {
             key: string;
             name?: string;
             optional?: boolean;
           };
+          externalId?: string;
           profile?: string;
           region?: string;
           roleArn?: string;
@@ -2410,6 +2471,7 @@ export interface MonitoringCoreosComV1Prometheus {
             name?: string;
             optional?: boolean;
           };
+          useFIPSSTSEndpoint?: boolean;
         };
         timeout?: string;
         tlsConfig?: {
@@ -2545,6 +2607,12 @@ export interface MonitoringCoreosComV1Prometheus {
           fieldRef?: {
             apiVersion?: string;
             fieldPath: string;
+          };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
           };
           resourceFieldRef?: {
             containerName?: string;
@@ -2701,6 +2769,13 @@ export interface MonitoringCoreosComV1Prometheus {
         };
       };
       restartPolicy?: string;
+      restartPolicyRules?: {
+        action: string;
+        exitCodes?: {
+          operator: string;
+          values?: number[];
+        };
+      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -2849,6 +2924,12 @@ export interface MonitoringCoreosComV1Prometheus {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -3004,6 +3085,13 @@ export interface MonitoringCoreosComV1Prometheus {
         };
       };
       restartPolicy?: string;
+      restartPolicyRules?: {
+        action: string;
+        exitCodes?: {
+          operator: string;
+          values?: number[];
+        };
+      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -3104,9 +3192,12 @@ export interface MonitoringCoreosComV1Prometheus {
       convertHistogramsToNHCB?: boolean;
       ignoreResourceAttributes?: string[];
       keepIdentifyingResourceAttributes?: boolean;
+      labelNamePreserveMultipleUnderscores?: boolean;
+      labelNameUnderscoreSanitization?: boolean;
       promoteAllResourceAttributes?: boolean;
       promoteResourceAttributes?: string[];
-      translationStrategy?: "NoUTF8EscapingWithSuffixes" | "UnderscoreEscapingWithSuffixes" | "NoTranslation";
+      promoteScopeMetadata?: boolean;
+      translationStrategy?: "NoUTF8EscapingWithSuffixes" | "UnderscoreEscapingWithSuffixes" | "NoTranslation" | "UnderscoreEscapingWithoutSuffixes";
     };
     overrideHonorLabels?: boolean;
     overrideHonorTimestamps?: boolean;
@@ -3115,6 +3206,7 @@ export interface MonitoringCoreosComV1Prometheus {
       whenDeleted?: string;
       whenScaled?: string;
     };
+    podManagementPolicy?: "OrderedReady" | "Parallel";
     podMetadata?: {
       annotations?: {
         [key: string]: unknown;
@@ -3339,7 +3431,7 @@ export interface MonitoringCoreosComV1Prometheus {
       azureAd?: {
         cloud?: "AzureChina" | "AzureGovernment" | "AzurePublic";
         managedIdentity?: {
-          clientId: string;
+          clientId?: string;
         };
         oauth?: {
           clientId: string;
@@ -3350,8 +3442,13 @@ export interface MonitoringCoreosComV1Prometheus {
           };
           tenantId: string;
         };
+        scope?: string;
         sdk?: {
           tenantId?: string;
+        };
+        workloadIdentity?: {
+          clientId: string;
+          tenantId: string;
         };
       };
       basicAuth?: {
@@ -3473,6 +3570,7 @@ export interface MonitoringCoreosComV1Prometheus {
           name?: string;
           optional?: boolean;
         };
+        externalId?: string;
         profile?: string;
         region?: string;
         roleArn?: string;
@@ -3481,6 +3579,7 @@ export interface MonitoringCoreosComV1Prometheus {
           name?: string;
           optional?: boolean;
         };
+        useFIPSSTSEndpoint?: boolean;
       };
       tlsConfig?: {
         ca?: {
@@ -3581,6 +3680,7 @@ export interface MonitoringCoreosComV1Prometheus {
       goGC?: number;
     };
     sampleLimit?: number;
+    schedulerName?: string;
     scrapeClasses?: {
       attachMetadata?: {
         node?: boolean;
@@ -3677,6 +3777,7 @@ export interface MonitoringCoreosComV1Prometheus {
     };
     scrapeFailureLogFile?: string;
     scrapeInterval?: string;
+    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     scrapeTimeout?: string;
     secrets?: string[];
@@ -3743,6 +3844,13 @@ export interface MonitoringCoreosComV1Prometheus {
         retentionPeriod: string;
       };
       whenScaled?: "Retain" | "Delete";
+    };
+    shardingStrategy?: {
+      mode?: "Address" | "Topology";
+      topology?: {
+        externalLabelName?: string;
+        values?: string[];
+      };
     };
     shards?: number;
     storage?: {
@@ -3910,6 +4018,8 @@ export interface MonitoringCoreosComV1Prometheus {
           };
         };
         certFile?: string;
+        cipherSuites?: string[];
+        curves?: string[];
         insecureSkipVerify?: boolean;
         keyFile?: string;
         keySecret?: {
@@ -3993,8 +4103,8 @@ export interface MonitoringCoreosComV1Prometheus {
       whenUnsatisfiable: string;
     }[];
     tracingConfig?: {
-      clientType?: "http" | "grpc";
-      compression?: "gzip";
+      clientType?: "http" | "grpc" | "HTTP" | "GRPC";
+      compression?: "gzip" | "Gzip";
       endpoint: string;
       headers?: {
         [key: string]: unknown;
@@ -4043,6 +4153,13 @@ export interface MonitoringCoreosComV1Prometheus {
     };
     tsdb?: {
       outOfOrderTimeWindow?: string;
+      staleSeriesCompactionThreshold?: any;
+    };
+    updateStrategy?: {
+      rollingUpdate?: {
+        maxUnavailable?: any;
+      };
+      type: "OnDelete" | "RollingUpdate";
     };
     version?: string;
     volumeMounts?: {
@@ -4299,6 +4416,17 @@ export interface MonitoringCoreosComV1Prometheus {
               };
             }[];
           };
+          podCertificate?: {
+            certificateChainPath?: string;
+            credentialBundlePath?: string;
+            keyPath?: string;
+            keyType: string;
+            maxExpirationSeconds?: number;
+            signerName: string;
+            userAnnotations?: {
+              [key: string]: unknown;
+            };
+          };
           secret?: {
             items?: {
               key: string;
@@ -4432,7 +4560,7 @@ export interface MonitoringCoreosComV1Prometheus {
     };
   };
   status?: {
-    availableReplicas: number;
+    availableReplicas?: number;
     conditions?: {
       lastTransitionTime: string;
       message?: string;
@@ -4441,8 +4569,8 @@ export interface MonitoringCoreosComV1Prometheus {
       status: string;
       type: string;
     }[];
-    paused: boolean;
-    replicas: number;
+    paused?: boolean;
+    replicas?: number;
     selector?: string;
     shardStatuses?: {
       availableReplicas: number;
@@ -4452,8 +4580,8 @@ export interface MonitoringCoreosComV1Prometheus {
       updatedReplicas: number;
     }[];
     shards?: number;
-    unavailableReplicas: number;
-    updatedReplicas: number;
+    unavailableReplicas?: number;
+    updatedReplicas?: number;
   };
 }
 /* com.coreos.monitoring.v1.PrometheusList */
@@ -4464,10 +4592,6 @@ export interface MonitoringCoreosComV1PrometheusList {
   kind?: string;
   metadata?: ListMeta;
 }
-/* com.coreos.monitoring.v1.PrometheusRule */
-/* The `PrometheusRule` custom resource definition (CRD) defines [alerting](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) and [recording](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/) rules to be evaluated by `Prometheus` or `ThanosRuler` objects.
-
-`Prometheus` and `ThanosRuler` objects select `PrometheusRule` objects using label and namespace selectors. */
 export interface MonitoringCoreosComV1PrometheusRule {
   apiVersion?: string;
   kind?: string;
@@ -4497,6 +4621,22 @@ export interface MonitoringCoreosComV1PrometheusRule {
       }[];
     }[];
   };
+  status?: {
+    bindings?: {
+      conditions?: {
+        lastTransitionTime: string;
+        message?: string;
+        observedGeneration?: number;
+        reason?: string;
+        status: string;
+        type: "Accepted";
+      }[];
+      group: "monitoring.coreos.com";
+      name: string;
+      namespace: string;
+      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
+    }[];
+  };
 }
 /* com.coreos.monitoring.v1.PrometheusRuleList */
 /* PrometheusRuleList is a list of PrometheusRule */
@@ -4506,15 +4646,6 @@ export interface MonitoringCoreosComV1PrometheusRuleList {
   kind?: string;
   metadata?: ListMeta;
 }
-/* com.coreos.monitoring.v1.ServiceMonitor */
-/* The `ServiceMonitor` custom resource definition (CRD) defines how `Prometheus` and `PrometheusAgent` can scrape metrics from a group of services.
-Among other things, it allows to specify:
-* The services to scrape via label selectors.
-* The container ports to scrape.
-* Authentication credentials to use.
-* Target and metric relabeling.
-
-`Prometheus` and `PrometheusAgent` objects select `ServiceMonitor` objects using label and namespace selectors. */
 export interface MonitoringCoreosComV1ServiceMonitor {
   apiVersion?: string;
   kind?: string;
@@ -4652,7 +4783,7 @@ export interface MonitoringCoreosComV1ServiceMonitor {
         sourceLabels?: string[];
         targetLabel?: string;
       }[];
-      scheme?: "http" | "https";
+      scheme?: "http" | "https" | "HTTP" | "HTTPS";
       scrapeTimeout?: string;
       targetPort?: any;
       tlsConfig?: {
@@ -4711,6 +4842,7 @@ export interface MonitoringCoreosComV1ServiceMonitor {
     sampleLimit?: number;
     scrapeClass?: string;
     scrapeClassicHistograms?: boolean;
+    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     selector: {
       matchExpressions?: {
@@ -4723,6 +4855,7 @@ export interface MonitoringCoreosComV1ServiceMonitor {
       };
     };
     selectorMechanism?: "RelabelConfig" | "RoleSelector";
+    serviceDiscoveryRole?: "Endpoints" | "EndpointSlice";
     targetLabels?: string[];
     targetLimit?: number;
   };
@@ -4739,7 +4872,7 @@ export interface MonitoringCoreosComV1ServiceMonitor {
       group: "monitoring.coreos.com";
       name: string;
       namespace: string;
-      resource: "prometheuses" | "prometheusagents";
+      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
     }[];
   };
 }
@@ -4751,12 +4884,6 @@ export interface MonitoringCoreosComV1ServiceMonitorList {
   kind?: string;
   metadata?: ListMeta;
 }
-/* com.coreos.monitoring.v1.ThanosRuler */
-/* The `ThanosRuler` custom resource definition (CRD) defines a desired [Thanos Ruler](https://github.com/thanos-io/thanos/blob/main/docs/components/rule.md) setup to run in a Kubernetes cluster.
-
-A `ThanosRuler` instance requires at least one compatible Prometheus API endpoint (either Thanos Querier or Prometheus services).
-
-The resource defines via label and namespace selectors which `PrometheusRule` objects should be associated to the deployed Thanos Ruler instances. */
 export interface MonitoringCoreosComV1ThanosRuler {
   apiVersion?: string;
   kind?: string;
@@ -4943,6 +5070,12 @@ export interface MonitoringCoreosComV1ThanosRuler {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -5098,6 +5231,13 @@ export interface MonitoringCoreosComV1ThanosRuler {
         };
       };
       restartPolicy?: string;
+      restartPolicyRules?: {
+        action: string;
+        exitCodes?: {
+          operator: string;
+          values?: number[];
+        };
+      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -5227,6 +5367,8 @@ export interface MonitoringCoreosComV1ThanosRuler {
         };
       };
       certFile?: string;
+      cipherSuites?: string[];
+      curves?: string[];
       insecureSkipVerify?: boolean;
       keyFile?: string;
       keySecret?: {
@@ -5263,6 +5405,12 @@ export interface MonitoringCoreosComV1ThanosRuler {
           fieldRef?: {
             apiVersion?: string;
             fieldPath: string;
+          };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
           };
           resourceFieldRef?: {
             containerName?: string;
@@ -5419,6 +5567,13 @@ export interface MonitoringCoreosComV1ThanosRuler {
         };
       };
       restartPolicy?: string;
+      restartPolicyRules?: {
+        action: string;
+        exitCodes?: {
+          operator: string;
+          values?: number[];
+        };
+      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -5518,6 +5673,7 @@ export interface MonitoringCoreosComV1ThanosRuler {
     };
     objectStorageConfigFile?: string;
     paused?: boolean;
+    podManagementPolicy?: "OrderedReady" | "Parallel";
     podMetadata?: {
       annotations?: {
         [key: string]: unknown;
@@ -5552,7 +5708,7 @@ export interface MonitoringCoreosComV1ThanosRuler {
       azureAd?: {
         cloud?: "AzureChina" | "AzureGovernment" | "AzurePublic";
         managedIdentity?: {
-          clientId: string;
+          clientId?: string;
         };
         oauth?: {
           clientId: string;
@@ -5563,8 +5719,13 @@ export interface MonitoringCoreosComV1ThanosRuler {
           };
           tenantId: string;
         };
+        scope?: string;
         sdk?: {
           tenantId?: string;
+        };
+        workloadIdentity?: {
+          clientId: string;
+          tenantId: string;
         };
       };
       basicAuth?: {
@@ -5686,6 +5847,7 @@ export interface MonitoringCoreosComV1ThanosRuler {
           name?: string;
           optional?: boolean;
         };
+        externalId?: string;
         profile?: string;
         region?: string;
         roleArn?: string;
@@ -5694,6 +5856,7 @@ export interface MonitoringCoreosComV1ThanosRuler {
           name?: string;
           optional?: boolean;
         };
+        useFIPSSTSEndpoint?: boolean;
       };
       tlsConfig?: {
         ca?: {
@@ -5784,6 +5947,7 @@ export interface MonitoringCoreosComV1ThanosRuler {
         [key: string]: unknown;
       };
     };
+    schedulerName?: string;
     securityContext?: {
       appArmorProfile?: {
         localhostProfile?: string;
@@ -5978,6 +6142,12 @@ export interface MonitoringCoreosComV1ThanosRuler {
       optional?: boolean;
     };
     tracingConfigFile?: string;
+    updateStrategy?: {
+      rollingUpdate?: {
+        maxUnavailable?: any;
+      };
+      type: "OnDelete" | "RollingUpdate";
+    };
     version?: string;
     volumeMounts?: {
       mountPath: string;
@@ -6233,6 +6403,17 @@ export interface MonitoringCoreosComV1ThanosRuler {
               };
             }[];
           };
+          podCertificate?: {
+            certificateChainPath?: string;
+            credentialBundlePath?: string;
+            keyPath?: string;
+            keyType: string;
+            maxExpirationSeconds?: number;
+            signerName: string;
+            userAnnotations?: {
+              [key: string]: unknown;
+            };
+          };
           secret?: {
             items?: {
               key: string;
@@ -6363,7 +6544,7 @@ export interface MonitoringCoreosComV1ThanosRuler {
     };
   };
   status?: {
-    availableReplicas: number;
+    availableReplicas?: number;
     conditions?: {
       lastTransitionTime: string;
       message?: string;
@@ -6372,10 +6553,10 @@ export interface MonitoringCoreosComV1ThanosRuler {
       status: string;
       type: string;
     }[];
-    paused: boolean;
-    replicas: number;
-    unavailableReplicas: number;
-    updatedReplicas: number;
+    paused?: boolean;
+    replicas?: number;
+    unavailableReplicas?: number;
+    updatedReplicas?: number;
   };
 }
 /* com.coreos.monitoring.v1.ThanosRulerList */
@@ -6386,9 +6567,6 @@ export interface MonitoringCoreosComV1ThanosRulerList {
   kind?: string;
   metadata?: ListMeta;
 }
-/* com.coreos.monitoring.v1alpha1.AlertmanagerConfig */
-/* AlertmanagerConfig configures the Prometheus Alertmanager,
-specifying how alerts should be grouped, inhibited and notified to external systems. */
 export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
   apiVersion?: string;
   kind?: string;
@@ -6460,6 +6638,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -6587,6 +6766,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
           optional?: boolean;
         };
         authUsername?: string;
+        forceImplicitTLS?: boolean;
         from?: string;
         headers?: {
           key: string;
@@ -6598,6 +6778,9 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
         sendResolved?: boolean;
         smarthost?: string;
         text?: string;
+        threading?: {
+          threadByDate: "Daily" | "None";
+        };
         tlsConfig?: {
           ca?: {
             configMap?: {
@@ -6662,6 +6845,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -6808,6 +6992,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -6967,6 +7152,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7082,7 +7268,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
         responders?: {
           id?: string;
           name?: string;
-          type: string;
+          type: "team" | "teams" | "user" | "escalation" | "schedule";
           username?: string;
         }[];
         sendResolved?: boolean;
@@ -7127,6 +7313,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7258,6 +7445,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
         };
         severity?: string;
         source?: string;
+        timeout?: string;
         url?: string;
       }[];
       pushoverConfigs?: {
@@ -7290,6 +7478,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7400,6 +7589,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
           };
         };
         message?: string;
+        monospace?: boolean;
         priority?: string;
         retry?: string;
         sendResolved?: boolean;
@@ -7462,6 +7652,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7647,6 +7838,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7760,12 +7952,14 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
         iconURL?: string;
         imageURL?: string;
         linkNames?: boolean;
+        messageText?: string;
         mrkdwnIn?: string[];
         pretext?: string;
         sendResolved?: boolean;
         shortFields?: boolean;
         text?: string;
         thumbURL?: string;
+        timeout?: string;
         title?: string;
         titleLink?: string;
         username?: string;
@@ -7801,6 +7995,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7919,6 +8114,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          externalId?: string;
           profile?: string;
           region?: string;
           roleArn?: string;
@@ -7927,6 +8123,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          useFIPSSTSEndpoint?: boolean;
         };
         subject?: string;
         targetARN?: string;
@@ -7968,6 +8165,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8120,6 +8318,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8231,7 +8430,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
         };
         messageType?: string;
         monitoringTool?: string;
-        routingKey?: string;
+        routingKey: string;
         sendResolved?: boolean;
         stateMessage?: string;
       }[];
@@ -8263,6 +8462,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8403,6 +8603,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8513,6 +8714,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
           };
         };
         maxAlerts?: number;
+        payload?: string;
         sendResolved?: boolean;
         timeout?: string;
         url?: string;
@@ -8557,6 +8759,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
+          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8692,6 +8895,22 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
       routes?: any[];
     };
   };
+  status?: {
+    bindings?: {
+      conditions?: {
+        lastTransitionTime: string;
+        message?: string;
+        observedGeneration?: number;
+        reason?: string;
+        status: string;
+        type: "Accepted";
+      }[];
+      group: "monitoring.coreos.com";
+      name: string;
+      namespace: string;
+      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
+    }[];
+  };
 }
 /* com.coreos.monitoring.v1alpha1.AlertmanagerConfigList */
 /* AlertmanagerConfigList is a list of AlertmanagerConfig */
@@ -8701,10 +8920,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfigList {
   kind?: string;
   metadata?: ListMeta;
 }
-/* com.coreos.monitoring.v1alpha1.PrometheusAgent */
-/* The `PrometheusAgent` custom resource definition (CRD) defines a desired [Prometheus Agent](https://prometheus.io/blog/2021/11/16/agent/) setup to run in a Kubernetes cluster.
-
-The CRD is very similar to the `Prometheus` CRD except for features which aren't available in agent mode like rule evaluation, persistent storage and Thanos sidecar. */
 export interface MonitoringCoreosComV1alpha1PrometheusAgent {
   apiVersion?: string;
   kind?: string;
@@ -8958,6 +9173,12 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -9113,6 +9334,13 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
         };
       };
       restartPolicy?: string;
+      restartPolicyRules?: {
+        action: string;
+        exitCodes?: {
+          operator: string;
+          values?: number[];
+        };
+      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -9255,6 +9483,12 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -9410,6 +9644,13 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
         };
       };
       restartPolicy?: string;
+      restartPolicyRules?: {
+        action: string;
+        exitCodes?: {
+          operator: string;
+          values?: number[];
+        };
+      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -9511,9 +9752,12 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       convertHistogramsToNHCB?: boolean;
       ignoreResourceAttributes?: string[];
       keepIdentifyingResourceAttributes?: boolean;
+      labelNamePreserveMultipleUnderscores?: boolean;
+      labelNameUnderscoreSanitization?: boolean;
       promoteAllResourceAttributes?: boolean;
       promoteResourceAttributes?: string[];
-      translationStrategy?: "NoUTF8EscapingWithSuffixes" | "UnderscoreEscapingWithSuffixes" | "NoTranslation";
+      promoteScopeMetadata?: boolean;
+      translationStrategy?: "NoUTF8EscapingWithSuffixes" | "UnderscoreEscapingWithSuffixes" | "NoTranslation" | "UnderscoreEscapingWithoutSuffixes";
     };
     overrideHonorLabels?: boolean;
     overrideHonorTimestamps?: boolean;
@@ -9522,6 +9766,7 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       whenDeleted?: string;
       whenScaled?: string;
     };
+    podManagementPolicy?: "OrderedReady" | "Parallel";
     podMetadata?: {
       annotations?: {
         [key: string]: unknown;
@@ -9589,7 +9834,7 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       azureAd?: {
         cloud?: "AzureChina" | "AzureGovernment" | "AzurePublic";
         managedIdentity?: {
-          clientId: string;
+          clientId?: string;
         };
         oauth?: {
           clientId: string;
@@ -9600,8 +9845,13 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
           };
           tenantId: string;
         };
+        scope?: string;
         sdk?: {
           tenantId?: string;
+        };
+        workloadIdentity?: {
+          clientId: string;
+          tenantId: string;
         };
       };
       basicAuth?: {
@@ -9723,6 +9973,7 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
           name?: string;
           optional?: boolean;
         };
+        externalId?: string;
         profile?: string;
         region?: string;
         roleArn?: string;
@@ -9731,6 +9982,7 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
           name?: string;
           optional?: boolean;
         };
+        useFIPSSTSEndpoint?: boolean;
       };
       tlsConfig?: {
         ca?: {
@@ -9801,6 +10053,7 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       goGC?: number;
     };
     sampleLimit?: number;
+    schedulerName?: string;
     scrapeClasses?: {
       attachMetadata?: {
         node?: boolean;
@@ -9897,6 +10150,7 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
     };
     scrapeFailureLogFile?: string;
     scrapeInterval?: string;
+    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     scrapeTimeout?: string;
     secrets?: string[];
@@ -9957,6 +10211,13 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       };
     };
     serviceName?: string;
+    shardingStrategy?: {
+      mode?: "Address" | "Topology";
+      topology?: {
+        externalLabelName?: string;
+        values?: string[];
+      };
+    };
     shards?: number;
     storage?: {
       disableMountSubPath?: boolean;
@@ -10113,8 +10374,8 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       whenUnsatisfiable: string;
     }[];
     tracingConfig?: {
-      clientType?: "http" | "grpc";
-      compression?: "gzip";
+      clientType?: "http" | "grpc" | "HTTP" | "GRPC";
+      compression?: "gzip" | "Gzip";
       endpoint: string;
       headers?: {
         [key: string]: unknown;
@@ -10163,6 +10424,13 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
     };
     tsdb?: {
       outOfOrderTimeWindow?: string;
+      staleSeriesCompactionThreshold?: any;
+    };
+    updateStrategy?: {
+      rollingUpdate?: {
+        maxUnavailable?: any;
+      };
+      type: "OnDelete" | "RollingUpdate";
     };
     version?: string;
     volumeMounts?: {
@@ -10419,6 +10687,17 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
               };
             }[];
           };
+          podCertificate?: {
+            certificateChainPath?: string;
+            credentialBundlePath?: string;
+            keyPath?: string;
+            keyType: string;
+            maxExpirationSeconds?: number;
+            signerName: string;
+            userAnnotations?: {
+              [key: string]: unknown;
+            };
+          };
           secret?: {
             items?: {
               key: string;
@@ -10552,7 +10831,7 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
     };
   };
   status?: {
-    availableReplicas: number;
+    availableReplicas?: number;
     conditions?: {
       lastTransitionTime: string;
       message?: string;
@@ -10561,8 +10840,8 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       status: string;
       type: string;
     }[];
-    paused: boolean;
-    replicas: number;
+    paused?: boolean;
+    replicas?: number;
     selector?: string;
     shardStatuses?: {
       availableReplicas: number;
@@ -10572,8 +10851,8 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       updatedReplicas: number;
     }[];
     shards?: number;
-    unavailableReplicas: number;
-    updatedReplicas: number;
+    unavailableReplicas?: number;
+    updatedReplicas?: number;
   };
 }
 /* com.coreos.monitoring.v1alpha1.PrometheusAgentList */
@@ -10584,9 +10863,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgentList {
   kind?: string;
   metadata?: ListMeta;
 }
-/* com.coreos.monitoring.v1alpha1.ScrapeConfig */
-/* ScrapeConfig defines a namespaced Prometheus scrape_config to be aggregated across
-multiple namespaces into the Prometheus configuration. */
 export interface MonitoringCoreosComV1alpha1ScrapeConfig {
   apiVersion?: string;
   kind?: string;
@@ -10601,7 +10877,7 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       type?: string;
     };
     azureSDConfigs?: {
-      authenticationMethod?: "OAuth" | "ManagedIdentity" | "SDK";
+      authenticationMethod?: "OAuth" | "ManagedIdentity" | "SDK" | "WorkloadIdentity";
       authorization?: {
         credentials?: {
           key: string;
@@ -10755,6 +11031,7 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
         optional?: boolean;
       };
     };
+    bodySizeLimit?: string;
     consulSDConfigs?: {
       allowStale?: boolean;
       authorization?: {
@@ -10781,6 +11058,7 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       enableHTTP2?: boolean;
       filter?: string;
       followRedirects?: boolean;
+      healthFilter?: string;
       namespace?: string;
       noProxy?: string;
       nodeMeta?: {
@@ -10859,7 +11137,7 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       proxyFromEnvironment?: boolean;
       proxyUrl?: string;
       refreshInterval?: string;
-      scheme?: "HTTP" | "HTTPS";
+      scheme?: "http" | "https" | "HTTP" | "HTTPS";
       server: string;
       services?: string[];
       tagSeparator?: string;
@@ -12750,7 +13028,7 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       };
       endpoint?: string;
       refreshInterval?: string;
-      service: string;
+      service: "VPS" | "DedicatedServer";
     }[];
     params?: {
       [key: string]: unknown;
@@ -12964,10 +13242,11 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       };
       zone?: string;
     }[];
-    scheme?: "HTTP" | "HTTPS";
+    scheme?: "http" | "https" | "HTTP" | "HTTPS";
     scrapeClass?: string;
     scrapeClassicHistograms?: boolean;
     scrapeInterval?: string;
+    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     scrapeTimeout?: string;
     staticConfigs?: {
@@ -13013,6 +13292,22 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       serverName?: string;
     };
     trackTimestampsStaleness?: boolean;
+  };
+  status?: {
+    bindings?: {
+      conditions?: {
+        lastTransitionTime: string;
+        message?: string;
+        observedGeneration?: number;
+        reason?: string;
+        status: string;
+        type: "Accepted";
+      }[];
+      group: "monitoring.coreos.com";
+      name: string;
+      namespace: string;
+      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
+    }[];
   };
 }
 /* com.coreos.monitoring.v1alpha1.ScrapeConfigList */
@@ -13206,7 +13501,6 @@ export interface NetworkingInternalKnativeDevV1alpha1ClusterDomainClaimList {
 by a backend. An Ingress can be configured to give services externally-reachable URLs, load
 balance traffic, offer name based virtual hosting, etc.
 
-
 This is heavily based on K8s Ingress https://godoc.org/k8s.io/api/networking/v1beta1#Ingress
 which some highlighted modifications. */
 export interface NetworkingInternalKnativeDevV1alpha1Ingress {
@@ -13390,7 +13684,7 @@ export interface ServingKnativeDevV1Configuration {
             };
             failureThreshold?: number;
             grpc?: {
-              port: number;
+              port?: number;
               service?: string;
             };
             httpGet?: {
@@ -13414,7 +13708,7 @@ export interface ServingKnativeDevV1Configuration {
           };
           name?: string;
           ports?: {
-            containerPort: number;
+            containerPort?: number;
             name?: string;
             protocol?: string;
           }[];
@@ -13424,7 +13718,7 @@ export interface ServingKnativeDevV1Configuration {
             };
             failureThreshold?: number;
             grpc?: {
-              port: number;
+              port?: number;
               service?: string;
             };
             httpGet?: {
@@ -13447,9 +13741,6 @@ export interface ServingKnativeDevV1Configuration {
             timeoutSeconds?: number;
           };
           resources?: {
-            claims?: {
-              name: string;
-            }[];
             limits?: {
               [key: string]: unknown;
             };
@@ -13463,6 +13754,7 @@ export interface ServingKnativeDevV1Configuration {
               add?: string[];
               drop?: string[];
             };
+            privileged?: boolean;
             readOnlyRootFilesystem?: boolean;
             runAsGroup?: number;
             runAsNonRoot?: boolean;
@@ -13478,7 +13770,7 @@ export interface ServingKnativeDevV1Configuration {
             };
             failureThreshold?: number;
             grpc?: {
-              port: number;
+              port?: number;
               service?: string;
             };
             httpGet?: {
@@ -13504,6 +13796,7 @@ export interface ServingKnativeDevV1Configuration {
           terminationMessagePolicy?: string;
           volumeMounts?: {
             mountPath: string;
+            mountPropagation?: string;
             name: string;
             readOnly?: boolean;
             subPath?: string;
@@ -13514,12 +13807,17 @@ export interface ServingKnativeDevV1Configuration {
         dnsPolicy?: string;
         enableServiceLinks?: boolean;
         hostAliases?: any[];
+        hostIPC?: boolean;
+        hostNetwork?: boolean;
+        hostPID?: boolean;
         idleTimeoutSeconds?: number;
         imagePullSecrets?: {
           name?: string;
         }[];
         initContainers?: any[];
-        nodeSelector?: any;
+        nodeSelector?: {
+          [key: string]: unknown;
+        };
         priorityClassName?: string;
         responseStartTimeoutSeconds?: number;
         runtimeClassName?: string;
@@ -13541,7 +13839,10 @@ export interface ServingKnativeDevV1Configuration {
             name?: string;
             optional?: boolean;
           };
+          csi?: any;
           emptyDir?: any;
+          hostPath?: any;
+          image?: any;
           name: string;
           persistentVolumeClaim?: any;
           projected?: {
@@ -13631,7 +13932,6 @@ export interface ServingKnativeDevV1ConfigurationList {
 references a container image. Revisions are created by updates to a
 Configuration.
 
-
 See also: https://github.com/knative/serving/blob/main/docs/spec/overview.md#revision */
 export interface ServingKnativeDevV1Revision {
   apiVersion?: string;
@@ -13681,7 +13981,7 @@ export interface ServingKnativeDevV1Revision {
         };
         failureThreshold?: number;
         grpc?: {
-          port: number;
+          port?: number;
           service?: string;
         };
         httpGet?: {
@@ -13705,7 +14005,7 @@ export interface ServingKnativeDevV1Revision {
       };
       name?: string;
       ports?: {
-        containerPort: number;
+        containerPort?: number;
         name?: string;
         protocol?: string;
       }[];
@@ -13715,7 +14015,7 @@ export interface ServingKnativeDevV1Revision {
         };
         failureThreshold?: number;
         grpc?: {
-          port: number;
+          port?: number;
           service?: string;
         };
         httpGet?: {
@@ -13738,9 +14038,6 @@ export interface ServingKnativeDevV1Revision {
         timeoutSeconds?: number;
       };
       resources?: {
-        claims?: {
-          name: string;
-        }[];
         limits?: {
           [key: string]: unknown;
         };
@@ -13754,6 +14051,7 @@ export interface ServingKnativeDevV1Revision {
           add?: string[];
           drop?: string[];
         };
+        privileged?: boolean;
         readOnlyRootFilesystem?: boolean;
         runAsGroup?: number;
         runAsNonRoot?: boolean;
@@ -13769,7 +14067,7 @@ export interface ServingKnativeDevV1Revision {
         };
         failureThreshold?: number;
         grpc?: {
-          port: number;
+          port?: number;
           service?: string;
         };
         httpGet?: {
@@ -13795,6 +14093,7 @@ export interface ServingKnativeDevV1Revision {
       terminationMessagePolicy?: string;
       volumeMounts?: {
         mountPath: string;
+        mountPropagation?: string;
         name: string;
         readOnly?: boolean;
         subPath?: string;
@@ -13805,12 +14104,17 @@ export interface ServingKnativeDevV1Revision {
     dnsPolicy?: string;
     enableServiceLinks?: boolean;
     hostAliases?: any[];
+    hostIPC?: boolean;
+    hostNetwork?: boolean;
+    hostPID?: boolean;
     idleTimeoutSeconds?: number;
     imagePullSecrets?: {
       name?: string;
     }[];
     initContainers?: any[];
-    nodeSelector?: any;
+    nodeSelector?: {
+      [key: string]: unknown;
+    };
     priorityClassName?: string;
     responseStartTimeoutSeconds?: number;
     runtimeClassName?: string;
@@ -13832,7 +14136,10 @@ export interface ServingKnativeDevV1Revision {
         name?: string;
         optional?: boolean;
       };
+      csi?: any;
       emptyDir?: any;
+      hostPath?: any;
+      image?: any;
       name: string;
       persistentVolumeClaim?: any;
       projected?: {
@@ -13992,10 +14299,8 @@ team resource ownership. Service acts only as an orchestrator of the
 underlying Routes and Configurations (much as a kubernetes Deployment
 orchestrates ReplicaSets), and its usage is optional but recommended.
 
-
 The Service's controller will track the statuses of its owned Configuration
 and Route, reflecting their statuses and conditions as its own.
-
 
 See also: https://github.com/knative/serving/blob/main/docs/spec/overview.md#service */
 export interface ServingKnativeDevV1Service {
@@ -14049,7 +14354,7 @@ export interface ServingKnativeDevV1Service {
             };
             failureThreshold?: number;
             grpc?: {
-              port: number;
+              port?: number;
               service?: string;
             };
             httpGet?: {
@@ -14073,7 +14378,7 @@ export interface ServingKnativeDevV1Service {
           };
           name?: string;
           ports?: {
-            containerPort: number;
+            containerPort?: number;
             name?: string;
             protocol?: string;
           }[];
@@ -14083,7 +14388,7 @@ export interface ServingKnativeDevV1Service {
             };
             failureThreshold?: number;
             grpc?: {
-              port: number;
+              port?: number;
               service?: string;
             };
             httpGet?: {
@@ -14106,9 +14411,6 @@ export interface ServingKnativeDevV1Service {
             timeoutSeconds?: number;
           };
           resources?: {
-            claims?: {
-              name: string;
-            }[];
             limits?: {
               [key: string]: unknown;
             };
@@ -14122,6 +14424,7 @@ export interface ServingKnativeDevV1Service {
               add?: string[];
               drop?: string[];
             };
+            privileged?: boolean;
             readOnlyRootFilesystem?: boolean;
             runAsGroup?: number;
             runAsNonRoot?: boolean;
@@ -14137,7 +14440,7 @@ export interface ServingKnativeDevV1Service {
             };
             failureThreshold?: number;
             grpc?: {
-              port: number;
+              port?: number;
               service?: string;
             };
             httpGet?: {
@@ -14163,6 +14466,7 @@ export interface ServingKnativeDevV1Service {
           terminationMessagePolicy?: string;
           volumeMounts?: {
             mountPath: string;
+            mountPropagation?: string;
             name: string;
             readOnly?: boolean;
             subPath?: string;
@@ -14173,12 +14477,17 @@ export interface ServingKnativeDevV1Service {
         dnsPolicy?: string;
         enableServiceLinks?: boolean;
         hostAliases?: any[];
+        hostIPC?: boolean;
+        hostNetwork?: boolean;
+        hostPID?: boolean;
         idleTimeoutSeconds?: number;
         imagePullSecrets?: {
           name?: string;
         }[];
         initContainers?: any[];
-        nodeSelector?: any;
+        nodeSelector?: {
+          [key: string]: unknown;
+        };
         priorityClassName?: string;
         responseStartTimeoutSeconds?: number;
         runtimeClassName?: string;
@@ -14200,7 +14509,10 @@ export interface ServingKnativeDevV1Service {
             name?: string;
             optional?: boolean;
           };
+          csi?: any;
           emptyDir?: any;
+          hostPath?: any;
+          image?: any;
           name: string;
           persistentVolumeClaim?: any;
           projected?: {
@@ -14357,6 +14669,4679 @@ export interface ServingKnativeDevV1beta1DomainMappingList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* dev.tekton.resolution.v1alpha1.ResolutionRequest */
+/* ResolutionRequest is an object for requesting the content of
+a Tekton resource like a pipeline.yaml. */
+export interface ResolutionTektonDevV1alpha1ResolutionRequest {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    params?: {
+      [key: string]: unknown;
+    };
+  };
+  status?: {
+    annotations?: {
+      [key: string]: unknown;
+    };
+    conditions?: {
+      lastTransitionTime?: string;
+      message?: string;
+      reason?: string;
+      severity?: string;
+      status: string;
+      type: string;
+    }[];
+    data: string;
+    observedGeneration?: number;
+    refSource: any;
+  };
+}
+/* dev.tekton.resolution.v1alpha1.ResolutionRequestList */
+/* ResolutionRequestList is a list of ResolutionRequest */
+export interface ResolutionTektonDevV1alpha1ResolutionRequestList {
+  apiVersion?: string;
+  items: ResolutionTektonDevV1alpha1ResolutionRequest[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.resolution.v1beta1.ResolutionRequest */
+/* ResolutionRequest is an object for requesting the content of
+a Tekton resource like a pipeline.yaml. */
+export interface ResolutionTektonDevV1beta1ResolutionRequest {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    params?: {
+      name: string;
+      value: any;
+    }[];
+    url?: string;
+  };
+  status?: {
+    annotations?: {
+      [key: string]: unknown;
+    };
+    conditions?: {
+      lastTransitionTime?: string;
+      message?: string;
+      reason?: string;
+      severity?: string;
+      status: string;
+      type: string;
+    }[];
+    data: string;
+    observedGeneration?: number;
+    refSource: any;
+    source: any;
+  };
+}
+/* dev.tekton.resolution.v1beta1.ResolutionRequestList */
+/* ResolutionRequestList is a list of ResolutionRequest */
+export interface ResolutionTektonDevV1beta1ResolutionRequestList {
+  apiVersion?: string;
+  items: ResolutionTektonDevV1beta1ResolutionRequest[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1.Pipeline */
+/* Pipeline describes a list of Tasks to execute. It expresses how outputs
+of tasks feed into inputs of subsequent tasks. */
+export interface TektonDevV1Pipeline {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    description?: string;
+    displayName?: string;
+    finally?: {
+      description?: string;
+      displayName?: string;
+      matrix?: {
+        include?: {
+          name?: string;
+          params?: {
+            name: string;
+            value: any;
+          }[];
+        }[];
+        params?: {
+          name: string;
+          value: any;
+        }[];
+      };
+      name?: string;
+      onError?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      pipelineRef?: {
+        apiVersion?: string;
+        name?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        resolver?: string;
+      };
+      pipelineSpec?: any;
+      retries?: number;
+      runAfter?: string[];
+      taskRef?: {
+        apiVersion?: string;
+        kind?: string;
+        name?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        resolver?: string;
+      };
+      taskSpec?: any;
+      timeout?: string;
+      when?: {
+        cel?: string;
+        input?: string;
+        operator?: string;
+        values?: string[];
+      }[];
+      workspaces?: {
+        name: string;
+        subPath?: string;
+        workspace?: string;
+      }[];
+    }[];
+    params?: {
+      default?: any;
+      description?: string;
+      enum?: string[];
+      name: string;
+      properties?: {
+        [key: string]: unknown;
+      };
+      type?: string;
+    }[];
+    results?: {
+      description?: string;
+      name: string;
+      type?: string;
+      value: any;
+    }[];
+    tasks?: {
+      description?: string;
+      displayName?: string;
+      matrix?: {
+        include?: {
+          name?: string;
+          params?: {
+            name: string;
+            value: any;
+          }[];
+        }[];
+        params?: {
+          name: string;
+          value: any;
+        }[];
+      };
+      name?: string;
+      onError?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      pipelineRef?: {
+        apiVersion?: string;
+        name?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        resolver?: string;
+      };
+      pipelineSpec?: any;
+      retries?: number;
+      runAfter?: string[];
+      taskRef?: {
+        apiVersion?: string;
+        kind?: string;
+        name?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        resolver?: string;
+      };
+      taskSpec?: any;
+      timeout?: string;
+      when?: {
+        cel?: string;
+        input?: string;
+        operator?: string;
+        values?: string[];
+      }[];
+      workspaces?: {
+        name: string;
+        subPath?: string;
+        workspace?: string;
+      }[];
+    }[];
+    workspaces?: {
+      description?: string;
+      name: string;
+      optional?: boolean;
+    }[];
+  };
+}
+/* dev.tekton.v1.PipelineList */
+/* PipelineList is a list of Pipeline */
+export interface TektonDevV1PipelineList {
+  apiVersion?: string;
+  items: TektonDevV1Pipeline[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1.PipelineRun */
+/* PipelineRun represents a single execution of a Pipeline. PipelineRuns are how
+the graph of Tasks declared in a Pipeline are executed; they specify inputs
+to Pipelines such as parameter values and capture operational aspects of the
+Tasks execution such as service account and tolerations. Creating a
+PipelineRun creates TaskRuns for Tasks in the referenced Pipeline. */
+export interface TektonDevV1PipelineRun {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    managedBy?: string;
+    params?: {
+      name: string;
+      value: any;
+    }[];
+    pipelineRef?: {
+      apiVersion?: string;
+      name?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      resolver?: string;
+    };
+    pipelineSpec?: any;
+    status?: string;
+    taskRunSpecs?: {
+      computeResources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      metadata?: {
+        annotations?: {
+          [key: string]: unknown;
+        };
+        labels?: {
+          [key: string]: unknown;
+        };
+      };
+      pipelineTaskName?: string;
+      podTemplate?: {
+        affinity?: any;
+        automountServiceAccountToken?: boolean;
+        dnsConfig?: {
+          nameservers?: string[];
+          options?: {
+            name?: string;
+            value?: string;
+          }[];
+          searches?: string[];
+        };
+        dnsPolicy?: string;
+        enableServiceLinks?: boolean;
+        env?: {
+          name: string;
+          value?: string;
+          valueFrom?: {
+            configMapKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+            fieldRef?: {
+              apiVersion?: string;
+              fieldPath: string;
+            };
+            resourceFieldRef?: {
+              containerName?: string;
+              divisor?: any;
+              resource: string;
+            };
+            secretKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+          };
+        }[];
+        hostAliases?: {
+          hostnames?: string[];
+          ip: string;
+        }[];
+        hostNetwork?: boolean;
+        imagePullSecrets?: {
+          name?: string;
+        }[];
+        nodeSelector?: {
+          [key: string]: unknown;
+        };
+        priorityClassName?: string;
+        runtimeClassName?: string;
+        schedulerName?: string;
+        securityContext?: any;
+        tolerations?: {
+          effect?: string;
+          key?: string;
+          operator?: string;
+          tolerationSeconds?: number;
+          value?: string;
+        }[];
+        topologySpreadConstraints?: {
+          labelSelector?: {
+            matchExpressions?: {
+              key: string;
+              operator: string;
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+          matchLabelKeys?: string[];
+          maxSkew: number;
+          minDomains?: number;
+          nodeAffinityPolicy?: string;
+          nodeTaintsPolicy?: string;
+          topologyKey: string;
+          whenUnsatisfiable: string;
+        }[];
+        volumes?: any;
+      };
+      serviceAccountName?: string;
+      sidecarSpecs?: {
+        computeResources: {
+          claims?: {
+            name: string;
+            request?: string;
+          }[];
+          limits?: {
+            [key: string]: unknown;
+          };
+          requests?: {
+            [key: string]: unknown;
+          };
+        };
+        name: string;
+      }[];
+      stepSpecs?: {
+        computeResources: {
+          claims?: {
+            name: string;
+            request?: string;
+          }[];
+          limits?: {
+            [key: string]: unknown;
+          };
+          requests?: {
+            [key: string]: unknown;
+          };
+        };
+        name: string;
+      }[];
+      timeout?: string;
+    }[];
+    taskRunTemplate?: {
+      podTemplate?: {
+        affinity?: any;
+        automountServiceAccountToken?: boolean;
+        dnsConfig?: {
+          nameservers?: string[];
+          options?: {
+            name?: string;
+            value?: string;
+          }[];
+          searches?: string[];
+        };
+        dnsPolicy?: string;
+        enableServiceLinks?: boolean;
+        env?: {
+          name: string;
+          value?: string;
+          valueFrom?: {
+            configMapKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+            fieldRef?: {
+              apiVersion?: string;
+              fieldPath: string;
+            };
+            resourceFieldRef?: {
+              containerName?: string;
+              divisor?: any;
+              resource: string;
+            };
+            secretKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+          };
+        }[];
+        hostAliases?: {
+          hostnames?: string[];
+          ip: string;
+        }[];
+        hostNetwork?: boolean;
+        imagePullSecrets?: {
+          name?: string;
+        }[];
+        nodeSelector?: {
+          [key: string]: unknown;
+        };
+        priorityClassName?: string;
+        runtimeClassName?: string;
+        schedulerName?: string;
+        securityContext?: any;
+        tolerations?: {
+          effect?: string;
+          key?: string;
+          operator?: string;
+          tolerationSeconds?: number;
+          value?: string;
+        }[];
+        topologySpreadConstraints?: {
+          labelSelector?: {
+            matchExpressions?: {
+              key: string;
+              operator: string;
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+          matchLabelKeys?: string[];
+          maxSkew: number;
+          minDomains?: number;
+          nodeAffinityPolicy?: string;
+          nodeTaintsPolicy?: string;
+          topologyKey: string;
+          whenUnsatisfiable: string;
+        }[];
+        volumes?: any;
+      };
+      serviceAccountName?: string;
+    };
+    timeouts?: {
+      finally?: string;
+      pipeline?: string;
+      tasks?: string;
+    };
+    workspaces?: {
+      configMap?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        name?: string;
+        optional?: boolean;
+      };
+      csi?: {
+        driver: string;
+        fsType?: string;
+        nodePublishSecretRef?: {
+          name?: string;
+        };
+        readOnly?: boolean;
+        volumeAttributes?: {
+          [key: string]: unknown;
+        };
+      };
+      emptyDir?: {
+        medium?: string;
+        sizeLimit?: any;
+      };
+      name: string;
+      persistentVolumeClaim?: {
+        claimName: string;
+        readOnly?: boolean;
+      };
+      projected?: {
+        defaultMode?: number;
+        sources?: {
+          clusterTrustBundle?: {
+            labelSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            name?: string;
+            optional?: boolean;
+            path: string;
+            signerName?: string;
+          };
+          configMap?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          downwardAPI?: {
+            items?: {
+              fieldRef?: {
+                apiVersion?: string;
+                fieldPath: string;
+              };
+              mode?: number;
+              path: string;
+              resourceFieldRef?: {
+                containerName?: string;
+                divisor?: any;
+                resource: string;
+              };
+            }[];
+          };
+          secret?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          serviceAccountToken?: {
+            audience?: string;
+            expirationSeconds?: number;
+            path: string;
+          };
+        }[];
+      };
+      secret?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        optional?: boolean;
+        secretName?: string;
+      };
+      subPath?: string;
+      volumeClaimTemplate?: any;
+    }[];
+  };
+  status?: {
+    annotations?: {
+      [key: string]: unknown;
+    };
+    childReferences?: {
+      apiVersion?: string;
+      displayName?: string;
+      kind?: string;
+      name?: string;
+      pipelineTaskName?: string;
+      whenExpressions?: {
+        cel?: string;
+        input?: string;
+        operator?: string;
+        values?: string[];
+      }[];
+    }[];
+    completionTime?: string;
+    conditions?: {
+      lastTransitionTime?: string;
+      message?: string;
+      reason?: string;
+      severity?: string;
+      status: string;
+      type: string;
+    }[];
+    finallyStartTime?: string;
+    observedGeneration?: number;
+    pipelineSpec?: any;
+    provenance?: {
+      featureFlags?: {
+        awaitSidecarReadiness?: boolean;
+        coschedule?: string;
+        disableCredsInit?: boolean;
+        disableInlineSpec?: string;
+        enableAPIFields?: string;
+        enableArtifacts?: boolean;
+        enableCELInWhenExpression?: boolean;
+        enableConciseResolverSyntax?: boolean;
+        enableKeepPodOnCancel?: boolean;
+        enableKubernetesSidecar?: boolean;
+        enableParamEnum?: boolean;
+        enableProvenanceInStatus?: boolean;
+        enableStepActions?: boolean;
+        enableWaitExponentialBackoff?: boolean;
+        enforceNonfalsifiability?: string;
+        maxResultSize?: number;
+        requireGitSSHSecretKnownHosts?: boolean;
+        resultExtractionMethod?: string;
+        runningInEnvWithInjectedSidecars?: boolean;
+        sendCloudEventsForRuns?: boolean;
+        setSecurityContext?: boolean;
+        setSecurityContextReadOnlyRootFilesystem?: boolean;
+        verificationNoMatchPolicy?: string;
+      };
+      refSource?: {
+        digest?: {
+          [key: string]: unknown;
+        };
+        entryPoint?: string;
+        uri?: string;
+      };
+    };
+    results?: {
+      name: string;
+      value: any;
+    }[];
+    skippedTasks?: {
+      name: string;
+      reason: string;
+      whenExpressions?: {
+        cel?: string;
+        input?: string;
+        operator?: string;
+        values?: string[];
+      }[];
+    }[];
+    spanContext?: {
+      [key: string]: unknown;
+    };
+    startTime?: string;
+  };
+}
+/* dev.tekton.v1.PipelineRunList */
+/* PipelineRunList is a list of PipelineRun */
+export interface TektonDevV1PipelineRunList {
+  apiVersion?: string;
+  items: TektonDevV1PipelineRun[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1.Task */
+/* Task represents a collection of sequential steps that are run as part of a
+Pipeline using a set of inputs and producing a set of outputs. Tasks execute
+when TaskRuns are created that provide the input parameters and resources and
+output resources the Task requires. */
+export interface TektonDevV1Task {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    description?: string;
+    displayName?: string;
+    params?: {
+      default?: any;
+      description?: string;
+      enum?: string[];
+      name: string;
+      properties?: {
+        [key: string]: unknown;
+      };
+      type?: string;
+    }[];
+    results?: {
+      description?: string;
+      name: string;
+      properties?: {
+        [key: string]: unknown;
+      };
+      type?: string;
+      value?: any;
+    }[];
+    sidecars?: {
+      args?: string[];
+      command?: string[];
+      computeResources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      envFrom?: {
+        configMapRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+        prefix?: string;
+        secretRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+      }[];
+      image?: string;
+      imagePullPolicy?: string;
+      lifecycle?: {
+        postStart?: {
+          exec?: {
+            command?: string[];
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          sleep?: {
+            seconds: number;
+          };
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+        };
+        preStop?: {
+          exec?: {
+            command?: string[];
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          sleep?: {
+            seconds: number;
+          };
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+        };
+      };
+      livenessProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      name: string;
+      ports?: {
+        containerPort: number;
+        hostIP?: string;
+        hostPort?: number;
+        name?: string;
+        protocol?: string;
+      }[];
+      readinessProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      restartPolicy?: string;
+      script?: string;
+      securityContext?: {
+        allowPrivilegeEscalation?: boolean;
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        capabilities?: {
+          add?: string[];
+          drop?: string[];
+        };
+        privileged?: boolean;
+        procMount?: string;
+        readOnlyRootFilesystem?: boolean;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      startupProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      stdin?: boolean;
+      stdinOnce?: boolean;
+      terminationMessagePath?: string;
+      terminationMessagePolicy?: string;
+      tty?: boolean;
+      volumeDevices?: {
+        devicePath: string;
+        name: string;
+      }[];
+      volumeMounts?: {
+        mountPath: string;
+        mountPropagation?: string;
+        name: string;
+        readOnly?: boolean;
+        recursiveReadOnly?: string;
+        subPath?: string;
+        subPathExpr?: string;
+      }[];
+      workingDir?: string;
+      workspaces?: {
+        mountPath: string;
+        name: string;
+      }[];
+    }[];
+    stepTemplate?: {
+      args?: string[];
+      command?: string[];
+      computeResources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      envFrom?: {
+        configMapRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+        prefix?: string;
+        secretRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+      }[];
+      image?: string;
+      imagePullPolicy?: string;
+      securityContext?: {
+        allowPrivilegeEscalation?: boolean;
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        capabilities?: {
+          add?: string[];
+          drop?: string[];
+        };
+        privileged?: boolean;
+        procMount?: string;
+        readOnlyRootFilesystem?: boolean;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      volumeDevices?: {
+        devicePath: string;
+        name: string;
+      }[];
+      volumeMounts?: {
+        mountPath: string;
+        mountPropagation?: string;
+        name: string;
+        readOnly?: boolean;
+        recursiveReadOnly?: string;
+        subPath?: string;
+        subPathExpr?: string;
+      }[];
+      workingDir?: string;
+    };
+    steps?: {
+      args?: string[];
+      command?: string[];
+      computeResources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      displayName?: string;
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      envFrom?: {
+        configMapRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+        prefix?: string;
+        secretRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+      }[];
+      image?: string;
+      imagePullPolicy?: string;
+      name: string;
+      onError?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      ref?: {
+        name?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        resolver?: string;
+      };
+      results?: {
+        description?: string;
+        name: string;
+        properties?: {
+          [key: string]: unknown;
+        };
+        type?: string;
+      }[];
+      script?: string;
+      securityContext?: {
+        allowPrivilegeEscalation?: boolean;
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        capabilities?: {
+          add?: string[];
+          drop?: string[];
+        };
+        privileged?: boolean;
+        procMount?: string;
+        readOnlyRootFilesystem?: boolean;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      stderrConfig?: {
+        path?: string;
+      };
+      stdoutConfig?: {
+        path?: string;
+      };
+      timeout?: string;
+      volumeDevices?: {
+        devicePath: string;
+        name: string;
+      }[];
+      volumeMounts?: {
+        mountPath: string;
+        mountPropagation?: string;
+        name: string;
+        readOnly?: boolean;
+        recursiveReadOnly?: string;
+        subPath?: string;
+        subPathExpr?: string;
+      }[];
+      when?: {
+        cel?: string;
+        input?: string;
+        operator?: string;
+        values?: string[];
+      }[];
+      workingDir?: string;
+      workspaces?: {
+        mountPath: string;
+        name: string;
+      }[];
+    }[];
+    volumes?: any;
+    workspaces?: {
+      description?: string;
+      mountPath?: string;
+      name: string;
+      optional?: boolean;
+      readOnly?: boolean;
+    }[];
+  };
+}
+/* dev.tekton.v1.TaskList */
+/* TaskList is a list of Task */
+export interface TektonDevV1TaskList {
+  apiVersion?: string;
+  items: TektonDevV1Task[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1.TaskRun */
+/* TaskRun represents a single execution of a Task. TaskRuns are how the steps
+specified in a Task are executed; they specify the parameters and resources
+used to run the steps in a Task. */
+export interface TektonDevV1TaskRun {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    computeResources?: {
+      claims?: {
+        name: string;
+        request?: string;
+      }[];
+      limits?: {
+        [key: string]: unknown;
+      };
+      requests?: {
+        [key: string]: unknown;
+      };
+    };
+    debug?: {
+      breakpoints?: {
+        beforeSteps?: string[];
+        onFailure?: string;
+      };
+    };
+    managedBy?: string;
+    params?: {
+      name: string;
+      value: any;
+    }[];
+    podTemplate?: {
+      affinity?: any;
+      automountServiceAccountToken?: boolean;
+      dnsConfig?: {
+        nameservers?: string[];
+        options?: {
+          name?: string;
+          value?: string;
+        }[];
+        searches?: string[];
+      };
+      dnsPolicy?: string;
+      enableServiceLinks?: boolean;
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      hostAliases?: {
+        hostnames?: string[];
+        ip: string;
+      }[];
+      hostNetwork?: boolean;
+      imagePullSecrets?: {
+        name?: string;
+      }[];
+      nodeSelector?: {
+        [key: string]: unknown;
+      };
+      priorityClassName?: string;
+      runtimeClassName?: string;
+      schedulerName?: string;
+      securityContext?: any;
+      tolerations?: {
+        effect?: string;
+        key?: string;
+        operator?: string;
+        tolerationSeconds?: number;
+        value?: string;
+      }[];
+      topologySpreadConstraints?: {
+        labelSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: string;
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        matchLabelKeys?: string[];
+        maxSkew: number;
+        minDomains?: number;
+        nodeAffinityPolicy?: string;
+        nodeTaintsPolicy?: string;
+        topologyKey: string;
+        whenUnsatisfiable: string;
+      }[];
+      volumes?: any;
+    };
+    retries?: number;
+    serviceAccountName?: string;
+    sidecarSpecs?: {
+      computeResources: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      name: string;
+    }[];
+    status?: string;
+    statusMessage?: string;
+    stepSpecs?: {
+      computeResources: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      name: string;
+    }[];
+    taskRef?: {
+      apiVersion?: string;
+      kind?: string;
+      name?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      resolver?: string;
+    };
+    taskSpec?: any;
+    timeout?: string;
+    workspaces?: {
+      configMap?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        name?: string;
+        optional?: boolean;
+      };
+      csi?: {
+        driver: string;
+        fsType?: string;
+        nodePublishSecretRef?: {
+          name?: string;
+        };
+        readOnly?: boolean;
+        volumeAttributes?: {
+          [key: string]: unknown;
+        };
+      };
+      emptyDir?: {
+        medium?: string;
+        sizeLimit?: any;
+      };
+      name: string;
+      persistentVolumeClaim?: {
+        claimName: string;
+        readOnly?: boolean;
+      };
+      projected?: {
+        defaultMode?: number;
+        sources?: {
+          clusterTrustBundle?: {
+            labelSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            name?: string;
+            optional?: boolean;
+            path: string;
+            signerName?: string;
+          };
+          configMap?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          downwardAPI?: {
+            items?: {
+              fieldRef?: {
+                apiVersion?: string;
+                fieldPath: string;
+              };
+              mode?: number;
+              path: string;
+              resourceFieldRef?: {
+                containerName?: string;
+                divisor?: any;
+                resource: string;
+              };
+            }[];
+          };
+          secret?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          serviceAccountToken?: {
+            audience?: string;
+            expirationSeconds?: number;
+            path: string;
+          };
+        }[];
+      };
+      secret?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        optional?: boolean;
+        secretName?: string;
+      };
+      subPath?: string;
+      volumeClaimTemplate?: any;
+    }[];
+  };
+  status?: {
+    annotations?: {
+      [key: string]: unknown;
+    };
+    artifacts?: {
+      inputs?: {
+        buildOutput?: boolean;
+        name?: string;
+        values?: {
+          digest?: {
+            [key: string]: unknown;
+          };
+          uri?: string;
+        }[];
+      }[];
+      outputs?: {
+        buildOutput?: boolean;
+        name?: string;
+        values?: {
+          digest?: {
+            [key: string]: unknown;
+          };
+          uri?: string;
+        }[];
+      }[];
+    };
+    completionTime?: string;
+    conditions?: {
+      lastTransitionTime?: string;
+      message?: string;
+      reason?: string;
+      severity?: string;
+      status: string;
+      type: string;
+    }[];
+    observedGeneration?: number;
+    podName: string;
+    provenance?: {
+      featureFlags?: {
+        awaitSidecarReadiness?: boolean;
+        coschedule?: string;
+        disableCredsInit?: boolean;
+        disableInlineSpec?: string;
+        enableAPIFields?: string;
+        enableArtifacts?: boolean;
+        enableCELInWhenExpression?: boolean;
+        enableConciseResolverSyntax?: boolean;
+        enableKeepPodOnCancel?: boolean;
+        enableKubernetesSidecar?: boolean;
+        enableParamEnum?: boolean;
+        enableProvenanceInStatus?: boolean;
+        enableStepActions?: boolean;
+        enableWaitExponentialBackoff?: boolean;
+        enforceNonfalsifiability?: string;
+        maxResultSize?: number;
+        requireGitSSHSecretKnownHosts?: boolean;
+        resultExtractionMethod?: string;
+        runningInEnvWithInjectedSidecars?: boolean;
+        sendCloudEventsForRuns?: boolean;
+        setSecurityContext?: boolean;
+        setSecurityContextReadOnlyRootFilesystem?: boolean;
+        verificationNoMatchPolicy?: string;
+      };
+      refSource?: {
+        digest?: {
+          [key: string]: unknown;
+        };
+        entryPoint?: string;
+        uri?: string;
+      };
+    };
+    results?: {
+      name: string;
+      type?: string;
+      value: any;
+    }[];
+    retriesStatus?: any;
+    sidecars?: {
+      container?: string;
+      imageID?: string;
+      name?: string;
+      running?: {
+        startedAt?: string;
+      };
+      terminated?: {
+        containerID?: string;
+        exitCode: number;
+        finishedAt?: string;
+        message?: string;
+        reason?: string;
+        signal?: number;
+        startedAt?: string;
+      };
+      waiting?: {
+        message?: string;
+        reason?: string;
+      };
+    }[];
+    spanContext?: {
+      [key: string]: unknown;
+    };
+    startTime?: string;
+    steps?: {
+      container?: string;
+      imageID?: string;
+      inputs?: {
+        buildOutput?: boolean;
+        name?: string;
+        values?: {
+          digest?: {
+            [key: string]: unknown;
+          };
+          uri?: string;
+        }[];
+      }[];
+      name?: string;
+      outputs?: {
+        buildOutput?: boolean;
+        name?: string;
+        values?: {
+          digest?: {
+            [key: string]: unknown;
+          };
+          uri?: string;
+        }[];
+      }[];
+      provenance?: {
+        featureFlags?: {
+          awaitSidecarReadiness?: boolean;
+          coschedule?: string;
+          disableCredsInit?: boolean;
+          disableInlineSpec?: string;
+          enableAPIFields?: string;
+          enableArtifacts?: boolean;
+          enableCELInWhenExpression?: boolean;
+          enableConciseResolverSyntax?: boolean;
+          enableKeepPodOnCancel?: boolean;
+          enableKubernetesSidecar?: boolean;
+          enableParamEnum?: boolean;
+          enableProvenanceInStatus?: boolean;
+          enableStepActions?: boolean;
+          enableWaitExponentialBackoff?: boolean;
+          enforceNonfalsifiability?: string;
+          maxResultSize?: number;
+          requireGitSSHSecretKnownHosts?: boolean;
+          resultExtractionMethod?: string;
+          runningInEnvWithInjectedSidecars?: boolean;
+          sendCloudEventsForRuns?: boolean;
+          setSecurityContext?: boolean;
+          setSecurityContextReadOnlyRootFilesystem?: boolean;
+          verificationNoMatchPolicy?: string;
+        };
+        refSource?: {
+          digest?: {
+            [key: string]: unknown;
+          };
+          entryPoint?: string;
+          uri?: string;
+        };
+      };
+      results?: {
+        name: string;
+        type?: string;
+        value: any;
+      }[];
+      running?: {
+        startedAt?: string;
+      };
+      terminated?: {
+        containerID?: string;
+        exitCode: number;
+        finishedAt?: string;
+        message?: string;
+        reason?: string;
+        signal?: number;
+        startedAt?: string;
+      };
+      terminationReason?: string;
+      waiting?: {
+        message?: string;
+        reason?: string;
+      };
+    }[];
+    taskSpec?: {
+      description?: string;
+      displayName?: string;
+      params?: {
+        default?: any;
+        description?: string;
+        enum?: string[];
+        name: string;
+        properties?: {
+          [key: string]: unknown;
+        };
+        type?: string;
+      }[];
+      results?: {
+        description?: string;
+        name: string;
+        properties?: {
+          [key: string]: unknown;
+        };
+        type?: string;
+        value?: any;
+      }[];
+      sidecars?: {
+        args?: string[];
+        command?: string[];
+        computeResources?: {
+          claims?: {
+            name: string;
+            request?: string;
+          }[];
+          limits?: {
+            [key: string]: unknown;
+          };
+          requests?: {
+            [key: string]: unknown;
+          };
+        };
+        env?: {
+          name: string;
+          value?: string;
+          valueFrom?: {
+            configMapKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+            fieldRef?: {
+              apiVersion?: string;
+              fieldPath: string;
+            };
+            resourceFieldRef?: {
+              containerName?: string;
+              divisor?: any;
+              resource: string;
+            };
+            secretKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+          };
+        }[];
+        envFrom?: {
+          configMapRef?: {
+            name?: string;
+            optional?: boolean;
+          };
+          prefix?: string;
+          secretRef?: {
+            name?: string;
+            optional?: boolean;
+          };
+        }[];
+        image?: string;
+        imagePullPolicy?: string;
+        lifecycle?: {
+          postStart?: {
+            exec?: {
+              command?: string[];
+            };
+            httpGet?: {
+              host?: string;
+              httpHeaders?: {
+                name: string;
+                value: string;
+              }[];
+              path?: string;
+              port: any;
+              scheme?: string;
+            };
+            sleep?: {
+              seconds: number;
+            };
+            tcpSocket?: {
+              host?: string;
+              port: any;
+            };
+          };
+          preStop?: {
+            exec?: {
+              command?: string[];
+            };
+            httpGet?: {
+              host?: string;
+              httpHeaders?: {
+                name: string;
+                value: string;
+              }[];
+              path?: string;
+              port: any;
+              scheme?: string;
+            };
+            sleep?: {
+              seconds: number;
+            };
+            tcpSocket?: {
+              host?: string;
+              port: any;
+            };
+          };
+        };
+        livenessProbe?: {
+          exec?: {
+            command?: string[];
+          };
+          failureThreshold?: number;
+          grpc?: {
+            port: number;
+            service?: string;
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          initialDelaySeconds?: number;
+          periodSeconds?: number;
+          successThreshold?: number;
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+          terminationGracePeriodSeconds?: number;
+          timeoutSeconds?: number;
+        };
+        name: string;
+        ports?: {
+          containerPort: number;
+          hostIP?: string;
+          hostPort?: number;
+          name?: string;
+          protocol?: string;
+        }[];
+        readinessProbe?: {
+          exec?: {
+            command?: string[];
+          };
+          failureThreshold?: number;
+          grpc?: {
+            port: number;
+            service?: string;
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          initialDelaySeconds?: number;
+          periodSeconds?: number;
+          successThreshold?: number;
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+          terminationGracePeriodSeconds?: number;
+          timeoutSeconds?: number;
+        };
+        restartPolicy?: string;
+        script?: string;
+        securityContext?: {
+          allowPrivilegeEscalation?: boolean;
+          appArmorProfile?: {
+            localhostProfile?: string;
+            type: string;
+          };
+          capabilities?: {
+            add?: string[];
+            drop?: string[];
+          };
+          privileged?: boolean;
+          procMount?: string;
+          readOnlyRootFilesystem?: boolean;
+          runAsGroup?: number;
+          runAsNonRoot?: boolean;
+          runAsUser?: number;
+          seLinuxOptions?: {
+            level?: string;
+            role?: string;
+            type?: string;
+            user?: string;
+          };
+          seccompProfile?: {
+            localhostProfile?: string;
+            type: string;
+          };
+          windowsOptions?: {
+            gmsaCredentialSpec?: string;
+            gmsaCredentialSpecName?: string;
+            hostProcess?: boolean;
+            runAsUserName?: string;
+          };
+        };
+        startupProbe?: {
+          exec?: {
+            command?: string[];
+          };
+          failureThreshold?: number;
+          grpc?: {
+            port: number;
+            service?: string;
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          initialDelaySeconds?: number;
+          periodSeconds?: number;
+          successThreshold?: number;
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+          terminationGracePeriodSeconds?: number;
+          timeoutSeconds?: number;
+        };
+        stdin?: boolean;
+        stdinOnce?: boolean;
+        terminationMessagePath?: string;
+        terminationMessagePolicy?: string;
+        tty?: boolean;
+        volumeDevices?: {
+          devicePath: string;
+          name: string;
+        }[];
+        volumeMounts?: {
+          mountPath: string;
+          mountPropagation?: string;
+          name: string;
+          readOnly?: boolean;
+          recursiveReadOnly?: string;
+          subPath?: string;
+          subPathExpr?: string;
+        }[];
+        workingDir?: string;
+        workspaces?: {
+          mountPath: string;
+          name: string;
+        }[];
+      }[];
+      stepTemplate?: {
+        args?: string[];
+        command?: string[];
+        computeResources?: {
+          claims?: {
+            name: string;
+            request?: string;
+          }[];
+          limits?: {
+            [key: string]: unknown;
+          };
+          requests?: {
+            [key: string]: unknown;
+          };
+        };
+        env?: {
+          name: string;
+          value?: string;
+          valueFrom?: {
+            configMapKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+            fieldRef?: {
+              apiVersion?: string;
+              fieldPath: string;
+            };
+            resourceFieldRef?: {
+              containerName?: string;
+              divisor?: any;
+              resource: string;
+            };
+            secretKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+          };
+        }[];
+        envFrom?: {
+          configMapRef?: {
+            name?: string;
+            optional?: boolean;
+          };
+          prefix?: string;
+          secretRef?: {
+            name?: string;
+            optional?: boolean;
+          };
+        }[];
+        image?: string;
+        imagePullPolicy?: string;
+        securityContext?: {
+          allowPrivilegeEscalation?: boolean;
+          appArmorProfile?: {
+            localhostProfile?: string;
+            type: string;
+          };
+          capabilities?: {
+            add?: string[];
+            drop?: string[];
+          };
+          privileged?: boolean;
+          procMount?: string;
+          readOnlyRootFilesystem?: boolean;
+          runAsGroup?: number;
+          runAsNonRoot?: boolean;
+          runAsUser?: number;
+          seLinuxOptions?: {
+            level?: string;
+            role?: string;
+            type?: string;
+            user?: string;
+          };
+          seccompProfile?: {
+            localhostProfile?: string;
+            type: string;
+          };
+          windowsOptions?: {
+            gmsaCredentialSpec?: string;
+            gmsaCredentialSpecName?: string;
+            hostProcess?: boolean;
+            runAsUserName?: string;
+          };
+        };
+        volumeDevices?: {
+          devicePath: string;
+          name: string;
+        }[];
+        volumeMounts?: {
+          mountPath: string;
+          mountPropagation?: string;
+          name: string;
+          readOnly?: boolean;
+          recursiveReadOnly?: string;
+          subPath?: string;
+          subPathExpr?: string;
+        }[];
+        workingDir?: string;
+      };
+      steps?: {
+        args?: string[];
+        command?: string[];
+        computeResources?: {
+          claims?: {
+            name: string;
+            request?: string;
+          }[];
+          limits?: {
+            [key: string]: unknown;
+          };
+          requests?: {
+            [key: string]: unknown;
+          };
+        };
+        displayName?: string;
+        env?: {
+          name: string;
+          value?: string;
+          valueFrom?: {
+            configMapKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+            fieldRef?: {
+              apiVersion?: string;
+              fieldPath: string;
+            };
+            resourceFieldRef?: {
+              containerName?: string;
+              divisor?: any;
+              resource: string;
+            };
+            secretKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+          };
+        }[];
+        envFrom?: {
+          configMapRef?: {
+            name?: string;
+            optional?: boolean;
+          };
+          prefix?: string;
+          secretRef?: {
+            name?: string;
+            optional?: boolean;
+          };
+        }[];
+        image?: string;
+        imagePullPolicy?: string;
+        name: string;
+        onError?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        ref?: {
+          name?: string;
+          params?: {
+            name: string;
+            value: any;
+          }[];
+          resolver?: string;
+        };
+        results?: {
+          description?: string;
+          name: string;
+          properties?: {
+            [key: string]: unknown;
+          };
+          type?: string;
+        }[];
+        script?: string;
+        securityContext?: {
+          allowPrivilegeEscalation?: boolean;
+          appArmorProfile?: {
+            localhostProfile?: string;
+            type: string;
+          };
+          capabilities?: {
+            add?: string[];
+            drop?: string[];
+          };
+          privileged?: boolean;
+          procMount?: string;
+          readOnlyRootFilesystem?: boolean;
+          runAsGroup?: number;
+          runAsNonRoot?: boolean;
+          runAsUser?: number;
+          seLinuxOptions?: {
+            level?: string;
+            role?: string;
+            type?: string;
+            user?: string;
+          };
+          seccompProfile?: {
+            localhostProfile?: string;
+            type: string;
+          };
+          windowsOptions?: {
+            gmsaCredentialSpec?: string;
+            gmsaCredentialSpecName?: string;
+            hostProcess?: boolean;
+            runAsUserName?: string;
+          };
+        };
+        stderrConfig?: {
+          path?: string;
+        };
+        stdoutConfig?: {
+          path?: string;
+        };
+        timeout?: string;
+        volumeDevices?: {
+          devicePath: string;
+          name: string;
+        }[];
+        volumeMounts?: {
+          mountPath: string;
+          mountPropagation?: string;
+          name: string;
+          readOnly?: boolean;
+          recursiveReadOnly?: string;
+          subPath?: string;
+          subPathExpr?: string;
+        }[];
+        when?: {
+          cel?: string;
+          input?: string;
+          operator?: string;
+          values?: string[];
+        }[];
+        workingDir?: string;
+        workspaces?: {
+          mountPath: string;
+          name: string;
+        }[];
+      }[];
+      volumes?: any;
+      workspaces?: {
+        description?: string;
+        mountPath?: string;
+        name: string;
+        optional?: boolean;
+        readOnly?: boolean;
+      }[];
+    };
+  };
+}
+/* dev.tekton.v1.TaskRunList */
+/* TaskRunList is a list of TaskRun */
+export interface TektonDevV1TaskRunList {
+  apiVersion?: string;
+  items: TektonDevV1TaskRun[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1alpha1.StepAction */
+/* StepAction represents the actionable components of Step.
+The Step can only reference it from the cluster or using remote resolution. */
+export interface TektonDevV1alpha1StepAction {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    args?: string[];
+    command?: string[];
+    description?: string;
+    env?: {
+      name: string;
+      value?: string;
+      valueFrom?: {
+        configMapKeyRef?: {
+          key: string;
+          name?: string;
+          optional?: boolean;
+        };
+        fieldRef?: {
+          apiVersion?: string;
+          fieldPath: string;
+        };
+        resourceFieldRef?: {
+          containerName?: string;
+          divisor?: any;
+          resource: string;
+        };
+        secretKeyRef?: {
+          key: string;
+          name?: string;
+          optional?: boolean;
+        };
+      };
+    }[];
+    image?: string;
+    params?: {
+      default?: any;
+      description?: string;
+      enum?: string[];
+      name: string;
+      properties?: {
+        [key: string]: unknown;
+      };
+      type?: string;
+    }[];
+    results?: {
+      description?: string;
+      name: string;
+      properties?: {
+        [key: string]: unknown;
+      };
+      type?: string;
+    }[];
+    script?: string;
+    securityContext?: {
+      allowPrivilegeEscalation?: boolean;
+      appArmorProfile?: {
+        localhostProfile?: string;
+        type: string;
+      };
+      capabilities?: {
+        add?: string[];
+        drop?: string[];
+      };
+      privileged?: boolean;
+      procMount?: string;
+      readOnlyRootFilesystem?: boolean;
+      runAsGroup?: number;
+      runAsNonRoot?: boolean;
+      runAsUser?: number;
+      seLinuxOptions?: {
+        level?: string;
+        role?: string;
+        type?: string;
+        user?: string;
+      };
+      seccompProfile?: {
+        localhostProfile?: string;
+        type: string;
+      };
+      windowsOptions?: {
+        gmsaCredentialSpec?: string;
+        gmsaCredentialSpecName?: string;
+        hostProcess?: boolean;
+        runAsUserName?: string;
+      };
+    };
+    volumeMounts?: {
+      mountPath: string;
+      mountPropagation?: string;
+      name: string;
+      readOnly?: boolean;
+      recursiveReadOnly?: string;
+      subPath?: string;
+      subPathExpr?: string;
+    }[];
+    workingDir?: string;
+  };
+}
+/* dev.tekton.v1alpha1.StepActionList */
+/* StepActionList is a list of StepAction */
+export interface TektonDevV1alpha1StepActionList {
+  apiVersion?: string;
+  items: TektonDevV1alpha1StepAction[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1alpha1.VerificationPolicy */
+/* VerificationPolicy defines the rules to verify Tekton resources.
+VerificationPolicy can config the mapping from resources to a list of public
+keys, so when verifying the resources we can use the corresponding public keys. */
+export interface TektonDevV1alpha1VerificationPolicy {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    authorities: {
+      key?: {
+        data?: string;
+        hashAlgorithm?: string;
+        kms?: string;
+        secretRef?: {
+          name?: string;
+          namespace?: string;
+        };
+      };
+      name: string;
+    }[];
+    mode?: string;
+    resources: {
+      pattern: string;
+    }[];
+  };
+}
+/* dev.tekton.v1alpha1.VerificationPolicyList */
+/* VerificationPolicyList is a list of VerificationPolicy */
+export interface TektonDevV1alpha1VerificationPolicyList {
+  apiVersion?: string;
+  items: TektonDevV1alpha1VerificationPolicy[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1beta1.CustomRun */
+/* CustomRun represents a single execution of a Custom Task. */
+export interface TektonDevV1beta1CustomRun {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    customRef?: {
+      apiVersion?: string;
+      bundle?: string;
+      kind?: string;
+      name?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      resolver?: string;
+    };
+    customSpec?: {
+      apiVersion?: string;
+      kind?: string;
+      metadata?: {
+        annotations?: {
+          [key: string]: unknown;
+        };
+        labels?: {
+          [key: string]: unknown;
+        };
+      };
+      spec?: any;
+    };
+    params?: {
+      name: string;
+      value: any;
+    }[];
+    retries?: number;
+    serviceAccountName?: string;
+    status?: string;
+    statusMessage?: string;
+    timeout?: string;
+    workspaces?: {
+      configMap?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        name?: string;
+        optional?: boolean;
+      };
+      csi?: {
+        driver: string;
+        fsType?: string;
+        nodePublishSecretRef?: {
+          name?: string;
+        };
+        readOnly?: boolean;
+        volumeAttributes?: {
+          [key: string]: unknown;
+        };
+      };
+      emptyDir?: {
+        medium?: string;
+        sizeLimit?: any;
+      };
+      name: string;
+      persistentVolumeClaim?: {
+        claimName: string;
+        readOnly?: boolean;
+      };
+      projected?: {
+        defaultMode?: number;
+        sources?: {
+          clusterTrustBundle?: {
+            labelSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            name?: string;
+            optional?: boolean;
+            path: string;
+            signerName?: string;
+          };
+          configMap?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          downwardAPI?: {
+            items?: {
+              fieldRef?: {
+                apiVersion?: string;
+                fieldPath: string;
+              };
+              mode?: number;
+              path: string;
+              resourceFieldRef?: {
+                containerName?: string;
+                divisor?: any;
+                resource: string;
+              };
+            }[];
+          };
+          secret?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          serviceAccountToken?: {
+            audience?: string;
+            expirationSeconds?: number;
+            path: string;
+          };
+        }[];
+      };
+      secret?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        optional?: boolean;
+        secretName?: string;
+      };
+      subPath?: string;
+      volumeClaimTemplate?: any;
+    }[];
+  };
+  status?: {
+    annotations?: {
+      [key: string]: unknown;
+    };
+    completionTime?: string;
+    conditions?: {
+      lastTransitionTime?: string;
+      message?: string;
+      reason?: string;
+      severity?: string;
+      status: string;
+      type: string;
+    }[];
+    extraFields?: any;
+    observedGeneration?: number;
+    results?: {
+      name: string;
+      value: string;
+    }[];
+    retriesStatus?: any;
+    startTime?: string;
+  };
+}
+/* dev.tekton.v1beta1.CustomRunList */
+/* CustomRunList is a list of CustomRun */
+export interface TektonDevV1beta1CustomRunList {
+  apiVersion?: string;
+  items: TektonDevV1beta1CustomRun[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1beta1.Pipeline */
+/* Pipeline describes a list of Tasks to execute. It expresses how outputs
+of tasks feed into inputs of subsequent tasks.
+
+Deprecated: Please use v1.Pipeline instead. */
+export interface TektonDevV1beta1Pipeline {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    description?: string;
+    displayName?: string;
+    finally?: {
+      description?: string;
+      displayName?: string;
+      matrix?: {
+        include?: {
+          name?: string;
+          params?: {
+            name: string;
+            value: any;
+          }[];
+        }[];
+        params?: {
+          name: string;
+          value: any;
+        }[];
+      };
+      name?: string;
+      onError?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      pipelineRef?: {
+        apiVersion?: string;
+        bundle?: string;
+        name?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        resolver?: string;
+      };
+      pipelineSpec?: any;
+      resources?: {
+        inputs?: {
+          from?: string[];
+          name: string;
+          resource: string;
+        }[];
+        outputs?: {
+          name: string;
+          resource: string;
+        }[];
+      };
+      retries?: number;
+      runAfter?: string[];
+      taskRef?: {
+        apiVersion?: string;
+        bundle?: string;
+        kind?: string;
+        name?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        resolver?: string;
+      };
+      taskSpec?: any;
+      timeout?: string;
+      when?: {
+        cel?: string;
+        input?: string;
+        operator?: string;
+        values?: string[];
+      }[];
+      workspaces?: {
+        name: string;
+        subPath?: string;
+        workspace?: string;
+      }[];
+    }[];
+    params?: {
+      default?: any;
+      description?: string;
+      enum?: string[];
+      name: string;
+      properties?: {
+        [key: string]: unknown;
+      };
+      type?: string;
+    }[];
+    resources?: {
+      name: string;
+      optional?: boolean;
+      type: string;
+    }[];
+    results?: {
+      description?: string;
+      name: string;
+      type?: string;
+      value: any;
+    }[];
+    tasks?: {
+      description?: string;
+      displayName?: string;
+      matrix?: {
+        include?: {
+          name?: string;
+          params?: {
+            name: string;
+            value: any;
+          }[];
+        }[];
+        params?: {
+          name: string;
+          value: any;
+        }[];
+      };
+      name?: string;
+      onError?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      pipelineRef?: {
+        apiVersion?: string;
+        bundle?: string;
+        name?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        resolver?: string;
+      };
+      pipelineSpec?: any;
+      resources?: {
+        inputs?: {
+          from?: string[];
+          name: string;
+          resource: string;
+        }[];
+        outputs?: {
+          name: string;
+          resource: string;
+        }[];
+      };
+      retries?: number;
+      runAfter?: string[];
+      taskRef?: {
+        apiVersion?: string;
+        bundle?: string;
+        kind?: string;
+        name?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        resolver?: string;
+      };
+      taskSpec?: any;
+      timeout?: string;
+      when?: {
+        cel?: string;
+        input?: string;
+        operator?: string;
+        values?: string[];
+      }[];
+      workspaces?: {
+        name: string;
+        subPath?: string;
+        workspace?: string;
+      }[];
+    }[];
+    workspaces?: {
+      description?: string;
+      name: string;
+      optional?: boolean;
+    }[];
+  };
+}
+/* dev.tekton.v1beta1.PipelineList */
+/* PipelineList is a list of Pipeline */
+export interface TektonDevV1beta1PipelineList {
+  apiVersion?: string;
+  items: TektonDevV1beta1Pipeline[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1beta1.PipelineRun */
+/* PipelineRun represents a single execution of a Pipeline. PipelineRuns are how
+the graph of Tasks declared in a Pipeline are executed; they specify inputs
+to Pipelines such as parameter values and capture operational aspects of the
+Tasks execution such as service account and tolerations. Creating a
+PipelineRun creates TaskRuns for Tasks in the referenced Pipeline.
+
+Deprecated: Please use v1.PipelineRun instead. */
+export interface TektonDevV1beta1PipelineRun {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    managedBy?: string;
+    params?: {
+      name: string;
+      value: any;
+    }[];
+    pipelineRef?: {
+      apiVersion?: string;
+      bundle?: string;
+      name?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      resolver?: string;
+    };
+    pipelineSpec?: any;
+    podTemplate?: {
+      affinity?: any;
+      automountServiceAccountToken?: boolean;
+      dnsConfig?: {
+        nameservers?: string[];
+        options?: {
+          name?: string;
+          value?: string;
+        }[];
+        searches?: string[];
+      };
+      dnsPolicy?: string;
+      enableServiceLinks?: boolean;
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      hostAliases?: {
+        hostnames?: string[];
+        ip: string;
+      }[];
+      hostNetwork?: boolean;
+      imagePullSecrets?: {
+        name?: string;
+      }[];
+      nodeSelector?: {
+        [key: string]: unknown;
+      };
+      priorityClassName?: string;
+      runtimeClassName?: string;
+      schedulerName?: string;
+      securityContext?: any;
+      tolerations?: {
+        effect?: string;
+        key?: string;
+        operator?: string;
+        tolerationSeconds?: number;
+        value?: string;
+      }[];
+      topologySpreadConstraints?: {
+        labelSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: string;
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        matchLabelKeys?: string[];
+        maxSkew: number;
+        minDomains?: number;
+        nodeAffinityPolicy?: string;
+        nodeTaintsPolicy?: string;
+        topologyKey: string;
+        whenUnsatisfiable: string;
+      }[];
+      volumes?: any;
+    };
+    resources?: {
+      name?: string;
+      resourceRef?: {
+        apiVersion?: string;
+        name?: string;
+      };
+      resourceSpec?: {
+        description?: string;
+        params: {
+          name: string;
+          value: string;
+        }[];
+        secrets?: {
+          fieldName: string;
+          secretKey: string;
+          secretName: string;
+        }[];
+        type: string;
+      };
+    }[];
+    serviceAccountName?: string;
+    status?: string;
+    taskRunSpecs?: {
+      computeResources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      metadata?: {
+        annotations?: {
+          [key: string]: unknown;
+        };
+        labels?: {
+          [key: string]: unknown;
+        };
+      };
+      pipelineTaskName?: string;
+      sidecarOverrides?: {
+        name: string;
+        resources: {
+          claims?: {
+            name: string;
+            request?: string;
+          }[];
+          limits?: {
+            [key: string]: unknown;
+          };
+          requests?: {
+            [key: string]: unknown;
+          };
+        };
+      }[];
+      stepOverrides?: {
+        name: string;
+        resources: {
+          claims?: {
+            name: string;
+            request?: string;
+          }[];
+          limits?: {
+            [key: string]: unknown;
+          };
+          requests?: {
+            [key: string]: unknown;
+          };
+        };
+      }[];
+      taskPodTemplate?: {
+        affinity?: any;
+        automountServiceAccountToken?: boolean;
+        dnsConfig?: {
+          nameservers?: string[];
+          options?: {
+            name?: string;
+            value?: string;
+          }[];
+          searches?: string[];
+        };
+        dnsPolicy?: string;
+        enableServiceLinks?: boolean;
+        env?: {
+          name: string;
+          value?: string;
+          valueFrom?: {
+            configMapKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+            fieldRef?: {
+              apiVersion?: string;
+              fieldPath: string;
+            };
+            resourceFieldRef?: {
+              containerName?: string;
+              divisor?: any;
+              resource: string;
+            };
+            secretKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+          };
+        }[];
+        hostAliases?: {
+          hostnames?: string[];
+          ip: string;
+        }[];
+        hostNetwork?: boolean;
+        imagePullSecrets?: {
+          name?: string;
+        }[];
+        nodeSelector?: {
+          [key: string]: unknown;
+        };
+        priorityClassName?: string;
+        runtimeClassName?: string;
+        schedulerName?: string;
+        securityContext?: any;
+        tolerations?: {
+          effect?: string;
+          key?: string;
+          operator?: string;
+          tolerationSeconds?: number;
+          value?: string;
+        }[];
+        topologySpreadConstraints?: {
+          labelSelector?: {
+            matchExpressions?: {
+              key: string;
+              operator: string;
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+          matchLabelKeys?: string[];
+          maxSkew: number;
+          minDomains?: number;
+          nodeAffinityPolicy?: string;
+          nodeTaintsPolicy?: string;
+          topologyKey: string;
+          whenUnsatisfiable: string;
+        }[];
+        volumes?: any;
+      };
+      taskServiceAccountName?: string;
+      timeout?: string;
+    }[];
+    timeout?: string;
+    timeouts?: {
+      finally?: string;
+      pipeline?: string;
+      tasks?: string;
+    };
+    workspaces?: {
+      configMap?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        name?: string;
+        optional?: boolean;
+      };
+      csi?: {
+        driver: string;
+        fsType?: string;
+        nodePublishSecretRef?: {
+          name?: string;
+        };
+        readOnly?: boolean;
+        volumeAttributes?: {
+          [key: string]: unknown;
+        };
+      };
+      emptyDir?: {
+        medium?: string;
+        sizeLimit?: any;
+      };
+      name: string;
+      persistentVolumeClaim?: {
+        claimName: string;
+        readOnly?: boolean;
+      };
+      projected?: {
+        defaultMode?: number;
+        sources?: {
+          clusterTrustBundle?: {
+            labelSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            name?: string;
+            optional?: boolean;
+            path: string;
+            signerName?: string;
+          };
+          configMap?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          downwardAPI?: {
+            items?: {
+              fieldRef?: {
+                apiVersion?: string;
+                fieldPath: string;
+              };
+              mode?: number;
+              path: string;
+              resourceFieldRef?: {
+                containerName?: string;
+                divisor?: any;
+                resource: string;
+              };
+            }[];
+          };
+          secret?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          serviceAccountToken?: {
+            audience?: string;
+            expirationSeconds?: number;
+            path: string;
+          };
+        }[];
+      };
+      secret?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        optional?: boolean;
+        secretName?: string;
+      };
+      subPath?: string;
+      volumeClaimTemplate?: any;
+    }[];
+  };
+  status?: {
+    annotations?: {
+      [key: string]: unknown;
+    };
+    childReferences?: {
+      apiVersion?: string;
+      displayName?: string;
+      kind?: string;
+      name?: string;
+      pipelineTaskName?: string;
+      whenExpressions?: {
+        cel?: string;
+        input?: string;
+        operator?: string;
+        values?: string[];
+      }[];
+    }[];
+    completionTime?: string;
+    conditions?: {
+      lastTransitionTime?: string;
+      message?: string;
+      reason?: string;
+      severity?: string;
+      status: string;
+      type: string;
+    }[];
+    finallyStartTime?: string;
+    observedGeneration?: number;
+    pipelineResults?: {
+      name: string;
+      value: any;
+    }[];
+    pipelineSpec?: any;
+    provenance?: {
+      configSource?: {
+        digest?: {
+          [key: string]: unknown;
+        };
+        entryPoint?: string;
+        uri?: string;
+      };
+      featureFlags?: {
+        awaitSidecarReadiness?: boolean;
+        coschedule?: string;
+        disableCredsInit?: boolean;
+        disableInlineSpec?: string;
+        enableAPIFields?: string;
+        enableArtifacts?: boolean;
+        enableCELInWhenExpression?: boolean;
+        enableConciseResolverSyntax?: boolean;
+        enableKeepPodOnCancel?: boolean;
+        enableKubernetesSidecar?: boolean;
+        enableParamEnum?: boolean;
+        enableProvenanceInStatus?: boolean;
+        enableStepActions?: boolean;
+        enableWaitExponentialBackoff?: boolean;
+        enforceNonfalsifiability?: string;
+        maxResultSize?: number;
+        requireGitSSHSecretKnownHosts?: boolean;
+        resultExtractionMethod?: string;
+        runningInEnvWithInjectedSidecars?: boolean;
+        sendCloudEventsForRuns?: boolean;
+        setSecurityContext?: boolean;
+        setSecurityContextReadOnlyRootFilesystem?: boolean;
+        verificationNoMatchPolicy?: string;
+      };
+      refSource?: {
+        digest?: {
+          [key: string]: unknown;
+        };
+        entryPoint?: string;
+        uri?: string;
+      };
+    };
+    runs?: {
+      [key: string]: unknown;
+    };
+    skippedTasks?: {
+      name: string;
+      reason: string;
+      whenExpressions?: {
+        cel?: string;
+        input?: string;
+        operator?: string;
+        values?: string[];
+      }[];
+    }[];
+    spanContext?: {
+      [key: string]: unknown;
+    };
+    startTime?: string;
+    taskRuns?: {
+      [key: string]: unknown;
+    };
+  };
+}
+/* dev.tekton.v1beta1.PipelineRunList */
+/* PipelineRunList is a list of PipelineRun */
+export interface TektonDevV1beta1PipelineRunList {
+  apiVersion?: string;
+  items: TektonDevV1beta1PipelineRun[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1beta1.StepAction */
+/* StepAction represents the actionable components of Step.
+The Step can only reference it from the cluster or using remote resolution. */
+export interface TektonDevV1beta1StepAction {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    args?: string[];
+    command?: string[];
+    description?: string;
+    env?: {
+      name: string;
+      value?: string;
+      valueFrom?: {
+        configMapKeyRef?: {
+          key: string;
+          name?: string;
+          optional?: boolean;
+        };
+        fieldRef?: {
+          apiVersion?: string;
+          fieldPath: string;
+        };
+        resourceFieldRef?: {
+          containerName?: string;
+          divisor?: any;
+          resource: string;
+        };
+        secretKeyRef?: {
+          key: string;
+          name?: string;
+          optional?: boolean;
+        };
+      };
+    }[];
+    image?: string;
+    params?: {
+      default?: any;
+      description?: string;
+      enum?: string[];
+      name: string;
+      properties?: {
+        [key: string]: unknown;
+      };
+      type?: string;
+    }[];
+    results?: {
+      description?: string;
+      name: string;
+      properties?: {
+        [key: string]: unknown;
+      };
+      type?: string;
+    }[];
+    script?: string;
+    securityContext?: {
+      allowPrivilegeEscalation?: boolean;
+      appArmorProfile?: {
+        localhostProfile?: string;
+        type: string;
+      };
+      capabilities?: {
+        add?: string[];
+        drop?: string[];
+      };
+      privileged?: boolean;
+      procMount?: string;
+      readOnlyRootFilesystem?: boolean;
+      runAsGroup?: number;
+      runAsNonRoot?: boolean;
+      runAsUser?: number;
+      seLinuxOptions?: {
+        level?: string;
+        role?: string;
+        type?: string;
+        user?: string;
+      };
+      seccompProfile?: {
+        localhostProfile?: string;
+        type: string;
+      };
+      windowsOptions?: {
+        gmsaCredentialSpec?: string;
+        gmsaCredentialSpecName?: string;
+        hostProcess?: boolean;
+        runAsUserName?: string;
+      };
+    };
+    volumeMounts?: {
+      mountPath: string;
+      mountPropagation?: string;
+      name: string;
+      readOnly?: boolean;
+      recursiveReadOnly?: string;
+      subPath?: string;
+      subPathExpr?: string;
+    }[];
+    workingDir?: string;
+  };
+}
+/* dev.tekton.v1beta1.StepActionList */
+/* StepActionList is a list of StepAction */
+export interface TektonDevV1beta1StepActionList {
+  apiVersion?: string;
+  items: TektonDevV1beta1StepAction[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1beta1.Task */
+/* Task represents a collection of sequential steps that are run as part of a
+Pipeline using a set of inputs and producing a set of outputs. Tasks execute
+when TaskRuns are created that provide the input parameters and resources and
+output resources the Task requires.
+
+Deprecated: Please use v1.Task instead. */
+export interface TektonDevV1beta1Task {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    description?: string;
+    displayName?: string;
+    params?: {
+      default?: any;
+      description?: string;
+      enum?: string[];
+      name: string;
+      properties?: {
+        [key: string]: unknown;
+      };
+      type?: string;
+    }[];
+    resources?: {
+      inputs?: {
+        description?: string;
+        name: string;
+        optional?: boolean;
+        targetPath?: string;
+        type: string;
+      }[];
+      outputs?: {
+        description?: string;
+        name: string;
+        optional?: boolean;
+        targetPath?: string;
+        type: string;
+      }[];
+    };
+    results?: {
+      description?: string;
+      name: string;
+      properties?: {
+        [key: string]: unknown;
+      };
+      type?: string;
+      value?: any;
+    }[];
+    sidecars?: {
+      args?: string[];
+      command?: string[];
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      envFrom?: {
+        configMapRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+        prefix?: string;
+        secretRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+      }[];
+      image?: string;
+      imagePullPolicy?: string;
+      lifecycle?: {
+        postStart?: {
+          exec?: {
+            command?: string[];
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          sleep?: {
+            seconds: number;
+          };
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+        };
+        preStop?: {
+          exec?: {
+            command?: string[];
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          sleep?: {
+            seconds: number;
+          };
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+        };
+      };
+      livenessProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      name: string;
+      ports?: {
+        containerPort: number;
+        hostIP?: string;
+        hostPort?: number;
+        name?: string;
+        protocol?: string;
+      }[];
+      readinessProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      resources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      restartPolicy?: string;
+      script?: string;
+      securityContext?: {
+        allowPrivilegeEscalation?: boolean;
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        capabilities?: {
+          add?: string[];
+          drop?: string[];
+        };
+        privileged?: boolean;
+        procMount?: string;
+        readOnlyRootFilesystem?: boolean;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      startupProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      stdin?: boolean;
+      stdinOnce?: boolean;
+      terminationMessagePath?: string;
+      terminationMessagePolicy?: string;
+      tty?: boolean;
+      volumeDevices?: {
+        devicePath: string;
+        name: string;
+      }[];
+      volumeMounts?: {
+        mountPath: string;
+        mountPropagation?: string;
+        name: string;
+        readOnly?: boolean;
+        recursiveReadOnly?: string;
+        subPath?: string;
+        subPathExpr?: string;
+      }[];
+      workingDir?: string;
+      workspaces?: {
+        mountPath: string;
+        name: string;
+      }[];
+    }[];
+    stepTemplate?: {
+      args?: string[];
+      command?: string[];
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      envFrom?: {
+        configMapRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+        prefix?: string;
+        secretRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+      }[];
+      image?: string;
+      imagePullPolicy?: string;
+      lifecycle?: {
+        postStart?: {
+          exec?: {
+            command?: string[];
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          sleep?: {
+            seconds: number;
+          };
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+        };
+        preStop?: {
+          exec?: {
+            command?: string[];
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          sleep?: {
+            seconds: number;
+          };
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+        };
+      };
+      livenessProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      name: string;
+      ports?: {
+        containerPort: number;
+        hostIP?: string;
+        hostPort?: number;
+        name?: string;
+        protocol?: string;
+      }[];
+      readinessProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      resources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      securityContext?: {
+        allowPrivilegeEscalation?: boolean;
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        capabilities?: {
+          add?: string[];
+          drop?: string[];
+        };
+        privileged?: boolean;
+        procMount?: string;
+        readOnlyRootFilesystem?: boolean;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      startupProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      stdin?: boolean;
+      stdinOnce?: boolean;
+      terminationMessagePath?: string;
+      terminationMessagePolicy?: string;
+      tty?: boolean;
+      volumeDevices?: {
+        devicePath: string;
+        name: string;
+      }[];
+      volumeMounts?: {
+        mountPath: string;
+        mountPropagation?: string;
+        name: string;
+        readOnly?: boolean;
+        recursiveReadOnly?: string;
+        subPath?: string;
+        subPathExpr?: string;
+      }[];
+      workingDir?: string;
+    };
+    steps?: {
+      args?: string[];
+      command?: string[];
+      displayName?: string;
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      envFrom?: {
+        configMapRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+        prefix?: string;
+        secretRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+      }[];
+      image?: string;
+      imagePullPolicy?: string;
+      lifecycle?: {
+        postStart?: {
+          exec?: {
+            command?: string[];
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          sleep?: {
+            seconds: number;
+          };
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+        };
+        preStop?: {
+          exec?: {
+            command?: string[];
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          sleep?: {
+            seconds: number;
+          };
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+        };
+      };
+      livenessProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      name: string;
+      onError?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      ports?: {
+        containerPort: number;
+        hostIP?: string;
+        hostPort?: number;
+        name?: string;
+        protocol?: string;
+      }[];
+      readinessProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      ref?: {
+        name?: string;
+        params?: {
+          name: string;
+          value: any;
+        }[];
+        resolver?: string;
+      };
+      resources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      results?: {
+        description?: string;
+        name: string;
+        properties?: {
+          [key: string]: unknown;
+        };
+        type?: string;
+      }[];
+      script?: string;
+      securityContext?: {
+        allowPrivilegeEscalation?: boolean;
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        capabilities?: {
+          add?: string[];
+          drop?: string[];
+        };
+        privileged?: boolean;
+        procMount?: string;
+        readOnlyRootFilesystem?: boolean;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      startupProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      stderrConfig?: {
+        path?: string;
+      };
+      stdin?: boolean;
+      stdinOnce?: boolean;
+      stdoutConfig?: {
+        path?: string;
+      };
+      terminationMessagePath?: string;
+      terminationMessagePolicy?: string;
+      timeout?: string;
+      tty?: boolean;
+      volumeDevices?: {
+        devicePath: string;
+        name: string;
+      }[];
+      volumeMounts?: {
+        mountPath: string;
+        mountPropagation?: string;
+        name: string;
+        readOnly?: boolean;
+        recursiveReadOnly?: string;
+        subPath?: string;
+        subPathExpr?: string;
+      }[];
+      when?: {
+        cel?: string;
+        input?: string;
+        operator?: string;
+        values?: string[];
+      }[];
+      workingDir?: string;
+      workspaces?: {
+        mountPath: string;
+        name: string;
+      }[];
+    }[];
+    volumes?: any;
+    workspaces?: {
+      description?: string;
+      mountPath?: string;
+      name: string;
+      optional?: boolean;
+      readOnly?: boolean;
+    }[];
+  };
+}
+/* dev.tekton.v1beta1.TaskList */
+/* TaskList is a list of Task */
+export interface TektonDevV1beta1TaskList {
+  apiVersion?: string;
+  items: TektonDevV1beta1Task[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* dev.tekton.v1beta1.TaskRun */
+/* TaskRun represents a single execution of a Task. TaskRuns are how the steps
+specified in a Task are executed; they specify the parameters and resources
+used to run the steps in a Task.
+
+Deprecated: Please use v1.TaskRun instead. */
+export interface TektonDevV1beta1TaskRun {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    computeResources?: {
+      claims?: {
+        name: string;
+        request?: string;
+      }[];
+      limits?: {
+        [key: string]: unknown;
+      };
+      requests?: {
+        [key: string]: unknown;
+      };
+    };
+    debug?: {
+      breakpoints?: {
+        beforeSteps?: string[];
+        onFailure?: string;
+      };
+    };
+    managedBy?: string;
+    params?: {
+      name: string;
+      value: any;
+    }[];
+    podTemplate?: {
+      affinity?: any;
+      automountServiceAccountToken?: boolean;
+      dnsConfig?: {
+        nameservers?: string[];
+        options?: {
+          name?: string;
+          value?: string;
+        }[];
+        searches?: string[];
+      };
+      dnsPolicy?: string;
+      enableServiceLinks?: boolean;
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      hostAliases?: {
+        hostnames?: string[];
+        ip: string;
+      }[];
+      hostNetwork?: boolean;
+      imagePullSecrets?: {
+        name?: string;
+      }[];
+      nodeSelector?: {
+        [key: string]: unknown;
+      };
+      priorityClassName?: string;
+      runtimeClassName?: string;
+      schedulerName?: string;
+      securityContext?: any;
+      tolerations?: {
+        effect?: string;
+        key?: string;
+        operator?: string;
+        tolerationSeconds?: number;
+        value?: string;
+      }[];
+      topologySpreadConstraints?: {
+        labelSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: string;
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        matchLabelKeys?: string[];
+        maxSkew: number;
+        minDomains?: number;
+        nodeAffinityPolicy?: string;
+        nodeTaintsPolicy?: string;
+        topologyKey: string;
+        whenUnsatisfiable: string;
+      }[];
+      volumes?: any;
+    };
+    resources?: {
+      inputs?: {
+        name?: string;
+        paths?: string[];
+        resourceRef?: {
+          apiVersion?: string;
+          name?: string;
+        };
+        resourceSpec?: {
+          description?: string;
+          params: {
+            name: string;
+            value: string;
+          }[];
+          secrets?: {
+            fieldName: string;
+            secretKey: string;
+            secretName: string;
+          }[];
+          type: string;
+        };
+      }[];
+      outputs?: {
+        name?: string;
+        paths?: string[];
+        resourceRef?: {
+          apiVersion?: string;
+          name?: string;
+        };
+        resourceSpec?: {
+          description?: string;
+          params: {
+            name: string;
+            value: string;
+          }[];
+          secrets?: {
+            fieldName: string;
+            secretKey: string;
+            secretName: string;
+          }[];
+          type: string;
+        };
+      }[];
+    };
+    retries?: number;
+    serviceAccountName?: string;
+    sidecarOverrides?: {
+      name: string;
+      resources: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+    }[];
+    status?: string;
+    statusMessage?: string;
+    stepOverrides?: {
+      name: string;
+      resources: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+    }[];
+    taskRef?: {
+      apiVersion?: string;
+      bundle?: string;
+      kind?: string;
+      name?: string;
+      params?: {
+        name: string;
+        value: any;
+      }[];
+      resolver?: string;
+    };
+    taskSpec?: any;
+    timeout?: string;
+    workspaces?: {
+      configMap?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        name?: string;
+        optional?: boolean;
+      };
+      csi?: {
+        driver: string;
+        fsType?: string;
+        nodePublishSecretRef?: {
+          name?: string;
+        };
+        readOnly?: boolean;
+        volumeAttributes?: {
+          [key: string]: unknown;
+        };
+      };
+      emptyDir?: {
+        medium?: string;
+        sizeLimit?: any;
+      };
+      name: string;
+      persistentVolumeClaim?: {
+        claimName: string;
+        readOnly?: boolean;
+      };
+      projected?: {
+        defaultMode?: number;
+        sources?: {
+          clusterTrustBundle?: {
+            labelSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            name?: string;
+            optional?: boolean;
+            path: string;
+            signerName?: string;
+          };
+          configMap?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          downwardAPI?: {
+            items?: {
+              fieldRef?: {
+                apiVersion?: string;
+                fieldPath: string;
+              };
+              mode?: number;
+              path: string;
+              resourceFieldRef?: {
+                containerName?: string;
+                divisor?: any;
+                resource: string;
+              };
+            }[];
+          };
+          secret?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          serviceAccountToken?: {
+            audience?: string;
+            expirationSeconds?: number;
+            path: string;
+          };
+        }[];
+      };
+      secret?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        optional?: boolean;
+        secretName?: string;
+      };
+      subPath?: string;
+      volumeClaimTemplate?: any;
+    }[];
+  };
+  status?: {
+    annotations?: {
+      [key: string]: unknown;
+    };
+    cloudEvents?: {
+      status?: {
+        condition?: string;
+        message: string;
+        retryCount: number;
+        sentAt?: string;
+      };
+      target?: string;
+    }[];
+    completionTime?: string;
+    conditions?: {
+      lastTransitionTime?: string;
+      message?: string;
+      reason?: string;
+      severity?: string;
+      status: string;
+      type: string;
+    }[];
+    observedGeneration?: number;
+    podName: string;
+    provenance?: {
+      configSource?: {
+        digest?: {
+          [key: string]: unknown;
+        };
+        entryPoint?: string;
+        uri?: string;
+      };
+      featureFlags?: {
+        awaitSidecarReadiness?: boolean;
+        coschedule?: string;
+        disableCredsInit?: boolean;
+        disableInlineSpec?: string;
+        enableAPIFields?: string;
+        enableArtifacts?: boolean;
+        enableCELInWhenExpression?: boolean;
+        enableConciseResolverSyntax?: boolean;
+        enableKeepPodOnCancel?: boolean;
+        enableKubernetesSidecar?: boolean;
+        enableParamEnum?: boolean;
+        enableProvenanceInStatus?: boolean;
+        enableStepActions?: boolean;
+        enableWaitExponentialBackoff?: boolean;
+        enforceNonfalsifiability?: string;
+        maxResultSize?: number;
+        requireGitSSHSecretKnownHosts?: boolean;
+        resultExtractionMethod?: string;
+        runningInEnvWithInjectedSidecars?: boolean;
+        sendCloudEventsForRuns?: boolean;
+        setSecurityContext?: boolean;
+        setSecurityContextReadOnlyRootFilesystem?: boolean;
+        verificationNoMatchPolicy?: string;
+      };
+      refSource?: {
+        digest?: {
+          [key: string]: unknown;
+        };
+        entryPoint?: string;
+        uri?: string;
+      };
+    };
+    resourcesResult?: {
+      key: string;
+      resourceName?: string;
+      type?: number;
+      value: string;
+    }[];
+    retriesStatus?: any;
+    sidecars?: {
+      container?: string;
+      imageID?: string;
+      name?: string;
+      running?: {
+        startedAt?: string;
+      };
+      terminated?: {
+        containerID?: string;
+        exitCode: number;
+        finishedAt?: string;
+        message?: string;
+        reason?: string;
+        signal?: number;
+        startedAt?: string;
+      };
+      waiting?: {
+        message?: string;
+        reason?: string;
+      };
+    }[];
+    spanContext?: {
+      [key: string]: unknown;
+    };
+    startTime?: string;
+    steps?: {
+      container?: string;
+      imageID?: string;
+      inputs?: {
+        buildOutput?: boolean;
+        name?: string;
+        values?: {
+          digest?: {
+            [key: string]: unknown;
+          };
+          uri?: string;
+        }[];
+      }[];
+      name?: string;
+      outputs?: {
+        buildOutput?: boolean;
+        name?: string;
+        values?: {
+          digest?: {
+            [key: string]: unknown;
+          };
+          uri?: string;
+        }[];
+      }[];
+      provenance?: {
+        configSource?: {
+          digest?: {
+            [key: string]: unknown;
+          };
+          entryPoint?: string;
+          uri?: string;
+        };
+        featureFlags?: {
+          awaitSidecarReadiness?: boolean;
+          coschedule?: string;
+          disableCredsInit?: boolean;
+          disableInlineSpec?: string;
+          enableAPIFields?: string;
+          enableArtifacts?: boolean;
+          enableCELInWhenExpression?: boolean;
+          enableConciseResolverSyntax?: boolean;
+          enableKeepPodOnCancel?: boolean;
+          enableKubernetesSidecar?: boolean;
+          enableParamEnum?: boolean;
+          enableProvenanceInStatus?: boolean;
+          enableStepActions?: boolean;
+          enableWaitExponentialBackoff?: boolean;
+          enforceNonfalsifiability?: string;
+          maxResultSize?: number;
+          requireGitSSHSecretKnownHosts?: boolean;
+          resultExtractionMethod?: string;
+          runningInEnvWithInjectedSidecars?: boolean;
+          sendCloudEventsForRuns?: boolean;
+          setSecurityContext?: boolean;
+          setSecurityContextReadOnlyRootFilesystem?: boolean;
+          verificationNoMatchPolicy?: string;
+        };
+        refSource?: {
+          digest?: {
+            [key: string]: unknown;
+          };
+          entryPoint?: string;
+          uri?: string;
+        };
+      };
+      results?: {
+        name: string;
+        type?: string;
+        value: any;
+      }[];
+      running?: {
+        startedAt?: string;
+      };
+      terminated?: {
+        containerID?: string;
+        exitCode: number;
+        finishedAt?: string;
+        message?: string;
+        reason?: string;
+        signal?: number;
+        startedAt?: string;
+      };
+      waiting?: {
+        message?: string;
+        reason?: string;
+      };
+    }[];
+    taskResults?: {
+      name: string;
+      type?: string;
+      value: any;
+    }[];
+    taskSpec?: any;
+  };
+}
+/* dev.tekton.v1beta1.TaskRunList */
+/* TaskRunList is a list of TaskRun */
+export interface TektonDevV1beta1TaskRunList {
+  apiVersion?: string;
+  items: TektonDevV1beta1TaskRun[];
+  kind?: string;
+  metadata?: ListMeta;
+}
 /* io.cert-manager.acme.v1.Challenge */
 /* Challenge is a type to represent a Challenge request with an ACME server */
 export interface AcmeCertManagerIoV1Challenge {
@@ -14412,6 +19397,7 @@ export interface AcmeCertManagerIoV1Challenge {
           resourceGroupName: string;
           subscriptionID: string;
           tenantID?: string;
+          zoneType?: "AzurePublicZone" | "AzurePrivateZone";
         };
         cloudDNS?: {
           hostedZoneName?: string;
@@ -14441,6 +19427,7 @@ export interface AcmeCertManagerIoV1Challenge {
         };
         rfc2136?: {
           nameserver: string;
+          protocol?: "TCP" | "UDP";
           tsigAlgorithm?: string;
           tsigKeyName?: string;
           tsigSecretSecretRef?: {
@@ -14653,6 +19640,14 @@ export interface AcmeCertManagerIoV1Challenge {
                 [key: string]: unknown;
               };
               priorityClassName?: string;
+              resources?: {
+                limits?: {
+                  [key: string]: unknown;
+                };
+                requests?: {
+                  [key: string]: unknown;
+                };
+              };
               securityContext?: {
                 fsGroup?: number;
                 fsGroupChangePolicy?: string;
@@ -14865,6 +19860,14 @@ export interface AcmeCertManagerIoV1Challenge {
                 [key: string]: unknown;
               };
               priorityClassName?: string;
+              resources?: {
+                limits?: {
+                  [key: string]: unknown;
+                };
+                requests?: {
+                  [key: string]: unknown;
+                };
+              };
               securityContext?: {
                 fsGroup?: number;
                 fsGroupChangePolicy?: string;
@@ -14944,6 +19947,7 @@ export interface AcmeCertManagerIoV1Order {
       kind?: string;
       name: string;
     };
+    profile?: string;
     request: string;
   };
   status?: {
@@ -15057,6 +20061,7 @@ export interface CertManagerIoV1Certificate {
         [key: string]: unknown;
       };
     };
+    signatureAlgorithm?: "SHA256WithRSA" | "SHA384WithRSA" | "SHA512WithRSA" | "ECDSAWithSHA256" | "ECDSAWithSHA384" | "ECDSAWithSHA512" | "PureEd25519";
     subject?: {
       countries?: string[];
       localities?: string[];
@@ -15177,6 +20182,7 @@ export interface CertManagerIoV1ClusterIssuer {
         key?: string;
         name: string;
       };
+      profile?: string;
       server: string;
       skipTLSVerify?: boolean;
       solvers?: {
@@ -15219,6 +20225,7 @@ export interface CertManagerIoV1ClusterIssuer {
             resourceGroupName: string;
             subscriptionID: string;
             tenantID?: string;
+            zoneType?: "AzurePublicZone" | "AzurePrivateZone";
           };
           cloudDNS?: {
             hostedZoneName?: string;
@@ -15248,6 +20255,7 @@ export interface CertManagerIoV1ClusterIssuer {
           };
           rfc2136?: {
             nameserver: string;
+            protocol?: "TCP" | "UDP";
             tsigAlgorithm?: string;
             tsigKeyName?: string;
             tsigSecretSecretRef?: {
@@ -15460,6 +20468,14 @@ export interface CertManagerIoV1ClusterIssuer {
                   [key: string]: unknown;
                 };
                 priorityClassName?: string;
+                resources?: {
+                  limits?: {
+                    [key: string]: unknown;
+                  };
+                  requests?: {
+                    [key: string]: unknown;
+                  };
+                };
                 securityContext?: {
                   fsGroup?: number;
                   fsGroupChangePolicy?: string;
@@ -15672,6 +20688,14 @@ export interface CertManagerIoV1ClusterIssuer {
                   [key: string]: unknown;
                 };
                 priorityClassName?: string;
+                resources?: {
+                  limits?: {
+                    [key: string]: unknown;
+                  };
+                  requests?: {
+                    [key: string]: unknown;
+                  };
+                };
                 securityContext?: {
                   fsGroup?: number;
                   fsGroupChangePolicy?: string;
@@ -15773,6 +20797,7 @@ export interface CertManagerIoV1ClusterIssuer {
       namespace?: string;
       path: string;
       server: string;
+      serverName?: string;
     };
     venafi?: {
       cloud?: {
@@ -15848,6 +20873,7 @@ export interface CertManagerIoV1Issuer {
         key?: string;
         name: string;
       };
+      profile?: string;
       server: string;
       skipTLSVerify?: boolean;
       solvers?: {
@@ -15890,6 +20916,7 @@ export interface CertManagerIoV1Issuer {
             resourceGroupName: string;
             subscriptionID: string;
             tenantID?: string;
+            zoneType?: "AzurePublicZone" | "AzurePrivateZone";
           };
           cloudDNS?: {
             hostedZoneName?: string;
@@ -15919,6 +20946,7 @@ export interface CertManagerIoV1Issuer {
           };
           rfc2136?: {
             nameserver: string;
+            protocol?: "TCP" | "UDP";
             tsigAlgorithm?: string;
             tsigKeyName?: string;
             tsigSecretSecretRef?: {
@@ -16131,6 +21159,14 @@ export interface CertManagerIoV1Issuer {
                   [key: string]: unknown;
                 };
                 priorityClassName?: string;
+                resources?: {
+                  limits?: {
+                    [key: string]: unknown;
+                  };
+                  requests?: {
+                    [key: string]: unknown;
+                  };
+                };
                 securityContext?: {
                   fsGroup?: number;
                   fsGroupChangePolicy?: string;
@@ -16343,6 +21379,14 @@ export interface CertManagerIoV1Issuer {
                   [key: string]: unknown;
                 };
                 priorityClassName?: string;
+                resources?: {
+                  limits?: {
+                    [key: string]: unknown;
+                  };
+                  requests?: {
+                    [key: string]: unknown;
+                  };
+                };
                 securityContext?: {
                   fsGroup?: number;
                   fsGroupChangePolicy?: string;
@@ -16444,6 +21488,7 @@ export interface CertManagerIoV1Issuer {
       namespace?: string;
       path: string;
       server: string;
+      serverName?: string;
     };
     venafi?: {
       cloud?: {
@@ -16492,7 +21537,7 @@ export interface CertManagerIoV1IssuerList {
   metadata?: ListMeta;
 }
 /* io.cnpg.postgresql.v1.Backup */
-/* A Backup resource is a request for a PostgreSQL backup by the user. */
+/* Backup is the Schema for the backups API */
 export interface PostgresqlCnpgIoV1Backup {
   apiVersion?: string;
   kind?: string;
@@ -16799,7 +21844,7 @@ export interface PostgresqlCnpgIoV1Cluster {
         };
         data?: {
           additionalCommandArgs?: string[];
-          compression?: "bzip2" | "gzip" | "snappy";
+          compression?: "gzip" | "bzip2" | "snappy";
           encryption?: "AES256" | "aws:kms";
           immediateCheckpoint?: boolean;
           jobs?: number;
@@ -16845,7 +21890,7 @@ export interface PostgresqlCnpgIoV1Cluster {
         };
         wal?: {
           archiveAdditionalCommandArgs?: string[];
-          compression?: "bzip2" | "gzip" | "lz4" | "snappy" | "xz" | "zstd";
+          compression?: "gzip" | "bzip2" | "snappy";
           encryption?: "AES256" | "aws:kms";
           maxParallel?: number;
           restoreAdditionalCommandArgs?: string[];
@@ -17102,7 +22147,7 @@ export interface PostgresqlCnpgIoV1Cluster {
         };
         data?: {
           additionalCommandArgs?: string[];
-          compression?: "bzip2" | "gzip" | "snappy";
+          compression?: "gzip" | "bzip2" | "snappy";
           encryption?: "AES256" | "aws:kms";
           immediateCheckpoint?: boolean;
           jobs?: number;
@@ -17148,7 +22193,7 @@ export interface PostgresqlCnpgIoV1Cluster {
         };
         wal?: {
           archiveAdditionalCommandArgs?: string[];
-          compression?: "bzip2" | "gzip" | "lz4" | "snappy" | "xz" | "zstd";
+          compression?: "gzip" | "bzip2" | "snappy";
           encryption?: "AES256" | "aws:kms";
           maxParallel?: number;
           restoreAdditionalCommandArgs?: string[];
@@ -17165,7 +22210,6 @@ export interface PostgresqlCnpgIoV1Cluster {
       };
       plugin?: {
         enabled?: boolean;
-        isWALArchiver?: boolean;
         name: string;
         parameters?: {
           [key: string]: unknown;
@@ -17325,7 +22369,6 @@ export interface PostgresqlCnpgIoV1Cluster {
     };
     plugins?: {
       enabled?: boolean;
-      isWALArchiver?: boolean;
       name: string;
       parameters?: {
         [key: string]: unknown;
@@ -19359,7 +24402,7 @@ export interface PostgresqlCnpgIoV1Pooler {
         }[];
       };
     };
-    type?: "rw" | "ro" | "r";
+    type?: "rw" | "ro";
   };
   status?: {
     instances?: number;
@@ -20714,7 +25757,7 @@ export interface AzureFileVolumeSource {
   shareName: string;
 }
 /* io.k8s.api.core.v1.Binding */
-/* Binding ties one object to another; for example, a pod is bound to a node by a scheduler. */
+/* Binding ties one object to another; for example, a pod is bound to a node by a scheduler. Deprecated in 1.7, please use the bindings subresource of pods instead. */
 export interface Binding {
   apiVersion?: string;
   kind?: string;
@@ -20722,7 +25765,7 @@ export interface Binding {
   target: ObjectReference;
 }
 /* io.k8s.api.core.v1.CSIPersistentVolumeSource */
-/* Represents storage that is managed by an external CSI volume driver */
+/* Represents storage that is managed by an external CSI volume driver (Beta feature) */
 export interface CSIPersistentVolumeSource {
   controllerExpandSecretRef?: SecretReference;
   controllerPublishSecretRef?: SecretReference;
@@ -21238,8 +26281,6 @@ export interface GCEPersistentDiskVolumeSource {
   pdName: string;
   readOnly?: boolean;
 }
-/* io.k8s.api.core.v1.GRPCAction */
-/* GRPCAction specifies an action involving a GRPC service. */
 export interface GRPCAction {
   port: number;
   service?: string;
@@ -21424,7 +26465,7 @@ export interface LocalObjectReference {
   name?: string;
 }
 /* io.k8s.api.core.v1.LocalVolumeSource */
-/* Local represents directly-attached storage with node affinity */
+/* Local represents directly-attached storage with node affinity (Beta feature) */
 export interface LocalVolumeSource {
   fsType?: string;
   path: string;
@@ -21878,7 +26919,6 @@ export interface PodSecurityContext {
   runAsGroup?: number;
   runAsNonRoot?: boolean;
   runAsUser?: number;
-  seLinuxChangePolicy?: string;
   seLinuxOptions?: SELinuxOptions;
   seccompProfile?: SeccompProfile;
   supplementalGroups?: number[];
@@ -21918,7 +26958,6 @@ export interface PodSpec {
   priorityClassName?: string;
   readinessGates?: PodReadinessGate[];
   resourceClaims?: PodResourceClaim[];
-  resources?: ResourceRequirements;
   restartPolicy?: "Always" | "Never" | "OnFailure";
   runtimeClassName?: string;
   schedulerName?: string;
@@ -21976,8 +27015,6 @@ export interface PodTemplateSpec {
   metadata?: ObjectMeta;
   spec?: PodSpec;
 }
-/* io.k8s.api.core.v1.PortStatus */
-/* PortStatus represents the error condition of a service port */
 export interface PortStatus {
   error?: string;
   port: number;
@@ -22110,7 +27147,7 @@ export interface ResourceFieldSelector {
   resource: string;
 }
 /* io.k8s.api.core.v1.ResourceHealth */
-/* ResourceHealth represents the health of a resource. It has the latest device health information. This is a part of KEP https://kep.k8s.io/4680. */
+/* ResourceHealth represents the health of a resource. It has the latest device health information. This is a part of KEP https://kep.k8s.io/4680 and historical health changes are planned to be added in future iterations of a KEP. */
 export interface ResourceHealth {
   health?: string;
   resourceID: string;
@@ -22162,8 +27199,6 @@ export interface ResourceRequirements {
     [key: string]: unknown;
   };
 }
-/* io.k8s.api.core.v1.ResourceStatus */
-/* ResourceStatus represents the status of a single resource allocated to a Pod. */
 export interface ResourceStatus {
   name: string;
   resources?: ResourceHealth[];
@@ -22472,8 +27507,6 @@ export interface TypedLocalObjectReference {
   kind: string;
   name: string;
 }
-/* io.k8s.api.core.v1.TypedObjectReference */
-/* TypedObjectReference contains enough information to let you locate the typed referenced object */
 export interface TypedObjectReference {
   apiGroup?: string;
   kind: string;
@@ -22677,168 +27710,6 @@ export interface EventsK8sIoV1EventList {
 export interface IoK8sApiEventsV1EventSeries {
   count: number;
   lastObservedTime: MicroTime;
-}
-/* io.k8s.api.flowcontrol.v1.ExemptPriorityLevelConfiguration */
-/* ExemptPriorityLevelConfiguration describes the configurable aspects of the handling of exempt requests. In the mandatory exempt configuration object the values in the fields here can be modified by authorized users, unlike the rest of the `spec`. */
-export interface ExemptPriorityLevelConfiguration {
-  lendablePercent?: number;
-  nominalConcurrencyShares?: number;
-}
-/* io.k8s.api.flowcontrol.v1.FlowDistinguisherMethod */
-/* FlowDistinguisherMethod specifies the method of a flow distinguisher. */
-export interface FlowDistinguisherMethod {
-  type: string;
-}
-/* io.k8s.api.flowcontrol.v1.FlowSchema */
-/* FlowSchema defines the schema of a group of flows. Note that a flow is made up of a set of inbound API requests with similar attributes and is identified by a pair of strings: the name of the FlowSchema and a "flow distinguisher". */
-export interface FlowcontrolApiserverK8sIoV1FlowSchema {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: FlowSchemaSpec;
-  status?: FlowSchemaStatus;
-}
-/* io.k8s.api.flowcontrol.v1.FlowSchemaCondition */
-/* FlowSchemaCondition describes conditions for a FlowSchema. */
-export interface FlowSchemaCondition {
-  lastTransitionTime?: Time;
-  message?: string;
-  reason?: string;
-  status?: string;
-  type?: string;
-}
-/* io.k8s.api.flowcontrol.v1.FlowSchemaList */
-/* FlowSchemaList is a list of FlowSchema objects. */
-export interface FlowcontrolApiserverK8sIoV1FlowSchemaList {
-  apiVersion?: string;
-  items: FlowcontrolApiserverK8sIoV1FlowSchema[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.k8s.api.flowcontrol.v1.FlowSchemaSpec */
-/* FlowSchemaSpec describes how the FlowSchema's specification looks like. */
-export interface FlowSchemaSpec {
-  distinguisherMethod?: FlowDistinguisherMethod;
-  matchingPrecedence?: number;
-  priorityLevelConfiguration: PriorityLevelConfigurationReference;
-  rules?: PolicyRulesWithSubjects[];
-}
-/* io.k8s.api.flowcontrol.v1.FlowSchemaStatus */
-/* FlowSchemaStatus represents the current state of a FlowSchema. */
-export interface FlowSchemaStatus {
-  conditions?: FlowSchemaCondition[];
-}
-/* io.k8s.api.flowcontrol.v1.GroupSubject */
-/* GroupSubject holds detailed information for group-kind subject. */
-export interface GroupSubject {
-  name: string;
-}
-/* io.k8s.api.flowcontrol.v1.LimitResponse */
-/* LimitResponse defines how to handle requests that can not be executed right now. */
-export interface LimitResponse {
-  queuing?: QueuingConfiguration;
-  type: string;
-}
-/* io.k8s.api.flowcontrol.v1.LimitedPriorityLevelConfiguration */
-/* LimitedPriorityLevelConfiguration specifies how to handle requests that are subject to limits. It addresses two issues:
-  - How are requests for this priority level limited?
-  - What should be done with requests that exceed the limit? */
-export interface LimitedPriorityLevelConfiguration {
-  borrowingLimitPercent?: number;
-  lendablePercent?: number;
-  limitResponse?: LimitResponse;
-  nominalConcurrencyShares?: number;
-}
-/* io.k8s.api.flowcontrol.v1.NonResourcePolicyRule */
-/* NonResourcePolicyRule is a predicate that matches non-resource requests according to their verb and the target non-resource URL. A NonResourcePolicyRule matches a request if and only if both (a) at least one member of verbs matches the request and (b) at least one member of nonResourceURLs matches the request. */
-export interface NonResourcePolicyRule {
-  nonResourceURLs: string[];
-  verbs: string[];
-}
-/* io.k8s.api.flowcontrol.v1.PolicyRulesWithSubjects */
-/* PolicyRulesWithSubjects prescribes a test that applies to a request to an apiserver. The test considers the subject making the request, the verb being requested, and the resource to be acted upon. This PolicyRulesWithSubjects matches a request if and only if both (a) at least one member of subjects matches the request and (b) at least one member of resourceRules or nonResourceRules matches the request. */
-export interface PolicyRulesWithSubjects {
-  nonResourceRules?: NonResourcePolicyRule[];
-  resourceRules?: ResourcePolicyRule[];
-  subjects: IoK8sApiFlowcontrolV1Subject[];
-}
-/* io.k8s.api.flowcontrol.v1.PriorityLevelConfiguration */
-/* PriorityLevelConfiguration represents the configuration of a priority level. */
-export interface FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: PriorityLevelConfigurationSpec;
-  status?: PriorityLevelConfigurationStatus;
-}
-/* io.k8s.api.flowcontrol.v1.PriorityLevelConfigurationCondition */
-/* PriorityLevelConfigurationCondition defines the condition of priority level. */
-export interface PriorityLevelConfigurationCondition {
-  lastTransitionTime?: Time;
-  message?: string;
-  reason?: string;
-  status?: string;
-  type?: string;
-}
-/* io.k8s.api.flowcontrol.v1.PriorityLevelConfigurationList */
-/* PriorityLevelConfigurationList is a list of PriorityLevelConfiguration objects. */
-export interface FlowcontrolApiserverK8sIoV1PriorityLevelConfigurationList {
-  apiVersion?: string;
-  items: FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.k8s.api.flowcontrol.v1.PriorityLevelConfigurationReference */
-/* PriorityLevelConfigurationReference contains information that points to the "request-priority" being used. */
-export interface PriorityLevelConfigurationReference {
-  name: string;
-}
-/* io.k8s.api.flowcontrol.v1.PriorityLevelConfigurationSpec */
-/* PriorityLevelConfigurationSpec specifies the configuration of a priority level. */
-export interface PriorityLevelConfigurationSpec {
-  exempt?: ExemptPriorityLevelConfiguration;
-  limited?: LimitedPriorityLevelConfiguration;
-  type: string;
-}
-/* io.k8s.api.flowcontrol.v1.PriorityLevelConfigurationStatus */
-/* PriorityLevelConfigurationStatus represents the current state of a "request-priority". */
-export interface PriorityLevelConfigurationStatus {
-  conditions?: PriorityLevelConfigurationCondition[];
-}
-/* io.k8s.api.flowcontrol.v1.QueuingConfiguration */
-/* QueuingConfiguration holds the configuration parameters for queuing */
-export interface QueuingConfiguration {
-  handSize?: number;
-  queueLengthLimit?: number;
-  queues?: number;
-}
-/* io.k8s.api.flowcontrol.v1.ResourcePolicyRule */
-/* ResourcePolicyRule is a predicate that matches some resource requests, testing the request's verb and the target resource. A ResourcePolicyRule matches a resource request if and only if: (a) at least one member of verbs matches the request, (b) at least one member of apiGroups matches the request, (c) at least one member of resources matches the request, and (d) either (d1) the request does not specify a namespace (i.e., `Namespace==""`) and clusterScope is true or (d2) the request specifies a namespace and least one member of namespaces matches the request's namespace. */
-export interface ResourcePolicyRule {
-  apiGroups: string[];
-  clusterScope?: boolean;
-  namespaces?: string[];
-  resources: string[];
-  verbs: string[];
-}
-/* io.k8s.api.flowcontrol.v1.ServiceAccountSubject */
-/* ServiceAccountSubject holds detailed information for service-account-kind subject. */
-export interface ServiceAccountSubject {
-  name: string;
-  namespace: string;
-}
-/* io.k8s.api.flowcontrol.v1.Subject */
-/* Subject matches the originator of a request, as identified by the request authentication system. There are three ways of matching an originator; by user, group, or service account. */
-export interface IoK8sApiFlowcontrolV1Subject {
-  group?: GroupSubject;
-  kind: string;
-  serviceAccount?: ServiceAccountSubject;
-  user?: UserSubject;
-}
-/* io.k8s.api.flowcontrol.v1.UserSubject */
-/* UserSubject holds detailed information for user-kind subject. */
-export interface UserSubject {
-  name: string;
 }
 /* io.k8s.api.networking.v1.HTTPIngressPath */
 /* HTTPIngressPath associates a path with a backend. Incoming urls matching the path are forwarded to the backend. */
@@ -23118,7 +27989,7 @@ export interface RbacAuthorizationK8sIoV1ClusterRoleBinding {
   kind?: string;
   metadata?: ObjectMeta;
   roleRef: RoleRef;
-  subjects?: IoK8sApiRbacV1Subject[];
+  subjects?: Subject[];
 }
 /* io.k8s.api.rbac.v1.ClusterRoleBindingList */
 /* ClusterRoleBindingList is a collection of ClusterRoleBindings */
@@ -23160,7 +28031,7 @@ export interface RbacAuthorizationK8sIoV1RoleBinding {
   kind?: string;
   metadata?: ObjectMeta;
   roleRef: RoleRef;
-  subjects?: IoK8sApiRbacV1Subject[];
+  subjects?: Subject[];
 }
 /* io.k8s.api.rbac.v1.RoleBindingList */
 /* RoleBindingList is a collection of RoleBindings */
@@ -23187,7 +28058,7 @@ export interface RoleRef {
 }
 /* io.k8s.api.rbac.v1.Subject */
 /* Subject contains a reference to the object or user identities a role binding applies to.  This can either hold a direct API object reference, or a value for non-objects such as user and group names. */
-export interface IoK8sApiRbacV1Subject {
+export interface Subject {
   apiGroup?: string;
   kind: string;
   name: string;
@@ -23348,7 +28219,7 @@ export interface StorageK8sIoV1VolumeAttachmentList {
   metadata?: ListMeta;
 }
 /* io.k8s.api.storage.v1.VolumeAttachmentSource */
-/* VolumeAttachmentSource represents a volume that should be attached. Right now only PersistentVolumes can be attached via external attacher, in the future we may allow also inline volumes in pods. Exactly one member can be set. */
+/* VolumeAttachmentSource represents a volume that should be attached. Right now only PersistenVolumes can be attached via external attacher, in future we may allow also inline volumes in pods. Exactly one member can be set. */
 export interface VolumeAttachmentSource {
   inlineVolumeSpec?: PersistentVolumeSpec;
   persistentVolumeName?: string;
@@ -23698,7 +28569,6 @@ export interface DeleteOptions {
   apiVersion?: string;
   dryRun?: string[];
   gracePeriodSeconds?: number;
-  ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
   kind?: string;
   orphanDependents?: boolean;
   preconditions?: Preconditions;
@@ -23958,6 +28828,2112 @@ export interface IoK8sKubeAggregatorPkgApisApiregistrationV1ServiceReference {
   namespace?: string;
   port?: number;
 }
+export interface IoMinStsV1alpha1PolicyBinding {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    application: {
+      namespace: string;
+      serviceaccount: string;
+    };
+    policies: string[];
+  };
+  status?: {
+    currentState: string;
+    usage?: any;
+  };
+}
+/* io.min.sts.v1alpha1.PolicyBindingList */
+/* PolicyBindingList is a list of PolicyBinding */
+export interface IoMinStsV1alpha1PolicyBindingList {
+  apiVersion?: string;
+  items: IoMinStsV1alpha1PolicyBinding[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+export interface IoMinStsV1beta1PolicyBinding {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    application: {
+      namespace: string;
+      serviceaccount: string;
+    };
+    policies: string[];
+  };
+  status?: {
+    currentState: string;
+    usage?: any;
+  };
+}
+/* io.min.sts.v1beta1.PolicyBindingList */
+/* PolicyBindingList is a list of PolicyBinding */
+export interface IoMinStsV1beta1PolicyBindingList {
+  apiVersion?: string;
+  items: IoMinStsV1beta1PolicyBinding[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.AIService */
+/* AIService is a Kubernetes-like Service to interact with a text-based LLM provider. It defines the parameters and credentials required to interact with various LLM providers. */
+export interface AIService {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    anthropic?: {
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      token?: {
+        secretName: string;
+      };
+    };
+    azureOpenai?: {
+      apiKeySecret?: {
+        secretName: string;
+      };
+      baseUrl: string;
+      deploymentName: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+    };
+    bedrock?: {
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      region?: string;
+      systemMessage?: boolean;
+    };
+    cohere?: {
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      token?: {
+        secretName: string;
+      };
+    };
+    deepSeek?: {
+      baseUrl?: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      token?: {
+        secretName: string;
+      };
+    };
+    gemini?: {
+      apiKey?: {
+        secretName: string;
+      };
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+    };
+    mistral?: {
+      apiKey?: {
+        secretName: string;
+      };
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+    };
+    ollama?: {
+      baseUrl: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+    };
+    openai?: {
+      baseUrl?: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      token?: {
+        secretName: string;
+      };
+    };
+    qWen?: {
+      baseUrl?: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      token?: {
+        secretName: string;
+      };
+    };
+  };
+}
+/* io.traefik.hub.v1alpha1.AIServiceList */
+/* AIServiceList is a list of AIService */
+export interface AIServiceList {
+  apiVersion?: string;
+  items: AIService[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.API */
+/* API defines an HTTP interface that is exposed to external clients. It specifies the supported versions
+and provides instructions for accessing its documentation. Once instantiated, an API object is associated
+with an Ingress, IngressRoute, or HTTPRoute resource, enabling the exposure of the described API to the outside world. */
+export interface API {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    cors?: {
+      addVaryHeader?: boolean;
+      allowCredentials?: boolean;
+      allowHeadersList?: string[];
+      allowMethodsList?: string[];
+      allowOriginListRegex?: string[];
+      allowOriginsList?: string[];
+      exposeHeadersList?: string[];
+      maxAge?: number;
+    };
+    description?: string;
+    openApiSpec?: {
+      operationSets?: {
+        matchers: {
+          methods?: string[];
+          path?: string;
+          pathPrefix?: string;
+          pathRegex?: string;
+        }[];
+        name: string;
+      }[];
+      override?: {
+        servers: {
+          url: string;
+        }[];
+      };
+      path?: string;
+      refreshInterval?: string;
+      url?: string;
+      validateRequestBodySchema?: boolean;
+      validateRequestMethodAndPath?: boolean;
+    };
+    title?: string;
+    versions?: {
+      name: string;
+    }[];
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIAuth */
+/* APIAuth defines the authentication configuration for APIs. */
+export interface APIAuth {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiKey?: {
+      keySource?: {
+        header?: string;
+        headerAuthScheme?: string;
+        query?: string;
+      };
+    };
+    isDefault: boolean;
+    jwt?: {
+      appIdClaim: string;
+      clientConfig?: {
+        maxRetries?: number;
+        timeoutSeconds?: number;
+        tls?: {
+          ca?: string;
+          insecureSkipVerify?: boolean;
+        };
+      };
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      jwksFile?: string;
+      jwksUrl?: string;
+      publicKey?: string;
+      signingSecretName?: string;
+      stripAuthorizationHeader?: boolean;
+      tokenNameClaim?: string;
+      tokenQueryKey?: string;
+      trustedIssuers?: {
+        issuer?: string;
+        jwksUrl: string;
+      }[];
+    };
+    ldap?: {
+      attribute?: string;
+      baseDn: string;
+      bindDn?: string;
+      bindPasswordSecretName?: string;
+      certificateAuthority?: string;
+      insecureSkipVerify?: boolean;
+      searchFilter?: string;
+      startTls?: boolean;
+      url: string;
+    };
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIAuthList */
+/* APIAuthList is a list of APIAuth */
+export interface APIAuthList {
+  apiVersion?: string;
+  items: APIAuth[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIBundle */
+/* APIBundle defines a set of APIs. */
+export interface APIBundle {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    apis?: {
+      name: string;
+    }[];
+    title?: string;
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    resolvedApis?: {
+      name: string;
+    }[];
+    syncedAt?: string;
+    unresolvedApis?: {
+      name: string;
+    }[];
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIBundleList */
+/* APIBundleList is a list of APIBundle */
+export interface APIBundleList {
+  apiVersion?: string;
+  items: APIBundle[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APICatalogItem */
+/* APICatalogItem defines APIs that will be part of the API catalog on the portal. */
+export interface APICatalogItem {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiBundles?: {
+      name: string;
+    }[];
+    apiPlan?: {
+      name: string;
+    };
+    apiSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    apis?: {
+      name: string;
+    }[];
+    everyone?: boolean;
+    groups?: string[];
+    operationFilter?: {
+      include?: string[];
+    };
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    resolvedApis?: {
+      name: string;
+    }[];
+    syncedAt?: string;
+    unresolvedApis?: {
+      name: string;
+    }[];
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APICatalogItemList */
+/* APICatalogItemList is a list of APICatalogItem */
+export interface APICatalogItemList {
+  apiVersion?: string;
+  items: APICatalogItem[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIList */
+/* APIList is a list of API */
+export interface APIList {
+  apiVersion?: string;
+  items: API[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIPlan */
+/* APIPlan defines API Plan policy. */
+export interface APIPlan {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    description?: string;
+    quota?: {
+      bucket?: "subscription" | "application-api" | "application";
+      limit: number;
+      period?: string;
+    };
+    rateLimit?: {
+      bucket?: "subscription" | "application-api" | "application";
+      limit: number;
+      period?: string;
+    };
+    title: string;
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIPlanList */
+/* APIPlanList is a list of APIPlan */
+export interface APIPlanList {
+  apiVersion?: string;
+  items: APIPlan[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIPortal */
+/* APIPortal defines a developer portal for accessing the documentation of APIs. */
+export interface APIPortal {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    auth?: {
+      name: string;
+    };
+    description?: string;
+    title?: string;
+    trustedUrls: string[];
+    ui?: {
+      logoUrl?: string;
+    };
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    oidc?: {
+      clientId?: string;
+      companyClaim?: string;
+      emailClaim?: string;
+      firstnameClaim?: string;
+      generic?: boolean;
+      groupsClaim?: string;
+      issuer?: string;
+      lastnameClaim?: string;
+      scopes?: string;
+      secretName?: string;
+      syncedAttributes?: string[];
+      userIdClaim?: string;
+    };
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIPortalAuth */
+/* APIPortalAuth defines the authentication configuration for an APIPortal. */
+export interface APIPortalAuth {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    ldap?: {
+      attribute?: string;
+      attributes?: {
+        company?: string;
+        email?: string;
+        firstname?: string;
+        lastname?: string;
+        userId?: string;
+      };
+      baseDn: string;
+      bindDn?: string;
+      bindPasswordSecretName?: string;
+      certificateAuthority?: string;
+      groups?: {
+        memberOfAttribute?: string;
+      };
+      insecureSkipVerify?: boolean;
+      searchFilter?: string;
+      startTls?: boolean;
+      syncedAttributes?: ("groups" | "userId" | "firstname" | "lastname" | "email" | "company")[];
+      url: string;
+    };
+    oidc?: {
+      claims: {
+        company?: string;
+        email?: string;
+        firstname?: string;
+        groups: string;
+        lastname?: string;
+        userId?: string;
+      };
+      clientConfig?: {
+        maxRetries?: number;
+        timeoutSeconds?: number;
+        tls?: {
+          ca?: string;
+          insecureSkipVerify?: boolean;
+        };
+      };
+      issuerUrl: string;
+      scopes?: string[];
+      secretName: string;
+      syncedAttributes?: ("groups" | "userId" | "firstname" | "lastname" | "email" | "company")[];
+    };
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIPortalAuthList */
+/* APIPortalAuthList is a list of APIPortalAuth */
+export interface APIPortalAuthList {
+  apiVersion?: string;
+  items: APIPortalAuth[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIPortalList */
+/* APIPortalList is a list of APIPortal */
+export interface APIPortalList {
+  apiVersion?: string;
+  items: APIPortal[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIRateLimit */
+/* APIRateLimit defines how group of consumers are rate limited on a set of APIs. */
+export interface APIRateLimit {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    apis?: {
+      name: string;
+    }[];
+    everyone?: boolean;
+    groups?: string[];
+    limit: number;
+    period?: string;
+    strategy?: "local" | "distributed";
+  };
+  status?: {
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIRateLimitList */
+/* APIRateLimitList is a list of APIRateLimit */
+export interface APIRateLimitList {
+  apiVersion?: string;
+  items: APIRateLimit[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIVersion */
+/* APIVersion defines a version of an API. */
+export interface APIVersion {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    cors?: {
+      addVaryHeader?: boolean;
+      allowCredentials?: boolean;
+      allowHeadersList?: string[];
+      allowMethodsList?: string[];
+      allowOriginListRegex?: string[];
+      allowOriginsList?: string[];
+      exposeHeadersList?: string[];
+      maxAge?: number;
+    };
+    description?: string;
+    openApiSpec?: {
+      operationSets?: {
+        matchers: {
+          methods?: string[];
+          path?: string;
+          pathPrefix?: string;
+          pathRegex?: string;
+        }[];
+        name: string;
+      }[];
+      override?: {
+        servers: {
+          url: string;
+        }[];
+      };
+      path?: string;
+      refreshInterval?: string;
+      url?: string;
+      validateRequestBodySchema?: boolean;
+      validateRequestMethodAndPath?: boolean;
+    };
+    release: string;
+    title?: string;
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIVersionList */
+/* APIVersionList is a list of APIVersion */
+export interface APIVersionList {
+  apiVersion?: string;
+  items: APIVersion[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.AccessControlPolicy */
+/* AccessControlPolicy defines an access control policy. */
+export interface AccessControlPolicy {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiKey?: {
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      keySource: {
+        cookie?: string;
+        header?: string;
+        headerAuthScheme?: string;
+        query?: string;
+      };
+      keys?: {
+        id: string;
+        metadata?: {
+          [key: string]: unknown;
+        };
+        value: string;
+      }[];
+    };
+    basicAuth?: {
+      forwardUsernameHeader?: string;
+      realm?: string;
+      stripAuthorizationHeader?: boolean;
+      users?: string[];
+    };
+    jwt?: {
+      claims?: string;
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      jwksFile?: string;
+      jwksUrl?: string;
+      publicKey?: string;
+      signingSecret?: string;
+      signingSecretBase64Encoded?: boolean;
+      stripAuthorizationHeader?: boolean;
+      tokenQueryKey?: string;
+    };
+    oAuthIntro?: {
+      claims?: string;
+      clientConfig: {
+        headers?: {
+          [key: string]: unknown;
+        };
+        maxRetries?: number;
+        timeoutSeconds?: number;
+        tls?: {
+          ca?: string;
+          insecureSkipVerify?: boolean;
+        };
+        tokenTypeHint?: string;
+        url: string;
+      };
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      tokenSource: {
+        cookie?: string;
+        header?: string;
+        headerAuthScheme?: string;
+        query?: string;
+      };
+    };
+    oidc?: {
+      authParams?: {
+        [key: string]: unknown;
+      };
+      claims?: string;
+      clientId?: string;
+      disableAuthRedirectionPaths?: string[];
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      issuer?: string;
+      logoutUrl?: string;
+      redirectUrl?: string;
+      scopes?: string[];
+      secret?: {
+        name?: string;
+        namespace?: string;
+      };
+      session?: {
+        domain?: string;
+        path?: string;
+        refresh?: boolean;
+        sameSite?: string;
+        secure?: boolean;
+      };
+      stateCookie?: {
+        domain?: string;
+        path?: string;
+        sameSite?: string;
+        secure?: boolean;
+      };
+    };
+    oidcGoogle?: {
+      authParams?: {
+        [key: string]: unknown;
+      };
+      clientId?: string;
+      emails?: string[];
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      logoutUrl?: string;
+      redirectUrl?: string;
+      secret?: {
+        name?: string;
+        namespace?: string;
+      };
+      session?: {
+        domain?: string;
+        path?: string;
+        refresh?: boolean;
+        sameSite?: string;
+        secure?: boolean;
+      };
+      stateCookie?: {
+        domain?: string;
+        path?: string;
+        sameSite?: string;
+        secure?: boolean;
+      };
+    };
+  };
+  status?: {
+    specHash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.AccessControlPolicyList */
+/* AccessControlPolicyList is a list of AccessControlPolicy */
+export interface AccessControlPolicyList {
+  apiVersion?: string;
+  items: AccessControlPolicy[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.ContentItem */
+/* ContentItem defines additional documentation for given resource. */
+export interface ContentItem {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    content?: string;
+    link?: {
+      href: string;
+    };
+    order: number;
+    parentRef: {
+      kind: "APIPortal" | "API" | "APIBundle";
+      name: string;
+    };
+    title: string;
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.ContentItemList */
+/* ContentItemList is a list of ContentItem */
+export interface ContentItemList {
+  apiVersion?: string;
+  items: ContentItem[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.ManagedApplication */
+/* ManagedApplication represents a managed application. */
+export interface ManagedApplication {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiKeys?: {
+      secretName?: string;
+      suspended?: boolean;
+      title?: string;
+      value?: string;
+    }[];
+    appId: string;
+    notes?: string;
+    owner: string;
+  };
+  status?: {
+    apiKeyVersions?: {
+      [key: string]: unknown;
+    };
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.ManagedApplicationList */
+/* ManagedApplicationList is a list of ManagedApplication */
+export interface ManagedApplicationList {
+  apiVersion?: string;
+  items: ManagedApplication[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.ManagedSubscription */
+/* ManagedSubscription defines a Subscription managed by the API manager as the result of a pre-negotiation with its
+API consumers. This subscription grant consuming access to a set of APIs to a set of Applications. */
+export interface ManagedSubscription {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiBundles?: {
+      name: string;
+    }[];
+    apiPlan: {
+      name: string;
+    };
+    apiSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    apis?: {
+      name: string;
+    }[];
+    applications?: {
+      appId: string;
+    }[];
+    claims?: string;
+    managedApplications?: {
+      name: string;
+    }[];
+    operationFilter?: {
+      include?: string[];
+    };
+    weight?: number;
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    hash?: string;
+    resolvedApis?: {
+      name: string;
+    }[];
+    syncedAt?: string;
+    unresolvedApis?: {
+      name: string;
+    }[];
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.ManagedSubscriptionList */
+/* ManagedSubscriptionList is a list of ManagedSubscription */
+export interface ManagedSubscriptionList {
+  apiVersion?: string;
+  items: ManagedSubscription[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.Uplink */
+/* Uplink is an inter-cluster service advertisement: a child cluster declares an Uplink to advertise
+to a parent cluster that it can handle a particular workload. */
+export interface Uplink {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    entryPoints?: string[];
+    exposeName?: string;
+    healthCheck?: {
+      followRedirects?: boolean;
+      headers?: {
+        [key: string]: unknown;
+      };
+      hostname?: string;
+      interval?: any;
+      method?: string;
+      mode?: string;
+      path?: string;
+      port?: number;
+      scheme?: string;
+      status?: number;
+      timeout?: any;
+      unhealthyInterval?: any;
+    };
+    passiveHealthCheck?: {
+      failureWindow?: any;
+      maxFailedAttempts?: number;
+    };
+    weight?: number;
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+  };
+}
+/* io.traefik.hub.v1alpha1.UplinkList */
+/* UplinkList is a list of Uplink */
+export interface UplinkList {
+  apiVersion?: string;
+  items: Uplink[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.v1alpha1.IngressRoute */
+/* IngressRoute is the CRD implementation of a Traefik HTTP Router. */
+export interface TraefikIoV1alpha1IngressRoute {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    entryPoints?: string[];
+    ingressClassName?: string;
+    parentRefs?: {
+      name: string;
+      namespace?: string;
+    }[];
+    routes: {
+      kind?: "Rule";
+      match: string;
+      middlewares?: {
+        name: string;
+        namespace?: string;
+      }[];
+      observability?: {
+        accessLogs?: boolean;
+        metrics?: boolean;
+        traceVerbosity?: "minimal" | "detailed";
+        tracing?: boolean;
+      };
+      priority?: number;
+      services?: {
+        healthCheck?: {
+          followRedirects?: boolean;
+          headers?: {
+            [key: string]: unknown;
+          };
+          hostname?: string;
+          interval?: any;
+          method?: string;
+          mode?: string;
+          path?: string;
+          port?: number;
+          scheme?: string;
+          status?: number;
+          timeout?: any;
+          unhealthyInterval?: any;
+        };
+        kind?: "Service" | "TraefikService";
+        middlewares?: {
+          name: string;
+          namespace?: string;
+        }[];
+        name: string;
+        namespace?: string;
+        nativeLB?: boolean;
+        nodePortLB?: boolean;
+        passHostHeader?: boolean;
+        passiveHealthCheck?: {
+          failureWindow?: any;
+          maxFailedAttempts?: number;
+        };
+        port?: any;
+        responseForwarding?: {
+          flushInterval?: string;
+        };
+        scheme?: string;
+        serversTransport?: string;
+        sticky?: {
+          cookie?: {
+            domain?: string;
+            httpOnly?: boolean;
+            maxAge?: number;
+            name?: string;
+            path?: string;
+            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            secure?: boolean;
+          };
+        };
+        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        weight?: number;
+      }[];
+      syntax?: string;
+    }[];
+    tls?: {
+      certResolver?: string;
+      domains?: {
+        main?: string;
+        sans?: string[];
+      }[];
+      options?: {
+        name: string;
+        namespace?: string;
+      };
+      secretName?: string;
+      store?: {
+        name: string;
+        namespace?: string;
+      };
+    };
+  };
+}
+/* io.traefik.v1alpha1.IngressRouteList */
+/* IngressRouteList is a list of IngressRoute */
+export interface TraefikIoV1alpha1IngressRouteList {
+  apiVersion?: string;
+  items: TraefikIoV1alpha1IngressRoute[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.v1alpha1.IngressRouteTCP */
+/* IngressRouteTCP is the CRD implementation of a Traefik TCP Router. */
+export interface TraefikIoV1alpha1IngressRouteTCP {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    entryPoints?: string[];
+    ingressClassName?: string;
+    routes: {
+      match: string;
+      middlewares?: {
+        name: string;
+        namespace?: string;
+      }[];
+      priority?: number;
+      services?: {
+        name: string;
+        namespace?: string;
+        nativeLB?: boolean;
+        nodePortLB?: boolean;
+        port: any;
+        proxyProtocol?: {
+          version?: number;
+        };
+        serversTransport?: string;
+        terminationDelay?: number;
+        tls?: boolean;
+        weight?: number;
+      }[];
+      syntax?: "v3" | "v2";
+    }[];
+    tls?: {
+      certResolver?: string;
+      domains?: {
+        main?: string;
+        sans?: string[];
+      }[];
+      options?: {
+        name: string;
+        namespace?: string;
+      };
+      passthrough?: boolean;
+      secretName?: string;
+      store?: {
+        name: string;
+        namespace?: string;
+      };
+    };
+  };
+}
+/* io.traefik.v1alpha1.IngressRouteTCPList */
+/* IngressRouteTCPList is a list of IngressRouteTCP */
+export interface TraefikIoV1alpha1IngressRouteTCPList {
+  apiVersion?: string;
+  items: TraefikIoV1alpha1IngressRouteTCP[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.v1alpha1.IngressRouteUDP */
+/* IngressRouteUDP is a CRD implementation of a Traefik UDP Router. */
+export interface TraefikIoV1alpha1IngressRouteUDP {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    entryPoints?: string[];
+    ingressClassName?: string;
+    routes: {
+      services?: {
+        name: string;
+        namespace?: string;
+        nativeLB?: boolean;
+        nodePortLB?: boolean;
+        port: any;
+        weight?: number;
+      }[];
+    }[];
+  };
+}
+/* io.traefik.v1alpha1.IngressRouteUDPList */
+/* IngressRouteUDPList is a list of IngressRouteUDP */
+export interface TraefikIoV1alpha1IngressRouteUDPList {
+  apiVersion?: string;
+  items: TraefikIoV1alpha1IngressRouteUDP[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.v1alpha1.Middleware */
+/* Middleware is the CRD implementation of a Traefik Middleware.
+More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/http/middlewares/overview/ */
+export interface TraefikIoV1alpha1Middleware {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    addPrefix?: {
+      prefix?: string;
+    };
+    basicAuth?: {
+      headerField?: string;
+      realm?: string;
+      removeHeader?: boolean;
+      secret?: string;
+    };
+    buffering?: {
+      maxRequestBodyBytes?: number;
+      maxResponseBodyBytes?: number;
+      memRequestBodyBytes?: number;
+      memResponseBodyBytes?: number;
+      retryExpression?: string;
+    };
+    chain?: {
+      middlewares?: {
+        name: string;
+        namespace?: string;
+      }[];
+    };
+    circuitBreaker?: {
+      checkPeriod?: any;
+      expression?: string;
+      fallbackDuration?: any;
+      recoveryDuration?: any;
+      responseCode?: number;
+    };
+    compress?: {
+      defaultEncoding?: string;
+      encodings?: string[];
+      excludedContentTypes?: string[];
+      includedContentTypes?: string[];
+      minResponseBodyBytes?: number;
+    };
+    contentType?: {
+      autoDetect?: boolean;
+    };
+    digestAuth?: {
+      headerField?: string;
+      realm?: string;
+      removeHeader?: boolean;
+      secret?: string;
+    };
+    encodedCharacters?: {
+      allowEncodedBackSlash?: boolean;
+      allowEncodedHash?: boolean;
+      allowEncodedNullCharacter?: boolean;
+      allowEncodedPercent?: boolean;
+      allowEncodedQuestionMark?: boolean;
+      allowEncodedSemicolon?: boolean;
+      allowEncodedSlash?: boolean;
+    };
+    errors?: {
+      query?: string;
+      service?: {
+        healthCheck?: {
+          followRedirects?: boolean;
+          headers?: {
+            [key: string]: unknown;
+          };
+          hostname?: string;
+          interval?: any;
+          method?: string;
+          mode?: string;
+          path?: string;
+          port?: number;
+          scheme?: string;
+          status?: number;
+          timeout?: any;
+          unhealthyInterval?: any;
+        };
+        kind?: "Service" | "TraefikService";
+        middlewares?: {
+          name: string;
+          namespace?: string;
+        }[];
+        name: string;
+        namespace?: string;
+        nativeLB?: boolean;
+        nodePortLB?: boolean;
+        passHostHeader?: boolean;
+        passiveHealthCheck?: {
+          failureWindow?: any;
+          maxFailedAttempts?: number;
+        };
+        port?: any;
+        responseForwarding?: {
+          flushInterval?: string;
+        };
+        scheme?: string;
+        serversTransport?: string;
+        sticky?: {
+          cookie?: {
+            domain?: string;
+            httpOnly?: boolean;
+            maxAge?: number;
+            name?: string;
+            path?: string;
+            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            secure?: boolean;
+          };
+        };
+        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        weight?: number;
+      };
+      status?: string[];
+      statusRewrites?: {
+        [key: string]: unknown;
+      };
+    };
+    forwardAuth?: {
+      addAuthCookiesToResponse?: string[];
+      address?: string;
+      authRequestHeaders?: string[];
+      authResponseHeaders?: string[];
+      authResponseHeadersRegex?: string;
+      authSigninURL?: string;
+      forwardBody?: boolean;
+      headerField?: string;
+      maxBodySize?: number;
+      maxResponseBodySize?: number;
+      preserveLocationHeader?: boolean;
+      preserveRequestMethod?: boolean;
+      tls?: {
+        caOptional?: boolean;
+        caSecret?: string;
+        certSecret?: string;
+        insecureSkipVerify?: boolean;
+      };
+      trustForwardHeader?: boolean;
+    };
+    grpcWeb?: {
+      allowOrigins?: string[];
+    };
+    headers?: {
+      accessControlAllowCredentials?: boolean;
+      accessControlAllowHeaders?: string[];
+      accessControlAllowMethods?: string[];
+      accessControlAllowOriginList?: string[];
+      accessControlAllowOriginListRegex?: string[];
+      accessControlExposeHeaders?: string[];
+      accessControlMaxAge?: number;
+      addVaryHeader?: boolean;
+      allowedHosts?: string[];
+      browserXssFilter?: boolean;
+      contentSecurityPolicy?: string;
+      contentSecurityPolicyReportOnly?: string;
+      contentTypeNosniff?: boolean;
+      customBrowserXSSValue?: string;
+      customFrameOptionsValue?: string;
+      customRequestHeaders?: {
+        [key: string]: unknown;
+      };
+      customResponseHeaders?: {
+        [key: string]: unknown;
+      };
+      featurePolicy?: string;
+      forceSTSHeader?: boolean;
+      frameDeny?: boolean;
+      hostsProxyHeaders?: string[];
+      isDevelopment?: boolean;
+      permissionsPolicy?: string;
+      publicKey?: string;
+      referrerPolicy?: string;
+      sslForceHost?: boolean;
+      sslHost?: string;
+      sslProxyHeaders?: {
+        [key: string]: unknown;
+      };
+      sslRedirect?: boolean;
+      sslTemporaryRedirect?: boolean;
+      stsIncludeSubdomains?: boolean;
+      stsPreload?: boolean;
+      stsSeconds?: number;
+    };
+    inFlightReq?: {
+      amount?: number;
+      sourceCriterion?: {
+        ipStrategy?: {
+          depth?: number;
+          excludedIPs?: string[];
+          ipv6Subnet?: number;
+        };
+        requestHeaderName?: string;
+        requestHost?: boolean;
+      };
+    };
+    ipAllowList?: {
+      ipStrategy?: {
+        depth?: number;
+        excludedIPs?: string[];
+        ipv6Subnet?: number;
+      };
+      rejectStatusCode?: number;
+      sourceRange?: string[];
+    };
+    ipWhiteList?: {
+      ipStrategy?: {
+        depth?: number;
+        excludedIPs?: string[];
+        ipv6Subnet?: number;
+      };
+      sourceRange?: string[];
+    };
+    passTLSClientCert?: {
+      info?: {
+        issuer?: {
+          commonName?: boolean;
+          country?: boolean;
+          domainComponent?: boolean;
+          locality?: boolean;
+          organization?: boolean;
+          province?: boolean;
+          serialNumber?: boolean;
+        };
+        notAfter?: boolean;
+        notBefore?: boolean;
+        sans?: boolean;
+        serialNumber?: boolean;
+        subject?: {
+          commonName?: boolean;
+          country?: boolean;
+          domainComponent?: boolean;
+          locality?: boolean;
+          organization?: boolean;
+          organizationalUnit?: boolean;
+          province?: boolean;
+          serialNumber?: boolean;
+        };
+      };
+      pem?: boolean;
+    };
+    plugin?: {
+      [key: string]: unknown;
+    };
+    rateLimit?: {
+      average?: number;
+      burst?: number;
+      period?: any;
+      redis?: {
+        db?: number;
+        dialTimeout?: any;
+        endpoints?: string[];
+        maxActiveConns?: number;
+        minIdleConns?: number;
+        poolSize?: number;
+        readTimeout?: any;
+        secret?: string;
+        tls?: {
+          caSecret?: string;
+          certSecret?: string;
+          insecureSkipVerify?: boolean;
+        };
+        writeTimeout?: any;
+      };
+      sourceCriterion?: {
+        ipStrategy?: {
+          depth?: number;
+          excludedIPs?: string[];
+          ipv6Subnet?: number;
+        };
+        requestHeaderName?: string;
+        requestHost?: boolean;
+      };
+    };
+    redirectRegex?: {
+      permanent?: boolean;
+      regex?: string;
+      replacement?: string;
+    };
+    redirectScheme?: {
+      permanent?: boolean;
+      port?: string;
+      scheme?: string;
+    };
+    replacePath?: {
+      path?: string;
+    };
+    replacePathRegex?: {
+      regex?: string;
+      replacement?: string;
+    };
+    retry?: {
+      attempts?: number;
+      disableRetryOnNetworkError?: boolean;
+      initialInterval?: any;
+      maxRequestBodyBytes?: number;
+      retryNonIdempotentMethod?: boolean;
+      status?: string[];
+      timeout?: any;
+    };
+    stripPrefix?: {
+      forceSlash?: boolean;
+      prefixes?: string[];
+    };
+    stripPrefixRegex?: {
+      regex?: string[];
+    };
+  };
+}
+/* io.traefik.v1alpha1.MiddlewareList */
+/* MiddlewareList is a list of Middleware */
+export interface TraefikIoV1alpha1MiddlewareList {
+  apiVersion?: string;
+  items: TraefikIoV1alpha1Middleware[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.v1alpha1.MiddlewareTCP */
+/* MiddlewareTCP is the CRD implementation of a Traefik TCP middleware.
+More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/tcp/middlewares/overview/ */
+export interface TraefikIoV1alpha1MiddlewareTCP {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    inFlightConn?: {
+      amount?: number;
+    };
+    ipAllowList?: {
+      sourceRange?: string[];
+    };
+    ipWhiteList?: {
+      sourceRange?: string[];
+    };
+  };
+}
+/* io.traefik.v1alpha1.MiddlewareTCPList */
+/* MiddlewareTCPList is a list of MiddlewareTCP */
+export interface TraefikIoV1alpha1MiddlewareTCPList {
+  apiVersion?: string;
+  items: TraefikIoV1alpha1MiddlewareTCP[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.v1alpha1.ServersTransport */
+/* ServersTransport is the CRD implementation of a ServersTransport.
+If no serversTransport is specified, the default@internal will be used.
+The default@internal serversTransport is created from the static configuration.
+More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/http/load-balancing/serverstransport/ */
+export interface TraefikIoV1alpha1ServersTransport {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    certificatesSecrets?: string[];
+    cipherSuites?: string[];
+    disableHTTP2?: boolean;
+    forwardingTimeouts?: {
+      dialTimeout?: any;
+      idleConnTimeout?: any;
+      pingTimeout?: any;
+      readIdleTimeout?: any;
+      responseHeaderTimeout?: any;
+    };
+    insecureSkipVerify?: boolean;
+    maxIdleConnsPerHost?: number;
+    maxVersion?: string;
+    minVersion?: string;
+    peerCertURI?: string;
+    rootCAs?: {
+      configMap?: string;
+      secret?: string;
+    }[];
+    rootCAsSecrets?: string[];
+    serverName?: string;
+    spiffe?: {
+      ids?: string[];
+      trustDomain?: string;
+    };
+  };
+}
+/* io.traefik.v1alpha1.ServersTransportList */
+/* ServersTransportList is a list of ServersTransport */
+export interface TraefikIoV1alpha1ServersTransportList {
+  apiVersion?: string;
+  items: TraefikIoV1alpha1ServersTransport[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.v1alpha1.ServersTransportTCP */
+/* ServersTransportTCP is the CRD implementation of a TCPServersTransport.
+If no tcpServersTransport is specified, a default one named default@internal will be used.
+The default@internal tcpServersTransport can be configured in the static configuration.
+More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/tcp/serverstransport/ */
+export interface TraefikIoV1alpha1ServersTransportTCP {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    dialKeepAlive?: any;
+    dialTimeout?: any;
+    proxyProtocol?: {
+      version?: number;
+    };
+    terminationDelay?: any;
+    tls?: {
+      certificatesSecrets?: string[];
+      insecureSkipVerify?: boolean;
+      peerCertURI?: string;
+      rootCAs?: {
+        configMap?: string;
+        secret?: string;
+      }[];
+      rootCAsSecrets?: string[];
+      serverName?: string;
+      spiffe?: {
+        ids?: string[];
+        trustDomain?: string;
+      };
+    };
+  };
+}
+/* io.traefik.v1alpha1.ServersTransportTCPList */
+/* ServersTransportTCPList is a list of ServersTransportTCP */
+export interface TraefikIoV1alpha1ServersTransportTCPList {
+  apiVersion?: string;
+  items: TraefikIoV1alpha1ServersTransportTCP[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.v1alpha1.TLSOption */
+/* TLSOption is the CRD implementation of a Traefik TLS Option, allowing to configure some parameters of the TLS connection.
+More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/http/tls/tls-certificates/#certificates-stores#tls-options */
+export interface TraefikIoV1alpha1TLSOption {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    alpnProtocols?: string[];
+    cipherSuites?: string[];
+    clientAuth?: {
+      clientAuthType?: "NoClientCert" | "RequestClientCert" | "RequireAnyClientCert" | "VerifyClientCertIfGiven" | "RequireAndVerifyClientCert";
+      secretNames?: string[];
+    };
+    curvePreferences?: string[];
+    disableSessionTickets?: boolean;
+    maxVersion?: string;
+    minVersion?: string;
+    preferServerCipherSuites?: boolean;
+    sniStrict?: boolean;
+  };
+}
+/* io.traefik.v1alpha1.TLSOptionList */
+/* TLSOptionList is a list of TLSOption */
+export interface TraefikIoV1alpha1TLSOptionList {
+  apiVersion?: string;
+  items: TraefikIoV1alpha1TLSOption[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.v1alpha1.TLSStore */
+/* TLSStore is the CRD implementation of a Traefik TLS Store.
+For the time being, only the TLSStore named default is supported.
+This means that you cannot have two stores that are named default in different Kubernetes namespaces.
+More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/http/tls/tls-certificates/#certificates-stores#certificates-stores */
+export interface TraefikIoV1alpha1TLSStore {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    certificates?: {
+      secretName: string;
+    }[];
+    defaultCertificate?: {
+      secretName: string;
+    };
+    defaultGeneratedCert?: {
+      domain?: {
+        main?: string;
+        sans?: string[];
+      };
+      resolver?: string;
+    };
+  };
+}
+/* io.traefik.v1alpha1.TLSStoreList */
+/* TLSStoreList is a list of TLSStore */
+export interface TraefikIoV1alpha1TLSStoreList {
+  apiVersion?: string;
+  items: TraefikIoV1alpha1TLSStore[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.v1alpha1.TraefikService */
+/* TraefikService is the CRD implementation of a Traefik Service.
+TraefikService object allows to:
+- Apply weight to Services on load-balancing
+- Mirror traffic on services
+More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/kubernetes/crd/http/traefikservice/ */
+export interface TraefikIoV1alpha1TraefikService {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    failover?: {
+      errors: {
+        maxRequestBodyBytes?: number;
+        status?: string[];
+      };
+      fallback: {
+        healthCheck?: {
+          followRedirects?: boolean;
+          headers?: {
+            [key: string]: unknown;
+          };
+          hostname?: string;
+          interval?: any;
+          method?: string;
+          mode?: string;
+          path?: string;
+          port?: number;
+          scheme?: string;
+          status?: number;
+          timeout?: any;
+          unhealthyInterval?: any;
+        };
+        kind?: "Service" | "TraefikService";
+        middlewares?: {
+          name: string;
+          namespace?: string;
+        }[];
+        name: string;
+        namespace?: string;
+        nativeLB?: boolean;
+        nodePortLB?: boolean;
+        passHostHeader?: boolean;
+        passiveHealthCheck?: {
+          failureWindow?: any;
+          maxFailedAttempts?: number;
+        };
+        port?: any;
+        responseForwarding?: {
+          flushInterval?: string;
+        };
+        scheme?: string;
+        serversTransport?: string;
+        sticky?: {
+          cookie?: {
+            domain?: string;
+            httpOnly?: boolean;
+            maxAge?: number;
+            name?: string;
+            path?: string;
+            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            secure?: boolean;
+          };
+        };
+        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        weight?: number;
+      };
+      service: {
+        healthCheck?: {
+          followRedirects?: boolean;
+          headers?: {
+            [key: string]: unknown;
+          };
+          hostname?: string;
+          interval?: any;
+          method?: string;
+          mode?: string;
+          path?: string;
+          port?: number;
+          scheme?: string;
+          status?: number;
+          timeout?: any;
+          unhealthyInterval?: any;
+        };
+        kind?: "Service" | "TraefikService";
+        middlewares?: {
+          name: string;
+          namespace?: string;
+        }[];
+        name: string;
+        namespace?: string;
+        nativeLB?: boolean;
+        nodePortLB?: boolean;
+        passHostHeader?: boolean;
+        passiveHealthCheck?: {
+          failureWindow?: any;
+          maxFailedAttempts?: number;
+        };
+        port?: any;
+        responseForwarding?: {
+          flushInterval?: string;
+        };
+        scheme?: string;
+        serversTransport?: string;
+        sticky?: {
+          cookie?: {
+            domain?: string;
+            httpOnly?: boolean;
+            maxAge?: number;
+            name?: string;
+            path?: string;
+            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            secure?: boolean;
+          };
+        };
+        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        weight?: number;
+      };
+    };
+    highestRandomWeight?: {
+      services?: {
+        healthCheck?: {
+          followRedirects?: boolean;
+          headers?: {
+            [key: string]: unknown;
+          };
+          hostname?: string;
+          interval?: any;
+          method?: string;
+          mode?: string;
+          path?: string;
+          port?: number;
+          scheme?: string;
+          status?: number;
+          timeout?: any;
+          unhealthyInterval?: any;
+        };
+        kind?: "Service" | "TraefikService";
+        middlewares?: {
+          name: string;
+          namespace?: string;
+        }[];
+        name: string;
+        namespace?: string;
+        nativeLB?: boolean;
+        nodePortLB?: boolean;
+        passHostHeader?: boolean;
+        passiveHealthCheck?: {
+          failureWindow?: any;
+          maxFailedAttempts?: number;
+        };
+        port?: any;
+        responseForwarding?: {
+          flushInterval?: string;
+        };
+        scheme?: string;
+        serversTransport?: string;
+        sticky?: {
+          cookie?: {
+            domain?: string;
+            httpOnly?: boolean;
+            maxAge?: number;
+            name?: string;
+            path?: string;
+            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            secure?: boolean;
+          };
+        };
+        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        weight?: number;
+      }[];
+    };
+    mirroring?: {
+      healthCheck?: {
+        followRedirects?: boolean;
+        headers?: {
+          [key: string]: unknown;
+        };
+        hostname?: string;
+        interval?: any;
+        method?: string;
+        mode?: string;
+        path?: string;
+        port?: number;
+        scheme?: string;
+        status?: number;
+        timeout?: any;
+        unhealthyInterval?: any;
+      };
+      kind?: "Service" | "TraefikService";
+      maxBodySize?: number;
+      middlewares?: {
+        name: string;
+        namespace?: string;
+      }[];
+      mirrorBody?: boolean;
+      mirrors?: {
+        healthCheck?: {
+          followRedirects?: boolean;
+          headers?: {
+            [key: string]: unknown;
+          };
+          hostname?: string;
+          interval?: any;
+          method?: string;
+          mode?: string;
+          path?: string;
+          port?: number;
+          scheme?: string;
+          status?: number;
+          timeout?: any;
+          unhealthyInterval?: any;
+        };
+        kind?: "Service" | "TraefikService";
+        middlewares?: {
+          name: string;
+          namespace?: string;
+        }[];
+        name: string;
+        namespace?: string;
+        nativeLB?: boolean;
+        nodePortLB?: boolean;
+        passHostHeader?: boolean;
+        passiveHealthCheck?: {
+          failureWindow?: any;
+          maxFailedAttempts?: number;
+        };
+        percent?: number;
+        port?: any;
+        responseForwarding?: {
+          flushInterval?: string;
+        };
+        scheme?: string;
+        serversTransport?: string;
+        sticky?: {
+          cookie?: {
+            domain?: string;
+            httpOnly?: boolean;
+            maxAge?: number;
+            name?: string;
+            path?: string;
+            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            secure?: boolean;
+          };
+        };
+        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        weight?: number;
+      }[];
+      name: string;
+      namespace?: string;
+      nativeLB?: boolean;
+      nodePortLB?: boolean;
+      passHostHeader?: boolean;
+      passiveHealthCheck?: {
+        failureWindow?: any;
+        maxFailedAttempts?: number;
+      };
+      port?: any;
+      responseForwarding?: {
+        flushInterval?: string;
+      };
+      scheme?: string;
+      serversTransport?: string;
+      sticky?: {
+        cookie?: {
+          domain?: string;
+          httpOnly?: boolean;
+          maxAge?: number;
+          name?: string;
+          path?: string;
+          sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+          secure?: boolean;
+        };
+      };
+      strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+      weight?: number;
+    };
+    weighted?: {
+      services?: {
+        healthCheck?: {
+          followRedirects?: boolean;
+          headers?: {
+            [key: string]: unknown;
+          };
+          hostname?: string;
+          interval?: any;
+          method?: string;
+          mode?: string;
+          path?: string;
+          port?: number;
+          scheme?: string;
+          status?: number;
+          timeout?: any;
+          unhealthyInterval?: any;
+        };
+        kind?: "Service" | "TraefikService";
+        middlewares?: {
+          name: string;
+          namespace?: string;
+        }[];
+        name: string;
+        namespace?: string;
+        nativeLB?: boolean;
+        nodePortLB?: boolean;
+        passHostHeader?: boolean;
+        passiveHealthCheck?: {
+          failureWindow?: any;
+          maxFailedAttempts?: number;
+        };
+        port?: any;
+        responseForwarding?: {
+          flushInterval?: string;
+        };
+        scheme?: string;
+        serversTransport?: string;
+        sticky?: {
+          cookie?: {
+            domain?: string;
+            httpOnly?: boolean;
+            maxAge?: number;
+            name?: string;
+            path?: string;
+            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            secure?: boolean;
+          };
+        };
+        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        weight?: number;
+      }[];
+      sticky?: {
+        cookie?: {
+          domain?: string;
+          httpOnly?: boolean;
+          maxAge?: number;
+          name?: string;
+          path?: string;
+          sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+          secure?: boolean;
+        };
+      };
+    };
+  };
+}
+/* io.traefik.v1alpha1.TraefikServiceList */
+/* TraefikServiceList is a list of TraefikService */
+export interface TraefikIoV1alpha1TraefikServiceList {
+  apiVersion?: string;
+  items: TraefikIoV1alpha1TraefikService[];
+  kind?: string;
+  metadata?: ListMeta;
+}
 export interface GetServiceAccountIssuerOpenIDConfigurationRequest {}
 export interface GetCoreAPIVersionsRequest {}
 export interface GetCoreV1APIResourcesRequest {}
@@ -24117,7 +31093,6 @@ export interface DeleteCoreV1CollectionNamespacedConfigMapRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -24158,7 +31133,6 @@ export interface DeleteCoreV1NamespacedConfigMapRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -24218,7 +31192,6 @@ export interface DeleteCoreV1CollectionNamespacedEndpointsRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -24259,7 +31232,6 @@ export interface DeleteCoreV1NamespacedEndpointsRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -24319,7 +31291,6 @@ export interface DeleteCoreV1CollectionNamespacedEventRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -24360,7 +31331,6 @@ export interface DeleteCoreV1NamespacedEventRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -24420,7 +31390,6 @@ export interface DeleteCoreV1CollectionNamespacedLimitRangeRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -24461,7 +31430,6 @@ export interface DeleteCoreV1NamespacedLimitRangeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -24521,7 +31489,6 @@ export interface DeleteCoreV1CollectionNamespacedPersistentVolumeClaimRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -24562,7 +31529,6 @@ export interface DeleteCoreV1NamespacedPersistentVolumeClaimRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -24658,7 +31624,6 @@ export interface DeleteCoreV1CollectionNamespacedPodRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -24699,7 +31664,6 @@ export interface DeleteCoreV1NamespacedPodRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -24847,7 +31811,6 @@ export interface ReadCoreV1NamespacedPodLogRequest {
     pretty?: string;
     previous?: boolean;
     sinceSeconds?: number;
-    stream?: string;
     tailLines?: number;
     timestamps?: boolean;
   };
@@ -25042,7 +32005,6 @@ export interface DeleteCoreV1CollectionNamespacedPodTemplateRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -25083,7 +32045,6 @@ export interface DeleteCoreV1NamespacedPodTemplateRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -25143,7 +32104,6 @@ export interface DeleteCoreV1CollectionNamespacedReplicationControllerRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -25184,7 +32144,6 @@ export interface DeleteCoreV1NamespacedReplicationControllerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -25316,7 +32275,6 @@ export interface DeleteCoreV1CollectionNamespacedResourceQuotaRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -25357,7 +32315,6 @@ export interface DeleteCoreV1NamespacedResourceQuotaRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -25453,7 +32410,6 @@ export interface DeleteCoreV1CollectionNamespacedSecretRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -25494,7 +32450,6 @@ export interface DeleteCoreV1NamespacedSecretRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -25554,7 +32509,6 @@ export interface DeleteCoreV1CollectionNamespacedServiceAccountRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -25595,7 +32549,6 @@ export interface DeleteCoreV1NamespacedServiceAccountRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -25668,7 +32621,6 @@ export interface DeleteCoreV1CollectionNamespacedServiceRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -25709,7 +32661,6 @@ export interface DeleteCoreV1NamespacedServiceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -25888,7 +32839,6 @@ export interface DeleteCoreV1NamespaceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -25985,7 +32935,6 @@ export interface DeleteCoreV1CollectionNodeRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -26021,7 +32970,6 @@ export interface DeleteCoreV1NodeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -26206,7 +33154,6 @@ export interface DeleteCoreV1CollectionPersistentVolumeRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -26242,7 +33189,6 @@ export interface DeleteCoreV1PersistentVolumeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -27216,7 +34162,6 @@ export interface DeleteAcmeCertManagerIoV1NamespacedChallengeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -27352,7 +34297,6 @@ export interface DeleteAcmeCertManagerIoV1NamespacedOrderRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -27460,7 +34404,6 @@ export interface DeleteAdmissionregistrationV1CollectionMutatingWebhookConfigura
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -27496,7 +34439,6 @@ export interface DeleteAdmissionregistrationV1MutatingWebhookConfigurationReques
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -27548,7 +34490,6 @@ export interface DeleteAdmissionregistrationV1CollectionValidatingAdmissionPolic
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -27584,7 +34525,6 @@ export interface DeleteAdmissionregistrationV1ValidatingAdmissionPolicyRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -27669,7 +34609,6 @@ export interface DeleteAdmissionregistrationV1CollectionValidatingAdmissionPolic
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -27705,7 +34644,6 @@ export interface DeleteAdmissionregistrationV1ValidatingAdmissionPolicyBindingRe
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -27757,7 +34695,6 @@ export interface DeleteAdmissionregistrationV1CollectionValidatingWebhookConfigu
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -27793,7 +34730,6 @@ export interface DeleteAdmissionregistrationV1ValidatingWebhookConfigurationRequ
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -27979,7 +34915,6 @@ export interface DeleteApiextensionsV1CollectionCustomResourceDefinitionRequest 
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -28015,7 +34950,6 @@ export interface DeleteApiextensionsV1CustomResourceDefinitionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -28135,7 +35069,6 @@ export interface DeleteApiregistrationV1CollectionAPIServiceRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -28171,7 +35104,6 @@ export interface DeleteApiregistrationV1APIServiceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -28342,7 +35274,6 @@ export interface DeleteAppsV1CollectionNamespacedControllerRevisionRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -28383,7 +35314,6 @@ export interface DeleteAppsV1NamespacedControllerRevisionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -28443,7 +35373,6 @@ export interface DeleteAppsV1CollectionNamespacedDaemonSetRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -28484,7 +35413,6 @@ export interface DeleteAppsV1NamespacedDaemonSetRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -28580,7 +35508,6 @@ export interface DeleteAppsV1CollectionNamespacedDeploymentRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -28621,7 +35548,6 @@ export interface DeleteAppsV1NamespacedDeploymentRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -28753,7 +35679,6 @@ export interface DeleteAppsV1CollectionNamespacedReplicaSetRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -28794,7 +35719,6 @@ export interface DeleteAppsV1NamespacedReplicaSetRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -28926,7 +35850,6 @@ export interface DeleteAppsV1CollectionNamespacedStatefulSetRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -28967,7 +35890,6 @@ export interface DeleteAppsV1NamespacedStatefulSetRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -29504,7 +36426,6 @@ export interface DeleteAutoscalingInternalKnativeDevV1alpha1NamespacedMetricRequ
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -29640,7 +36561,6 @@ export interface DeleteAutoscalingInternalKnativeDevV1alpha1NamespacedPodAutosca
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -29769,7 +36689,6 @@ export interface DeleteAutoscalingV1CollectionNamespacedHorizontalPodAutoscalerR
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -29810,7 +36729,6 @@ export interface DeleteAutoscalingV1NamespacedHorizontalPodAutoscalerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -29974,7 +36892,6 @@ export interface DeleteAutoscalingV2CollectionNamespacedHorizontalPodAutoscalerR
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -30015,7 +36932,6 @@ export interface DeleteAutoscalingV2NamespacedHorizontalPodAutoscalerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -30195,7 +37111,6 @@ export interface DeleteBatchV1CollectionNamespacedCronJobRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -30236,7 +37151,6 @@ export interface DeleteBatchV1NamespacedCronJobRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -30332,7 +37246,6 @@ export interface DeleteBatchV1CollectionNamespacedJobRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -30373,7 +37286,6 @@ export interface DeleteBatchV1NamespacedJobRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -30627,7 +37539,6 @@ export interface DeleteCachingInternalKnativeDevV1alpha1NamespacedImageRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -30782,7 +37693,6 @@ export interface DeleteCertManagerIoV1ClusterIssuerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -30928,7 +37838,6 @@ export interface DeleteCertManagerIoV1NamespacedCertificateRequestRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31064,7 +37973,6 @@ export interface DeleteCertManagerIoV1NamespacedCertificateRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31200,7 +38108,6 @@ export interface DeleteCertManagerIoV1NamespacedIssuerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31293,7 +38200,6 @@ export interface DeleteCertificatesV1CollectionCertificateSigningRequestRequest 
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -31329,7 +38235,6 @@ export interface DeleteCertificatesV1CertificateSigningRequestRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31503,7 +38408,6 @@ export interface DeleteCoordinationV1CollectionNamespacedLeaseRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -31544,7 +38448,6 @@ export interface DeleteCoordinationV1NamespacedLeaseRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31673,7 +38576,6 @@ export interface DeleteDiscoveryV1CollectionNamespacedEndpointSliceRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -31714,7 +38616,6 @@ export interface DeleteDiscoveryV1NamespacedEndpointSliceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31843,7 +38744,6 @@ export interface DeleteEventsV1CollectionNamespacedEventRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -31884,7 +38784,6 @@ export interface DeleteEventsV1NamespacedEventRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31957,316 +38856,6 @@ export interface WatchEventsV1NamespacedEventRequest {
   path: {
     name: string;
     namespace: string;
-  };
-}
-export interface GetFlowcontrolApiserverAPIGroupRequest {}
-export interface GetFlowcontrolApiserverV1APIResourcesRequest {}
-export interface ListFlowcontrolApiserverV1FlowSchemaRequest {
-  query: {
-    pretty?: string;
-    allowWatchBookmarks?: boolean;
-    continue?: string;
-    fieldSelector?: string;
-    labelSelector?: string;
-    limit?: number;
-    resourceVersion?: string;
-    resourceVersionMatch?: string;
-    sendInitialEvents?: boolean;
-    timeoutSeconds?: number;
-    watch?: boolean;
-  };
-}
-export interface CreateFlowcontrolApiserverV1FlowSchemaRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  body: FlowcontrolApiserverK8sIoV1FlowSchema;
-}
-export interface DeleteFlowcontrolApiserverV1CollectionFlowSchemaRequest {
-  query: {
-    pretty?: string;
-    continue?: string;
-    dryRun?: string;
-    fieldSelector?: string;
-    gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
-    labelSelector?: string;
-    limit?: number;
-    orphanDependents?: boolean;
-    propagationPolicy?: string;
-    resourceVersion?: string;
-    resourceVersionMatch?: string;
-    sendInitialEvents?: boolean;
-    timeoutSeconds?: number;
-  };
-}
-export interface ReadFlowcontrolApiserverV1FlowSchemaRequest {
-  query: {
-    pretty?: string;
-  };
-  path: {
-    name: string;
-  };
-}
-export interface ReplaceFlowcontrolApiserverV1FlowSchemaRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  path: {
-    name: string;
-  };
-  body: FlowcontrolApiserverK8sIoV1FlowSchema;
-}
-export interface DeleteFlowcontrolApiserverV1FlowSchemaRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
-    orphanDependents?: boolean;
-    propagationPolicy?: string;
-  };
-  path: {
-    name: string;
-  };
-}
-export interface PatchFlowcontrolApiserverV1FlowSchemaRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-  };
-  path: {
-    name: string;
-  };
-  body: Patch;
-}
-export interface ReadFlowcontrolApiserverV1FlowSchemaStatusRequest {
-  query: {
-    pretty?: string;
-  };
-  path: {
-    name: string;
-  };
-}
-export interface ReplaceFlowcontrolApiserverV1FlowSchemaStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  path: {
-    name: string;
-  };
-  body: FlowcontrolApiserverK8sIoV1FlowSchema;
-}
-export interface PatchFlowcontrolApiserverV1FlowSchemaStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-  };
-  path: {
-    name: string;
-  };
-  body: Patch;
-}
-export interface ListFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
-  query: {
-    pretty?: string;
-    allowWatchBookmarks?: boolean;
-    continue?: string;
-    fieldSelector?: string;
-    labelSelector?: string;
-    limit?: number;
-    resourceVersion?: string;
-    resourceVersionMatch?: string;
-    sendInitialEvents?: boolean;
-    timeoutSeconds?: number;
-    watch?: boolean;
-  };
-}
-export interface CreateFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  body: FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration;
-}
-export interface DeleteFlowcontrolApiserverV1CollectionPriorityLevelConfigurationRequest {
-  query: {
-    pretty?: string;
-    continue?: string;
-    dryRun?: string;
-    fieldSelector?: string;
-    gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
-    labelSelector?: string;
-    limit?: number;
-    orphanDependents?: boolean;
-    propagationPolicy?: string;
-    resourceVersion?: string;
-    resourceVersionMatch?: string;
-    sendInitialEvents?: boolean;
-    timeoutSeconds?: number;
-  };
-}
-export interface ReadFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
-  query: {
-    pretty?: string;
-  };
-  path: {
-    name: string;
-  };
-}
-export interface ReplaceFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  path: {
-    name: string;
-  };
-  body: FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration;
-}
-export interface DeleteFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
-    orphanDependents?: boolean;
-    propagationPolicy?: string;
-  };
-  path: {
-    name: string;
-  };
-}
-export interface PatchFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-  };
-  path: {
-    name: string;
-  };
-  body: Patch;
-}
-export interface ReadFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest {
-  query: {
-    pretty?: string;
-  };
-  path: {
-    name: string;
-  };
-}
-export interface ReplaceFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  path: {
-    name: string;
-  };
-  body: FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration;
-}
-export interface PatchFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-  };
-  path: {
-    name: string;
-  };
-  body: Patch;
-}
-export interface WatchFlowcontrolApiserverV1FlowSchemaListRequest {
-  query: {
-    allowWatchBookmarks?: boolean;
-    continue?: string;
-    fieldSelector?: string;
-    labelSelector?: string;
-    limit?: number;
-    pretty?: string;
-    resourceVersion?: string;
-    resourceVersionMatch?: string;
-    sendInitialEvents?: boolean;
-    timeoutSeconds?: number;
-    watch?: boolean;
-  };
-}
-export interface WatchFlowcontrolApiserverV1FlowSchemaRequest {
-  query: {
-    allowWatchBookmarks?: boolean;
-    continue?: string;
-    fieldSelector?: string;
-    labelSelector?: string;
-    limit?: number;
-    pretty?: string;
-    resourceVersion?: string;
-    resourceVersionMatch?: string;
-    sendInitialEvents?: boolean;
-    timeoutSeconds?: number;
-    watch?: boolean;
-  };
-  path: {
-    name: string;
-  };
-}
-export interface WatchFlowcontrolApiserverV1PriorityLevelConfigurationListRequest {
-  query: {
-    allowWatchBookmarks?: boolean;
-    continue?: string;
-    fieldSelector?: string;
-    labelSelector?: string;
-    limit?: number;
-    pretty?: string;
-    resourceVersion?: string;
-    resourceVersionMatch?: string;
-    sendInitialEvents?: boolean;
-    timeoutSeconds?: number;
-    watch?: boolean;
-  };
-}
-export interface WatchFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
-  query: {
-    allowWatchBookmarks?: boolean;
-    continue?: string;
-    fieldSelector?: string;
-    labelSelector?: string;
-    limit?: number;
-    pretty?: string;
-    resourceVersion?: string;
-    resourceVersionMatch?: string;
-    sendInitialEvents?: boolean;
-    timeoutSeconds?: number;
-    watch?: boolean;
-  };
-  path: {
-    name: string;
   };
 }
 export interface ListMonitoringCoreosComV1AlertmanagerForAllNamespacesRequest {
@@ -32360,7 +38949,6 @@ export interface DeleteMonitoringCoreosComV1NamespacedAlertmanagerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32533,7 +39121,6 @@ export interface DeleteMonitoringCoreosComV1NamespacedPodMonitorRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32543,6 +39130,43 @@ export interface DeleteMonitoringCoreosComV1NamespacedPodMonitorRequest {
   };
 }
 export interface PatchMonitoringCoreosComV1NamespacedPodMonitorRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadMonitoringCoreosComV1NamespacedPodMonitorStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceMonitoringCoreosComV1NamespacedPodMonitorStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: MonitoringCoreosComV1PodMonitor;
+}
+export interface PatchMonitoringCoreosComV1NamespacedPodMonitorStatusRequest {
   query: {
     pretty?: string;
     dryRun?: string;
@@ -32632,7 +39256,6 @@ export interface DeleteMonitoringCoreosComV1NamespacedProbeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32642,6 +39265,43 @@ export interface DeleteMonitoringCoreosComV1NamespacedProbeRequest {
   };
 }
 export interface PatchMonitoringCoreosComV1NamespacedProbeRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadMonitoringCoreosComV1NamespacedProbeStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceMonitoringCoreosComV1NamespacedProbeStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: MonitoringCoreosComV1Probe;
+}
+export interface PatchMonitoringCoreosComV1NamespacedProbeStatusRequest {
   query: {
     pretty?: string;
     dryRun?: string;
@@ -32731,7 +39391,6 @@ export interface DeleteMonitoringCoreosComV1NamespacedPrometheusRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32904,7 +39563,6 @@ export interface DeleteMonitoringCoreosComV1NamespacedPrometheusRuleRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32914,6 +39572,43 @@ export interface DeleteMonitoringCoreosComV1NamespacedPrometheusRuleRequest {
   };
 }
 export interface PatchMonitoringCoreosComV1NamespacedPrometheusRuleRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: MonitoringCoreosComV1PrometheusRule;
+}
+export interface PatchMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest {
   query: {
     pretty?: string;
     dryRun?: string;
@@ -33003,7 +39698,6 @@ export interface DeleteMonitoringCoreosComV1NamespacedServiceMonitorRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -33139,7 +39833,6 @@ export interface DeleteMonitoringCoreosComV1NamespacedThanosRulerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -33380,7 +40073,6 @@ export interface DeleteMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigRe
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -33390,6 +40082,43 @@ export interface DeleteMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigRe
   };
 }
 export interface PatchMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: MonitoringCoreosComV1alpha1AlertmanagerConfig;
+}
+export interface PatchMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest {
   query: {
     pretty?: string;
     dryRun?: string;
@@ -33479,7 +40208,6 @@ export interface DeleteMonitoringCoreosComV1alpha1NamespacedPrometheusAgentReque
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -33652,7 +40380,6 @@ export interface DeleteMonitoringCoreosComV1alpha1NamespacedScrapeConfigRequest 
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -33662,6 +40389,43 @@ export interface DeleteMonitoringCoreosComV1alpha1NamespacedScrapeConfigRequest 
   };
 }
 export interface PatchMonitoringCoreosComV1alpha1NamespacedScrapeConfigRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: MonitoringCoreosComV1alpha1ScrapeConfig;
+}
+export interface PatchMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest {
   query: {
     pretty?: string;
     dryRun?: string;
@@ -33785,7 +40549,6 @@ export interface DeleteNetworkingInternalKnativeDevV1alpha1ClusterDomainClaimReq
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -33931,7 +40694,6 @@ export interface DeleteNetworkingInternalKnativeDevV1alpha1NamespacedCertificate
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34067,7 +40829,6 @@ export interface DeleteNetworkingInternalKnativeDevV1alpha1NamespacedIngressRequ
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34203,7 +40964,6 @@ export interface DeleteNetworkingInternalKnativeDevV1alpha1NamespacedServerlessS
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34311,7 +41071,6 @@ export interface DeleteNetworkingV1CollectionIngressClassRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -34347,7 +41106,6 @@ export interface DeleteNetworkingV1IngressClassRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34420,7 +41178,6 @@ export interface DeleteNetworkingV1CollectionNamespacedIngressRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -34461,7 +41218,6 @@ export interface DeleteNetworkingV1NamespacedIngressRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34557,7 +41313,6 @@ export interface DeleteNetworkingV1CollectionNamespacedNetworkPolicyRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -34598,7 +41353,6 @@ export interface DeleteNetworkingV1NamespacedNetworkPolicyRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34806,7 +41560,6 @@ export interface DeleteNodeV1CollectionRuntimeClassRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -34842,7 +41595,6 @@ export interface DeleteNodeV1RuntimeClassRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34935,7 +41687,6 @@ export interface DeletePolicyV1CollectionNamespacedPodDisruptionBudgetRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -34976,7 +41727,6 @@ export interface DeletePolicyV1NamespacedPodDisruptionBudgetRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35182,7 +41932,6 @@ export interface DeletePostgresqlCnpgIoV1ClusterImageCatalogRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35324,7 +42073,6 @@ export interface DeletePostgresqlCnpgIoV1NamespacedBackupRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35460,7 +42208,6 @@ export interface DeletePostgresqlCnpgIoV1NamespacedClusterRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35633,7 +42380,6 @@ export interface DeletePostgresqlCnpgIoV1NamespacedDatabaseRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35769,7 +42515,6 @@ export interface DeletePostgresqlCnpgIoV1NamespacedImageCatalogRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35868,7 +42613,6 @@ export interface DeletePostgresqlCnpgIoV1NamespacedPoolerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36041,7 +42785,6 @@ export interface DeletePostgresqlCnpgIoV1NamespacedPublicationRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36177,7 +42920,6 @@ export interface DeletePostgresqlCnpgIoV1NamespacedScheduledBackupRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36313,7 +43055,6 @@ export interface DeletePostgresqlCnpgIoV1NamespacedSubscriptionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36466,7 +43207,6 @@ export interface DeleteRbacAuthorizationV1CollectionClusterRoleBindingRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -36502,7 +43242,6 @@ export interface DeleteRbacAuthorizationV1ClusterRoleBindingRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36554,7 +43293,6 @@ export interface DeleteRbacAuthorizationV1CollectionClusterRoleRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -36590,7 +43328,6 @@ export interface DeleteRbacAuthorizationV1ClusterRoleRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36648,7 +43385,6 @@ export interface DeleteRbacAuthorizationV1CollectionNamespacedRoleBindingRequest
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -36689,7 +43425,6 @@ export interface DeleteRbacAuthorizationV1NamespacedRoleBindingRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36749,7 +43484,6 @@ export interface DeleteRbacAuthorizationV1CollectionNamespacedRoleRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -36790,7 +43524,6 @@ export interface DeleteRbacAuthorizationV1NamespacedRoleRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37013,6 +43746,306 @@ export interface WatchRbacAuthorizationV1RoleListForAllNamespacesRequest {
     watch?: boolean;
   };
 }
+export interface ListResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: ResolutionTektonDevV1alpha1ResolutionRequest;
+}
+export interface DeleteResolutionTektonDevV1alpha1CollectionNamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: ResolutionTektonDevV1alpha1ResolutionRequest;
+}
+export interface DeleteResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadResolutionTektonDevV1alpha1NamespacedResolutionRequestStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceResolutionTektonDevV1alpha1NamespacedResolutionRequestStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: ResolutionTektonDevV1alpha1ResolutionRequest;
+}
+export interface PatchResolutionTektonDevV1alpha1NamespacedResolutionRequestStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListResolutionTektonDevV1alpha1ResolutionRequestForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListResolutionTektonDevV1beta1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateResolutionTektonDevV1beta1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: ResolutionTektonDevV1beta1ResolutionRequest;
+}
+export interface DeleteResolutionTektonDevV1beta1CollectionNamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadResolutionTektonDevV1beta1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceResolutionTektonDevV1beta1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: ResolutionTektonDevV1beta1ResolutionRequest;
+}
+export interface DeleteResolutionTektonDevV1beta1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchResolutionTektonDevV1beta1NamespacedResolutionRequestRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadResolutionTektonDevV1beta1NamespacedResolutionRequestStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceResolutionTektonDevV1beta1NamespacedResolutionRequestStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: ResolutionTektonDevV1beta1ResolutionRequest;
+}
+export interface PatchResolutionTektonDevV1beta1NamespacedResolutionRequestStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListResolutionTektonDevV1beta1ResolutionRequestForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
 export interface GetSchedulingAPIGroupRequest {}
 export interface GetSchedulingV1APIResourcesRequest {}
 export interface ListSchedulingV1PriorityClassRequest {
@@ -37046,7 +44079,6 @@ export interface DeleteSchedulingV1CollectionPriorityClassRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -37082,7 +44114,6 @@ export interface DeleteSchedulingV1PriorityClassRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37227,7 +44258,6 @@ export interface DeleteServingKnativeDevV1NamespacedConfigurationRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37363,7 +44393,6 @@ export interface DeleteServingKnativeDevV1NamespacedRevisionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37499,7 +44528,6 @@ export interface DeleteServingKnativeDevV1NamespacedRouteRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37635,7 +44663,6 @@ export interface DeleteServingKnativeDevV1NamespacedServiceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37831,7 +44858,6 @@ export interface DeleteServingKnativeDevV1beta1NamespacedDomainMappingRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37924,7 +44950,6 @@ export interface DeleteStorageV1CollectionCSIDriverRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -37960,7 +44985,6 @@ export interface DeleteStorageV1CSIDriverRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38012,7 +45036,6 @@ export interface DeleteStorageV1CollectionCSINodeRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -38048,7 +45071,6 @@ export interface DeleteStorageV1CSINodeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38121,7 +45143,6 @@ export interface DeleteStorageV1CollectionNamespacedCSIStorageCapacityRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -38162,7 +45183,6 @@ export interface DeleteStorageV1NamespacedCSIStorageCapacityRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38216,7 +45236,6 @@ export interface DeleteStorageV1CollectionStorageClassRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -38252,7 +45271,6 @@ export interface DeleteStorageV1StorageClassRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38304,7 +45322,6 @@ export interface DeleteStorageV1CollectionVolumeAttachmentRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -38340,7 +45357,6 @@ export interface DeleteStorageV1VolumeAttachmentRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
-    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38576,6 +45592,2899 @@ export interface WatchStorageV1VolumeAttachmentRequest {
   };
   path: {
     name: string;
+  };
+}
+export interface ListTektonDevV1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1PipelineRun;
+}
+export interface DeleteTektonDevV1CollectionNamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1PipelineRun;
+}
+export interface DeleteTektonDevV1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1NamespacedPipelineRunStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1NamespacedPipelineRunStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1PipelineRun;
+}
+export interface PatchTektonDevV1NamespacedPipelineRunStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1Pipeline;
+}
+export interface DeleteTektonDevV1CollectionNamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1Pipeline;
+}
+export interface DeleteTektonDevV1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1NamespacedPipelineStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1NamespacedPipelineStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1Pipeline;
+}
+export interface PatchTektonDevV1NamespacedPipelineStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1TaskRun;
+}
+export interface DeleteTektonDevV1CollectionNamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1TaskRun;
+}
+export interface DeleteTektonDevV1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1NamespacedTaskRunStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1NamespacedTaskRunStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1TaskRun;
+}
+export interface PatchTektonDevV1NamespacedTaskRunStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1Task;
+}
+export interface DeleteTektonDevV1CollectionNamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1Task;
+}
+export interface DeleteTektonDevV1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1NamespacedTaskStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1NamespacedTaskStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1Task;
+}
+export interface PatchTektonDevV1NamespacedTaskStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1PipelineRunForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1PipelineForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1TaskRunForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1TaskForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1alpha1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1alpha1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1alpha1StepAction;
+}
+export interface DeleteTektonDevV1alpha1CollectionNamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1alpha1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1alpha1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1alpha1StepAction;
+}
+export interface DeleteTektonDevV1alpha1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1alpha1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1alpha1NamespacedStepActionStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1alpha1NamespacedStepActionStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1alpha1StepAction;
+}
+export interface PatchTektonDevV1alpha1NamespacedStepActionStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1alpha1NamespacedVerificationPolicyRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1alpha1NamespacedVerificationPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1alpha1VerificationPolicy;
+}
+export interface DeleteTektonDevV1alpha1CollectionNamespacedVerificationPolicyRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1alpha1NamespacedVerificationPolicyRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1alpha1NamespacedVerificationPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1alpha1VerificationPolicy;
+}
+export interface DeleteTektonDevV1alpha1NamespacedVerificationPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1alpha1NamespacedVerificationPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1alpha1StepActionForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1alpha1VerificationPolicyForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1beta1CustomRunForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1beta1NamespacedCustomRunRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1beta1NamespacedCustomRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1beta1CustomRun;
+}
+export interface DeleteTektonDevV1beta1CollectionNamespacedCustomRunRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1beta1NamespacedCustomRunRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedCustomRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1CustomRun;
+}
+export interface DeleteTektonDevV1beta1NamespacedCustomRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1beta1NamespacedCustomRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1beta1NamespacedCustomRunStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedCustomRunStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1CustomRun;
+}
+export interface PatchTektonDevV1beta1NamespacedCustomRunStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1beta1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1beta1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1beta1PipelineRun;
+}
+export interface DeleteTektonDevV1beta1CollectionNamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1beta1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1PipelineRun;
+}
+export interface DeleteTektonDevV1beta1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1beta1NamespacedPipelineRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1beta1NamespacedPipelineRunStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedPipelineRunStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1PipelineRun;
+}
+export interface PatchTektonDevV1beta1NamespacedPipelineRunStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1beta1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1beta1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1beta1Pipeline;
+}
+export interface DeleteTektonDevV1beta1CollectionNamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1beta1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1Pipeline;
+}
+export interface DeleteTektonDevV1beta1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1beta1NamespacedPipelineRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1beta1NamespacedPipelineStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedPipelineStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1Pipeline;
+}
+export interface PatchTektonDevV1beta1NamespacedPipelineStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1beta1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1beta1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1beta1StepAction;
+}
+export interface DeleteTektonDevV1beta1CollectionNamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1beta1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1StepAction;
+}
+export interface DeleteTektonDevV1beta1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1beta1NamespacedStepActionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1beta1NamespacedStepActionStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedStepActionStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1StepAction;
+}
+export interface PatchTektonDevV1beta1NamespacedStepActionStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1beta1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1beta1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1beta1TaskRun;
+}
+export interface DeleteTektonDevV1beta1CollectionNamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1beta1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1TaskRun;
+}
+export interface DeleteTektonDevV1beta1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1beta1NamespacedTaskRunRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1beta1NamespacedTaskRunStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedTaskRunStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1TaskRun;
+}
+export interface PatchTektonDevV1beta1NamespacedTaskRunStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1beta1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTektonDevV1beta1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TektonDevV1beta1Task;
+}
+export interface DeleteTektonDevV1beta1CollectionNamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTektonDevV1beta1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1Task;
+}
+export interface DeleteTektonDevV1beta1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTektonDevV1beta1NamespacedTaskRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadTektonDevV1beta1NamespacedTaskStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTektonDevV1beta1NamespacedTaskStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TektonDevV1beta1Task;
+}
+export interface PatchTektonDevV1beta1NamespacedTaskStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTektonDevV1beta1PipelineRunForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1beta1PipelineForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1beta1StepActionForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1beta1TaskRunForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTektonDevV1beta1TaskForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTraefikIoV1alpha1IngressRouteForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTraefikIoV1alpha1IngressRouteTCPForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTraefikIoV1alpha1IngressRouteUDPForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTraefikIoV1alpha1MiddlewareForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTraefikIoV1alpha1MiddlewareTCPForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTraefikIoV1alpha1NamespacedIngressRouteRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTraefikIoV1alpha1NamespacedIngressRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1IngressRoute;
+}
+export interface DeleteTraefikIoV1alpha1CollectionNamespacedIngressRouteRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTraefikIoV1alpha1NamespacedIngressRouteRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTraefikIoV1alpha1NamespacedIngressRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1IngressRoute;
+}
+export interface DeleteTraefikIoV1alpha1NamespacedIngressRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTraefikIoV1alpha1NamespacedIngressRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTraefikIoV1alpha1NamespacedIngressRouteTCPRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTraefikIoV1alpha1NamespacedIngressRouteTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1IngressRouteTCP;
+}
+export interface DeleteTraefikIoV1alpha1CollectionNamespacedIngressRouteTCPRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTraefikIoV1alpha1NamespacedIngressRouteTCPRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTraefikIoV1alpha1NamespacedIngressRouteTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1IngressRouteTCP;
+}
+export interface DeleteTraefikIoV1alpha1NamespacedIngressRouteTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTraefikIoV1alpha1NamespacedIngressRouteTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTraefikIoV1alpha1NamespacedIngressRouteUDPRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTraefikIoV1alpha1NamespacedIngressRouteUDPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1IngressRouteUDP;
+}
+export interface DeleteTraefikIoV1alpha1CollectionNamespacedIngressRouteUDPRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTraefikIoV1alpha1NamespacedIngressRouteUDPRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTraefikIoV1alpha1NamespacedIngressRouteUDPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1IngressRouteUDP;
+}
+export interface DeleteTraefikIoV1alpha1NamespacedIngressRouteUDPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTraefikIoV1alpha1NamespacedIngressRouteUDPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTraefikIoV1alpha1NamespacedMiddlewareRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTraefikIoV1alpha1NamespacedMiddlewareRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1Middleware;
+}
+export interface DeleteTraefikIoV1alpha1CollectionNamespacedMiddlewareRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTraefikIoV1alpha1NamespacedMiddlewareRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTraefikIoV1alpha1NamespacedMiddlewareRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1Middleware;
+}
+export interface DeleteTraefikIoV1alpha1NamespacedMiddlewareRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTraefikIoV1alpha1NamespacedMiddlewareRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTraefikIoV1alpha1NamespacedMiddlewareTCPRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTraefikIoV1alpha1NamespacedMiddlewareTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1MiddlewareTCP;
+}
+export interface DeleteTraefikIoV1alpha1CollectionNamespacedMiddlewareTCPRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTraefikIoV1alpha1NamespacedMiddlewareTCPRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTraefikIoV1alpha1NamespacedMiddlewareTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1MiddlewareTCP;
+}
+export interface DeleteTraefikIoV1alpha1NamespacedMiddlewareTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTraefikIoV1alpha1NamespacedMiddlewareTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTraefikIoV1alpha1NamespacedServersTransportRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTraefikIoV1alpha1NamespacedServersTransportRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1ServersTransport;
+}
+export interface DeleteTraefikIoV1alpha1CollectionNamespacedServersTransportRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTraefikIoV1alpha1NamespacedServersTransportRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTraefikIoV1alpha1NamespacedServersTransportRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1ServersTransport;
+}
+export interface DeleteTraefikIoV1alpha1NamespacedServersTransportRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTraefikIoV1alpha1NamespacedServersTransportRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTraefikIoV1alpha1NamespacedServersTransportTCPRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTraefikIoV1alpha1NamespacedServersTransportTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1ServersTransportTCP;
+}
+export interface DeleteTraefikIoV1alpha1CollectionNamespacedServersTransportTCPRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTraefikIoV1alpha1NamespacedServersTransportTCPRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTraefikIoV1alpha1NamespacedServersTransportTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1ServersTransportTCP;
+}
+export interface DeleteTraefikIoV1alpha1NamespacedServersTransportTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTraefikIoV1alpha1NamespacedServersTransportTCPRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTraefikIoV1alpha1NamespacedTLSOptionRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTraefikIoV1alpha1NamespacedTLSOptionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1TLSOption;
+}
+export interface DeleteTraefikIoV1alpha1CollectionNamespacedTLSOptionRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTraefikIoV1alpha1NamespacedTLSOptionRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTraefikIoV1alpha1NamespacedTLSOptionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1TLSOption;
+}
+export interface DeleteTraefikIoV1alpha1NamespacedTLSOptionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTraefikIoV1alpha1NamespacedTLSOptionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTraefikIoV1alpha1NamespacedTLSStoreRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTraefikIoV1alpha1NamespacedTLSStoreRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1TLSStore;
+}
+export interface DeleteTraefikIoV1alpha1CollectionNamespacedTLSStoreRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTraefikIoV1alpha1NamespacedTLSStoreRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTraefikIoV1alpha1NamespacedTLSStoreRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1TLSStore;
+}
+export interface DeleteTraefikIoV1alpha1NamespacedTLSStoreRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTraefikIoV1alpha1NamespacedTLSStoreRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTraefikIoV1alpha1NamespacedTraefikServiceRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateTraefikIoV1alpha1NamespacedTraefikServiceRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1TraefikService;
+}
+export interface DeleteTraefikIoV1alpha1CollectionNamespacedTraefikServiceRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadTraefikIoV1alpha1NamespacedTraefikServiceRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceTraefikIoV1alpha1NamespacedTraefikServiceRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: TraefikIoV1alpha1TraefikService;
+}
+export interface DeleteTraefikIoV1alpha1NamespacedTraefikServiceRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchTraefikIoV1alpha1NamespacedTraefikServiceRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListTraefikIoV1alpha1ServersTransportForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTraefikIoV1alpha1ServersTransportTCPForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTraefikIoV1alpha1TLSOptionForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTraefikIoV1alpha1TLSStoreForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListTraefikIoV1alpha1TraefikServiceForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
   };
 }
 export interface GetServiceAccountIssuerOpenIDKeysetRequest {}
@@ -41020,110 +50929,6 @@ export class KubernetesClient extends APIClient {
     const path = `/apis/events.k8s.io/v1/watch/namespaces/${params.path.namespace}/events/${params.path.name}`;
     return await this.get<WatchEvent>(path, null, null, opts);
   }
-  async getFlowcontrolApiserverAPIGroup(params: GetFlowcontrolApiserverAPIGroupRequest, opts?: APIClientRequestOpts): Promise<APIGroup> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/`;
-    return await this.get<APIGroup>(path, null, null, opts);
-  }
-  async getFlowcontrolApiserverV1APIResources(params: GetFlowcontrolApiserverV1APIResourcesRequest, opts?: APIClientRequestOpts): Promise<APIResourceList> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/`;
-    return await this.get<APIResourceList>(path, null, null, opts);
-  }
-  async listFlowcontrolApiserverV1FlowSchema(params: ListFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchemaList> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas`;
-    return await this.get<FlowcontrolApiserverK8sIoV1FlowSchemaList>(path, params.query, null, opts);
-  }
-  async createFlowcontrolApiserverV1FlowSchema(params: CreateFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas`;
-    return await this.post<FlowcontrolApiserverK8sIoV1FlowSchema>(path, params.query, params.body, opts);
-  }
-  async deleteFlowcontrolApiserverV1CollectionFlowSchema(params: DeleteFlowcontrolApiserverV1CollectionFlowSchemaRequest, opts?: APIClientRequestOpts): Promise<Status> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas`;
-    return await this.delete<Status>(path, params.query, null, opts);
-  }
-  async readFlowcontrolApiserverV1FlowSchema(params: ReadFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}`;
-    return await this.get<FlowcontrolApiserverK8sIoV1FlowSchema>(path, null, null, opts);
-  }
-  async replaceFlowcontrolApiserverV1FlowSchema(params: ReplaceFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}`;
-    return await this.put<FlowcontrolApiserverK8sIoV1FlowSchema>(path, params.query, params.body, opts);
-  }
-  async deleteFlowcontrolApiserverV1FlowSchema(params: DeleteFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<Status> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}`;
-    return await this.delete<Status>(path, params.query, null, opts);
-  }
-  async patchFlowcontrolApiserverV1FlowSchema(params: PatchFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}`;
-    return await this.patch<FlowcontrolApiserverK8sIoV1FlowSchema>(path, params.query, params.body, opts);
-  }
-  async readFlowcontrolApiserverV1FlowSchemaStatus(params: ReadFlowcontrolApiserverV1FlowSchemaStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}/status`;
-    return await this.get<FlowcontrolApiserverK8sIoV1FlowSchema>(path, null, null, opts);
-  }
-  async replaceFlowcontrolApiserverV1FlowSchemaStatus(params: ReplaceFlowcontrolApiserverV1FlowSchemaStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}/status`;
-    return await this.put<FlowcontrolApiserverK8sIoV1FlowSchema>(path, params.query, params.body, opts);
-  }
-  async patchFlowcontrolApiserverV1FlowSchemaStatus(params: PatchFlowcontrolApiserverV1FlowSchemaStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}/status`;
-    return await this.patch<FlowcontrolApiserverK8sIoV1FlowSchema>(path, params.query, params.body, opts);
-  }
-  async listFlowcontrolApiserverV1PriorityLevelConfiguration(params: ListFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfigurationList> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations`;
-    return await this.get<FlowcontrolApiserverK8sIoV1PriorityLevelConfigurationList>(path, params.query, null, opts);
-  }
-  async createFlowcontrolApiserverV1PriorityLevelConfiguration(params: CreateFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations`;
-    return await this.post<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, params.query, params.body, opts);
-  }
-  async deleteFlowcontrolApiserverV1CollectionPriorityLevelConfiguration(params: DeleteFlowcontrolApiserverV1CollectionPriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<Status> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations`;
-    return await this.delete<Status>(path, params.query, null, opts);
-  }
-  async readFlowcontrolApiserverV1PriorityLevelConfiguration(params: ReadFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}`;
-    return await this.get<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, null, null, opts);
-  }
-  async replaceFlowcontrolApiserverV1PriorityLevelConfiguration(params: ReplaceFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}`;
-    return await this.put<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, params.query, params.body, opts);
-  }
-  async deleteFlowcontrolApiserverV1PriorityLevelConfiguration(params: DeleteFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<Status> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}`;
-    return await this.delete<Status>(path, params.query, null, opts);
-  }
-  async patchFlowcontrolApiserverV1PriorityLevelConfiguration(params: PatchFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}`;
-    return await this.patch<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, params.query, params.body, opts);
-  }
-  async readFlowcontrolApiserverV1PriorityLevelConfigurationStatus(params: ReadFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}/status`;
-    return await this.get<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, null, null, opts);
-  }
-  async replaceFlowcontrolApiserverV1PriorityLevelConfigurationStatus(params: ReplaceFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}/status`;
-    return await this.put<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, params.query, params.body, opts);
-  }
-  async patchFlowcontrolApiserverV1PriorityLevelConfigurationStatus(params: PatchFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}/status`;
-    return await this.patch<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, params.query, params.body, opts);
-  }
-  async watchFlowcontrolApiserverV1FlowSchemaList(params: WatchFlowcontrolApiserverV1FlowSchemaListRequest, opts?: APIClientRequestOpts): Promise<WatchEvent> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/watch/flowschemas`;
-    return await this.get<WatchEvent>(path, null, null, opts);
-  }
-  async watchFlowcontrolApiserverV1FlowSchema(params: WatchFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<WatchEvent> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/watch/flowschemas/${params.path.name}`;
-    return await this.get<WatchEvent>(path, null, null, opts);
-  }
-  async watchFlowcontrolApiserverV1PriorityLevelConfigurationList(params: WatchFlowcontrolApiserverV1PriorityLevelConfigurationListRequest, opts?: APIClientRequestOpts): Promise<WatchEvent> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/watch/prioritylevelconfigurations`;
-    return await this.get<WatchEvent>(path, null, null, opts);
-  }
-  async watchFlowcontrolApiserverV1PriorityLevelConfiguration(params: WatchFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<WatchEvent> {
-    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/watch/prioritylevelconfigurations/${params.path.name}`;
-    return await this.get<WatchEvent>(path, null, null, opts);
-  }
   async listMonitoringCoreosComV1AlertmanagerForAllNamespaces(params: ListMonitoringCoreosComV1AlertmanagerForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1AlertmanagerList> {
     const path = `/apis/monitoring.coreos.com/v1/alertmanagers`;
     return await this.get<MonitoringCoreosComV1AlertmanagerList>(path, null, null, opts);
@@ -41208,6 +51013,18 @@ export class KubernetesClient extends APIClient {
     const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/podmonitors/${params.path.name}`;
     return await this.patch<MonitoringCoreosComV1PodMonitor>(path, params.query, params.body, opts);
   }
+  async readMonitoringCoreosComV1NamespacedPodMonitorStatus(params: ReadMonitoringCoreosComV1NamespacedPodMonitorStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PodMonitor> {
+    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/podmonitors/${params.path.name}/status`;
+    return await this.get<MonitoringCoreosComV1PodMonitor>(path, params.query, null, opts);
+  }
+  async replaceMonitoringCoreosComV1NamespacedPodMonitorStatus(params: ReplaceMonitoringCoreosComV1NamespacedPodMonitorStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PodMonitor> {
+    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/podmonitors/${params.path.name}/status`;
+    return await this.put<MonitoringCoreosComV1PodMonitor>(path, params.query, params.body, opts);
+  }
+  async patchMonitoringCoreosComV1NamespacedPodMonitorStatus(params: PatchMonitoringCoreosComV1NamespacedPodMonitorStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PodMonitor> {
+    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/podmonitors/${params.path.name}/status`;
+    return await this.patch<MonitoringCoreosComV1PodMonitor>(path, params.query, params.body, opts);
+  }
   async listMonitoringCoreosComV1NamespacedProbe(params: ListMonitoringCoreosComV1NamespacedProbeRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1ProbeList> {
     const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/probes`;
     return await this.get<MonitoringCoreosComV1ProbeList>(path, params.query, null, opts);
@@ -41234,6 +51051,18 @@ export class KubernetesClient extends APIClient {
   }
   async patchMonitoringCoreosComV1NamespacedProbe(params: PatchMonitoringCoreosComV1NamespacedProbeRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1Probe> {
     const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/probes/${params.path.name}`;
+    return await this.patch<MonitoringCoreosComV1Probe>(path, params.query, params.body, opts);
+  }
+  async readMonitoringCoreosComV1NamespacedProbeStatus(params: ReadMonitoringCoreosComV1NamespacedProbeStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1Probe> {
+    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/probes/${params.path.name}/status`;
+    return await this.get<MonitoringCoreosComV1Probe>(path, params.query, null, opts);
+  }
+  async replaceMonitoringCoreosComV1NamespacedProbeStatus(params: ReplaceMonitoringCoreosComV1NamespacedProbeStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1Probe> {
+    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/probes/${params.path.name}/status`;
+    return await this.put<MonitoringCoreosComV1Probe>(path, params.query, params.body, opts);
+  }
+  async patchMonitoringCoreosComV1NamespacedProbeStatus(params: PatchMonitoringCoreosComV1NamespacedProbeStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1Probe> {
+    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/probes/${params.path.name}/status`;
     return await this.patch<MonitoringCoreosComV1Probe>(path, params.query, params.body, opts);
   }
   async listMonitoringCoreosComV1NamespacedPrometheus(params: ListMonitoringCoreosComV1NamespacedPrometheusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PrometheusList> {
@@ -41314,6 +51143,18 @@ export class KubernetesClient extends APIClient {
   }
   async patchMonitoringCoreosComV1NamespacedPrometheusRule(params: PatchMonitoringCoreosComV1NamespacedPrometheusRuleRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PrometheusRule> {
     const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/prometheusrules/${params.path.name}`;
+    return await this.patch<MonitoringCoreosComV1PrometheusRule>(path, params.query, params.body, opts);
+  }
+  async readMonitoringCoreosComV1NamespacedPrometheusRuleStatus(params: ReadMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PrometheusRule> {
+    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/prometheusrules/${params.path.name}/status`;
+    return await this.get<MonitoringCoreosComV1PrometheusRule>(path, params.query, null, opts);
+  }
+  async replaceMonitoringCoreosComV1NamespacedPrometheusRuleStatus(params: ReplaceMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PrometheusRule> {
+    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/prometheusrules/${params.path.name}/status`;
+    return await this.put<MonitoringCoreosComV1PrometheusRule>(path, params.query, params.body, opts);
+  }
+  async patchMonitoringCoreosComV1NamespacedPrometheusRuleStatus(params: PatchMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PrometheusRule> {
+    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/prometheusrules/${params.path.name}/status`;
     return await this.patch<MonitoringCoreosComV1PrometheusRule>(path, params.query, params.body, opts);
   }
   async listMonitoringCoreosComV1NamespacedServiceMonitor(params: ListMonitoringCoreosComV1NamespacedServiceMonitorRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1ServiceMonitorList> {
@@ -41452,6 +51293,18 @@ export class KubernetesClient extends APIClient {
     const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/alertmanagerconfigs/${params.path.name}`;
     return await this.patch<MonitoringCoreosComV1alpha1AlertmanagerConfig>(path, params.query, params.body, opts);
   }
+  async readMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatus(params: ReadMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1AlertmanagerConfig> {
+    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/alertmanagerconfigs/${params.path.name}/status`;
+    return await this.get<MonitoringCoreosComV1alpha1AlertmanagerConfig>(path, params.query, null, opts);
+  }
+  async replaceMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatus(params: ReplaceMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1AlertmanagerConfig> {
+    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/alertmanagerconfigs/${params.path.name}/status`;
+    return await this.put<MonitoringCoreosComV1alpha1AlertmanagerConfig>(path, params.query, params.body, opts);
+  }
+  async patchMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatus(params: PatchMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1AlertmanagerConfig> {
+    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/alertmanagerconfigs/${params.path.name}/status`;
+    return await this.patch<MonitoringCoreosComV1alpha1AlertmanagerConfig>(path, params.query, params.body, opts);
+  }
   async listMonitoringCoreosComV1alpha1NamespacedPrometheusAgent(params: ListMonitoringCoreosComV1alpha1NamespacedPrometheusAgentRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1PrometheusAgentList> {
     const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/prometheusagents`;
     return await this.get<MonitoringCoreosComV1alpha1PrometheusAgentList>(path, params.query, null, opts);
@@ -41530,6 +51383,18 @@ export class KubernetesClient extends APIClient {
   }
   async patchMonitoringCoreosComV1alpha1NamespacedScrapeConfig(params: PatchMonitoringCoreosComV1alpha1NamespacedScrapeConfigRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1ScrapeConfig> {
     const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/scrapeconfigs/${params.path.name}`;
+    return await this.patch<MonitoringCoreosComV1alpha1ScrapeConfig>(path, params.query, params.body, opts);
+  }
+  async readMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatus(params: ReadMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1ScrapeConfig> {
+    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/scrapeconfigs/${params.path.name}/status`;
+    return await this.get<MonitoringCoreosComV1alpha1ScrapeConfig>(path, params.query, null, opts);
+  }
+  async replaceMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatus(params: ReplaceMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1ScrapeConfig> {
+    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/scrapeconfigs/${params.path.name}/status`;
+    return await this.put<MonitoringCoreosComV1alpha1ScrapeConfig>(path, params.query, params.body, opts);
+  }
+  async patchMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatus(params: PatchMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1ScrapeConfig> {
+    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/scrapeconfigs/${params.path.name}/status`;
     return await this.patch<MonitoringCoreosComV1alpha1ScrapeConfig>(path, params.query, params.body, opts);
   }
   async listMonitoringCoreosComV1alpha1PrometheusAgentForAllNamespaces(params: ListMonitoringCoreosComV1alpha1PrometheusAgentForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1PrometheusAgentList> {
@@ -42524,6 +52389,94 @@ export class KubernetesClient extends APIClient {
     const path = `/apis/rbac.authorization.k8s.io/v1/watch/roles`;
     return await this.get<WatchEvent>(path, null, null, opts);
   }
+  async listResolutionTektonDevV1alpha1NamespacedResolutionRequest(params: ListResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1alpha1ResolutionRequestList> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/namespaces/${params.path.namespace}/resolutionrequests`;
+    return await this.get<ResolutionTektonDevV1alpha1ResolutionRequestList>(path, params.query, null, opts);
+  }
+  async createResolutionTektonDevV1alpha1NamespacedResolutionRequest(params: CreateResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1alpha1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/namespaces/${params.path.namespace}/resolutionrequests`;
+    return await this.post<ResolutionTektonDevV1alpha1ResolutionRequest>(path, params.query, params.body, opts);
+  }
+  async deleteResolutionTektonDevV1alpha1CollectionNamespacedResolutionRequest(params: DeleteResolutionTektonDevV1alpha1CollectionNamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/namespaces/${params.path.namespace}/resolutionrequests`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readResolutionTektonDevV1alpha1NamespacedResolutionRequest(params: ReadResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1alpha1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}`;
+    return await this.get<ResolutionTektonDevV1alpha1ResolutionRequest>(path, params.query, null, opts);
+  }
+  async replaceResolutionTektonDevV1alpha1NamespacedResolutionRequest(params: ReplaceResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1alpha1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}`;
+    return await this.put<ResolutionTektonDevV1alpha1ResolutionRequest>(path, params.query, params.body, opts);
+  }
+  async deleteResolutionTektonDevV1alpha1NamespacedResolutionRequest(params: DeleteResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchResolutionTektonDevV1alpha1NamespacedResolutionRequest(params: PatchResolutionTektonDevV1alpha1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1alpha1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}`;
+    return await this.patch<ResolutionTektonDevV1alpha1ResolutionRequest>(path, params.query, params.body, opts);
+  }
+  async readResolutionTektonDevV1alpha1NamespacedResolutionRequestStatus(params: ReadResolutionTektonDevV1alpha1NamespacedResolutionRequestStatusRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1alpha1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}/status`;
+    return await this.get<ResolutionTektonDevV1alpha1ResolutionRequest>(path, params.query, null, opts);
+  }
+  async replaceResolutionTektonDevV1alpha1NamespacedResolutionRequestStatus(params: ReplaceResolutionTektonDevV1alpha1NamespacedResolutionRequestStatusRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1alpha1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}/status`;
+    return await this.put<ResolutionTektonDevV1alpha1ResolutionRequest>(path, params.query, params.body, opts);
+  }
+  async patchResolutionTektonDevV1alpha1NamespacedResolutionRequestStatus(params: PatchResolutionTektonDevV1alpha1NamespacedResolutionRequestStatusRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1alpha1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}/status`;
+    return await this.patch<ResolutionTektonDevV1alpha1ResolutionRequest>(path, params.query, params.body, opts);
+  }
+  async listResolutionTektonDevV1alpha1ResolutionRequestForAllNamespaces(params: ListResolutionTektonDevV1alpha1ResolutionRequestForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1alpha1ResolutionRequestList> {
+    const path = `/apis/resolution.tekton.dev/v1alpha1/resolutionrequests`;
+    return await this.get<ResolutionTektonDevV1alpha1ResolutionRequestList>(path, null, null, opts);
+  }
+  async listResolutionTektonDevV1beta1NamespacedResolutionRequest(params: ListResolutionTektonDevV1beta1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1beta1ResolutionRequestList> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/namespaces/${params.path.namespace}/resolutionrequests`;
+    return await this.get<ResolutionTektonDevV1beta1ResolutionRequestList>(path, params.query, null, opts);
+  }
+  async createResolutionTektonDevV1beta1NamespacedResolutionRequest(params: CreateResolutionTektonDevV1beta1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1beta1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/namespaces/${params.path.namespace}/resolutionrequests`;
+    return await this.post<ResolutionTektonDevV1beta1ResolutionRequest>(path, params.query, params.body, opts);
+  }
+  async deleteResolutionTektonDevV1beta1CollectionNamespacedResolutionRequest(params: DeleteResolutionTektonDevV1beta1CollectionNamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/namespaces/${params.path.namespace}/resolutionrequests`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readResolutionTektonDevV1beta1NamespacedResolutionRequest(params: ReadResolutionTektonDevV1beta1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1beta1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}`;
+    return await this.get<ResolutionTektonDevV1beta1ResolutionRequest>(path, params.query, null, opts);
+  }
+  async replaceResolutionTektonDevV1beta1NamespacedResolutionRequest(params: ReplaceResolutionTektonDevV1beta1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1beta1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}`;
+    return await this.put<ResolutionTektonDevV1beta1ResolutionRequest>(path, params.query, params.body, opts);
+  }
+  async deleteResolutionTektonDevV1beta1NamespacedResolutionRequest(params: DeleteResolutionTektonDevV1beta1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchResolutionTektonDevV1beta1NamespacedResolutionRequest(params: PatchResolutionTektonDevV1beta1NamespacedResolutionRequestRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1beta1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}`;
+    return await this.patch<ResolutionTektonDevV1beta1ResolutionRequest>(path, params.query, params.body, opts);
+  }
+  async readResolutionTektonDevV1beta1NamespacedResolutionRequestStatus(params: ReadResolutionTektonDevV1beta1NamespacedResolutionRequestStatusRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1beta1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}/status`;
+    return await this.get<ResolutionTektonDevV1beta1ResolutionRequest>(path, params.query, null, opts);
+  }
+  async replaceResolutionTektonDevV1beta1NamespacedResolutionRequestStatus(params: ReplaceResolutionTektonDevV1beta1NamespacedResolutionRequestStatusRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1beta1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}/status`;
+    return await this.put<ResolutionTektonDevV1beta1ResolutionRequest>(path, params.query, params.body, opts);
+  }
+  async patchResolutionTektonDevV1beta1NamespacedResolutionRequestStatus(params: PatchResolutionTektonDevV1beta1NamespacedResolutionRequestStatusRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1beta1ResolutionRequest> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/namespaces/${params.path.namespace}/resolutionrequests/${params.path.name}/status`;
+    return await this.patch<ResolutionTektonDevV1beta1ResolutionRequest>(path, params.query, params.body, opts);
+  }
+  async listResolutionTektonDevV1beta1ResolutionRequestForAllNamespaces(params: ListResolutionTektonDevV1beta1ResolutionRequestForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<ResolutionTektonDevV1beta1ResolutionRequestList> {
+    const path = `/apis/resolution.tekton.dev/v1beta1/resolutionrequests`;
+    return await this.get<ResolutionTektonDevV1beta1ResolutionRequestList>(path, null, null, opts);
+  }
   async getSchedulingAPIGroup(params: GetSchedulingAPIGroupRequest, opts?: APIClientRequestOpts): Promise<APIGroup> {
     const path = `/apis/scheduling.k8s.io/`;
     return await this.get<APIGroup>(path, null, null, opts);
@@ -42996,6 +52949,842 @@ export class KubernetesClient extends APIClient {
     const path = `/apis/storage.k8s.io/v1/watch/volumeattachments/${params.path.name}`;
     return await this.get<WatchEvent>(path, null, null, opts);
   }
+  async listTektonDevV1NamespacedPipelineRun(params: ListTektonDevV1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineRunList> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns`;
+    return await this.get<TektonDevV1PipelineRunList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1NamespacedPipelineRun(params: CreateTektonDevV1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns`;
+    return await this.post<TektonDevV1PipelineRun>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1CollectionNamespacedPipelineRun(params: DeleteTektonDevV1CollectionNamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1NamespacedPipelineRun(params: ReadTektonDevV1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}`;
+    return await this.get<TektonDevV1PipelineRun>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1NamespacedPipelineRun(params: ReplaceTektonDevV1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}`;
+    return await this.put<TektonDevV1PipelineRun>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1NamespacedPipelineRun(params: DeleteTektonDevV1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1NamespacedPipelineRun(params: PatchTektonDevV1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}`;
+    return await this.patch<TektonDevV1PipelineRun>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1NamespacedPipelineRunStatus(params: ReadTektonDevV1NamespacedPipelineRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}/status`;
+    return await this.get<TektonDevV1PipelineRun>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1NamespacedPipelineRunStatus(params: ReplaceTektonDevV1NamespacedPipelineRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}/status`;
+    return await this.put<TektonDevV1PipelineRun>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1NamespacedPipelineRunStatus(params: PatchTektonDevV1NamespacedPipelineRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}/status`;
+    return await this.patch<TektonDevV1PipelineRun>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1NamespacedPipeline(params: ListTektonDevV1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineList> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelines`;
+    return await this.get<TektonDevV1PipelineList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1NamespacedPipeline(params: CreateTektonDevV1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Pipeline> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelines`;
+    return await this.post<TektonDevV1Pipeline>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1CollectionNamespacedPipeline(params: DeleteTektonDevV1CollectionNamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelines`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1NamespacedPipeline(params: ReadTektonDevV1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Pipeline> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelines/${params.path.name}`;
+    return await this.get<TektonDevV1Pipeline>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1NamespacedPipeline(params: ReplaceTektonDevV1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Pipeline> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelines/${params.path.name}`;
+    return await this.put<TektonDevV1Pipeline>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1NamespacedPipeline(params: DeleteTektonDevV1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelines/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1NamespacedPipeline(params: PatchTektonDevV1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Pipeline> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelines/${params.path.name}`;
+    return await this.patch<TektonDevV1Pipeline>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1NamespacedPipelineStatus(params: ReadTektonDevV1NamespacedPipelineStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Pipeline> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelines/${params.path.name}/status`;
+    return await this.get<TektonDevV1Pipeline>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1NamespacedPipelineStatus(params: ReplaceTektonDevV1NamespacedPipelineStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Pipeline> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelines/${params.path.name}/status`;
+    return await this.put<TektonDevV1Pipeline>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1NamespacedPipelineStatus(params: PatchTektonDevV1NamespacedPipelineStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Pipeline> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelines/${params.path.name}/status`;
+    return await this.patch<TektonDevV1Pipeline>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1NamespacedTaskRun(params: ListTektonDevV1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskRunList> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/taskruns`;
+    return await this.get<TektonDevV1TaskRunList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1NamespacedTaskRun(params: CreateTektonDevV1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/taskruns`;
+    return await this.post<TektonDevV1TaskRun>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1CollectionNamespacedTaskRun(params: DeleteTektonDevV1CollectionNamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/taskruns`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1NamespacedTaskRun(params: ReadTektonDevV1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/taskruns/${params.path.name}`;
+    return await this.get<TektonDevV1TaskRun>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1NamespacedTaskRun(params: ReplaceTektonDevV1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/taskruns/${params.path.name}`;
+    return await this.put<TektonDevV1TaskRun>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1NamespacedTaskRun(params: DeleteTektonDevV1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/taskruns/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1NamespacedTaskRun(params: PatchTektonDevV1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/taskruns/${params.path.name}`;
+    return await this.patch<TektonDevV1TaskRun>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1NamespacedTaskRunStatus(params: ReadTektonDevV1NamespacedTaskRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/taskruns/${params.path.name}/status`;
+    return await this.get<TektonDevV1TaskRun>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1NamespacedTaskRunStatus(params: ReplaceTektonDevV1NamespacedTaskRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/taskruns/${params.path.name}/status`;
+    return await this.put<TektonDevV1TaskRun>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1NamespacedTaskRunStatus(params: PatchTektonDevV1NamespacedTaskRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskRun> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/taskruns/${params.path.name}/status`;
+    return await this.patch<TektonDevV1TaskRun>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1NamespacedTask(params: ListTektonDevV1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskList> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/tasks`;
+    return await this.get<TektonDevV1TaskList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1NamespacedTask(params: CreateTektonDevV1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Task> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/tasks`;
+    return await this.post<TektonDevV1Task>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1CollectionNamespacedTask(params: DeleteTektonDevV1CollectionNamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/tasks`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1NamespacedTask(params: ReadTektonDevV1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Task> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/tasks/${params.path.name}`;
+    return await this.get<TektonDevV1Task>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1NamespacedTask(params: ReplaceTektonDevV1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Task> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/tasks/${params.path.name}`;
+    return await this.put<TektonDevV1Task>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1NamespacedTask(params: DeleteTektonDevV1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/tasks/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1NamespacedTask(params: PatchTektonDevV1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Task> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/tasks/${params.path.name}`;
+    return await this.patch<TektonDevV1Task>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1NamespacedTaskStatus(params: ReadTektonDevV1NamespacedTaskStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Task> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/tasks/${params.path.name}/status`;
+    return await this.get<TektonDevV1Task>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1NamespacedTaskStatus(params: ReplaceTektonDevV1NamespacedTaskStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Task> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/tasks/${params.path.name}/status`;
+    return await this.put<TektonDevV1Task>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1NamespacedTaskStatus(params: PatchTektonDevV1NamespacedTaskStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1Task> {
+    const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/tasks/${params.path.name}/status`;
+    return await this.patch<TektonDevV1Task>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1PipelineRunForAllNamespaces(params: ListTektonDevV1PipelineRunForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineRunList> {
+    const path = `/apis/tekton.dev/v1/pipelineruns`;
+    return await this.get<TektonDevV1PipelineRunList>(path, null, null, opts);
+  }
+  async listTektonDevV1PipelineForAllNamespaces(params: ListTektonDevV1PipelineForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineList> {
+    const path = `/apis/tekton.dev/v1/pipelines`;
+    return await this.get<TektonDevV1PipelineList>(path, null, null, opts);
+  }
+  async listTektonDevV1TaskRunForAllNamespaces(params: ListTektonDevV1TaskRunForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskRunList> {
+    const path = `/apis/tekton.dev/v1/taskruns`;
+    return await this.get<TektonDevV1TaskRunList>(path, null, null, opts);
+  }
+  async listTektonDevV1TaskForAllNamespaces(params: ListTektonDevV1TaskForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1TaskList> {
+    const path = `/apis/tekton.dev/v1/tasks`;
+    return await this.get<TektonDevV1TaskList>(path, null, null, opts);
+  }
+  async listTektonDevV1alpha1NamespacedStepAction(params: ListTektonDevV1alpha1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1StepActionList> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/stepactions`;
+    return await this.get<TektonDevV1alpha1StepActionList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1alpha1NamespacedStepAction(params: CreateTektonDevV1alpha1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1StepAction> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/stepactions`;
+    return await this.post<TektonDevV1alpha1StepAction>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1alpha1CollectionNamespacedStepAction(params: DeleteTektonDevV1alpha1CollectionNamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/stepactions`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1alpha1NamespacedStepAction(params: ReadTektonDevV1alpha1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1StepAction> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/stepactions/${params.path.name}`;
+    return await this.get<TektonDevV1alpha1StepAction>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1alpha1NamespacedStepAction(params: ReplaceTektonDevV1alpha1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1StepAction> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/stepactions/${params.path.name}`;
+    return await this.put<TektonDevV1alpha1StepAction>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1alpha1NamespacedStepAction(params: DeleteTektonDevV1alpha1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/stepactions/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1alpha1NamespacedStepAction(params: PatchTektonDevV1alpha1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1StepAction> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/stepactions/${params.path.name}`;
+    return await this.patch<TektonDevV1alpha1StepAction>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1alpha1NamespacedStepActionStatus(params: ReadTektonDevV1alpha1NamespacedStepActionStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1StepAction> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/stepactions/${params.path.name}/status`;
+    return await this.get<TektonDevV1alpha1StepAction>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1alpha1NamespacedStepActionStatus(params: ReplaceTektonDevV1alpha1NamespacedStepActionStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1StepAction> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/stepactions/${params.path.name}/status`;
+    return await this.put<TektonDevV1alpha1StepAction>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1alpha1NamespacedStepActionStatus(params: PatchTektonDevV1alpha1NamespacedStepActionStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1StepAction> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/stepactions/${params.path.name}/status`;
+    return await this.patch<TektonDevV1alpha1StepAction>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1alpha1NamespacedVerificationPolicy(params: ListTektonDevV1alpha1NamespacedVerificationPolicyRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1VerificationPolicyList> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/verificationpolicies`;
+    return await this.get<TektonDevV1alpha1VerificationPolicyList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1alpha1NamespacedVerificationPolicy(params: CreateTektonDevV1alpha1NamespacedVerificationPolicyRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1VerificationPolicy> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/verificationpolicies`;
+    return await this.post<TektonDevV1alpha1VerificationPolicy>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1alpha1CollectionNamespacedVerificationPolicy(params: DeleteTektonDevV1alpha1CollectionNamespacedVerificationPolicyRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/verificationpolicies`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1alpha1NamespacedVerificationPolicy(params: ReadTektonDevV1alpha1NamespacedVerificationPolicyRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1VerificationPolicy> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/verificationpolicies/${params.path.name}`;
+    return await this.get<TektonDevV1alpha1VerificationPolicy>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1alpha1NamespacedVerificationPolicy(params: ReplaceTektonDevV1alpha1NamespacedVerificationPolicyRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1VerificationPolicy> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/verificationpolicies/${params.path.name}`;
+    return await this.put<TektonDevV1alpha1VerificationPolicy>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1alpha1NamespacedVerificationPolicy(params: DeleteTektonDevV1alpha1NamespacedVerificationPolicyRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/verificationpolicies/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1alpha1NamespacedVerificationPolicy(params: PatchTektonDevV1alpha1NamespacedVerificationPolicyRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1VerificationPolicy> {
+    const path = `/apis/tekton.dev/v1alpha1/namespaces/${params.path.namespace}/verificationpolicies/${params.path.name}`;
+    return await this.patch<TektonDevV1alpha1VerificationPolicy>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1alpha1StepActionForAllNamespaces(params: ListTektonDevV1alpha1StepActionForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1StepActionList> {
+    const path = `/apis/tekton.dev/v1alpha1/stepactions`;
+    return await this.get<TektonDevV1alpha1StepActionList>(path, null, null, opts);
+  }
+  async listTektonDevV1alpha1VerificationPolicyForAllNamespaces(params: ListTektonDevV1alpha1VerificationPolicyForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1alpha1VerificationPolicyList> {
+    const path = `/apis/tekton.dev/v1alpha1/verificationpolicies`;
+    return await this.get<TektonDevV1alpha1VerificationPolicyList>(path, null, null, opts);
+  }
+  async listTektonDevV1beta1CustomRunForAllNamespaces(params: ListTektonDevV1beta1CustomRunForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1CustomRunList> {
+    const path = `/apis/tekton.dev/v1beta1/customruns`;
+    return await this.get<TektonDevV1beta1CustomRunList>(path, null, null, opts);
+  }
+  async listTektonDevV1beta1NamespacedCustomRun(params: ListTektonDevV1beta1NamespacedCustomRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1CustomRunList> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/customruns`;
+    return await this.get<TektonDevV1beta1CustomRunList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1beta1NamespacedCustomRun(params: CreateTektonDevV1beta1NamespacedCustomRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1CustomRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/customruns`;
+    return await this.post<TektonDevV1beta1CustomRun>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1CollectionNamespacedCustomRun(params: DeleteTektonDevV1beta1CollectionNamespacedCustomRunRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/customruns`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1beta1NamespacedCustomRun(params: ReadTektonDevV1beta1NamespacedCustomRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1CustomRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/customruns/${params.path.name}`;
+    return await this.get<TektonDevV1beta1CustomRun>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedCustomRun(params: ReplaceTektonDevV1beta1NamespacedCustomRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1CustomRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/customruns/${params.path.name}`;
+    return await this.put<TektonDevV1beta1CustomRun>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1NamespacedCustomRun(params: DeleteTektonDevV1beta1NamespacedCustomRunRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/customruns/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1beta1NamespacedCustomRun(params: PatchTektonDevV1beta1NamespacedCustomRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1CustomRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/customruns/${params.path.name}`;
+    return await this.patch<TektonDevV1beta1CustomRun>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1beta1NamespacedCustomRunStatus(params: ReadTektonDevV1beta1NamespacedCustomRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1CustomRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/customruns/${params.path.name}/status`;
+    return await this.get<TektonDevV1beta1CustomRun>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedCustomRunStatus(params: ReplaceTektonDevV1beta1NamespacedCustomRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1CustomRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/customruns/${params.path.name}/status`;
+    return await this.put<TektonDevV1beta1CustomRun>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1beta1NamespacedCustomRunStatus(params: PatchTektonDevV1beta1NamespacedCustomRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1CustomRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/customruns/${params.path.name}/status`;
+    return await this.patch<TektonDevV1beta1CustomRun>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1beta1NamespacedPipelineRun(params: ListTektonDevV1beta1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineRunList> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelineruns`;
+    return await this.get<TektonDevV1beta1PipelineRunList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1beta1NamespacedPipelineRun(params: CreateTektonDevV1beta1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelineruns`;
+    return await this.post<TektonDevV1beta1PipelineRun>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1CollectionNamespacedPipelineRun(params: DeleteTektonDevV1beta1CollectionNamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelineruns`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1beta1NamespacedPipelineRun(params: ReadTektonDevV1beta1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}`;
+    return await this.get<TektonDevV1beta1PipelineRun>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedPipelineRun(params: ReplaceTektonDevV1beta1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}`;
+    return await this.put<TektonDevV1beta1PipelineRun>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1NamespacedPipelineRun(params: DeleteTektonDevV1beta1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1beta1NamespacedPipelineRun(params: PatchTektonDevV1beta1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}`;
+    return await this.patch<TektonDevV1beta1PipelineRun>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1beta1NamespacedPipelineRunStatus(params: ReadTektonDevV1beta1NamespacedPipelineRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}/status`;
+    return await this.get<TektonDevV1beta1PipelineRun>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedPipelineRunStatus(params: ReplaceTektonDevV1beta1NamespacedPipelineRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}/status`;
+    return await this.put<TektonDevV1beta1PipelineRun>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1beta1NamespacedPipelineRunStatus(params: PatchTektonDevV1beta1NamespacedPipelineRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelineruns/${params.path.name}/status`;
+    return await this.patch<TektonDevV1beta1PipelineRun>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1beta1NamespacedPipeline(params: ListTektonDevV1beta1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineList> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelines`;
+    return await this.get<TektonDevV1beta1PipelineList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1beta1NamespacedPipeline(params: CreateTektonDevV1beta1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Pipeline> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelines`;
+    return await this.post<TektonDevV1beta1Pipeline>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1CollectionNamespacedPipeline(params: DeleteTektonDevV1beta1CollectionNamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelines`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1beta1NamespacedPipeline(params: ReadTektonDevV1beta1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Pipeline> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelines/${params.path.name}`;
+    return await this.get<TektonDevV1beta1Pipeline>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedPipeline(params: ReplaceTektonDevV1beta1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Pipeline> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelines/${params.path.name}`;
+    return await this.put<TektonDevV1beta1Pipeline>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1NamespacedPipeline(params: DeleteTektonDevV1beta1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelines/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1beta1NamespacedPipeline(params: PatchTektonDevV1beta1NamespacedPipelineRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Pipeline> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelines/${params.path.name}`;
+    return await this.patch<TektonDevV1beta1Pipeline>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1beta1NamespacedPipelineStatus(params: ReadTektonDevV1beta1NamespacedPipelineStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Pipeline> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelines/${params.path.name}/status`;
+    return await this.get<TektonDevV1beta1Pipeline>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedPipelineStatus(params: ReplaceTektonDevV1beta1NamespacedPipelineStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Pipeline> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelines/${params.path.name}/status`;
+    return await this.put<TektonDevV1beta1Pipeline>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1beta1NamespacedPipelineStatus(params: PatchTektonDevV1beta1NamespacedPipelineStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Pipeline> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/pipelines/${params.path.name}/status`;
+    return await this.patch<TektonDevV1beta1Pipeline>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1beta1NamespacedStepAction(params: ListTektonDevV1beta1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1StepActionList> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/stepactions`;
+    return await this.get<TektonDevV1beta1StepActionList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1beta1NamespacedStepAction(params: CreateTektonDevV1beta1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1StepAction> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/stepactions`;
+    return await this.post<TektonDevV1beta1StepAction>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1CollectionNamespacedStepAction(params: DeleteTektonDevV1beta1CollectionNamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/stepactions`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1beta1NamespacedStepAction(params: ReadTektonDevV1beta1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1StepAction> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/stepactions/${params.path.name}`;
+    return await this.get<TektonDevV1beta1StepAction>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedStepAction(params: ReplaceTektonDevV1beta1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1StepAction> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/stepactions/${params.path.name}`;
+    return await this.put<TektonDevV1beta1StepAction>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1NamespacedStepAction(params: DeleteTektonDevV1beta1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/stepactions/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1beta1NamespacedStepAction(params: PatchTektonDevV1beta1NamespacedStepActionRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1StepAction> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/stepactions/${params.path.name}`;
+    return await this.patch<TektonDevV1beta1StepAction>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1beta1NamespacedStepActionStatus(params: ReadTektonDevV1beta1NamespacedStepActionStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1StepAction> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/stepactions/${params.path.name}/status`;
+    return await this.get<TektonDevV1beta1StepAction>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedStepActionStatus(params: ReplaceTektonDevV1beta1NamespacedStepActionStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1StepAction> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/stepactions/${params.path.name}/status`;
+    return await this.put<TektonDevV1beta1StepAction>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1beta1NamespacedStepActionStatus(params: PatchTektonDevV1beta1NamespacedStepActionStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1StepAction> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/stepactions/${params.path.name}/status`;
+    return await this.patch<TektonDevV1beta1StepAction>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1beta1NamespacedTaskRun(params: ListTektonDevV1beta1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskRunList> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/taskruns`;
+    return await this.get<TektonDevV1beta1TaskRunList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1beta1NamespacedTaskRun(params: CreateTektonDevV1beta1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/taskruns`;
+    return await this.post<TektonDevV1beta1TaskRun>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1CollectionNamespacedTaskRun(params: DeleteTektonDevV1beta1CollectionNamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/taskruns`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1beta1NamespacedTaskRun(params: ReadTektonDevV1beta1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/taskruns/${params.path.name}`;
+    return await this.get<TektonDevV1beta1TaskRun>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedTaskRun(params: ReplaceTektonDevV1beta1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/taskruns/${params.path.name}`;
+    return await this.put<TektonDevV1beta1TaskRun>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1NamespacedTaskRun(params: DeleteTektonDevV1beta1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/taskruns/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1beta1NamespacedTaskRun(params: PatchTektonDevV1beta1NamespacedTaskRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/taskruns/${params.path.name}`;
+    return await this.patch<TektonDevV1beta1TaskRun>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1beta1NamespacedTaskRunStatus(params: ReadTektonDevV1beta1NamespacedTaskRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/taskruns/${params.path.name}/status`;
+    return await this.get<TektonDevV1beta1TaskRun>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedTaskRunStatus(params: ReplaceTektonDevV1beta1NamespacedTaskRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/taskruns/${params.path.name}/status`;
+    return await this.put<TektonDevV1beta1TaskRun>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1beta1NamespacedTaskRunStatus(params: PatchTektonDevV1beta1NamespacedTaskRunStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskRun> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/taskruns/${params.path.name}/status`;
+    return await this.patch<TektonDevV1beta1TaskRun>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1beta1NamespacedTask(params: ListTektonDevV1beta1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskList> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/tasks`;
+    return await this.get<TektonDevV1beta1TaskList>(path, params.query, null, opts);
+  }
+  async createTektonDevV1beta1NamespacedTask(params: CreateTektonDevV1beta1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Task> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/tasks`;
+    return await this.post<TektonDevV1beta1Task>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1CollectionNamespacedTask(params: DeleteTektonDevV1beta1CollectionNamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/tasks`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTektonDevV1beta1NamespacedTask(params: ReadTektonDevV1beta1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Task> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/tasks/${params.path.name}`;
+    return await this.get<TektonDevV1beta1Task>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedTask(params: ReplaceTektonDevV1beta1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Task> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/tasks/${params.path.name}`;
+    return await this.put<TektonDevV1beta1Task>(path, params.query, params.body, opts);
+  }
+  async deleteTektonDevV1beta1NamespacedTask(params: DeleteTektonDevV1beta1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/tasks/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTektonDevV1beta1NamespacedTask(params: PatchTektonDevV1beta1NamespacedTaskRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Task> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/tasks/${params.path.name}`;
+    return await this.patch<TektonDevV1beta1Task>(path, params.query, params.body, opts);
+  }
+  async readTektonDevV1beta1NamespacedTaskStatus(params: ReadTektonDevV1beta1NamespacedTaskStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Task> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/tasks/${params.path.name}/status`;
+    return await this.get<TektonDevV1beta1Task>(path, params.query, null, opts);
+  }
+  async replaceTektonDevV1beta1NamespacedTaskStatus(params: ReplaceTektonDevV1beta1NamespacedTaskStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Task> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/tasks/${params.path.name}/status`;
+    return await this.put<TektonDevV1beta1Task>(path, params.query, params.body, opts);
+  }
+  async patchTektonDevV1beta1NamespacedTaskStatus(params: PatchTektonDevV1beta1NamespacedTaskStatusRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1Task> {
+    const path = `/apis/tekton.dev/v1beta1/namespaces/${params.path.namespace}/tasks/${params.path.name}/status`;
+    return await this.patch<TektonDevV1beta1Task>(path, params.query, params.body, opts);
+  }
+  async listTektonDevV1beta1PipelineRunForAllNamespaces(params: ListTektonDevV1beta1PipelineRunForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineRunList> {
+    const path = `/apis/tekton.dev/v1beta1/pipelineruns`;
+    return await this.get<TektonDevV1beta1PipelineRunList>(path, null, null, opts);
+  }
+  async listTektonDevV1beta1PipelineForAllNamespaces(params: ListTektonDevV1beta1PipelineForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1PipelineList> {
+    const path = `/apis/tekton.dev/v1beta1/pipelines`;
+    return await this.get<TektonDevV1beta1PipelineList>(path, null, null, opts);
+  }
+  async listTektonDevV1beta1StepActionForAllNamespaces(params: ListTektonDevV1beta1StepActionForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1StepActionList> {
+    const path = `/apis/tekton.dev/v1beta1/stepactions`;
+    return await this.get<TektonDevV1beta1StepActionList>(path, null, null, opts);
+  }
+  async listTektonDevV1beta1TaskRunForAllNamespaces(params: ListTektonDevV1beta1TaskRunForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskRunList> {
+    const path = `/apis/tekton.dev/v1beta1/taskruns`;
+    return await this.get<TektonDevV1beta1TaskRunList>(path, null, null, opts);
+  }
+  async listTektonDevV1beta1TaskForAllNamespaces(params: ListTektonDevV1beta1TaskForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1beta1TaskList> {
+    const path = `/apis/tekton.dev/v1beta1/tasks`;
+    return await this.get<TektonDevV1beta1TaskList>(path, null, null, opts);
+  }
+  async listTraefikIoV1alpha1IngressRouteForAllNamespaces(params: ListTraefikIoV1alpha1IngressRouteForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteList> {
+    const path = `/apis/traefik.io/v1alpha1/ingressroutes`;
+    return await this.get<TraefikIoV1alpha1IngressRouteList>(path, null, null, opts);
+  }
+  async listTraefikIoV1alpha1IngressRouteTCPForAllNamespaces(params: ListTraefikIoV1alpha1IngressRouteTCPForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteTCPList> {
+    const path = `/apis/traefik.io/v1alpha1/ingressroutetcps`;
+    return await this.get<TraefikIoV1alpha1IngressRouteTCPList>(path, null, null, opts);
+  }
+  async listTraefikIoV1alpha1IngressRouteUDPForAllNamespaces(params: ListTraefikIoV1alpha1IngressRouteUDPForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteUDPList> {
+    const path = `/apis/traefik.io/v1alpha1/ingressrouteudps`;
+    return await this.get<TraefikIoV1alpha1IngressRouteUDPList>(path, null, null, opts);
+  }
+  async listTraefikIoV1alpha1MiddlewareForAllNamespaces(params: ListTraefikIoV1alpha1MiddlewareForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1MiddlewareList> {
+    const path = `/apis/traefik.io/v1alpha1/middlewares`;
+    return await this.get<TraefikIoV1alpha1MiddlewareList>(path, null, null, opts);
+  }
+  async listTraefikIoV1alpha1MiddlewareTCPForAllNamespaces(params: ListTraefikIoV1alpha1MiddlewareTCPForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1MiddlewareTCPList> {
+    const path = `/apis/traefik.io/v1alpha1/middlewaretcps`;
+    return await this.get<TraefikIoV1alpha1MiddlewareTCPList>(path, null, null, opts);
+  }
+  async listTraefikIoV1alpha1NamespacedIngressRoute(params: ListTraefikIoV1alpha1NamespacedIngressRouteRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteList> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutes`;
+    return await this.get<TraefikIoV1alpha1IngressRouteList>(path, params.query, null, opts);
+  }
+  async createTraefikIoV1alpha1NamespacedIngressRoute(params: CreateTraefikIoV1alpha1NamespacedIngressRouteRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRoute> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutes`;
+    return await this.post<TraefikIoV1alpha1IngressRoute>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1CollectionNamespacedIngressRoute(params: DeleteTraefikIoV1alpha1CollectionNamespacedIngressRouteRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutes`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTraefikIoV1alpha1NamespacedIngressRoute(params: ReadTraefikIoV1alpha1NamespacedIngressRouteRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRoute> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutes/${params.path.name}`;
+    return await this.get<TraefikIoV1alpha1IngressRoute>(path, params.query, null, opts);
+  }
+  async replaceTraefikIoV1alpha1NamespacedIngressRoute(params: ReplaceTraefikIoV1alpha1NamespacedIngressRouteRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRoute> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutes/${params.path.name}`;
+    return await this.put<TraefikIoV1alpha1IngressRoute>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1NamespacedIngressRoute(params: DeleteTraefikIoV1alpha1NamespacedIngressRouteRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutes/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTraefikIoV1alpha1NamespacedIngressRoute(params: PatchTraefikIoV1alpha1NamespacedIngressRouteRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRoute> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutes/${params.path.name}`;
+    return await this.patch<TraefikIoV1alpha1IngressRoute>(path, params.query, params.body, opts);
+  }
+  async listTraefikIoV1alpha1NamespacedIngressRouteTCP(params: ListTraefikIoV1alpha1NamespacedIngressRouteTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteTCPList> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutetcps`;
+    return await this.get<TraefikIoV1alpha1IngressRouteTCPList>(path, params.query, null, opts);
+  }
+  async createTraefikIoV1alpha1NamespacedIngressRouteTCP(params: CreateTraefikIoV1alpha1NamespacedIngressRouteTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutetcps`;
+    return await this.post<TraefikIoV1alpha1IngressRouteTCP>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1CollectionNamespacedIngressRouteTCP(params: DeleteTraefikIoV1alpha1CollectionNamespacedIngressRouteTCPRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutetcps`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTraefikIoV1alpha1NamespacedIngressRouteTCP(params: ReadTraefikIoV1alpha1NamespacedIngressRouteTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutetcps/${params.path.name}`;
+    return await this.get<TraefikIoV1alpha1IngressRouteTCP>(path, params.query, null, opts);
+  }
+  async replaceTraefikIoV1alpha1NamespacedIngressRouteTCP(params: ReplaceTraefikIoV1alpha1NamespacedIngressRouteTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutetcps/${params.path.name}`;
+    return await this.put<TraefikIoV1alpha1IngressRouteTCP>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1NamespacedIngressRouteTCP(params: DeleteTraefikIoV1alpha1NamespacedIngressRouteTCPRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutetcps/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTraefikIoV1alpha1NamespacedIngressRouteTCP(params: PatchTraefikIoV1alpha1NamespacedIngressRouteTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressroutetcps/${params.path.name}`;
+    return await this.patch<TraefikIoV1alpha1IngressRouteTCP>(path, params.query, params.body, opts);
+  }
+  async listTraefikIoV1alpha1NamespacedIngressRouteUDP(params: ListTraefikIoV1alpha1NamespacedIngressRouteUDPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteUDPList> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressrouteudps`;
+    return await this.get<TraefikIoV1alpha1IngressRouteUDPList>(path, params.query, null, opts);
+  }
+  async createTraefikIoV1alpha1NamespacedIngressRouteUDP(params: CreateTraefikIoV1alpha1NamespacedIngressRouteUDPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteUDP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressrouteudps`;
+    return await this.post<TraefikIoV1alpha1IngressRouteUDP>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1CollectionNamespacedIngressRouteUDP(params: DeleteTraefikIoV1alpha1CollectionNamespacedIngressRouteUDPRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressrouteudps`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTraefikIoV1alpha1NamespacedIngressRouteUDP(params: ReadTraefikIoV1alpha1NamespacedIngressRouteUDPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteUDP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressrouteudps/${params.path.name}`;
+    return await this.get<TraefikIoV1alpha1IngressRouteUDP>(path, params.query, null, opts);
+  }
+  async replaceTraefikIoV1alpha1NamespacedIngressRouteUDP(params: ReplaceTraefikIoV1alpha1NamespacedIngressRouteUDPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteUDP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressrouteudps/${params.path.name}`;
+    return await this.put<TraefikIoV1alpha1IngressRouteUDP>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1NamespacedIngressRouteUDP(params: DeleteTraefikIoV1alpha1NamespacedIngressRouteUDPRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressrouteudps/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTraefikIoV1alpha1NamespacedIngressRouteUDP(params: PatchTraefikIoV1alpha1NamespacedIngressRouteUDPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1IngressRouteUDP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/ingressrouteudps/${params.path.name}`;
+    return await this.patch<TraefikIoV1alpha1IngressRouteUDP>(path, params.query, params.body, opts);
+  }
+  async listTraefikIoV1alpha1NamespacedMiddleware(params: ListTraefikIoV1alpha1NamespacedMiddlewareRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1MiddlewareList> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewares`;
+    return await this.get<TraefikIoV1alpha1MiddlewareList>(path, params.query, null, opts);
+  }
+  async createTraefikIoV1alpha1NamespacedMiddleware(params: CreateTraefikIoV1alpha1NamespacedMiddlewareRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1Middleware> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewares`;
+    return await this.post<TraefikIoV1alpha1Middleware>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1CollectionNamespacedMiddleware(params: DeleteTraefikIoV1alpha1CollectionNamespacedMiddlewareRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewares`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTraefikIoV1alpha1NamespacedMiddleware(params: ReadTraefikIoV1alpha1NamespacedMiddlewareRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1Middleware> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewares/${params.path.name}`;
+    return await this.get<TraefikIoV1alpha1Middleware>(path, params.query, null, opts);
+  }
+  async replaceTraefikIoV1alpha1NamespacedMiddleware(params: ReplaceTraefikIoV1alpha1NamespacedMiddlewareRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1Middleware> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewares/${params.path.name}`;
+    return await this.put<TraefikIoV1alpha1Middleware>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1NamespacedMiddleware(params: DeleteTraefikIoV1alpha1NamespacedMiddlewareRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewares/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTraefikIoV1alpha1NamespacedMiddleware(params: PatchTraefikIoV1alpha1NamespacedMiddlewareRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1Middleware> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewares/${params.path.name}`;
+    return await this.patch<TraefikIoV1alpha1Middleware>(path, params.query, params.body, opts);
+  }
+  async listTraefikIoV1alpha1NamespacedMiddlewareTCP(params: ListTraefikIoV1alpha1NamespacedMiddlewareTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1MiddlewareTCPList> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewaretcps`;
+    return await this.get<TraefikIoV1alpha1MiddlewareTCPList>(path, params.query, null, opts);
+  }
+  async createTraefikIoV1alpha1NamespacedMiddlewareTCP(params: CreateTraefikIoV1alpha1NamespacedMiddlewareTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1MiddlewareTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewaretcps`;
+    return await this.post<TraefikIoV1alpha1MiddlewareTCP>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1CollectionNamespacedMiddlewareTCP(params: DeleteTraefikIoV1alpha1CollectionNamespacedMiddlewareTCPRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewaretcps`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTraefikIoV1alpha1NamespacedMiddlewareTCP(params: ReadTraefikIoV1alpha1NamespacedMiddlewareTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1MiddlewareTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewaretcps/${params.path.name}`;
+    return await this.get<TraefikIoV1alpha1MiddlewareTCP>(path, params.query, null, opts);
+  }
+  async replaceTraefikIoV1alpha1NamespacedMiddlewareTCP(params: ReplaceTraefikIoV1alpha1NamespacedMiddlewareTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1MiddlewareTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewaretcps/${params.path.name}`;
+    return await this.put<TraefikIoV1alpha1MiddlewareTCP>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1NamespacedMiddlewareTCP(params: DeleteTraefikIoV1alpha1NamespacedMiddlewareTCPRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewaretcps/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTraefikIoV1alpha1NamespacedMiddlewareTCP(params: PatchTraefikIoV1alpha1NamespacedMiddlewareTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1MiddlewareTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/middlewaretcps/${params.path.name}`;
+    return await this.patch<TraefikIoV1alpha1MiddlewareTCP>(path, params.query, params.body, opts);
+  }
+  async listTraefikIoV1alpha1NamespacedServersTransport(params: ListTraefikIoV1alpha1NamespacedServersTransportRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransportList> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransports`;
+    return await this.get<TraefikIoV1alpha1ServersTransportList>(path, params.query, null, opts);
+  }
+  async createTraefikIoV1alpha1NamespacedServersTransport(params: CreateTraefikIoV1alpha1NamespacedServersTransportRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransport> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransports`;
+    return await this.post<TraefikIoV1alpha1ServersTransport>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1CollectionNamespacedServersTransport(params: DeleteTraefikIoV1alpha1CollectionNamespacedServersTransportRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransports`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTraefikIoV1alpha1NamespacedServersTransport(params: ReadTraefikIoV1alpha1NamespacedServersTransportRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransport> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransports/${params.path.name}`;
+    return await this.get<TraefikIoV1alpha1ServersTransport>(path, params.query, null, opts);
+  }
+  async replaceTraefikIoV1alpha1NamespacedServersTransport(params: ReplaceTraefikIoV1alpha1NamespacedServersTransportRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransport> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransports/${params.path.name}`;
+    return await this.put<TraefikIoV1alpha1ServersTransport>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1NamespacedServersTransport(params: DeleteTraefikIoV1alpha1NamespacedServersTransportRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransports/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTraefikIoV1alpha1NamespacedServersTransport(params: PatchTraefikIoV1alpha1NamespacedServersTransportRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransport> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransports/${params.path.name}`;
+    return await this.patch<TraefikIoV1alpha1ServersTransport>(path, params.query, params.body, opts);
+  }
+  async listTraefikIoV1alpha1NamespacedServersTransportTCP(params: ListTraefikIoV1alpha1NamespacedServersTransportTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransportTCPList> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransporttcps`;
+    return await this.get<TraefikIoV1alpha1ServersTransportTCPList>(path, params.query, null, opts);
+  }
+  async createTraefikIoV1alpha1NamespacedServersTransportTCP(params: CreateTraefikIoV1alpha1NamespacedServersTransportTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransportTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransporttcps`;
+    return await this.post<TraefikIoV1alpha1ServersTransportTCP>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1CollectionNamespacedServersTransportTCP(params: DeleteTraefikIoV1alpha1CollectionNamespacedServersTransportTCPRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransporttcps`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTraefikIoV1alpha1NamespacedServersTransportTCP(params: ReadTraefikIoV1alpha1NamespacedServersTransportTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransportTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransporttcps/${params.path.name}`;
+    return await this.get<TraefikIoV1alpha1ServersTransportTCP>(path, params.query, null, opts);
+  }
+  async replaceTraefikIoV1alpha1NamespacedServersTransportTCP(params: ReplaceTraefikIoV1alpha1NamespacedServersTransportTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransportTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransporttcps/${params.path.name}`;
+    return await this.put<TraefikIoV1alpha1ServersTransportTCP>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1NamespacedServersTransportTCP(params: DeleteTraefikIoV1alpha1NamespacedServersTransportTCPRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransporttcps/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTraefikIoV1alpha1NamespacedServersTransportTCP(params: PatchTraefikIoV1alpha1NamespacedServersTransportTCPRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransportTCP> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/serverstransporttcps/${params.path.name}`;
+    return await this.patch<TraefikIoV1alpha1ServersTransportTCP>(path, params.query, params.body, opts);
+  }
+  async listTraefikIoV1alpha1NamespacedTLSOption(params: ListTraefikIoV1alpha1NamespacedTLSOptionRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSOptionList> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsoptions`;
+    return await this.get<TraefikIoV1alpha1TLSOptionList>(path, params.query, null, opts);
+  }
+  async createTraefikIoV1alpha1NamespacedTLSOption(params: CreateTraefikIoV1alpha1NamespacedTLSOptionRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSOption> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsoptions`;
+    return await this.post<TraefikIoV1alpha1TLSOption>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1CollectionNamespacedTLSOption(params: DeleteTraefikIoV1alpha1CollectionNamespacedTLSOptionRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsoptions`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTraefikIoV1alpha1NamespacedTLSOption(params: ReadTraefikIoV1alpha1NamespacedTLSOptionRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSOption> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsoptions/${params.path.name}`;
+    return await this.get<TraefikIoV1alpha1TLSOption>(path, params.query, null, opts);
+  }
+  async replaceTraefikIoV1alpha1NamespacedTLSOption(params: ReplaceTraefikIoV1alpha1NamespacedTLSOptionRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSOption> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsoptions/${params.path.name}`;
+    return await this.put<TraefikIoV1alpha1TLSOption>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1NamespacedTLSOption(params: DeleteTraefikIoV1alpha1NamespacedTLSOptionRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsoptions/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTraefikIoV1alpha1NamespacedTLSOption(params: PatchTraefikIoV1alpha1NamespacedTLSOptionRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSOption> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsoptions/${params.path.name}`;
+    return await this.patch<TraefikIoV1alpha1TLSOption>(path, params.query, params.body, opts);
+  }
+  async listTraefikIoV1alpha1NamespacedTLSStore(params: ListTraefikIoV1alpha1NamespacedTLSStoreRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSStoreList> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsstores`;
+    return await this.get<TraefikIoV1alpha1TLSStoreList>(path, params.query, null, opts);
+  }
+  async createTraefikIoV1alpha1NamespacedTLSStore(params: CreateTraefikIoV1alpha1NamespacedTLSStoreRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSStore> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsstores`;
+    return await this.post<TraefikIoV1alpha1TLSStore>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1CollectionNamespacedTLSStore(params: DeleteTraefikIoV1alpha1CollectionNamespacedTLSStoreRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsstores`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTraefikIoV1alpha1NamespacedTLSStore(params: ReadTraefikIoV1alpha1NamespacedTLSStoreRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSStore> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsstores/${params.path.name}`;
+    return await this.get<TraefikIoV1alpha1TLSStore>(path, params.query, null, opts);
+  }
+  async replaceTraefikIoV1alpha1NamespacedTLSStore(params: ReplaceTraefikIoV1alpha1NamespacedTLSStoreRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSStore> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsstores/${params.path.name}`;
+    return await this.put<TraefikIoV1alpha1TLSStore>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1NamespacedTLSStore(params: DeleteTraefikIoV1alpha1NamespacedTLSStoreRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsstores/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTraefikIoV1alpha1NamespacedTLSStore(params: PatchTraefikIoV1alpha1NamespacedTLSStoreRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSStore> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/tlsstores/${params.path.name}`;
+    return await this.patch<TraefikIoV1alpha1TLSStore>(path, params.query, params.body, opts);
+  }
+  async listTraefikIoV1alpha1NamespacedTraefikService(params: ListTraefikIoV1alpha1NamespacedTraefikServiceRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TraefikServiceList> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/traefikservices`;
+    return await this.get<TraefikIoV1alpha1TraefikServiceList>(path, params.query, null, opts);
+  }
+  async createTraefikIoV1alpha1NamespacedTraefikService(params: CreateTraefikIoV1alpha1NamespacedTraefikServiceRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TraefikService> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/traefikservices`;
+    return await this.post<TraefikIoV1alpha1TraefikService>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1CollectionNamespacedTraefikService(params: DeleteTraefikIoV1alpha1CollectionNamespacedTraefikServiceRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/traefikservices`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readTraefikIoV1alpha1NamespacedTraefikService(params: ReadTraefikIoV1alpha1NamespacedTraefikServiceRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TraefikService> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/traefikservices/${params.path.name}`;
+    return await this.get<TraefikIoV1alpha1TraefikService>(path, params.query, null, opts);
+  }
+  async replaceTraefikIoV1alpha1NamespacedTraefikService(params: ReplaceTraefikIoV1alpha1NamespacedTraefikServiceRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TraefikService> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/traefikservices/${params.path.name}`;
+    return await this.put<TraefikIoV1alpha1TraefikService>(path, params.query, params.body, opts);
+  }
+  async deleteTraefikIoV1alpha1NamespacedTraefikService(params: DeleteTraefikIoV1alpha1NamespacedTraefikServiceRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/traefikservices/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchTraefikIoV1alpha1NamespacedTraefikService(params: PatchTraefikIoV1alpha1NamespacedTraefikServiceRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TraefikService> {
+    const path = `/apis/traefik.io/v1alpha1/namespaces/${params.path.namespace}/traefikservices/${params.path.name}`;
+    return await this.patch<TraefikIoV1alpha1TraefikService>(path, params.query, params.body, opts);
+  }
+  async listTraefikIoV1alpha1ServersTransportForAllNamespaces(params: ListTraefikIoV1alpha1ServersTransportForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransportList> {
+    const path = `/apis/traefik.io/v1alpha1/serverstransports`;
+    return await this.get<TraefikIoV1alpha1ServersTransportList>(path, null, null, opts);
+  }
+  async listTraefikIoV1alpha1ServersTransportTCPForAllNamespaces(params: ListTraefikIoV1alpha1ServersTransportTCPForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1ServersTransportTCPList> {
+    const path = `/apis/traefik.io/v1alpha1/serverstransporttcps`;
+    return await this.get<TraefikIoV1alpha1ServersTransportTCPList>(path, null, null, opts);
+  }
+  async listTraefikIoV1alpha1TLSOptionForAllNamespaces(params: ListTraefikIoV1alpha1TLSOptionForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSOptionList> {
+    const path = `/apis/traefik.io/v1alpha1/tlsoptions`;
+    return await this.get<TraefikIoV1alpha1TLSOptionList>(path, null, null, opts);
+  }
+  async listTraefikIoV1alpha1TLSStoreForAllNamespaces(params: ListTraefikIoV1alpha1TLSStoreForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TLSStoreList> {
+    const path = `/apis/traefik.io/v1alpha1/tlsstores`;
+    return await this.get<TraefikIoV1alpha1TLSStoreList>(path, null, null, opts);
+  }
+  async listTraefikIoV1alpha1TraefikServiceForAllNamespaces(params: ListTraefikIoV1alpha1TraefikServiceForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<TraefikIoV1alpha1TraefikServiceList> {
+    const path = `/apis/traefik.io/v1alpha1/traefikservices`;
+    return await this.get<TraefikIoV1alpha1TraefikServiceList>(path, null, null, opts);
+  }
   async getServiceAccountIssuerOpenIDKeyset(params: GetServiceAccountIssuerOpenIDKeysetRequest, opts?: APIClientRequestOpts): Promise<string> {
     const path = `/openid/v1/jwks/`;
     return await this.get<string>(path, null, null, opts);
@@ -43057,8 +53846,6 @@ export interface ResourceTypeMap {
   "coordination.k8s.io/v1/Lease": CoordinationK8sIoV1Lease;
   "discovery.k8s.io/v1/EndpointSlice": DiscoveryK8sIoV1EndpointSlice;
   "events.k8s.io/v1/Event": EventsK8sIoV1Event;
-  "flowcontrol.apiserver.k8s.io/v1/FlowSchema": FlowcontrolApiserverK8sIoV1FlowSchema;
-  "flowcontrol.apiserver.k8s.io/v1/PriorityLevelConfiguration": FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration;
   "monitoring.coreos.com/v1/Alertmanager": MonitoringCoreosComV1Alertmanager;
   "monitoring.coreos.com/v1/PodMonitor": MonitoringCoreosComV1PodMonitor;
   "monitoring.coreos.com/v1/Probe": MonitoringCoreosComV1Probe;
@@ -43091,6 +53878,8 @@ export interface ResourceTypeMap {
   "rbac.authorization.k8s.io/v1/ClusterRole": RbacAuthorizationK8sIoV1ClusterRole;
   "rbac.authorization.k8s.io/v1/RoleBinding": RbacAuthorizationK8sIoV1RoleBinding;
   "rbac.authorization.k8s.io/v1/Role": RbacAuthorizationK8sIoV1Role;
+  "resolution.tekton.dev/v1alpha1/ResolutionRequest": ResolutionTektonDevV1alpha1ResolutionRequest;
+  "resolution.tekton.dev/v1beta1/ResolutionRequest": ResolutionTektonDevV1beta1ResolutionRequest;
   "scheduling.k8s.io/v1/PriorityClass": SchedulingK8sIoV1PriorityClass;
   "serving.knative.dev/v1/Configuration": ServingKnativeDevV1Configuration;
   "serving.knative.dev/v1/Revision": ServingKnativeDevV1Revision;
@@ -43102,6 +53891,28 @@ export interface ResourceTypeMap {
   "storage.k8s.io/v1/CSIStorageCapacity": StorageK8sIoV1CSIStorageCapacity;
   "storage.k8s.io/v1/StorageClass": StorageK8sIoV1StorageClass;
   "storage.k8s.io/v1/VolumeAttachment": StorageK8sIoV1VolumeAttachment;
+  "tekton.dev/v1/PipelineRun": TektonDevV1PipelineRun;
+  "tekton.dev/v1/Pipeline": TektonDevV1Pipeline;
+  "tekton.dev/v1/TaskRun": TektonDevV1TaskRun;
+  "tekton.dev/v1/Task": TektonDevV1Task;
+  "tekton.dev/v1alpha1/StepAction": TektonDevV1alpha1StepAction;
+  "tekton.dev/v1alpha1/VerificationPolicy": TektonDevV1alpha1VerificationPolicy;
+  "tekton.dev/v1beta1/CustomRun": TektonDevV1beta1CustomRun;
+  "tekton.dev/v1beta1/PipelineRun": TektonDevV1beta1PipelineRun;
+  "tekton.dev/v1beta1/Pipeline": TektonDevV1beta1Pipeline;
+  "tekton.dev/v1beta1/StepAction": TektonDevV1beta1StepAction;
+  "tekton.dev/v1beta1/TaskRun": TektonDevV1beta1TaskRun;
+  "tekton.dev/v1beta1/Task": TektonDevV1beta1Task;
+  "traefik.io/v1alpha1/IngressRoute": TraefikIoV1alpha1IngressRoute;
+  "traefik.io/v1alpha1/IngressRouteTCP": TraefikIoV1alpha1IngressRouteTCP;
+  "traefik.io/v1alpha1/IngressRouteUDP": TraefikIoV1alpha1IngressRouteUDP;
+  "traefik.io/v1alpha1/Middleware": TraefikIoV1alpha1Middleware;
+  "traefik.io/v1alpha1/MiddlewareTCP": TraefikIoV1alpha1MiddlewareTCP;
+  "traefik.io/v1alpha1/ServersTransport": TraefikIoV1alpha1ServersTransport;
+  "traefik.io/v1alpha1/ServersTransportTCP": TraefikIoV1alpha1ServersTransportTCP;
+  "traefik.io/v1alpha1/TLSOption": TraefikIoV1alpha1TLSOption;
+  "traefik.io/v1alpha1/TLSStore": TraefikIoV1alpha1TLSStore;
+  "traefik.io/v1alpha1/TraefikService": TraefikIoV1alpha1TraefikService;
   "policy/v1/Eviction": PolicyV1Eviction;
   "autoscaling/v1/Scale": AutoscalingV1Scale;
   "authentication.k8s.io/v1/TokenRequest": AuthenticationK8sIoV1TokenRequest;
@@ -43112,4 +53923,4 @@ export interface ResourceTypeMap {
   "authorization.k8s.io/v1/SelfSubjectRulesReview": AuthorizationK8sIoV1SelfSubjectRulesReview;
   "authorization.k8s.io/v1/SubjectAccessReview": AuthorizationK8sIoV1SubjectAccessReview;
 }
-export type KubernetesResource = ComponentStatus | ConfigMap | Endpoints | Event | LimitRange | Namespace | Binding | Status | PersistentVolumeClaim | Pod | PodTemplate | ReplicationController | ResourceQuota | Secret | ServiceAccount | Service | Node | PersistentVolume | AcmeCertManagerIoV1Challenge | AcmeCertManagerIoV1Order | AdmissionregistrationK8sIoV1MutatingWebhookConfiguration | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicy | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicyBinding | AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration | ApiextensionsK8sIoV1CustomResourceDefinition | ApiregistrationK8sIoV1APIService | AppsV1ControllerRevision | AppsV1DaemonSet | AppsV1Deployment | AppsV1ReplicaSet | AppsV1StatefulSet | AutoscalingInternalKnativeDevV1alpha1Metric | AutoscalingInternalKnativeDevV1alpha1PodAutoscaler | AutoscalingV1HorizontalPodAutoscaler | AutoscalingV2HorizontalPodAutoscaler | BatchV1CronJob | BatchV1Job | CachingInternalKnativeDevV1alpha1Image | CertManagerIoV1ClusterIssuer | CertManagerIoV1CertificateRequest | CertManagerIoV1Certificate | CertManagerIoV1Issuer | CertificatesK8sIoV1CertificateSigningRequest | CoordinationK8sIoV1Lease | DiscoveryK8sIoV1EndpointSlice | EventsK8sIoV1Event | FlowcontrolApiserverK8sIoV1FlowSchema | FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration | MonitoringCoreosComV1Alertmanager | MonitoringCoreosComV1PodMonitor | MonitoringCoreosComV1Probe | MonitoringCoreosComV1Prometheus | MonitoringCoreosComV1PrometheusRule | MonitoringCoreosComV1ServiceMonitor | MonitoringCoreosComV1ThanosRuler | MonitoringCoreosComV1alpha1AlertmanagerConfig | MonitoringCoreosComV1alpha1PrometheusAgent | MonitoringCoreosComV1alpha1ScrapeConfig | NetworkingInternalKnativeDevV1alpha1ClusterDomainClaim | NetworkingInternalKnativeDevV1alpha1Certificate | NetworkingInternalKnativeDevV1alpha1Ingress | NetworkingInternalKnativeDevV1alpha1ServerlessService | NetworkingK8sIoV1IngressClass | NetworkingK8sIoV1Ingress | NetworkingK8sIoV1NetworkPolicy | NodeK8sIoV1RuntimeClass | PolicyV1PodDisruptionBudget | PostgresqlCnpgIoV1ClusterImageCatalog | PostgresqlCnpgIoV1Backup | PostgresqlCnpgIoV1Cluster | PostgresqlCnpgIoV1Database | PostgresqlCnpgIoV1ImageCatalog | PostgresqlCnpgIoV1Pooler | PostgresqlCnpgIoV1Publication | PostgresqlCnpgIoV1ScheduledBackup | PostgresqlCnpgIoV1Subscription | RbacAuthorizationK8sIoV1ClusterRoleBinding | RbacAuthorizationK8sIoV1ClusterRole | RbacAuthorizationK8sIoV1RoleBinding | RbacAuthorizationK8sIoV1Role | SchedulingK8sIoV1PriorityClass | ServingKnativeDevV1Configuration | ServingKnativeDevV1Revision | ServingKnativeDevV1Route | ServingKnativeDevV1Service | ServingKnativeDevV1beta1DomainMapping | StorageK8sIoV1CSIDriver | StorageK8sIoV1CSINode | StorageK8sIoV1CSIStorageCapacity | StorageK8sIoV1StorageClass | StorageK8sIoV1VolumeAttachment | PolicyV1Eviction | AutoscalingV1Scale | AuthenticationK8sIoV1TokenRequest | AuthenticationK8sIoV1SelfSubjectReview | AuthenticationK8sIoV1TokenReview | AuthorizationK8sIoV1LocalSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectRulesReview | AuthorizationK8sIoV1SubjectAccessReview;
+export type KubernetesResource = ComponentStatus | ConfigMap | Endpoints | Event | LimitRange | Namespace | Binding | Status | PersistentVolumeClaim | Pod | PodTemplate | ReplicationController | ResourceQuota | Secret | ServiceAccount | Service | Node | PersistentVolume | AcmeCertManagerIoV1Challenge | AcmeCertManagerIoV1Order | AdmissionregistrationK8sIoV1MutatingWebhookConfiguration | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicy | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicyBinding | AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration | ApiextensionsK8sIoV1CustomResourceDefinition | ApiregistrationK8sIoV1APIService | AppsV1ControllerRevision | AppsV1DaemonSet | AppsV1Deployment | AppsV1ReplicaSet | AppsV1StatefulSet | AutoscalingInternalKnativeDevV1alpha1Metric | AutoscalingInternalKnativeDevV1alpha1PodAutoscaler | AutoscalingV1HorizontalPodAutoscaler | AutoscalingV2HorizontalPodAutoscaler | BatchV1CronJob | BatchV1Job | CachingInternalKnativeDevV1alpha1Image | CertManagerIoV1ClusterIssuer | CertManagerIoV1CertificateRequest | CertManagerIoV1Certificate | CertManagerIoV1Issuer | CertificatesK8sIoV1CertificateSigningRequest | CoordinationK8sIoV1Lease | DiscoveryK8sIoV1EndpointSlice | EventsK8sIoV1Event | MonitoringCoreosComV1Alertmanager | MonitoringCoreosComV1PodMonitor | MonitoringCoreosComV1Probe | MonitoringCoreosComV1Prometheus | MonitoringCoreosComV1PrometheusRule | MonitoringCoreosComV1ServiceMonitor | MonitoringCoreosComV1ThanosRuler | MonitoringCoreosComV1alpha1AlertmanagerConfig | MonitoringCoreosComV1alpha1PrometheusAgent | MonitoringCoreosComV1alpha1ScrapeConfig | NetworkingInternalKnativeDevV1alpha1ClusterDomainClaim | NetworkingInternalKnativeDevV1alpha1Certificate | NetworkingInternalKnativeDevV1alpha1Ingress | NetworkingInternalKnativeDevV1alpha1ServerlessService | NetworkingK8sIoV1IngressClass | NetworkingK8sIoV1Ingress | NetworkingK8sIoV1NetworkPolicy | NodeK8sIoV1RuntimeClass | PolicyV1PodDisruptionBudget | PostgresqlCnpgIoV1ClusterImageCatalog | PostgresqlCnpgIoV1Backup | PostgresqlCnpgIoV1Cluster | PostgresqlCnpgIoV1Database | PostgresqlCnpgIoV1ImageCatalog | PostgresqlCnpgIoV1Pooler | PostgresqlCnpgIoV1Publication | PostgresqlCnpgIoV1ScheduledBackup | PostgresqlCnpgIoV1Subscription | RbacAuthorizationK8sIoV1ClusterRoleBinding | RbacAuthorizationK8sIoV1ClusterRole | RbacAuthorizationK8sIoV1RoleBinding | RbacAuthorizationK8sIoV1Role | ResolutionTektonDevV1alpha1ResolutionRequest | ResolutionTektonDevV1beta1ResolutionRequest | SchedulingK8sIoV1PriorityClass | ServingKnativeDevV1Configuration | ServingKnativeDevV1Revision | ServingKnativeDevV1Route | ServingKnativeDevV1Service | ServingKnativeDevV1beta1DomainMapping | StorageK8sIoV1CSIDriver | StorageK8sIoV1CSINode | StorageK8sIoV1CSIStorageCapacity | StorageK8sIoV1StorageClass | StorageK8sIoV1VolumeAttachment | TektonDevV1PipelineRun | TektonDevV1Pipeline | TektonDevV1TaskRun | TektonDevV1Task | TektonDevV1alpha1StepAction | TektonDevV1alpha1VerificationPolicy | TektonDevV1beta1CustomRun | TektonDevV1beta1PipelineRun | TektonDevV1beta1Pipeline | TektonDevV1beta1StepAction | TektonDevV1beta1TaskRun | TektonDevV1beta1Task | TraefikIoV1alpha1IngressRoute | TraefikIoV1alpha1IngressRouteTCP | TraefikIoV1alpha1IngressRouteUDP | TraefikIoV1alpha1Middleware | TraefikIoV1alpha1MiddlewareTCP | TraefikIoV1alpha1ServersTransport | TraefikIoV1alpha1ServersTransportTCP | TraefikIoV1alpha1TLSOption | TraefikIoV1alpha1TLSStore | TraefikIoV1alpha1TraefikService | PolicyV1Eviction | AutoscalingV1Scale | AuthenticationK8sIoV1TokenRequest | AuthenticationK8sIoV1SelfSubjectReview | AuthenticationK8sIoV1TokenReview | AuthorizationK8sIoV1LocalSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectRulesReview | AuthorizationK8sIoV1SubjectAccessReview;
