@@ -25757,7 +25757,7 @@ export interface AzureFileVolumeSource {
   shareName: string;
 }
 /* io.k8s.api.core.v1.Binding */
-/* Binding ties one object to another; for example, a pod is bound to a node by a scheduler. Deprecated in 1.7, please use the bindings subresource of pods instead. */
+/* Binding ties one object to another; for example, a pod is bound to a node by a scheduler. */
 export interface Binding {
   apiVersion?: string;
   kind?: string;
@@ -25765,7 +25765,7 @@ export interface Binding {
   target: ObjectReference;
 }
 /* io.k8s.api.core.v1.CSIPersistentVolumeSource */
-/* Represents storage that is managed by an external CSI volume driver (Beta feature) */
+/* Represents storage that is managed by an external CSI volume driver */
 export interface CSIPersistentVolumeSource {
   controllerExpandSecretRef?: SecretReference;
   controllerPublishSecretRef?: SecretReference;
@@ -26281,6 +26281,8 @@ export interface GCEPersistentDiskVolumeSource {
   pdName: string;
   readOnly?: boolean;
 }
+/* io.k8s.api.core.v1.GRPCAction */
+/* GRPCAction specifies an action involving a GRPC service. */
 export interface GRPCAction {
   port: number;
   service?: string;
@@ -26465,7 +26467,7 @@ export interface LocalObjectReference {
   name?: string;
 }
 /* io.k8s.api.core.v1.LocalVolumeSource */
-/* Local represents directly-attached storage with node affinity (Beta feature) */
+/* Local represents directly-attached storage with node affinity */
 export interface LocalVolumeSource {
   fsType?: string;
   path: string;
@@ -26919,6 +26921,7 @@ export interface PodSecurityContext {
   runAsGroup?: number;
   runAsNonRoot?: boolean;
   runAsUser?: number;
+  seLinuxChangePolicy?: string;
   seLinuxOptions?: SELinuxOptions;
   seccompProfile?: SeccompProfile;
   supplementalGroups?: number[];
@@ -26958,6 +26961,7 @@ export interface PodSpec {
   priorityClassName?: string;
   readinessGates?: PodReadinessGate[];
   resourceClaims?: PodResourceClaim[];
+  resources?: ResourceRequirements;
   restartPolicy?: "Always" | "Never" | "OnFailure";
   runtimeClassName?: string;
   schedulerName?: string;
@@ -27015,6 +27019,8 @@ export interface PodTemplateSpec {
   metadata?: ObjectMeta;
   spec?: PodSpec;
 }
+/* io.k8s.api.core.v1.PortStatus */
+/* PortStatus represents the error condition of a service port */
 export interface PortStatus {
   error?: string;
   port: number;
@@ -27147,7 +27153,7 @@ export interface ResourceFieldSelector {
   resource: string;
 }
 /* io.k8s.api.core.v1.ResourceHealth */
-/* ResourceHealth represents the health of a resource. It has the latest device health information. This is a part of KEP https://kep.k8s.io/4680 and historical health changes are planned to be added in future iterations of a KEP. */
+/* ResourceHealth represents the health of a resource. It has the latest device health information. This is a part of KEP https://kep.k8s.io/4680. */
 export interface ResourceHealth {
   health?: string;
   resourceID: string;
@@ -27199,6 +27205,8 @@ export interface ResourceRequirements {
     [key: string]: unknown;
   };
 }
+/* io.k8s.api.core.v1.ResourceStatus */
+/* ResourceStatus represents the status of a single resource allocated to a Pod. */
 export interface ResourceStatus {
   name: string;
   resources?: ResourceHealth[];
@@ -27507,6 +27515,8 @@ export interface TypedLocalObjectReference {
   kind: string;
   name: string;
 }
+/* io.k8s.api.core.v1.TypedObjectReference */
+/* TypedObjectReference contains enough information to let you locate the typed referenced object */
 export interface TypedObjectReference {
   apiGroup?: string;
   kind: string;
@@ -27710,6 +27720,168 @@ export interface EventsK8sIoV1EventList {
 export interface IoK8sApiEventsV1EventSeries {
   count: number;
   lastObservedTime: MicroTime;
+}
+/* io.k8s.api.flowcontrol.v1.ExemptPriorityLevelConfiguration */
+/* ExemptPriorityLevelConfiguration describes the configurable aspects of the handling of exempt requests. In the mandatory exempt configuration object the values in the fields here can be modified by authorized users, unlike the rest of the `spec`. */
+export interface ExemptPriorityLevelConfiguration {
+  lendablePercent?: number;
+  nominalConcurrencyShares?: number;
+}
+/* io.k8s.api.flowcontrol.v1.FlowDistinguisherMethod */
+/* FlowDistinguisherMethod specifies the method of a flow distinguisher. */
+export interface FlowDistinguisherMethod {
+  type: string;
+}
+/* io.k8s.api.flowcontrol.v1.FlowSchema */
+/* FlowSchema defines the schema of a group of flows. Note that a flow is made up of a set of inbound API requests with similar attributes and is identified by a pair of strings: the name of the FlowSchema and a "flow distinguisher". */
+export interface FlowcontrolApiserverK8sIoV1FlowSchema {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: FlowSchemaSpec;
+  status?: FlowSchemaStatus;
+}
+/* io.k8s.api.flowcontrol.v1.FlowSchemaCondition */
+/* FlowSchemaCondition describes conditions for a FlowSchema. */
+export interface FlowSchemaCondition {
+  lastTransitionTime?: Time;
+  message?: string;
+  reason?: string;
+  status?: string;
+  type?: string;
+}
+/* io.k8s.api.flowcontrol.v1.FlowSchemaList */
+/* FlowSchemaList is a list of FlowSchema objects. */
+export interface FlowcontrolApiserverK8sIoV1FlowSchemaList {
+  apiVersion?: string;
+  items: FlowcontrolApiserverK8sIoV1FlowSchema[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.k8s.api.flowcontrol.v1.FlowSchemaSpec */
+/* FlowSchemaSpec describes how the FlowSchema's specification looks like. */
+export interface FlowSchemaSpec {
+  distinguisherMethod?: FlowDistinguisherMethod;
+  matchingPrecedence?: number;
+  priorityLevelConfiguration: PriorityLevelConfigurationReference;
+  rules?: PolicyRulesWithSubjects[];
+}
+/* io.k8s.api.flowcontrol.v1.FlowSchemaStatus */
+/* FlowSchemaStatus represents the current state of a FlowSchema. */
+export interface FlowSchemaStatus {
+  conditions?: FlowSchemaCondition[];
+}
+/* io.k8s.api.flowcontrol.v1.GroupSubject */
+/* GroupSubject holds detailed information for group-kind subject. */
+export interface GroupSubject {
+  name: string;
+}
+/* io.k8s.api.flowcontrol.v1.LimitResponse */
+/* LimitResponse defines how to handle requests that can not be executed right now. */
+export interface LimitResponse {
+  queuing?: QueuingConfiguration;
+  type: string;
+}
+/* io.k8s.api.flowcontrol.v1.LimitedPriorityLevelConfiguration */
+/* LimitedPriorityLevelConfiguration specifies how to handle requests that are subject to limits. It addresses two issues:
+  - How are requests for this priority level limited?
+  - What should be done with requests that exceed the limit? */
+export interface LimitedPriorityLevelConfiguration {
+  borrowingLimitPercent?: number;
+  lendablePercent?: number;
+  limitResponse?: LimitResponse;
+  nominalConcurrencyShares?: number;
+}
+/* io.k8s.api.flowcontrol.v1.NonResourcePolicyRule */
+/* NonResourcePolicyRule is a predicate that matches non-resource requests according to their verb and the target non-resource URL. A NonResourcePolicyRule matches a request if and only if both (a) at least one member of verbs matches the request and (b) at least one member of nonResourceURLs matches the request. */
+export interface NonResourcePolicyRule {
+  nonResourceURLs: string[];
+  verbs: string[];
+}
+/* io.k8s.api.flowcontrol.v1.PolicyRulesWithSubjects */
+/* PolicyRulesWithSubjects prescribes a test that applies to a request to an apiserver. The test considers the subject making the request, the verb being requested, and the resource to be acted upon. This PolicyRulesWithSubjects matches a request if and only if both (a) at least one member of subjects matches the request and (b) at least one member of resourceRules or nonResourceRules matches the request. */
+export interface PolicyRulesWithSubjects {
+  nonResourceRules?: NonResourcePolicyRule[];
+  resourceRules?: ResourcePolicyRule[];
+  subjects: IoK8sApiFlowcontrolV1Subject[];
+}
+/* io.k8s.api.flowcontrol.v1.PriorityLevelConfiguration */
+/* PriorityLevelConfiguration represents the configuration of a priority level. */
+export interface FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: PriorityLevelConfigurationSpec;
+  status?: PriorityLevelConfigurationStatus;
+}
+/* io.k8s.api.flowcontrol.v1.PriorityLevelConfigurationCondition */
+/* PriorityLevelConfigurationCondition defines the condition of priority level. */
+export interface PriorityLevelConfigurationCondition {
+  lastTransitionTime?: Time;
+  message?: string;
+  reason?: string;
+  status?: string;
+  type?: string;
+}
+/* io.k8s.api.flowcontrol.v1.PriorityLevelConfigurationList */
+/* PriorityLevelConfigurationList is a list of PriorityLevelConfiguration objects. */
+export interface FlowcontrolApiserverK8sIoV1PriorityLevelConfigurationList {
+  apiVersion?: string;
+  items: FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.k8s.api.flowcontrol.v1.PriorityLevelConfigurationReference */
+/* PriorityLevelConfigurationReference contains information that points to the "request-priority" being used. */
+export interface PriorityLevelConfigurationReference {
+  name: string;
+}
+/* io.k8s.api.flowcontrol.v1.PriorityLevelConfigurationSpec */
+/* PriorityLevelConfigurationSpec specifies the configuration of a priority level. */
+export interface PriorityLevelConfigurationSpec {
+  exempt?: ExemptPriorityLevelConfiguration;
+  limited?: LimitedPriorityLevelConfiguration;
+  type: string;
+}
+/* io.k8s.api.flowcontrol.v1.PriorityLevelConfigurationStatus */
+/* PriorityLevelConfigurationStatus represents the current state of a "request-priority". */
+export interface PriorityLevelConfigurationStatus {
+  conditions?: PriorityLevelConfigurationCondition[];
+}
+/* io.k8s.api.flowcontrol.v1.QueuingConfiguration */
+/* QueuingConfiguration holds the configuration parameters for queuing */
+export interface QueuingConfiguration {
+  handSize?: number;
+  queueLengthLimit?: number;
+  queues?: number;
+}
+/* io.k8s.api.flowcontrol.v1.ResourcePolicyRule */
+/* ResourcePolicyRule is a predicate that matches some resource requests, testing the request's verb and the target resource. A ResourcePolicyRule matches a resource request if and only if: (a) at least one member of verbs matches the request, (b) at least one member of apiGroups matches the request, (c) at least one member of resources matches the request, and (d) either (d1) the request does not specify a namespace (i.e., `Namespace==""`) and clusterScope is true or (d2) the request specifies a namespace and least one member of namespaces matches the request's namespace. */
+export interface ResourcePolicyRule {
+  apiGroups: string[];
+  clusterScope?: boolean;
+  namespaces?: string[];
+  resources: string[];
+  verbs: string[];
+}
+/* io.k8s.api.flowcontrol.v1.ServiceAccountSubject */
+/* ServiceAccountSubject holds detailed information for service-account-kind subject. */
+export interface ServiceAccountSubject {
+  name: string;
+  namespace: string;
+}
+/* io.k8s.api.flowcontrol.v1.Subject */
+/* Subject matches the originator of a request, as identified by the request authentication system. There are three ways of matching an originator; by user, group, or service account. */
+export interface IoK8sApiFlowcontrolV1Subject {
+  group?: GroupSubject;
+  kind: string;
+  serviceAccount?: ServiceAccountSubject;
+  user?: UserSubject;
+}
+/* io.k8s.api.flowcontrol.v1.UserSubject */
+/* UserSubject holds detailed information for user-kind subject. */
+export interface UserSubject {
+  name: string;
 }
 /* io.k8s.api.networking.v1.HTTPIngressPath */
 /* HTTPIngressPath associates a path with a backend. Incoming urls matching the path are forwarded to the backend. */
@@ -27989,7 +28161,7 @@ export interface RbacAuthorizationK8sIoV1ClusterRoleBinding {
   kind?: string;
   metadata?: ObjectMeta;
   roleRef: RoleRef;
-  subjects?: Subject[];
+  subjects?: IoK8sApiRbacV1Subject[];
 }
 /* io.k8s.api.rbac.v1.ClusterRoleBindingList */
 /* ClusterRoleBindingList is a collection of ClusterRoleBindings */
@@ -28031,7 +28203,7 @@ export interface RbacAuthorizationK8sIoV1RoleBinding {
   kind?: string;
   metadata?: ObjectMeta;
   roleRef: RoleRef;
-  subjects?: Subject[];
+  subjects?: IoK8sApiRbacV1Subject[];
 }
 /* io.k8s.api.rbac.v1.RoleBindingList */
 /* RoleBindingList is a collection of RoleBindings */
@@ -28058,7 +28230,7 @@ export interface RoleRef {
 }
 /* io.k8s.api.rbac.v1.Subject */
 /* Subject contains a reference to the object or user identities a role binding applies to.  This can either hold a direct API object reference, or a value for non-objects such as user and group names. */
-export interface Subject {
+export interface IoK8sApiRbacV1Subject {
   apiGroup?: string;
   kind: string;
   name: string;
@@ -28219,7 +28391,7 @@ export interface StorageK8sIoV1VolumeAttachmentList {
   metadata?: ListMeta;
 }
 /* io.k8s.api.storage.v1.VolumeAttachmentSource */
-/* VolumeAttachmentSource represents a volume that should be attached. Right now only PersistenVolumes can be attached via external attacher, in future we may allow also inline volumes in pods. Exactly one member can be set. */
+/* VolumeAttachmentSource represents a volume that should be attached. Right now only PersistentVolumes can be attached via external attacher, in the future we may allow also inline volumes in pods. Exactly one member can be set. */
 export interface VolumeAttachmentSource {
   inlineVolumeSpec?: PersistentVolumeSpec;
   persistentVolumeName?: string;
@@ -28569,6 +28741,7 @@ export interface DeleteOptions {
   apiVersion?: string;
   dryRun?: string[];
   gracePeriodSeconds?: number;
+  ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
   kind?: string;
   orphanDependents?: boolean;
   preconditions?: Preconditions;
@@ -28827,1073 +29000,6 @@ export interface IoK8sKubeAggregatorPkgApisApiregistrationV1ServiceReference {
   name?: string;
   namespace?: string;
   port?: number;
-}
-export interface IoMinStsV1alpha1PolicyBinding {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    application: {
-      namespace: string;
-      serviceaccount: string;
-    };
-    policies: string[];
-  };
-  status?: {
-    currentState: string;
-    usage?: any;
-  };
-}
-/* io.min.sts.v1alpha1.PolicyBindingList */
-/* PolicyBindingList is a list of PolicyBinding */
-export interface IoMinStsV1alpha1PolicyBindingList {
-  apiVersion?: string;
-  items: IoMinStsV1alpha1PolicyBinding[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-export interface IoMinStsV1beta1PolicyBinding {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    application: {
-      namespace: string;
-      serviceaccount: string;
-    };
-    policies: string[];
-  };
-  status?: {
-    currentState: string;
-    usage?: any;
-  };
-}
-/* io.min.sts.v1beta1.PolicyBindingList */
-/* PolicyBindingList is a list of PolicyBinding */
-export interface IoMinStsV1beta1PolicyBindingList {
-  apiVersion?: string;
-  items: IoMinStsV1beta1PolicyBinding[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.AIService */
-/* AIService is a Kubernetes-like Service to interact with a text-based LLM provider. It defines the parameters and credentials required to interact with various LLM providers. */
-export interface AIService {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    anthropic?: {
-      model?: string;
-      params?: {
-        frequencyPenalty?: number;
-        maxTokens?: number;
-        presencePenalty?: number;
-        temperature?: number;
-        topP?: number;
-      };
-      token?: {
-        secretName: string;
-      };
-    };
-    azureOpenai?: {
-      apiKeySecret?: {
-        secretName: string;
-      };
-      baseUrl: string;
-      deploymentName: string;
-      model?: string;
-      params?: {
-        frequencyPenalty?: number;
-        maxTokens?: number;
-        presencePenalty?: number;
-        temperature?: number;
-        topP?: number;
-      };
-    };
-    bedrock?: {
-      model?: string;
-      params?: {
-        frequencyPenalty?: number;
-        maxTokens?: number;
-        presencePenalty?: number;
-        temperature?: number;
-        topP?: number;
-      };
-      region?: string;
-      systemMessage?: boolean;
-    };
-    cohere?: {
-      model?: string;
-      params?: {
-        frequencyPenalty?: number;
-        maxTokens?: number;
-        presencePenalty?: number;
-        temperature?: number;
-        topP?: number;
-      };
-      token?: {
-        secretName: string;
-      };
-    };
-    deepSeek?: {
-      baseUrl?: string;
-      model?: string;
-      params?: {
-        frequencyPenalty?: number;
-        maxTokens?: number;
-        presencePenalty?: number;
-        temperature?: number;
-        topP?: number;
-      };
-      token?: {
-        secretName: string;
-      };
-    };
-    gemini?: {
-      apiKey?: {
-        secretName: string;
-      };
-      model?: string;
-      params?: {
-        frequencyPenalty?: number;
-        maxTokens?: number;
-        presencePenalty?: number;
-        temperature?: number;
-        topP?: number;
-      };
-    };
-    mistral?: {
-      apiKey?: {
-        secretName: string;
-      };
-      model?: string;
-      params?: {
-        frequencyPenalty?: number;
-        maxTokens?: number;
-        presencePenalty?: number;
-        temperature?: number;
-        topP?: number;
-      };
-    };
-    ollama?: {
-      baseUrl: string;
-      model?: string;
-      params?: {
-        frequencyPenalty?: number;
-        maxTokens?: number;
-        presencePenalty?: number;
-        temperature?: number;
-        topP?: number;
-      };
-    };
-    openai?: {
-      baseUrl?: string;
-      model?: string;
-      params?: {
-        frequencyPenalty?: number;
-        maxTokens?: number;
-        presencePenalty?: number;
-        temperature?: number;
-        topP?: number;
-      };
-      token?: {
-        secretName: string;
-      };
-    };
-    qWen?: {
-      baseUrl?: string;
-      model?: string;
-      params?: {
-        frequencyPenalty?: number;
-        maxTokens?: number;
-        presencePenalty?: number;
-        temperature?: number;
-        topP?: number;
-      };
-      token?: {
-        secretName: string;
-      };
-    };
-  };
-}
-/* io.traefik.hub.v1alpha1.AIServiceList */
-/* AIServiceList is a list of AIService */
-export interface AIServiceList {
-  apiVersion?: string;
-  items: AIService[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.API */
-/* API defines an HTTP interface that is exposed to external clients. It specifies the supported versions
-and provides instructions for accessing its documentation. Once instantiated, an API object is associated
-with an Ingress, IngressRoute, or HTTPRoute resource, enabling the exposure of the described API to the outside world. */
-export interface API {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    cors?: {
-      addVaryHeader?: boolean;
-      allowCredentials?: boolean;
-      allowHeadersList?: string[];
-      allowMethodsList?: string[];
-      allowOriginListRegex?: string[];
-      allowOriginsList?: string[];
-      exposeHeadersList?: string[];
-      maxAge?: number;
-    };
-    description?: string;
-    openApiSpec?: {
-      operationSets?: {
-        matchers: {
-          methods?: string[];
-          path?: string;
-          pathPrefix?: string;
-          pathRegex?: string;
-        }[];
-        name: string;
-      }[];
-      override?: {
-        servers: {
-          url: string;
-        }[];
-      };
-      path?: string;
-      refreshInterval?: string;
-      url?: string;
-      validateRequestBodySchema?: boolean;
-      validateRequestMethodAndPath?: boolean;
-    };
-    title?: string;
-    versions?: {
-      name: string;
-    }[];
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    syncedAt?: string;
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.APIAuth */
-/* APIAuth defines the authentication configuration for APIs. */
-export interface APIAuth {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    apiKey?: {
-      keySource?: {
-        header?: string;
-        headerAuthScheme?: string;
-        query?: string;
-      };
-    };
-    isDefault: boolean;
-    jwt?: {
-      appIdClaim: string;
-      clientConfig?: {
-        maxRetries?: number;
-        timeoutSeconds?: number;
-        tls?: {
-          ca?: string;
-          insecureSkipVerify?: boolean;
-        };
-      };
-      forwardHeaders?: {
-        [key: string]: unknown;
-      };
-      jwksFile?: string;
-      jwksUrl?: string;
-      publicKey?: string;
-      signingSecretName?: string;
-      stripAuthorizationHeader?: boolean;
-      tokenNameClaim?: string;
-      tokenQueryKey?: string;
-      trustedIssuers?: {
-        issuer?: string;
-        jwksUrl: string;
-      }[];
-    };
-    ldap?: {
-      attribute?: string;
-      baseDn: string;
-      bindDn?: string;
-      bindPasswordSecretName?: string;
-      certificateAuthority?: string;
-      insecureSkipVerify?: boolean;
-      searchFilter?: string;
-      startTls?: boolean;
-      url: string;
-    };
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    syncedAt?: string;
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.APIAuthList */
-/* APIAuthList is a list of APIAuth */
-export interface APIAuthList {
-  apiVersion?: string;
-  items: APIAuth[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.APIBundle */
-/* APIBundle defines a set of APIs. */
-export interface APIBundle {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    apiSelector?: {
-      matchExpressions?: {
-        key: string;
-        operator: string;
-        values?: string[];
-      }[];
-      matchLabels?: {
-        [key: string]: unknown;
-      };
-    };
-    apis?: {
-      name: string;
-    }[];
-    title?: string;
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    resolvedApis?: {
-      name: string;
-    }[];
-    syncedAt?: string;
-    unresolvedApis?: {
-      name: string;
-    }[];
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.APIBundleList */
-/* APIBundleList is a list of APIBundle */
-export interface APIBundleList {
-  apiVersion?: string;
-  items: APIBundle[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.APICatalogItem */
-/* APICatalogItem defines APIs that will be part of the API catalog on the portal. */
-export interface APICatalogItem {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    apiBundles?: {
-      name: string;
-    }[];
-    apiPlan?: {
-      name: string;
-    };
-    apiSelector?: {
-      matchExpressions?: {
-        key: string;
-        operator: string;
-        values?: string[];
-      }[];
-      matchLabels?: {
-        [key: string]: unknown;
-      };
-    };
-    apis?: {
-      name: string;
-    }[];
-    everyone?: boolean;
-    groups?: string[];
-    operationFilter?: {
-      include?: string[];
-    };
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    resolvedApis?: {
-      name: string;
-    }[];
-    syncedAt?: string;
-    unresolvedApis?: {
-      name: string;
-    }[];
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.APICatalogItemList */
-/* APICatalogItemList is a list of APICatalogItem */
-export interface APICatalogItemList {
-  apiVersion?: string;
-  items: APICatalogItem[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.APIList */
-/* APIList is a list of API */
-export interface APIList {
-  apiVersion?: string;
-  items: API[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.APIPlan */
-/* APIPlan defines API Plan policy. */
-export interface APIPlan {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    description?: string;
-    quota?: {
-      bucket?: "subscription" | "application-api" | "application";
-      limit: number;
-      period?: string;
-    };
-    rateLimit?: {
-      bucket?: "subscription" | "application-api" | "application";
-      limit: number;
-      period?: string;
-    };
-    title: string;
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    syncedAt?: string;
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.APIPlanList */
-/* APIPlanList is a list of APIPlan */
-export interface APIPlanList {
-  apiVersion?: string;
-  items: APIPlan[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.APIPortal */
-/* APIPortal defines a developer portal for accessing the documentation of APIs. */
-export interface APIPortal {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    auth?: {
-      name: string;
-    };
-    description?: string;
-    title?: string;
-    trustedUrls: string[];
-    ui?: {
-      logoUrl?: string;
-    };
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    oidc?: {
-      clientId?: string;
-      companyClaim?: string;
-      emailClaim?: string;
-      firstnameClaim?: string;
-      generic?: boolean;
-      groupsClaim?: string;
-      issuer?: string;
-      lastnameClaim?: string;
-      scopes?: string;
-      secretName?: string;
-      syncedAttributes?: string[];
-      userIdClaim?: string;
-    };
-    syncedAt?: string;
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.APIPortalAuth */
-/* APIPortalAuth defines the authentication configuration for an APIPortal. */
-export interface APIPortalAuth {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    ldap?: {
-      attribute?: string;
-      attributes?: {
-        company?: string;
-        email?: string;
-        firstname?: string;
-        lastname?: string;
-        userId?: string;
-      };
-      baseDn: string;
-      bindDn?: string;
-      bindPasswordSecretName?: string;
-      certificateAuthority?: string;
-      groups?: {
-        memberOfAttribute?: string;
-      };
-      insecureSkipVerify?: boolean;
-      searchFilter?: string;
-      startTls?: boolean;
-      syncedAttributes?: ("groups" | "userId" | "firstname" | "lastname" | "email" | "company")[];
-      url: string;
-    };
-    oidc?: {
-      claims: {
-        company?: string;
-        email?: string;
-        firstname?: string;
-        groups: string;
-        lastname?: string;
-        userId?: string;
-      };
-      clientConfig?: {
-        maxRetries?: number;
-        timeoutSeconds?: number;
-        tls?: {
-          ca?: string;
-          insecureSkipVerify?: boolean;
-        };
-      };
-      issuerUrl: string;
-      scopes?: string[];
-      secretName: string;
-      syncedAttributes?: ("groups" | "userId" | "firstname" | "lastname" | "email" | "company")[];
-    };
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    syncedAt?: string;
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.APIPortalAuthList */
-/* APIPortalAuthList is a list of APIPortalAuth */
-export interface APIPortalAuthList {
-  apiVersion?: string;
-  items: APIPortalAuth[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.APIPortalList */
-/* APIPortalList is a list of APIPortal */
-export interface APIPortalList {
-  apiVersion?: string;
-  items: APIPortal[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.APIRateLimit */
-/* APIRateLimit defines how group of consumers are rate limited on a set of APIs. */
-export interface APIRateLimit {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    apiSelector?: {
-      matchExpressions?: {
-        key: string;
-        operator: string;
-        values?: string[];
-      }[];
-      matchLabels?: {
-        [key: string]: unknown;
-      };
-    };
-    apis?: {
-      name: string;
-    }[];
-    everyone?: boolean;
-    groups?: string[];
-    limit: number;
-    period?: string;
-    strategy?: "local" | "distributed";
-  };
-  status?: {
-    hash?: string;
-    syncedAt?: string;
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.APIRateLimitList */
-/* APIRateLimitList is a list of APIRateLimit */
-export interface APIRateLimitList {
-  apiVersion?: string;
-  items: APIRateLimit[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.APIVersion */
-/* APIVersion defines a version of an API. */
-export interface APIVersion {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    cors?: {
-      addVaryHeader?: boolean;
-      allowCredentials?: boolean;
-      allowHeadersList?: string[];
-      allowMethodsList?: string[];
-      allowOriginListRegex?: string[];
-      allowOriginsList?: string[];
-      exposeHeadersList?: string[];
-      maxAge?: number;
-    };
-    description?: string;
-    openApiSpec?: {
-      operationSets?: {
-        matchers: {
-          methods?: string[];
-          path?: string;
-          pathPrefix?: string;
-          pathRegex?: string;
-        }[];
-        name: string;
-      }[];
-      override?: {
-        servers: {
-          url: string;
-        }[];
-      };
-      path?: string;
-      refreshInterval?: string;
-      url?: string;
-      validateRequestBodySchema?: boolean;
-      validateRequestMethodAndPath?: boolean;
-    };
-    release: string;
-    title?: string;
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    syncedAt?: string;
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.APIVersionList */
-/* APIVersionList is a list of APIVersion */
-export interface APIVersionList {
-  apiVersion?: string;
-  items: APIVersion[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.AccessControlPolicy */
-/* AccessControlPolicy defines an access control policy. */
-export interface AccessControlPolicy {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    apiKey?: {
-      forwardHeaders?: {
-        [key: string]: unknown;
-      };
-      keySource: {
-        cookie?: string;
-        header?: string;
-        headerAuthScheme?: string;
-        query?: string;
-      };
-      keys?: {
-        id: string;
-        metadata?: {
-          [key: string]: unknown;
-        };
-        value: string;
-      }[];
-    };
-    basicAuth?: {
-      forwardUsernameHeader?: string;
-      realm?: string;
-      stripAuthorizationHeader?: boolean;
-      users?: string[];
-    };
-    jwt?: {
-      claims?: string;
-      forwardHeaders?: {
-        [key: string]: unknown;
-      };
-      jwksFile?: string;
-      jwksUrl?: string;
-      publicKey?: string;
-      signingSecret?: string;
-      signingSecretBase64Encoded?: boolean;
-      stripAuthorizationHeader?: boolean;
-      tokenQueryKey?: string;
-    };
-    oAuthIntro?: {
-      claims?: string;
-      clientConfig: {
-        headers?: {
-          [key: string]: unknown;
-        };
-        maxRetries?: number;
-        timeoutSeconds?: number;
-        tls?: {
-          ca?: string;
-          insecureSkipVerify?: boolean;
-        };
-        tokenTypeHint?: string;
-        url: string;
-      };
-      forwardHeaders?: {
-        [key: string]: unknown;
-      };
-      tokenSource: {
-        cookie?: string;
-        header?: string;
-        headerAuthScheme?: string;
-        query?: string;
-      };
-    };
-    oidc?: {
-      authParams?: {
-        [key: string]: unknown;
-      };
-      claims?: string;
-      clientId?: string;
-      disableAuthRedirectionPaths?: string[];
-      forwardHeaders?: {
-        [key: string]: unknown;
-      };
-      issuer?: string;
-      logoutUrl?: string;
-      redirectUrl?: string;
-      scopes?: string[];
-      secret?: {
-        name?: string;
-        namespace?: string;
-      };
-      session?: {
-        domain?: string;
-        path?: string;
-        refresh?: boolean;
-        sameSite?: string;
-        secure?: boolean;
-      };
-      stateCookie?: {
-        domain?: string;
-        path?: string;
-        sameSite?: string;
-        secure?: boolean;
-      };
-    };
-    oidcGoogle?: {
-      authParams?: {
-        [key: string]: unknown;
-      };
-      clientId?: string;
-      emails?: string[];
-      forwardHeaders?: {
-        [key: string]: unknown;
-      };
-      logoutUrl?: string;
-      redirectUrl?: string;
-      secret?: {
-        name?: string;
-        namespace?: string;
-      };
-      session?: {
-        domain?: string;
-        path?: string;
-        refresh?: boolean;
-        sameSite?: string;
-        secure?: boolean;
-      };
-      stateCookie?: {
-        domain?: string;
-        path?: string;
-        sameSite?: string;
-        secure?: boolean;
-      };
-    };
-  };
-  status?: {
-    specHash?: string;
-    syncedAt?: string;
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.AccessControlPolicyList */
-/* AccessControlPolicyList is a list of AccessControlPolicy */
-export interface AccessControlPolicyList {
-  apiVersion?: string;
-  items: AccessControlPolicy[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.ContentItem */
-/* ContentItem defines additional documentation for given resource. */
-export interface ContentItem {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    content?: string;
-    link?: {
-      href: string;
-    };
-    order: number;
-    parentRef: {
-      kind: "APIPortal" | "API" | "APIBundle";
-      name: string;
-    };
-    title: string;
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    syncedAt?: string;
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.ContentItemList */
-/* ContentItemList is a list of ContentItem */
-export interface ContentItemList {
-  apiVersion?: string;
-  items: ContentItem[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.ManagedApplication */
-/* ManagedApplication represents a managed application. */
-export interface ManagedApplication {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    apiKeys?: {
-      secretName?: string;
-      suspended?: boolean;
-      title?: string;
-      value?: string;
-    }[];
-    appId: string;
-    notes?: string;
-    owner: string;
-  };
-  status?: {
-    apiKeyVersions?: {
-      [key: string]: unknown;
-    };
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    syncedAt?: string;
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.ManagedApplicationList */
-/* ManagedApplicationList is a list of ManagedApplication */
-export interface ManagedApplicationList {
-  apiVersion?: string;
-  items: ManagedApplication[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.ManagedSubscription */
-/* ManagedSubscription defines a Subscription managed by the API manager as the result of a pre-negotiation with its
-API consumers. This subscription grant consuming access to a set of APIs to a set of Applications. */
-export interface ManagedSubscription {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    apiBundles?: {
-      name: string;
-    }[];
-    apiPlan: {
-      name: string;
-    };
-    apiSelector?: {
-      matchExpressions?: {
-        key: string;
-        operator: string;
-        values?: string[];
-      }[];
-      matchLabels?: {
-        [key: string]: unknown;
-      };
-    };
-    apis?: {
-      name: string;
-    }[];
-    applications?: {
-      appId: string;
-    }[];
-    claims?: string;
-    managedApplications?: {
-      name: string;
-    }[];
-    operationFilter?: {
-      include?: string[];
-    };
-    weight?: number;
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-    hash?: string;
-    resolvedApis?: {
-      name: string;
-    }[];
-    syncedAt?: string;
-    unresolvedApis?: {
-      name: string;
-    }[];
-    version?: string;
-  };
-}
-/* io.traefik.hub.v1alpha1.ManagedSubscriptionList */
-/* ManagedSubscriptionList is a list of ManagedSubscription */
-export interface ManagedSubscriptionList {
-  apiVersion?: string;
-  items: ManagedSubscription[];
-  kind?: string;
-  metadata?: ListMeta;
-}
-/* io.traefik.hub.v1alpha1.Uplink */
-/* Uplink is an inter-cluster service advertisement: a child cluster declares an Uplink to advertise
-to a parent cluster that it can handle a particular workload. */
-export interface Uplink {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMeta;
-  spec?: {
-    entryPoints?: string[];
-    exposeName?: string;
-    healthCheck?: {
-      followRedirects?: boolean;
-      headers?: {
-        [key: string]: unknown;
-      };
-      hostname?: string;
-      interval?: any;
-      method?: string;
-      mode?: string;
-      path?: string;
-      port?: number;
-      scheme?: string;
-      status?: number;
-      timeout?: any;
-      unhealthyInterval?: any;
-    };
-    passiveHealthCheck?: {
-      failureWindow?: any;
-      maxFailedAttempts?: number;
-    };
-    weight?: number;
-  };
-  status?: {
-    conditions?: {
-      lastTransitionTime: string;
-      message: string;
-      observedGeneration?: number;
-      reason: string;
-      status: "True" | "False" | "Unknown";
-      type: string;
-    }[];
-  };
-}
-/* io.traefik.hub.v1alpha1.UplinkList */
-/* UplinkList is a list of Uplink */
-export interface UplinkList {
-  apiVersion?: string;
-  items: Uplink[];
-  kind?: string;
-  metadata?: ListMeta;
 }
 /* io.traefik.v1alpha1.IngressRoute */
 /* IngressRoute is the CRD implementation of a Traefik HTTP Router. */
@@ -31093,6 +30199,7 @@ export interface DeleteCoreV1CollectionNamespacedConfigMapRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -31133,6 +30240,7 @@ export interface DeleteCoreV1NamespacedConfigMapRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31192,6 +30300,7 @@ export interface DeleteCoreV1CollectionNamespacedEndpointsRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -31232,6 +30341,7 @@ export interface DeleteCoreV1NamespacedEndpointsRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31291,6 +30401,7 @@ export interface DeleteCoreV1CollectionNamespacedEventRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -31331,6 +30442,7 @@ export interface DeleteCoreV1NamespacedEventRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31390,6 +30502,7 @@ export interface DeleteCoreV1CollectionNamespacedLimitRangeRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -31430,6 +30543,7 @@ export interface DeleteCoreV1NamespacedLimitRangeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31489,6 +30603,7 @@ export interface DeleteCoreV1CollectionNamespacedPersistentVolumeClaimRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -31529,6 +30644,7 @@ export interface DeleteCoreV1NamespacedPersistentVolumeClaimRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31624,6 +30740,7 @@ export interface DeleteCoreV1CollectionNamespacedPodRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -31664,6 +30781,7 @@ export interface DeleteCoreV1NamespacedPodRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -31811,6 +30929,7 @@ export interface ReadCoreV1NamespacedPodLogRequest {
     pretty?: string;
     previous?: boolean;
     sinceSeconds?: number;
+    stream?: string;
     tailLines?: number;
     timestamps?: boolean;
   };
@@ -32005,6 +31124,7 @@ export interface DeleteCoreV1CollectionNamespacedPodTemplateRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -32045,6 +31165,7 @@ export interface DeleteCoreV1NamespacedPodTemplateRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32104,6 +31225,7 @@ export interface DeleteCoreV1CollectionNamespacedReplicationControllerRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -32144,6 +31266,7 @@ export interface DeleteCoreV1NamespacedReplicationControllerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32275,6 +31398,7 @@ export interface DeleteCoreV1CollectionNamespacedResourceQuotaRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -32315,6 +31439,7 @@ export interface DeleteCoreV1NamespacedResourceQuotaRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32410,6 +31535,7 @@ export interface DeleteCoreV1CollectionNamespacedSecretRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -32450,6 +31576,7 @@ export interface DeleteCoreV1NamespacedSecretRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32509,6 +31636,7 @@ export interface DeleteCoreV1CollectionNamespacedServiceAccountRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -32549,6 +31677,7 @@ export interface DeleteCoreV1NamespacedServiceAccountRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32621,6 +31750,7 @@ export interface DeleteCoreV1CollectionNamespacedServiceRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -32661,6 +31791,7 @@ export interface DeleteCoreV1NamespacedServiceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32839,6 +31970,7 @@ export interface DeleteCoreV1NamespaceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -32935,6 +32067,7 @@ export interface DeleteCoreV1CollectionNodeRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -32970,6 +32103,7 @@ export interface DeleteCoreV1NodeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -33154,6 +32288,7 @@ export interface DeleteCoreV1CollectionPersistentVolumeRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -33189,6 +32324,7 @@ export interface DeleteCoreV1PersistentVolumeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34162,6 +33298,7 @@ export interface DeleteAcmeCertManagerIoV1NamespacedChallengeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34297,6 +33434,7 @@ export interface DeleteAcmeCertManagerIoV1NamespacedOrderRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34404,6 +33542,7 @@ export interface DeleteAdmissionregistrationV1CollectionMutatingWebhookConfigura
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -34439,6 +33578,7 @@ export interface DeleteAdmissionregistrationV1MutatingWebhookConfigurationReques
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34490,6 +33630,7 @@ export interface DeleteAdmissionregistrationV1CollectionValidatingAdmissionPolic
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -34525,6 +33666,7 @@ export interface DeleteAdmissionregistrationV1ValidatingAdmissionPolicyRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34609,6 +33751,7 @@ export interface DeleteAdmissionregistrationV1CollectionValidatingAdmissionPolic
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -34644,6 +33787,7 @@ export interface DeleteAdmissionregistrationV1ValidatingAdmissionPolicyBindingRe
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34695,6 +33839,7 @@ export interface DeleteAdmissionregistrationV1CollectionValidatingWebhookConfigu
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -34730,6 +33875,7 @@ export interface DeleteAdmissionregistrationV1ValidatingWebhookConfigurationRequ
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -34915,6 +34061,7 @@ export interface DeleteApiextensionsV1CollectionCustomResourceDefinitionRequest 
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -34950,6 +34097,7 @@ export interface DeleteApiextensionsV1CustomResourceDefinitionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35069,6 +34217,7 @@ export interface DeleteApiregistrationV1CollectionAPIServiceRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -35104,6 +34253,7 @@ export interface DeleteApiregistrationV1APIServiceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35274,6 +34424,7 @@ export interface DeleteAppsV1CollectionNamespacedControllerRevisionRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -35314,6 +34465,7 @@ export interface DeleteAppsV1NamespacedControllerRevisionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35373,6 +34525,7 @@ export interface DeleteAppsV1CollectionNamespacedDaemonSetRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -35413,6 +34566,7 @@ export interface DeleteAppsV1NamespacedDaemonSetRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35508,6 +34662,7 @@ export interface DeleteAppsV1CollectionNamespacedDeploymentRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -35548,6 +34703,7 @@ export interface DeleteAppsV1NamespacedDeploymentRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35679,6 +34835,7 @@ export interface DeleteAppsV1CollectionNamespacedReplicaSetRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -35719,6 +34876,7 @@ export interface DeleteAppsV1NamespacedReplicaSetRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -35850,6 +35008,7 @@ export interface DeleteAppsV1CollectionNamespacedStatefulSetRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -35890,6 +35049,7 @@ export interface DeleteAppsV1NamespacedStatefulSetRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36426,6 +35586,7 @@ export interface DeleteAutoscalingInternalKnativeDevV1alpha1NamespacedMetricRequ
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36561,6 +35722,7 @@ export interface DeleteAutoscalingInternalKnativeDevV1alpha1NamespacedPodAutosca
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36689,6 +35851,7 @@ export interface DeleteAutoscalingV1CollectionNamespacedHorizontalPodAutoscalerR
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -36729,6 +35892,7 @@ export interface DeleteAutoscalingV1NamespacedHorizontalPodAutoscalerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -36892,6 +36056,7 @@ export interface DeleteAutoscalingV2CollectionNamespacedHorizontalPodAutoscalerR
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -36932,6 +36097,7 @@ export interface DeleteAutoscalingV2NamespacedHorizontalPodAutoscalerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37111,6 +36277,7 @@ export interface DeleteBatchV1CollectionNamespacedCronJobRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -37151,6 +36318,7 @@ export interface DeleteBatchV1NamespacedCronJobRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37246,6 +36414,7 @@ export interface DeleteBatchV1CollectionNamespacedJobRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -37286,6 +36455,7 @@ export interface DeleteBatchV1NamespacedJobRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37539,6 +36709,7 @@ export interface DeleteCachingInternalKnativeDevV1alpha1NamespacedImageRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37693,6 +36864,7 @@ export interface DeleteCertManagerIoV1ClusterIssuerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37838,6 +37010,7 @@ export interface DeleteCertManagerIoV1NamespacedCertificateRequestRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -37973,6 +37146,7 @@ export interface DeleteCertManagerIoV1NamespacedCertificateRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38108,6 +37282,7 @@ export interface DeleteCertManagerIoV1NamespacedIssuerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38200,6 +37375,7 @@ export interface DeleteCertificatesV1CollectionCertificateSigningRequestRequest 
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -38235,6 +37411,7 @@ export interface DeleteCertificatesV1CertificateSigningRequestRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38408,6 +37585,7 @@ export interface DeleteCoordinationV1CollectionNamespacedLeaseRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -38448,6 +37626,7 @@ export interface DeleteCoordinationV1NamespacedLeaseRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38576,6 +37755,7 @@ export interface DeleteDiscoveryV1CollectionNamespacedEndpointSliceRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -38616,6 +37796,7 @@ export interface DeleteDiscoveryV1NamespacedEndpointSliceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38744,6 +37925,7 @@ export interface DeleteEventsV1CollectionNamespacedEventRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -38784,6 +37966,7 @@ export interface DeleteEventsV1NamespacedEventRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -38856,6 +38039,316 @@ export interface WatchEventsV1NamespacedEventRequest {
   path: {
     name: string;
     namespace: string;
+  };
+}
+export interface GetFlowcontrolApiserverAPIGroupRequest {}
+export interface GetFlowcontrolApiserverV1APIResourcesRequest {}
+export interface ListFlowcontrolApiserverV1FlowSchemaRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateFlowcontrolApiserverV1FlowSchemaRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: FlowcontrolApiserverK8sIoV1FlowSchema;
+}
+export interface DeleteFlowcontrolApiserverV1CollectionFlowSchemaRequest {
+  query: {
+    pretty?: string;
+    continue?: string;
+    dryRun?: string;
+    fieldSelector?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    labelSelector?: string;
+    limit?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+  };
+}
+export interface ReadFlowcontrolApiserverV1FlowSchemaRequest {
+  query: {
+    pretty?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceFlowcontrolApiserverV1FlowSchemaRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: FlowcontrolApiserverK8sIoV1FlowSchema;
+}
+export interface DeleteFlowcontrolApiserverV1FlowSchemaRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchFlowcontrolApiserverV1FlowSchemaRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ReadFlowcontrolApiserverV1FlowSchemaStatusRequest {
+  query: {
+    pretty?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceFlowcontrolApiserverV1FlowSchemaStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: FlowcontrolApiserverK8sIoV1FlowSchema;
+}
+export interface PatchFlowcontrolApiserverV1FlowSchemaStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration;
+}
+export interface DeleteFlowcontrolApiserverV1CollectionPriorityLevelConfigurationRequest {
+  query: {
+    pretty?: string;
+    continue?: string;
+    dryRun?: string;
+    fieldSelector?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    labelSelector?: string;
+    limit?: number;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+  };
+}
+export interface ReadFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
+  query: {
+    pretty?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration;
+}
+export interface DeleteFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ReadFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest {
+  query: {
+    pretty?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration;
+}
+export interface PatchFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface WatchFlowcontrolApiserverV1FlowSchemaListRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface WatchFlowcontrolApiserverV1FlowSchemaRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface WatchFlowcontrolApiserverV1PriorityLevelConfigurationListRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface WatchFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    name: string;
   };
 }
 export interface ListMonitoringCoreosComV1AlertmanagerForAllNamespacesRequest {
@@ -38949,6 +38442,7 @@ export interface DeleteMonitoringCoreosComV1NamespacedAlertmanagerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -39121,6 +38615,7 @@ export interface DeleteMonitoringCoreosComV1NamespacedPodMonitorRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -39256,6 +38751,7 @@ export interface DeleteMonitoringCoreosComV1NamespacedProbeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -39391,6 +38887,7 @@ export interface DeleteMonitoringCoreosComV1NamespacedPrometheusRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -39563,6 +39060,7 @@ export interface DeleteMonitoringCoreosComV1NamespacedPrometheusRuleRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -39698,6 +39196,7 @@ export interface DeleteMonitoringCoreosComV1NamespacedServiceMonitorRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -39833,6 +39332,7 @@ export interface DeleteMonitoringCoreosComV1NamespacedThanosRulerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -40073,6 +39573,7 @@ export interface DeleteMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigRe
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -40208,6 +39709,7 @@ export interface DeleteMonitoringCoreosComV1alpha1NamespacedPrometheusAgentReque
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -40380,6 +39882,7 @@ export interface DeleteMonitoringCoreosComV1alpha1NamespacedScrapeConfigRequest 
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -40549,6 +40052,7 @@ export interface DeleteNetworkingInternalKnativeDevV1alpha1ClusterDomainClaimReq
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -40694,6 +40198,7 @@ export interface DeleteNetworkingInternalKnativeDevV1alpha1NamespacedCertificate
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -40829,6 +40334,7 @@ export interface DeleteNetworkingInternalKnativeDevV1alpha1NamespacedIngressRequ
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -40964,6 +40470,7 @@ export interface DeleteNetworkingInternalKnativeDevV1alpha1NamespacedServerlessS
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -41071,6 +40578,7 @@ export interface DeleteNetworkingV1CollectionIngressClassRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -41106,6 +40614,7 @@ export interface DeleteNetworkingV1IngressClassRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -41178,6 +40687,7 @@ export interface DeleteNetworkingV1CollectionNamespacedIngressRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -41218,6 +40728,7 @@ export interface DeleteNetworkingV1NamespacedIngressRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -41313,6 +40824,7 @@ export interface DeleteNetworkingV1CollectionNamespacedNetworkPolicyRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -41353,6 +40865,7 @@ export interface DeleteNetworkingV1NamespacedNetworkPolicyRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -41560,6 +41073,7 @@ export interface DeleteNodeV1CollectionRuntimeClassRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -41595,6 +41109,7 @@ export interface DeleteNodeV1RuntimeClassRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -41687,6 +41202,7 @@ export interface DeletePolicyV1CollectionNamespacedPodDisruptionBudgetRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -41727,6 +41243,7 @@ export interface DeletePolicyV1NamespacedPodDisruptionBudgetRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -41932,6 +41449,7 @@ export interface DeletePostgresqlCnpgIoV1ClusterImageCatalogRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -42073,6 +41591,7 @@ export interface DeletePostgresqlCnpgIoV1NamespacedBackupRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -42208,6 +41727,7 @@ export interface DeletePostgresqlCnpgIoV1NamespacedClusterRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -42380,6 +41900,7 @@ export interface DeletePostgresqlCnpgIoV1NamespacedDatabaseRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -42515,6 +42036,7 @@ export interface DeletePostgresqlCnpgIoV1NamespacedImageCatalogRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -42613,6 +42135,7 @@ export interface DeletePostgresqlCnpgIoV1NamespacedPoolerRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -42785,6 +42308,7 @@ export interface DeletePostgresqlCnpgIoV1NamespacedPublicationRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -42920,6 +42444,7 @@ export interface DeletePostgresqlCnpgIoV1NamespacedScheduledBackupRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -43055,6 +42580,7 @@ export interface DeletePostgresqlCnpgIoV1NamespacedSubscriptionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -43207,6 +42733,7 @@ export interface DeleteRbacAuthorizationV1CollectionClusterRoleBindingRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -43242,6 +42769,7 @@ export interface DeleteRbacAuthorizationV1ClusterRoleBindingRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -43293,6 +42821,7 @@ export interface DeleteRbacAuthorizationV1CollectionClusterRoleRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -43328,6 +42857,7 @@ export interface DeleteRbacAuthorizationV1ClusterRoleRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -43385,6 +42915,7 @@ export interface DeleteRbacAuthorizationV1CollectionNamespacedRoleBindingRequest
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -43425,6 +42956,7 @@ export interface DeleteRbacAuthorizationV1NamespacedRoleBindingRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -43484,6 +43016,7 @@ export interface DeleteRbacAuthorizationV1CollectionNamespacedRoleRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -43524,6 +43057,7 @@ export interface DeleteRbacAuthorizationV1NamespacedRoleRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -43822,6 +43356,7 @@ export interface DeleteResolutionTektonDevV1alpha1NamespacedResolutionRequestReq
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -43972,6 +43507,7 @@ export interface DeleteResolutionTektonDevV1beta1NamespacedResolutionRequestRequ
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -44079,6 +43615,7 @@ export interface DeleteSchedulingV1CollectionPriorityClassRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -44114,6 +43651,7 @@ export interface DeleteSchedulingV1PriorityClassRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -44258,6 +43796,7 @@ export interface DeleteServingKnativeDevV1NamespacedConfigurationRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -44393,6 +43932,7 @@ export interface DeleteServingKnativeDevV1NamespacedRevisionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -44528,6 +44068,7 @@ export interface DeleteServingKnativeDevV1NamespacedRouteRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -44663,6 +44204,7 @@ export interface DeleteServingKnativeDevV1NamespacedServiceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -44858,6 +44400,7 @@ export interface DeleteServingKnativeDevV1beta1NamespacedDomainMappingRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -44950,6 +44493,7 @@ export interface DeleteStorageV1CollectionCSIDriverRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -44985,6 +44529,7 @@ export interface DeleteStorageV1CSIDriverRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -45036,6 +44581,7 @@ export interface DeleteStorageV1CollectionCSINodeRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -45071,6 +44617,7 @@ export interface DeleteStorageV1CSINodeRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -45143,6 +44690,7 @@ export interface DeleteStorageV1CollectionNamespacedCSIStorageCapacityRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -45183,6 +44731,7 @@ export interface DeleteStorageV1NamespacedCSIStorageCapacityRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -45236,6 +44785,7 @@ export interface DeleteStorageV1CollectionStorageClassRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -45271,6 +44821,7 @@ export interface DeleteStorageV1StorageClassRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -45322,6 +44873,7 @@ export interface DeleteStorageV1CollectionVolumeAttachmentRequest {
     dryRun?: string;
     fieldSelector?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     labelSelector?: string;
     limit?: number;
     orphanDependents?: boolean;
@@ -45357,6 +44909,7 @@ export interface DeleteStorageV1VolumeAttachmentRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -45670,6 +45223,7 @@ export interface DeleteTektonDevV1NamespacedPipelineRunRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -45805,6 +45359,7 @@ export interface DeleteTektonDevV1NamespacedPipelineRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -45940,6 +45495,7 @@ export interface DeleteTektonDevV1NamespacedTaskRunRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -46075,6 +45631,7 @@ export interface DeleteTektonDevV1NamespacedTaskRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -46270,6 +45827,7 @@ export interface DeleteTektonDevV1alpha1NamespacedStepActionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -46405,6 +45963,7 @@ export interface DeleteTektonDevV1alpha1NamespacedVerificationPolicyRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -46548,6 +46107,7 @@ export interface DeleteTektonDevV1beta1NamespacedCustomRunRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -46683,6 +46243,7 @@ export interface DeleteTektonDevV1beta1NamespacedPipelineRunRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -46818,6 +46379,7 @@ export interface DeleteTektonDevV1beta1NamespacedPipelineRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -46953,6 +46515,7 @@ export interface DeleteTektonDevV1beta1NamespacedStepActionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -47088,6 +46651,7 @@ export interface DeleteTektonDevV1beta1NamespacedTaskRunRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -47223,6 +46787,7 @@ export interface DeleteTektonDevV1beta1NamespacedTaskRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -47508,6 +47073,7 @@ export interface DeleteTraefikIoV1alpha1NamespacedIngressRouteRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -47606,6 +47172,7 @@ export interface DeleteTraefikIoV1alpha1NamespacedIngressRouteTCPRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -47704,6 +47271,7 @@ export interface DeleteTraefikIoV1alpha1NamespacedIngressRouteUDPRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -47802,6 +47370,7 @@ export interface DeleteTraefikIoV1alpha1NamespacedMiddlewareRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -47900,6 +47469,7 @@ export interface DeleteTraefikIoV1alpha1NamespacedMiddlewareTCPRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -47998,6 +47568,7 @@ export interface DeleteTraefikIoV1alpha1NamespacedServersTransportRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -48096,6 +47667,7 @@ export interface DeleteTraefikIoV1alpha1NamespacedServersTransportTCPRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -48194,6 +47766,7 @@ export interface DeleteTraefikIoV1alpha1NamespacedTLSOptionRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -48292,6 +47865,7 @@ export interface DeleteTraefikIoV1alpha1NamespacedTLSStoreRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -48390,6 +47964,7 @@ export interface DeleteTraefikIoV1alpha1NamespacedTraefikServiceRequest {
     pretty?: string;
     dryRun?: string;
     gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
     orphanDependents?: boolean;
     propagationPolicy?: string;
   };
@@ -50927,6 +50502,110 @@ export class KubernetesClient extends APIClient {
   }
   async watchEventsV1NamespacedEvent(params: WatchEventsV1NamespacedEventRequest, opts?: APIClientRequestOpts): Promise<WatchEvent> {
     const path = `/apis/events.k8s.io/v1/watch/namespaces/${params.path.namespace}/events/${params.path.name}`;
+    return await this.get<WatchEvent>(path, null, null, opts);
+  }
+  async getFlowcontrolApiserverAPIGroup(params: GetFlowcontrolApiserverAPIGroupRequest, opts?: APIClientRequestOpts): Promise<APIGroup> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/`;
+    return await this.get<APIGroup>(path, null, null, opts);
+  }
+  async getFlowcontrolApiserverV1APIResources(params: GetFlowcontrolApiserverV1APIResourcesRequest, opts?: APIClientRequestOpts): Promise<APIResourceList> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/`;
+    return await this.get<APIResourceList>(path, null, null, opts);
+  }
+  async listFlowcontrolApiserverV1FlowSchema(params: ListFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchemaList> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas`;
+    return await this.get<FlowcontrolApiserverK8sIoV1FlowSchemaList>(path, params.query, null, opts);
+  }
+  async createFlowcontrolApiserverV1FlowSchema(params: CreateFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas`;
+    return await this.post<FlowcontrolApiserverK8sIoV1FlowSchema>(path, params.query, params.body, opts);
+  }
+  async deleteFlowcontrolApiserverV1CollectionFlowSchema(params: DeleteFlowcontrolApiserverV1CollectionFlowSchemaRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readFlowcontrolApiserverV1FlowSchema(params: ReadFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}`;
+    return await this.get<FlowcontrolApiserverK8sIoV1FlowSchema>(path, null, null, opts);
+  }
+  async replaceFlowcontrolApiserverV1FlowSchema(params: ReplaceFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}`;
+    return await this.put<FlowcontrolApiserverK8sIoV1FlowSchema>(path, params.query, params.body, opts);
+  }
+  async deleteFlowcontrolApiserverV1FlowSchema(params: DeleteFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchFlowcontrolApiserverV1FlowSchema(params: PatchFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}`;
+    return await this.patch<FlowcontrolApiserverK8sIoV1FlowSchema>(path, params.query, params.body, opts);
+  }
+  async readFlowcontrolApiserverV1FlowSchemaStatus(params: ReadFlowcontrolApiserverV1FlowSchemaStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}/status`;
+    return await this.get<FlowcontrolApiserverK8sIoV1FlowSchema>(path, null, null, opts);
+  }
+  async replaceFlowcontrolApiserverV1FlowSchemaStatus(params: ReplaceFlowcontrolApiserverV1FlowSchemaStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}/status`;
+    return await this.put<FlowcontrolApiserverK8sIoV1FlowSchema>(path, params.query, params.body, opts);
+  }
+  async patchFlowcontrolApiserverV1FlowSchemaStatus(params: PatchFlowcontrolApiserverV1FlowSchemaStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1FlowSchema> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/flowschemas/${params.path.name}/status`;
+    return await this.patch<FlowcontrolApiserverK8sIoV1FlowSchema>(path, params.query, params.body, opts);
+  }
+  async listFlowcontrolApiserverV1PriorityLevelConfiguration(params: ListFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfigurationList> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations`;
+    return await this.get<FlowcontrolApiserverK8sIoV1PriorityLevelConfigurationList>(path, params.query, null, opts);
+  }
+  async createFlowcontrolApiserverV1PriorityLevelConfiguration(params: CreateFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations`;
+    return await this.post<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, params.query, params.body, opts);
+  }
+  async deleteFlowcontrolApiserverV1CollectionPriorityLevelConfiguration(params: DeleteFlowcontrolApiserverV1CollectionPriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readFlowcontrolApiserverV1PriorityLevelConfiguration(params: ReadFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}`;
+    return await this.get<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, null, null, opts);
+  }
+  async replaceFlowcontrolApiserverV1PriorityLevelConfiguration(params: ReplaceFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}`;
+    return await this.put<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, params.query, params.body, opts);
+  }
+  async deleteFlowcontrolApiserverV1PriorityLevelConfiguration(params: DeleteFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchFlowcontrolApiserverV1PriorityLevelConfiguration(params: PatchFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}`;
+    return await this.patch<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, params.query, params.body, opts);
+  }
+  async readFlowcontrolApiserverV1PriorityLevelConfigurationStatus(params: ReadFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}/status`;
+    return await this.get<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, null, null, opts);
+  }
+  async replaceFlowcontrolApiserverV1PriorityLevelConfigurationStatus(params: ReplaceFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}/status`;
+    return await this.put<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, params.query, params.body, opts);
+  }
+  async patchFlowcontrolApiserverV1PriorityLevelConfigurationStatus(params: PatchFlowcontrolApiserverV1PriorityLevelConfigurationStatusRequest, opts?: APIClientRequestOpts): Promise<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/prioritylevelconfigurations/${params.path.name}/status`;
+    return await this.patch<FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration>(path, params.query, params.body, opts);
+  }
+  async watchFlowcontrolApiserverV1FlowSchemaList(params: WatchFlowcontrolApiserverV1FlowSchemaListRequest, opts?: APIClientRequestOpts): Promise<WatchEvent> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/watch/flowschemas`;
+    return await this.get<WatchEvent>(path, null, null, opts);
+  }
+  async watchFlowcontrolApiserverV1FlowSchema(params: WatchFlowcontrolApiserverV1FlowSchemaRequest, opts?: APIClientRequestOpts): Promise<WatchEvent> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/watch/flowschemas/${params.path.name}`;
+    return await this.get<WatchEvent>(path, null, null, opts);
+  }
+  async watchFlowcontrolApiserverV1PriorityLevelConfigurationList(params: WatchFlowcontrolApiserverV1PriorityLevelConfigurationListRequest, opts?: APIClientRequestOpts): Promise<WatchEvent> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/watch/prioritylevelconfigurations`;
+    return await this.get<WatchEvent>(path, null, null, opts);
+  }
+  async watchFlowcontrolApiserverV1PriorityLevelConfiguration(params: WatchFlowcontrolApiserverV1PriorityLevelConfigurationRequest, opts?: APIClientRequestOpts): Promise<WatchEvent> {
+    const path = `/apis/flowcontrol.apiserver.k8s.io/v1/watch/prioritylevelconfigurations/${params.path.name}`;
     return await this.get<WatchEvent>(path, null, null, opts);
   }
   async listMonitoringCoreosComV1AlertmanagerForAllNamespaces(params: ListMonitoringCoreosComV1AlertmanagerForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1AlertmanagerList> {
@@ -53846,6 +53525,8 @@ export interface ResourceTypeMap {
   "coordination.k8s.io/v1/Lease": CoordinationK8sIoV1Lease;
   "discovery.k8s.io/v1/EndpointSlice": DiscoveryK8sIoV1EndpointSlice;
   "events.k8s.io/v1/Event": EventsK8sIoV1Event;
+  "flowcontrol.apiserver.k8s.io/v1/FlowSchema": FlowcontrolApiserverK8sIoV1FlowSchema;
+  "flowcontrol.apiserver.k8s.io/v1/PriorityLevelConfiguration": FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration;
   "monitoring.coreos.com/v1/Alertmanager": MonitoringCoreosComV1Alertmanager;
   "monitoring.coreos.com/v1/PodMonitor": MonitoringCoreosComV1PodMonitor;
   "monitoring.coreos.com/v1/Probe": MonitoringCoreosComV1Probe;
@@ -53923,4 +53604,4 @@ export interface ResourceTypeMap {
   "authorization.k8s.io/v1/SelfSubjectRulesReview": AuthorizationK8sIoV1SelfSubjectRulesReview;
   "authorization.k8s.io/v1/SubjectAccessReview": AuthorizationK8sIoV1SubjectAccessReview;
 }
-export type KubernetesResource = ComponentStatus | ConfigMap | Endpoints | Event | LimitRange | Namespace | Binding | Status | PersistentVolumeClaim | Pod | PodTemplate | ReplicationController | ResourceQuota | Secret | ServiceAccount | Service | Node | PersistentVolume | AcmeCertManagerIoV1Challenge | AcmeCertManagerIoV1Order | AdmissionregistrationK8sIoV1MutatingWebhookConfiguration | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicy | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicyBinding | AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration | ApiextensionsK8sIoV1CustomResourceDefinition | ApiregistrationK8sIoV1APIService | AppsV1ControllerRevision | AppsV1DaemonSet | AppsV1Deployment | AppsV1ReplicaSet | AppsV1StatefulSet | AutoscalingInternalKnativeDevV1alpha1Metric | AutoscalingInternalKnativeDevV1alpha1PodAutoscaler | AutoscalingV1HorizontalPodAutoscaler | AutoscalingV2HorizontalPodAutoscaler | BatchV1CronJob | BatchV1Job | CachingInternalKnativeDevV1alpha1Image | CertManagerIoV1ClusterIssuer | CertManagerIoV1CertificateRequest | CertManagerIoV1Certificate | CertManagerIoV1Issuer | CertificatesK8sIoV1CertificateSigningRequest | CoordinationK8sIoV1Lease | DiscoveryK8sIoV1EndpointSlice | EventsK8sIoV1Event | MonitoringCoreosComV1Alertmanager | MonitoringCoreosComV1PodMonitor | MonitoringCoreosComV1Probe | MonitoringCoreosComV1Prometheus | MonitoringCoreosComV1PrometheusRule | MonitoringCoreosComV1ServiceMonitor | MonitoringCoreosComV1ThanosRuler | MonitoringCoreosComV1alpha1AlertmanagerConfig | MonitoringCoreosComV1alpha1PrometheusAgent | MonitoringCoreosComV1alpha1ScrapeConfig | NetworkingInternalKnativeDevV1alpha1ClusterDomainClaim | NetworkingInternalKnativeDevV1alpha1Certificate | NetworkingInternalKnativeDevV1alpha1Ingress | NetworkingInternalKnativeDevV1alpha1ServerlessService | NetworkingK8sIoV1IngressClass | NetworkingK8sIoV1Ingress | NetworkingK8sIoV1NetworkPolicy | NodeK8sIoV1RuntimeClass | PolicyV1PodDisruptionBudget | PostgresqlCnpgIoV1ClusterImageCatalog | PostgresqlCnpgIoV1Backup | PostgresqlCnpgIoV1Cluster | PostgresqlCnpgIoV1Database | PostgresqlCnpgIoV1ImageCatalog | PostgresqlCnpgIoV1Pooler | PostgresqlCnpgIoV1Publication | PostgresqlCnpgIoV1ScheduledBackup | PostgresqlCnpgIoV1Subscription | RbacAuthorizationK8sIoV1ClusterRoleBinding | RbacAuthorizationK8sIoV1ClusterRole | RbacAuthorizationK8sIoV1RoleBinding | RbacAuthorizationK8sIoV1Role | ResolutionTektonDevV1alpha1ResolutionRequest | ResolutionTektonDevV1beta1ResolutionRequest | SchedulingK8sIoV1PriorityClass | ServingKnativeDevV1Configuration | ServingKnativeDevV1Revision | ServingKnativeDevV1Route | ServingKnativeDevV1Service | ServingKnativeDevV1beta1DomainMapping | StorageK8sIoV1CSIDriver | StorageK8sIoV1CSINode | StorageK8sIoV1CSIStorageCapacity | StorageK8sIoV1StorageClass | StorageK8sIoV1VolumeAttachment | TektonDevV1PipelineRun | TektonDevV1Pipeline | TektonDevV1TaskRun | TektonDevV1Task | TektonDevV1alpha1StepAction | TektonDevV1alpha1VerificationPolicy | TektonDevV1beta1CustomRun | TektonDevV1beta1PipelineRun | TektonDevV1beta1Pipeline | TektonDevV1beta1StepAction | TektonDevV1beta1TaskRun | TektonDevV1beta1Task | TraefikIoV1alpha1IngressRoute | TraefikIoV1alpha1IngressRouteTCP | TraefikIoV1alpha1IngressRouteUDP | TraefikIoV1alpha1Middleware | TraefikIoV1alpha1MiddlewareTCP | TraefikIoV1alpha1ServersTransport | TraefikIoV1alpha1ServersTransportTCP | TraefikIoV1alpha1TLSOption | TraefikIoV1alpha1TLSStore | TraefikIoV1alpha1TraefikService | PolicyV1Eviction | AutoscalingV1Scale | AuthenticationK8sIoV1TokenRequest | AuthenticationK8sIoV1SelfSubjectReview | AuthenticationK8sIoV1TokenReview | AuthorizationK8sIoV1LocalSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectRulesReview | AuthorizationK8sIoV1SubjectAccessReview;
+export type KubernetesResource = ComponentStatus | ConfigMap | Endpoints | Event | LimitRange | Namespace | Binding | Status | PersistentVolumeClaim | Pod | PodTemplate | ReplicationController | ResourceQuota | Secret | ServiceAccount | Service | Node | PersistentVolume | AcmeCertManagerIoV1Challenge | AcmeCertManagerIoV1Order | AdmissionregistrationK8sIoV1MutatingWebhookConfiguration | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicy | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicyBinding | AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration | ApiextensionsK8sIoV1CustomResourceDefinition | ApiregistrationK8sIoV1APIService | AppsV1ControllerRevision | AppsV1DaemonSet | AppsV1Deployment | AppsV1ReplicaSet | AppsV1StatefulSet | AutoscalingInternalKnativeDevV1alpha1Metric | AutoscalingInternalKnativeDevV1alpha1PodAutoscaler | AutoscalingV1HorizontalPodAutoscaler | AutoscalingV2HorizontalPodAutoscaler | BatchV1CronJob | BatchV1Job | CachingInternalKnativeDevV1alpha1Image | CertManagerIoV1ClusterIssuer | CertManagerIoV1CertificateRequest | CertManagerIoV1Certificate | CertManagerIoV1Issuer | CertificatesK8sIoV1CertificateSigningRequest | CoordinationK8sIoV1Lease | DiscoveryK8sIoV1EndpointSlice | EventsK8sIoV1Event | FlowcontrolApiserverK8sIoV1FlowSchema | FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration | MonitoringCoreosComV1Alertmanager | MonitoringCoreosComV1PodMonitor | MonitoringCoreosComV1Probe | MonitoringCoreosComV1Prometheus | MonitoringCoreosComV1PrometheusRule | MonitoringCoreosComV1ServiceMonitor | MonitoringCoreosComV1ThanosRuler | MonitoringCoreosComV1alpha1AlertmanagerConfig | MonitoringCoreosComV1alpha1PrometheusAgent | MonitoringCoreosComV1alpha1ScrapeConfig | NetworkingInternalKnativeDevV1alpha1ClusterDomainClaim | NetworkingInternalKnativeDevV1alpha1Certificate | NetworkingInternalKnativeDevV1alpha1Ingress | NetworkingInternalKnativeDevV1alpha1ServerlessService | NetworkingK8sIoV1IngressClass | NetworkingK8sIoV1Ingress | NetworkingK8sIoV1NetworkPolicy | NodeK8sIoV1RuntimeClass | PolicyV1PodDisruptionBudget | PostgresqlCnpgIoV1ClusterImageCatalog | PostgresqlCnpgIoV1Backup | PostgresqlCnpgIoV1Cluster | PostgresqlCnpgIoV1Database | PostgresqlCnpgIoV1ImageCatalog | PostgresqlCnpgIoV1Pooler | PostgresqlCnpgIoV1Publication | PostgresqlCnpgIoV1ScheduledBackup | PostgresqlCnpgIoV1Subscription | RbacAuthorizationK8sIoV1ClusterRoleBinding | RbacAuthorizationK8sIoV1ClusterRole | RbacAuthorizationK8sIoV1RoleBinding | RbacAuthorizationK8sIoV1Role | ResolutionTektonDevV1alpha1ResolutionRequest | ResolutionTektonDevV1beta1ResolutionRequest | SchedulingK8sIoV1PriorityClass | ServingKnativeDevV1Configuration | ServingKnativeDevV1Revision | ServingKnativeDevV1Route | ServingKnativeDevV1Service | ServingKnativeDevV1beta1DomainMapping | StorageK8sIoV1CSIDriver | StorageK8sIoV1CSINode | StorageK8sIoV1CSIStorageCapacity | StorageK8sIoV1StorageClass | StorageK8sIoV1VolumeAttachment | TektonDevV1PipelineRun | TektonDevV1Pipeline | TektonDevV1TaskRun | TektonDevV1Task | TektonDevV1alpha1StepAction | TektonDevV1alpha1VerificationPolicy | TektonDevV1beta1CustomRun | TektonDevV1beta1PipelineRun | TektonDevV1beta1Pipeline | TektonDevV1beta1StepAction | TektonDevV1beta1TaskRun | TektonDevV1beta1Task | TraefikIoV1alpha1IngressRoute | TraefikIoV1alpha1IngressRouteTCP | TraefikIoV1alpha1IngressRouteUDP | TraefikIoV1alpha1Middleware | TraefikIoV1alpha1MiddlewareTCP | TraefikIoV1alpha1ServersTransport | TraefikIoV1alpha1ServersTransportTCP | TraefikIoV1alpha1TLSOption | TraefikIoV1alpha1TLSStore | TraefikIoV1alpha1TraefikService | PolicyV1Eviction | AutoscalingV1Scale | AuthenticationK8sIoV1TokenRequest | AuthenticationK8sIoV1SelfSubjectReview | AuthenticationK8sIoV1TokenReview | AuthorizationK8sIoV1LocalSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectRulesReview | AuthorizationK8sIoV1SubjectAccessReview;
