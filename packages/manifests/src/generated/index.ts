@@ -2,6 +2,7 @@
 import type { KubernetesResource } from "@kubernetesjs/ops";
 import CertManager from "./cert-manager";
 import CloudnativePg from "./cloudnative-pg";
+import KnativeServing from "./knative-serving";
 import KubePrometheusStack from "./kube-prometheus-stack";
 import MinioOperator from "./minio-operator";
 import TektonPipelines from "./tekton-pipelines";
@@ -12,6 +13,7 @@ export interface OperatorObjectModule {
 export const OPERATOR_OBJECTS: Record<string, OperatorObjectModule> = {
   "cert-manager": CertManager,
   "cloudnative-pg": CloudnativePg,
+  "knative-serving": KnativeServing,
   "kube-prometheus-stack": KubePrometheusStack,
   "minio-operator": MinioOperator,
   "tekton-pipelines": TektonPipelines,

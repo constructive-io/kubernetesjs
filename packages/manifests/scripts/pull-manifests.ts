@@ -378,6 +378,12 @@ async function pullOperator(op: OperatorConfig, version?: string, outDir = path.
       // With combineUrls false the parts are written separately and numbered,
       // so the order they must be applied in is the order they sort in — and a
       // consumer cannot get it wrong by reading the directory.
+      // The combined file is always written: it is what codegen reads to
+      // discover kinds, and type generation never applies anything so the
+      // ordering problem does not arise there. It is the *apply* path that must
+      // not use it.
+      writeFile(targetFile, combined);
+
       if (op.combineUrls === false) {
         // Nested under the version, not beside it: the parts are one version
         // applied in sequence, and writing them as siblings of the versioned
@@ -391,8 +397,6 @@ async function pullOperator(op: OperatorConfig, version?: string, outDir = path.
           );
           writeFile(partFile, partContents[i]);
         });
-      } else {
-        writeFile(targetFile, combined);
       }
       // Also update unversioned latest pointer (copy) if this is highest version
   } else if (src.type === 'helm') {
