@@ -2,11 +2,6 @@ name: Regenerate Ops Client
 
 on:
   workflow_dispatch:
-    inputs:
-      pull_manifests:
-        description: 'Re-pull vendored manifests from upstream first'
-        type: boolean
-        default: true
 
 # Versions are NOT declared here.
 #
@@ -63,8 +58,11 @@ jobs:
       # Refresh the vendored manifests from upstream, then regenerate the typed
       # objects built from them. Both are inputs to everything below, so they
       # run before the cluster exists rather than alongside it.
+      # Always, and unconditionally. The versions are pinned in
+      # pull-manifests.ts, so this re-downloads the same content rather than
+      # picking up something newer — it is idempotent, and skipping it only
+      # creates a way for the vendored files to lag the config that names them.
       - name: Pull manifests
-        if: ${{ inputs.pull_manifests }}
         run: pnpm --filter @kubernetesjs/manifests run pull:all
 
       - name: Regenerate operator objects
