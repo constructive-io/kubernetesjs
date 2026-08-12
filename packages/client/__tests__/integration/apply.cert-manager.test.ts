@@ -8,7 +8,6 @@ describe("SetupClient.installOperators integration", () => {
     { namespace: string; version: string }
   > = {
     "cert-manager": { namespace: "cert-manager", version: "v1.17.0" },
-    "ingress-nginx": { namespace: "ingress-nginx", version: "4.11.2" },
   };
 
   const createConfig = (names: string[]): ClusterSetupConfig => ({
@@ -76,7 +75,7 @@ describe("SetupClient.installOperators integration", () => {
     
     jest.spyOn(console, "log").mockImplementation(() => {});
 
-    const config = createConfig(["cert-manager", "ingress-nginx"]);
+    const config = createConfig(["cert-manager"]);
     await setup.installOperators(config);
 
     expect(applySpy).toHaveBeenCalledTimes(2);
@@ -96,8 +95,6 @@ describe("SetupClient.installOperators integration", () => {
     );
     expect(secondCall[0]).toEqual(
       getOperatorResources(
-        "ingress-nginx",
-        operatorDetails["ingress-nginx"].version
       )
     );
   }, 30000); // 30 second timeout

@@ -2,11 +2,14 @@ import { getOperatorResources } from "@kubernetesjs/manifests";
 
 describe("manifests: metadata coverage", () => {
   const operatorNamespaceMap = {
-    "ingress-nginx": "ingress-nginx",
     "cert-manager": "cert-manager",
     "knative-serving": "knative-serving",
     "cloudnative-pg": "cnpg-system",
     "kube-prometheus-stack": "monitoring",
+    // Added with the operators themselves: a manifest set that ships
+    // without a Namespace is a manifest set that cannot be applied
+    // standalone, and this is the assertion that catches it.
+    traefik: "traefik",
   };
 
   it("exports namespaces for supported operators", () => {

@@ -25,7 +25,6 @@ jobs:
       fail-fast: false
       matrix:
         operator:
-          - ingress-nginx
           - cert-manager
           - knative-serving
           - cloudnative-pg

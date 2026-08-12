@@ -11,7 +11,6 @@ jest.setTimeout(15 * 60 * 1000); // generous for CI
 const K8S_API = process.env.K8S_API || "http://127.0.0.1:8001";
 
 const DEFAULT_VERSIONS: Record<string, string> = {
-  "ingress-nginx": "4.11.2",
   "cert-manager": "v1.17.0",
   "knative-serving": "v1.15.0",
   "cloudnative-pg": "1.25.2",
@@ -20,7 +19,6 @@ const DEFAULT_VERSIONS: Record<string, string> = {
 };
 
 const DEFAULT_NAMESPACES: Record<string, string> = {
-  "ingress-nginx": "ingress-nginx",
   "cert-manager": "cert-manager",
   "knative-serving": "knative-serving",
   "cloudnative-pg": "cnpg-system",
