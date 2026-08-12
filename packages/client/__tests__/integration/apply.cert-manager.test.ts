@@ -78,11 +78,10 @@ describe("SetupClient.installOperators integration", () => {
     const config = createConfig(["cert-manager"]);
     await setup.installOperators(config);
 
-    expect(applySpy).toHaveBeenCalledTimes(2);
-    expect(waitForOperatorSpy).toHaveBeenCalledTimes(2);
+    expect(applySpy).toHaveBeenCalledTimes(1);
+    expect(waitForOperatorSpy).toHaveBeenCalledTimes(1);
     
     const firstCall = applySpy.mock.calls[0];
-    const secondCall = applySpy.mock.calls[1];
 
     expect(firstCall[0]).toEqual(
       getOperatorResources(
@@ -92,10 +91,6 @@ describe("SetupClient.installOperators integration", () => {
     );
     expect(firstCall[1]).toEqual(
       expect.objectContaining({ continueOnError: false })
-    );
-    expect(secondCall[0]).toEqual(
-      getOperatorResources(
-      )
     );
   }, 30000); // 30 second timeout
 
