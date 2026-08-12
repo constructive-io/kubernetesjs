@@ -122,6 +122,17 @@ export class K8sApplier {
     // Phase 0: CRDs
     for (const m of parts.crds) await this.apply(m);
 
+    // Establishment is asynchronous. Creating a CRD returns as soon as the
+    // object is accepted, not when the API server is serving that kind — so a
+    // custom resource applied in a later phase can arrive before its own kind
+    // exists, and fails with "no matches for kind".
+    //
+    // Knative is where this shows: serving-core creates Certificates and Images
+    // of kinds serving-crds defines moments earlier.
+    if (parts.crds.length > 0) {
+      await this.waitForCrdsEstablished(parts.crds);
+    }
+
     // Phase 1: Namespaces
     for (const m of parts.namespaces) await this.apply(m);
 
@@ -502,6 +513,54 @@ export class K8sApplier {
   // former and timed out on the latter: Knative v1.22 ships Certificates in
   // serving-core.yaml that its own webhook must admit, and the apply failed
   // before the webhook pod was ready.
+  /**
+   * Block until every applied CRD reports Established.
+   *
+   * Polls rather than watches, to stay consistent with the other readiness
+   * helpers here and to avoid holding a connection open across a phase
+   * boundary. A CRD that never establishes is not fatal: it is reported and the
+   * apply continues, so the failure surfaces as the resource that needed it
+   * rather than as an opaque wait.
+   */
+  private async waitForCrdsEstablished(
+    crds: KubernetesResource[],
+    timeoutMs = 120_000,
+    pollMs = 2_000
+  ): Promise<void> {
+    const names = crds
+      .map((c) => (c.metadata && 'name' in c.metadata ? (c.metadata as any).name : undefined))
+      .filter(Boolean) as string[];
+    if (names.length === 0) return;
+
+    this.opts.log(`Waiting for ${names.length} CRD(s) to be established...`);
+    const start = Date.now();
+    const pending = new Set(names);
+
+    while (pending.size > 0 && Date.now() - start < timeoutMs) {
+      for (const name of Array.from(pending)) {
+        try {
+          const crd: any = await (this.client as any).get(
+            `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${name}`
+          );
+          const established = (crd?.status?.conditions || []).some(
+            (c: any) => c.type === 'Established' && c.status === 'True'
+          );
+          if (established) pending.delete(name);
+        } catch {
+          // Not readable yet; try again on the next tick.
+        }
+      }
+      if (pending.size === 0) break;
+      await new Promise((r) => setTimeout(r, pollMs));
+    }
+
+    if (pending.size > 0) {
+      this.opts.log(
+        `CRDs not established after ${Math.round((Date.now() - start) / 1000)}s: ${Array.from(pending).join(', ')}`
+      );
+    }
+  }
+
   private async postWithRetries(path: string, body: any, ref: string, maxAttempts = 12, baseDelayMs = 2_000) {
     let attempt = 0;
     let lastErr: any;
