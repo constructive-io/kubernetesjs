@@ -27,7 +27,32 @@ on:
         description: 'Install CloudNative PG'
         type: boolean
         default: true
+      cilium:
+        description: 'Install Cilium (required for CiliumNetworkPolicy types)'
+        type: boolean
+        default: true
 
+
+# Pinned deliberately, rather than to whatever `latest` resolves to.
+#
+# The generated client describes whatever API the cluster below advertises, so
+# these versions decide what `@kubernetesjs/ops` claims exists. Left on
+# `latest`, the client changes whenever an upstream project cuts a release —
+# silently, and only for whoever regenerates next.
+#
+# Some of these are intentionally not the newest release, because they track
+# the versions a downstream consumer deploys. Bumping one is a coordinated
+# change: pin it here and downstream together, or the client and the cluster it
+# describes drift apart.
+env:
+  CERT_MANAGER_VERSION: 'v1.21.1'
+  PROMETHEUS_OPERATOR_VERSION: 'v0.93.1'
+  KNATIVE_VERSION: 'v1.20.0'
+  TEKTON_VERSION: 'v1.15.0'
+  TRAEFIK_CHART_VERSION: '34.4.1'
+  CNPG_VERSION: '1.25.0'
+  CILIUM_VERSION: '1.19.5'
+  CILIUM_CLI_VERSION: '0.19.7'
 
 permissions:
   contents: write
@@ -79,25 +104,25 @@ jobs:
       - name: Install cert-manager
         if: ${{ inputs.cert_manager }}
         run: |
-          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
+          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/${CERT_MANAGER_VERSION}/cert-manager.yaml
           kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
 
       - name: Install Prometheus Operator CRDs
         if: ${{ inputs.prometheus }}
         run: |
-          kubectl apply --server-side -f https://github.com/prometheus-operator/prometheus-operator/releases/latest/download/stripped-down-crds.yaml
+          kubectl apply --server-side -f https://github.com/prometheus-operator/prometheus-operator/releases/download/${PROMETHEUS_OPERATOR_VERSION}/stripped-down-crds.yaml
 
       - name: Install Knative Serving
         if: ${{ inputs.knative_serving }}
         run: |
-          kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-crds.yaml
-          kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-core.yaml
+          kubectl apply -f https://github.com/knative/serving/releases/download/knative-${KNATIVE_VERSION#v}/serving-crds.yaml
+          kubectl apply -f https://github.com/knative/serving/releases/download/knative-${KNATIVE_VERSION#v}/serving-core.yaml
           kubectl wait --for=condition=Available deployment/controller -n knative-serving --timeout=120s || true
 
       - name: Install Tekton Pipelines
         if: ${{ inputs.tekton }}
         run: |
-          kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+          kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/previous/${TEKTON_VERSION}/release.yaml
           kubectl wait --for=condition=established --timeout=60s crd/pipelines.tekton.dev
           kubectl wait --for=condition=established --timeout=60s crd/pipelineruns.tekton.dev
           kubectl wait --for=condition=established --timeout=60s crd/tasks.tekton.dev
@@ -109,26 +134,41 @@ jobs:
           # Install CRDs directly (helm install --wait times out in Kind due to LoadBalancer)
           helm repo add traefik https://traefik.github.io/charts
           helm repo update
-          helm template traefik traefik/traefik | kubectl apply --server-side -f - || true
+          helm template traefik traefik/traefik --version "${TRAEFIK_CHART_VERSION}" | kubectl apply --server-side -f - || true
           # Ensure Traefik CRDs are also applied from source (covers all CRDs)
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_ingressroutes.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_ingressroutetcps.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_ingressrouteudps.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_middlewares.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_middlewaretcps.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_serverstransports.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_serverstransporttcps.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_tlsoptions.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_tlsstores.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/master/traefik/crds/traefik.io_traefikservices.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_ingressroutes.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_ingressroutetcps.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_ingressrouteudps.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_middlewares.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_middlewaretcps.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_serverstransports.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_serverstransporttcps.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_tlsoptions.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_tlsstores.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_traefikservices.yaml
           kubectl wait --for=condition=established --timeout=60s crd/ingressroutes.traefik.io
 
       - name: Install CloudNative PG
         if: ${{ inputs.cloudnative_pg }}
         run: |
-          kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/releases/cnpg-1.25.0.yaml
+          kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/v${CNPG_VERSION}/releases/cnpg-${CNPG_VERSION}.yaml
           kubectl wait --for=condition=established --timeout=60s crd/clusters.postgresql.cnpg.io || true
 
+
+      # Cilium last: it is the only component here that owns a dataplane, and
+      # this cluster already has one. `cilium install` against a cluster with a
+      # working CNI still registers its CRDs, which is all this job needs.
+      - name: Install Cilium
+        if: ${{ inputs.cilium }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "v${CILIUM_CLI_VERSION}" \
+            --repo cilium/cilium-cli \
+            --pattern cilium-linux-amd64.tar.gz --output /tmp/cilium.tar.gz
+          sudo tar xzf /tmp/cilium.tar.gz -C /usr/local/bin
+          cilium install --version "${CILIUM_VERSION}" --wait
+          kubectl wait --for=condition=established --timeout=120s crd/ciliumnetworkpolicies.cilium.io
 
       - name: Wait for all CRDs to register
         run: |
@@ -201,6 +241,7 @@ jobs:
           - Tekton Pipelines: ${{ inputs.tekton }}
           - Traefik: ${{ inputs.traefik }}
           - CloudNative PG: ${{ inputs.cloudnative_pg }}
+          - Cilium: ${{ inputs.cilium }}
 
           Triggered by workflow_dispatch." \
             --base main \
