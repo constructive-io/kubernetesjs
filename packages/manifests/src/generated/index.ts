@@ -23,10 +23,10 @@ export const OPERATOR_OBJECTS: Record<string, OperatorObjectModule> = {
 };
 export const OPERATOR_IDS: ReadonlyArray<string> = ["cert-manager", "cilium", "cloudnative-pg", "knative-serving", "kube-prometheus-stack", "minio-operator", "tekton-pipelines", "traefik"];
 export const OPERATOR_VERSIONS = {
-  "cert-manager": ["v1.17.0", "v1.21.1"],
+  "cert-manager": ["v1.17.0"],
   cilium: ["1.19.5"],
   "cloudnative-pg": ["1.25.2"],
-  "knative-serving": ["v1.15.0", "v1.22.1"],
+  "knative-serving": ["v1.22.1"],
   "kube-prometheus-stack": ["77.5.0"],
   "minio-operator": ["7.1.1"],
   "tekton-pipelines": ["v1.15.0"],
@@ -37,7 +37,7 @@ export const OPERATOR_MAP: Record<string, {
   versions: ReadonlyArray<string>;
 }> = {
   "cert-manager": {
-    versions: ["v1.17.0", "v1.21.1"],
+    versions: ["v1.17.0"],
     resources: CertManager.resources
   },
   "cilium": {
@@ -49,7 +49,7 @@ export const OPERATOR_MAP: Record<string, {
     resources: CloudnativePg.resources
   },
   "knative-serving": {
-    versions: ["v1.15.0", "v1.22.1"],
+    versions: ["v1.22.1"],
     resources: KnativeServing.resources
   },
   "kube-prometheus-stack": {

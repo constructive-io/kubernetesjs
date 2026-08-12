@@ -95,11 +95,14 @@ const OPERATORS: OperatorConfig[] = [
     ],
   },
   {
+    // Held at v1.17.0 deliberately: this is the version deployed downstream, and
+    // a client generated from newer CRDs would describe an API that is not
+    // running. Bump both together or not at all.
     name: 'cert-manager',
     sources: [
       {
         type: 'helm',
-        version: 'v1.21.1',
+        version: 'v1.17.0', // matches what constructive-cloud deploys — see note below
         repo: 'https://charts.jetstack.io',
         repoName: 'jetstack',
         chart: 'cert-manager',

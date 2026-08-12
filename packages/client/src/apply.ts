@@ -492,7 +492,17 @@ export class K8sApplier {
     );
   }
 
-  private async postWithRetries(path: string, body: any, ref: string, maxAttempts = 6, baseDelayMs = 2_000) {
+  // The webhook being waited on is usually created by this same apply — a
+  // manifest set that contains both an admission webhook and resources it must
+  // admit. So the wait is not "a rolling webhook briefly unavailable", it is
+  // "a Deployment scheduling, pulling an image and passing its readiness
+  // probe", which on a cold cluster is minutes rather than seconds.
+  //
+  // The previous budget (6 attempts capped at 10s ≈ 34s) was sized for the
+  // former and timed out on the latter: Knative v1.22 ships Certificates in
+  // serving-core.yaml that its own webhook must admit, and the apply failed
+  // before the webhook pod was ready.
+  private async postWithRetries(path: string, body: any, ref: string, maxAttempts = 12, baseDelayMs = 2_000) {
     let attempt = 0;
     let lastErr: any;
     while (attempt < maxAttempts) {
@@ -501,7 +511,7 @@ export class K8sApplier {
       } catch (err: any) {
         lastErr = err;
         if (!this.isAdmissionWebhookTransient(err)) throw err;
-        const delay = Math.min(baseDelayMs * Math.pow(2, attempt), 10_000);
+        const delay = Math.min(baseDelayMs * Math.pow(2, attempt), 15_000);
         this.opts.log(`Retrying ${ref} due to webhook readiness (attempt ${attempt + 1}/${maxAttempts}) in ${delay}ms...`);
         await new Promise((r) => setTimeout(r, delay));
         attempt++;
@@ -510,7 +520,7 @@ export class K8sApplier {
     throw lastErr;
   }
 
-  private async putWithRetries(path: string, body: any, ref: string, maxAttempts = 5, baseDelayMs = 2_000) {
+  private async putWithRetries(path: string, body: any, ref: string, maxAttempts = 12, baseDelayMs = 2_000) {
     let attempt = 0;
     let lastErr: any;
     while (attempt < maxAttempts) {
@@ -519,7 +529,7 @@ export class K8sApplier {
       } catch (err: any) {
         lastErr = err;
         if (!this.isAdmissionWebhookTransient(err)) throw err;
-        const delay = Math.min(baseDelayMs * Math.pow(2, attempt), 10_000);
+        const delay = Math.min(baseDelayMs * Math.pow(2, attempt), 15_000);
         this.opts.log(`Retrying update for ${ref} due to webhook readiness (attempt ${attempt + 1}/${maxAttempts}) in ${delay}ms...`);
         await new Promise((r) => setTimeout(r, delay));
         attempt++;

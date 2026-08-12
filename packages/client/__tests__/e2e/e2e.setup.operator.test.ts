@@ -1,4 +1,5 @@
 import { KubernetesClient } from "@kubernetesjs/ops";
+import { getOperatorVersions } from "@kubernetesjs/manifests";
 import { SetupClient } from "../../src/setup";
 import type { ClusterSetupConfig, OperatorConfig } from "../../src/types";
 
@@ -10,13 +11,16 @@ jest.setTimeout(15 * 60 * 1000); // generous for CI
 
 const K8S_API = process.env.K8S_API || "http://127.0.0.1:8001";
 
-const DEFAULT_VERSIONS: Record<string, string> = {
-  "cert-manager": "v1.17.0",
-  "knative-serving": "v1.15.0",
-  "cloudnative-pg": "1.25.2",
-  "kube-prometheus-stack": "77.5.0",
-  "minio-operator": "7.1.1",
-};
+// Versions are not declared here. They come from the manifests package, which
+// is the only place a version is written — a hardcoded copy is a third place
+// for them to disagree, and it already had: this fixture pinned cert-manager
+// v1.17.0 and knative v1.15.0 long after the package had moved on, so the e2e
+// suite was installing versions the package no longer shipped.
+function latestVersion(name: string): string {
+  const versions = getOperatorVersions(name);
+  if (!versions.length) throw new Error(`Unknown operator '${name}'`);
+  return versions[versions.length - 1];
+}
 
 const DEFAULT_NAMESPACES: Record<string, string> = {
   "cert-manager": "cert-manager",
@@ -34,8 +38,7 @@ const OPERATOR_DEPENDENCIES: Record<string, string[]> = {
 };
 
 function buildOperator(name: string): OperatorConfig {
-  const version = DEFAULT_VERSIONS[name];
-  if (!version) throw new Error(`Unknown operator '${name}'`);
+  const version = latestVersion(name);
   const namespace = DEFAULT_NAMESPACES[name] || name;
   return { name, enabled: true, version, namespace } as OperatorConfig;
 }
