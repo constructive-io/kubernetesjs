@@ -118,16 +118,39 @@ function scanOperators(): OperatorModel[] {
     if (entry.isDirectory()) {
       const id = entry.name;
       const dir = path.join(OPERATORS_DIR, id);
-      const versionFiles = fs
-        .readdirSync(dir, { withFileTypes: true })
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+      // A version is either a single <version>.yaml, or a <version>/ directory
+      // of numbered parts that must be applied in order. Knative is the second
+      // shape: serving-crds has to be established before serving-core creates
+      // custom resources of those kinds, so merging them into one document set
+      // races the CRDs against the resources that need them.
+      const versionFiles = entries
         .filter((f) => f.isFile() && f.name.endsWith('.yaml'))
-        .sort((a, b) => a.name.localeCompare(b.name));
-      if (versionFiles.length === 0) continue;
+        .map((f) => ({ version: f.name.replace(/\.yaml$/i, ''), paths: [path.join(dir, f.name)] }));
+
+      const versionDirs = entries
+        .filter((f) => f.isDirectory())
+        .map((d) => ({
+          version: d.name,
+          paths: fs
+            .readdirSync(path.join(dir, d.name))
+            .filter((n) => n.endsWith('.yaml'))
+            // Lexical order is the apply order — that is what the numeric
+            // prefixes are for.
+            .sort((a, b) => a.localeCompare(b))
+            .map((n) => path.join(dir, d.name, n)),
+        }))
+        .filter((v) => v.paths.length > 0);
+
+      const allVersions = [...versionFiles, ...versionDirs]
+        .sort((a, b) => a.version.localeCompare(b.version));
+      if (allVersions.length === 0) continue;
       const model = byId.get(id) || { id };
       model.versions = model.versions || {};
-      for (const f of versionFiles) {
-        const version = f.name.replace(/\.yaml$/i, '');
-        const docs = readYaml(path.join(dir, f.name));
+      for (const f of allVersions) {
+        const version = f.version;
+        const docs = f.paths.flatMap((fp) => readYaml(fp));
         const gvk = uniqSorted(
           docs.map(toGVKRef).filter(Boolean) as GVKRef[],
           (x) => x.gvk

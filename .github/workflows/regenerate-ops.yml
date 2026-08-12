@@ -15,6 +15,13 @@ on:
 #
 # To change a version: edit pull-manifests.ts, run this workflow, review the PR.
 
+env:
+  # Cilium alone is pinned here rather than in the manifests package, because it
+  # is the one operator that package cannot vendor -- see the note beside its
+  # absence in pull-manifests.ts.
+  CILIUM_VERSION: '1.19.5'
+  CILIUM_CLI_VERSION: '0.19.7'
+
 permissions:
   contents: write
   pull-requests: write
@@ -83,16 +90,50 @@ jobs:
         run: |
           set -euo pipefail
           shopt -s nullglob
+
+          apply() {
+            # --server-side: several of these carry CRDs large enough to exceed
+            # the annotation limit client-side apply uses.
+            kubectl apply --server-side --force-conflicts -f "$1" \
+              || echo "::warning::$1 did not apply cleanly"
+          }
+
           for f in packages/manifests/operators/*.yaml; do
             name=$(basename "$f" .yaml)
-            echo "::group::$name"
-            # --server-side: several of these carry CRDs large enough to exceed
-            # the annotation limit that client-side apply uses.
-            kubectl apply --server-side --force-conflicts -f "$f" || {
-              echo "::warning::$name did not apply cleanly"
-            }
+            echo "::group::$name"; apply "$f"; echo "::endgroup::"
+          done
+
+          # Operators vendored as ordered parts. The numeric prefixes are the
+          # apply order, and it matters: Knative's CRDs must be established
+          # before serving-core creates custom resources of those kinds.
+          for d in packages/manifests/operators/*/*/; do
+            [ -n "$(echo "$d"*.yaml)" ] || continue
+            echo "::group::$(basename "$(dirname "$d")") $(basename "$d")"
+            for f in "$d"*.yaml; do
+              apply "$f"
+              # Establish CRDs before the next part is applied against them.
+              if grep -q "^kind: CustomResourceDefinition" "$f"; then
+                kubectl wait --for=condition=established --timeout=120s \
+                  crd --all >/dev/null 2>&1 || true
+              fi
+            done
             echo "::endgroup::"
           done
+
+      # Cilium is not vendored: its chart mints a CA private key at template
+      # time, and its CRDs are registered by the operator at runtime rather
+      # than shipped in the chart. Installing it here is what makes those CRDs
+      # exist for the client to be generated from.
+      - name: Install Cilium
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "v${CILIUM_CLI_VERSION}" --repo cilium/cilium-cli \
+            --pattern cilium-linux-amd64.tar.gz --output /tmp/cilium.tar.gz
+          sudo tar xzf /tmp/cilium.tar.gz -C /usr/local/bin
+          cilium install --version "${CILIUM_VERSION}" --wait
+          kubectl wait --for=condition=established --timeout=120s \
+            crd/ciliumnetworkpolicies.cilium.io
 
       - name: Wait for all CRDs to register
         run: |

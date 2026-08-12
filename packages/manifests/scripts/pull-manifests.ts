@@ -27,6 +27,19 @@ type OperatorConfig = {
   name: string;
   sources: Source[]; // multiple versions allowed
   combineUrls?: boolean; // for urls type: concatenate into single file (default true)
+  // Vendor only CustomResourceDefinitions from this operator's output.
+  //
+  // For charts that mint secrets at template time. Cilium's
+  // cilium-ca-secret.yaml emits a freshly generated CA certificate and private
+  // key on every `helm template`, unconditionally — `tls.auto.enabled=false`
+  // does not suppress it. Vendoring that output would commit a private key to
+  // a public repository and publish it to npm, and would never be reproducible
+  // since the key changes on every run.
+  //
+  // The CRDs carry no secrets and are all the generated client needs. Installing
+  // such an operator stays a deploy-time action, where the CA is generated in
+  // the target cluster and stays there.
+  crdsOnly?: boolean;
 };
 
 // Configure supported operators and versions.
@@ -79,6 +92,9 @@ const OPERATORS: OperatorConfig[] = [
   },
   {
     name: 'knative-serving',
+    // Applied in three ordered parts, never merged: the CRDs have to be
+    // established before serving-core's custom resources of those kinds exist.
+    combineUrls: false,
     sources: [
       {
         type: 'urls',
@@ -138,22 +154,19 @@ const OPERATORS: OperatorConfig[] = [
       },
     ],
   },
-  {
-    // Cilium's CRDs are what a NetworkPolicy-based isolation model is written
-    // against, so a client generated without them cannot describe that surface
-    // at all.
-    name: 'cilium',
-    sources: [
-      {
-        type: 'helm',
-        version: '1.19.5',
-        repo: 'https://helm.cilium.io',
-        repoName: 'cilium',
-        chart: 'cilium',
-        namespace: 'kube-system',
-      },
-    ],
-  },
+  // Cilium is deliberately absent.
+  //
+  // Its chart cannot be vendored safely or usefully. cilium-ca-secret.yaml
+  // emits a freshly generated CA certificate and private key on every
+  // `helm template` -- unconditionally; `tls.auto.enabled=false` does not
+  // suppress it -- so vendoring the output would commit a private key to a
+  // public repository and would never reproduce across runs. Filtering to CRDs
+  // yields nothing either, because Cilium's operator registers its CRDs at
+  // runtime rather than shipping them in the chart.
+  //
+  // So Cilium is installed into the cluster by the regenerate workflow, where
+  // the operator creates the CRDs the client is generated from, and the CA is
+  // generated in that cluster and stays there.
   {
     name: 'traefik',
     sources: [
@@ -319,6 +332,7 @@ async function pullOperator(op: OperatorConfig, version?: string, outDir = path.
       // Preserve original formatting/comments by NOT re-serializing via js-yaml.
       const seen = new Set<string>();
       const outPieces: string[] = [];
+      const partContents: string[] = [];
 
       for (const url of src.urls) {
         // eslint-disable-next-line no-await-in-loop
@@ -328,6 +342,7 @@ async function pullOperator(op: OperatorConfig, version?: string, outDir = path.
           .map((s) => s.trim())
           .filter((s) => s.length > 0);
 
+        const thisPart: string[] = [];
         let wroteHeaderForSource = false;
         for (const raw of docsRaw) {
           let key = '';
@@ -346,11 +361,39 @@ async function pullOperator(op: OperatorConfig, version?: string, outDir = path.
             wroteHeaderForSource = true;
           }
           outPieces.push(raw);
+          thisPart.push(raw);
         }
+        partContents.push(`# Source: ${url}\n` + thisPart.join('\n---\n') + '\n');
       }
 
       const combined = outPieces.join('\n---\n') + '\n';
-      writeFile(targetFile, combined);
+
+      // combineUrls was declared but never read, so every URL source was
+      // concatenated whether or not that was safe. It is not safe for Knative:
+      // serving-crds.yaml must be applied and *established* before
+      // serving-core.yaml, which contains custom resources of those very kinds.
+      // Merged into one document set, a single-pass apply races the CRDs
+      // against the resources that need them.
+      //
+      // With combineUrls false the parts are written separately and numbered,
+      // so the order they must be applied in is the order they sort in — and a
+      // consumer cannot get it wrong by reading the directory.
+      if (op.combineUrls === false) {
+        // Nested under the version, not beside it: the parts are one version
+        // applied in sequence, and writing them as siblings of the versioned
+        // files made the codegen read `01-serving-crds` as a version name.
+        src.urls.forEach((url, i) => {
+          const part = url.split('/').pop() || `part-${i}.yaml`;
+          const partFile = path.join(
+            targetDir,
+            src.version,
+            `${String(i + 1).padStart(2, '0')}-${part}`
+          );
+          writeFile(partFile, partContents[i]);
+        });
+      } else {
+        writeFile(targetFile, combined);
+      }
       // Also update unversioned latest pointer (copy) if this is highest version
   } else if (src.type === 'helm') {
       // Ensure repo
@@ -377,6 +420,22 @@ async function pullOperator(op: OperatorConfig, version?: string, outDir = path.
       }
 
       // No post-render mutations: rely on Helm values overrides above.
+
+      if (op.crdsOnly) {
+        rendered = rendered
+          .split(/\n---\s*\n/gm)
+          .map((d) => d.trim())
+          .filter((d) => {
+            if (!d) return false;
+            try {
+              const parsed = yaml.load(d) as any;
+              return parsed?.kind === 'CustomResourceDefinition';
+            } catch {
+              return false;
+            }
+          })
+          .join('\n---\n');
+      }
 
       writeFile(
         targetFile,
