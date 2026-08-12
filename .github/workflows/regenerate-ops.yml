@@ -69,7 +69,7 @@ jobs:
         run: pnpm --filter @kubernetesjs/manifests run codegen
 
       - name: Create Kind cluster
-        uses: helm/kind-action@v1.12.0
+        uses: ./.github/actions/setup-kind
         with:
           cluster_name: ops-codegen
           kubectl_version: v1.31.3
