@@ -22,13 +22,6 @@ export const OPERATOR_CATALOG: Record<string, OperatorCatalogEntry> = {
     docsUrl: 'https://operator.min.io',
     namespaces: ['minio-operator'],
   },
-  'ingress-nginx': {
-    name: 'ingress-nginx',
-    displayName: 'NGINX Ingress Controller',
-    description: 'Ingress controller using NGINX as a reverse proxy and load balancer',
-    docsUrl: 'https://kubernetes.github.io/ingress-nginx/',
-    namespaces: ['ingress-nginx'],
-  },
   'cert-manager': {
     name: 'cert-manager',
     displayName: 'cert-manager',

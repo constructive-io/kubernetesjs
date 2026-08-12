@@ -1,49 +1,55 @@
 /** Auto-generated aggregator of operator objects*/
 import type { KubernetesResource } from "@kubernetesjs/ops";
 import CertManager from "./cert-manager";
+import Cilium from "./cilium";
 import CloudnativePg from "./cloudnative-pg";
-import IngressNginx from "./ingress-nginx";
 import KnativeServing from "./knative-serving";
 import KubePrometheusStack from "./kube-prometheus-stack";
 import MinioOperator from "./minio-operator";
+import TektonPipelines from "./tekton-pipelines";
+import Traefik from "./traefik";
 export interface OperatorObjectModule {
   resources?: ReadonlyArray<KubernetesResource>;
 }
 export const OPERATOR_OBJECTS: Record<string, OperatorObjectModule> = {
   "cert-manager": CertManager,
+  "cilium": Cilium,
   "cloudnative-pg": CloudnativePg,
-  "ingress-nginx": IngressNginx,
   "knative-serving": KnativeServing,
   "kube-prometheus-stack": KubePrometheusStack,
-  "minio-operator": MinioOperator
+  "minio-operator": MinioOperator,
+  "tekton-pipelines": TektonPipelines,
+  "traefik": Traefik
 };
-export const OPERATOR_IDS: ReadonlyArray<string> = ["cert-manager", "cloudnative-pg", "ingress-nginx", "knative-serving", "kube-prometheus-stack", "minio-operator"];
+export const OPERATOR_IDS: ReadonlyArray<string> = ["cert-manager", "cilium", "cloudnative-pg", "knative-serving", "kube-prometheus-stack", "minio-operator", "tekton-pipelines", "traefik"];
 export const OPERATOR_VERSIONS = {
-  "cert-manager": ["v1.17.0"],
+  "cert-manager": ["v1.17.0", "v1.21.1"],
+  cilium: ["1.19.5"],
   "cloudnative-pg": ["1.25.2"],
-  "ingress-nginx": ["4.11.2"],
-  "knative-serving": ["v1.15.0"],
+  "knative-serving": ["v1.15.0", "v1.22.1"],
   "kube-prometheus-stack": ["77.5.0"],
-  "minio-operator": ["7.1.1"]
+  "minio-operator": ["7.1.1"],
+  "tekton-pipelines": ["v1.15.0"],
+  traefik: ["34.4.1"]
 };
 export const OPERATOR_MAP: Record<string, {
   resources: ReadonlyArray<KubernetesResource>;
   versions: ReadonlyArray<string>;
 }> = {
   "cert-manager": {
-    versions: ["v1.17.0"],
+    versions: ["v1.17.0", "v1.21.1"],
     resources: CertManager.resources
+  },
+  "cilium": {
+    versions: ["1.19.5"],
+    resources: Cilium.resources
   },
   "cloudnative-pg": {
     versions: ["1.25.2"],
     resources: CloudnativePg.resources
   },
-  "ingress-nginx": {
-    versions: ["4.11.2"],
-    resources: IngressNginx.resources
-  },
   "knative-serving": {
-    versions: ["v1.15.0"],
+    versions: ["v1.15.0", "v1.22.1"],
     resources: KnativeServing.resources
   },
   "kube-prometheus-stack": {
@@ -53,5 +59,13 @@ export const OPERATOR_MAP: Record<string, {
   "minio-operator": {
     versions: ["7.1.1"],
     resources: MinioOperator.resources
+  },
+  "tekton-pipelines": {
+    versions: ["v1.15.0"],
+    resources: TektonPipelines.resources
+  },
+  "traefik": {
+    versions: ["34.4.1"],
+    resources: Traefik.resources
   }
 };

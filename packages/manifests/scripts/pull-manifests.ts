@@ -69,8 +69,10 @@ const OPERATORS: OperatorConfig[] = [
         type: 'urls',
         version: '1.25.2',
         urls: [
-          // Matches scripts/01-install-operators.sh
-          'https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.25/releases/cnpg-1.25.2.yaml',
+          // Pinned to the tag rather than the release-1.25 branch: a branch can
+          // change under a fixed filename, so the same version could pull
+          // different content on two different days.
+          'https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/v1.25.2/releases/cnpg-1.25.2.yaml',
         ],
       },
     ],
@@ -80,11 +82,14 @@ const OPERATORS: OperatorConfig[] = [
     sources: [
       {
         type: 'urls',
-        version: 'v1.15.0',
+        version: 'v1.22.1',
         urls: [
-          'https://github.com/knative/serving/releases/download/knative-v1.15.0/serving-crds.yaml',
-          'https://github.com/knative/serving/releases/download/knative-v1.15.0/serving-core.yaml',
-          'https://github.com/knative/net-kourier/releases/download/knative-v1.15.0/kourier.yaml',
+          'https://github.com/knative/serving/releases/download/knative-v1.22.1/serving-crds.yaml',
+          'https://github.com/knative/serving/releases/download/knative-v1.22.1/serving-core.yaml',
+          // knative-extensions, not knative: the old path redirects, so both
+          // work and neither is obviously wrong — which is how two consumers
+          // came to name different repos for the same file.
+          'https://github.com/knative-extensions/net-kourier/releases/download/knative-v1.22.1/kourier.yaml',
         ],
       },
     ],
@@ -94,32 +99,12 @@ const OPERATORS: OperatorConfig[] = [
     sources: [
       {
         type: 'helm',
-        version: 'v1.17.0',
+        version: 'v1.21.1',
         repo: 'https://charts.jetstack.io',
         repoName: 'jetstack',
         chart: 'cert-manager',
         namespace: 'cert-manager',
         values: { installCRDs: true, global: { leaderElection: { namespace: 'cert-manager' } } },
-      },
-    ],
-  },
-  {
-    name: 'ingress-nginx',
-    sources: [
-      {
-        type: 'helm',
-        // Chart 4.11.2 corresponds to controller 1.11.1 (matches existing yaml)
-        version: '4.11.2',
-        repo: 'https://kubernetes.github.io/ingress-nginx',
-        repoName: 'ingress-nginx',
-        chart: 'ingress-nginx',
-        namespace: 'ingress-nginx',
-        values: {
-          controller: {
-            metrics: { enabled: true },
-            podAnnotations: { 'prometheus.io/scrape': 'true', 'prometheus.io/port': '10254' },
-          },
-        },
       },
     ],
   },
@@ -147,6 +132,49 @@ const OPERATORS: OperatorConfig[] = [
             persistence: { enabled: true, size: '5Gi' },
           },
         },
+      },
+    ],
+  },
+  {
+    // Cilium's CRDs are what a NetworkPolicy-based isolation model is written
+    // against, so a client generated without them cannot describe that surface
+    // at all.
+    name: 'cilium',
+    sources: [
+      {
+        type: 'helm',
+        version: '1.19.5',
+        repo: 'https://helm.cilium.io',
+        repoName: 'cilium',
+        chart: 'cilium',
+        namespace: 'kube-system',
+      },
+    ],
+  },
+  {
+    name: 'traefik',
+    sources: [
+      {
+        type: 'helm',
+        version: '34.4.1',
+        repo: 'https://traefik.github.io/charts',
+        repoName: 'traefik',
+        chart: 'traefik',
+        namespace: 'traefik',
+      },
+    ],
+  },
+  {
+    name: 'tekton-pipelines',
+    sources: [
+      {
+        type: 'urls',
+        version: 'v1.15.0',
+        urls: [
+          // The GitHub release asset, not the GCS bucket: the bucket's
+          // `previous/` layout does not carry every version.
+          'https://github.com/tektoncd/pipeline/releases/download/v1.15.0/release.yaml',
+        ],
       },
     ],
   }

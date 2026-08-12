@@ -1,6 +1,6 @@
 /** Auto-generated typed resources for operator: cert-manager*/
-import type { KubernetesResource, AdmissionregistrationK8sIoV1MutatingWebhookConfiguration, AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration, ApiextensionsK8sIoV1CustomResourceDefinition, AppsV1Deployment, BatchV1Job, Namespace, RbacAuthorizationK8sIoV1ClusterRole, RbacAuthorizationK8sIoV1ClusterRoleBinding, RbacAuthorizationK8sIoV1Role, RbacAuthorizationK8sIoV1RoleBinding, Service, ServiceAccount } from "@kubernetesjs/ops";
-export const Namespace_CertManager: Namespace = {
+import type { KubernetesResource } from "@kubernetesjs/ops";
+export const Namespace_CertManager: KubernetesResource = {
   apiVersion: "v1",
   kind: "Namespace",
   metadata: {
@@ -10,7 +10,7 @@ export const Namespace_CertManager: Namespace = {
     name: "cert-manager"
   }
 };
-export const ServiceAccount_CertManagerCainjector: ServiceAccount = {
+export const ServiceAccount_CertManagerCainjector: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -20,15 +20,15 @@ export const ServiceAccount_CertManagerCainjector: ServiceAccount = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cainjector",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-cainjector",
     namespace: "cert-manager"
   },
   automountServiceAccountToken: true
 };
-export const ServiceAccount_CertManager: ServiceAccount = {
+export const ServiceAccount_CertManager: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -38,15 +38,15 @@ export const ServiceAccount_CertManager: ServiceAccount = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager",
     namespace: "cert-manager"
   },
   automountServiceAccountToken: true
 };
-export const ServiceAccount_CertManagerWebhook: ServiceAccount = {
+export const ServiceAccount_CertManagerWebhook: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -56,15 +56,15 @@ export const ServiceAccount_CertManagerWebhook: ServiceAccount = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "webhook",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-webhook",
     namespace: "cert-manager"
   },
   automountServiceAccountToken: true
 };
-export const CustomResourceDefinition_CertificaterequestsCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -73,779 +73,12 @@ export const CustomResourceDefinition_CertificaterequestsCertManagerIo: Apiexten
     },
     labels: {
       app: "cert-manager",
+      "app.kubernetes.io/component": "crds",
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
-    },
-    name: "certificaterequests.cert-manager.io"
-  },
-  spec: {
-    group: "cert-manager.io",
-    names: {
-      categories: ["cert-manager"],
-      kind: "CertificateRequest",
-      listKind: "CertificateRequestList",
-      plural: "certificaterequests",
-      shortNames: ["cr", "crs"],
-      singular: "certificaterequest"
-    },
-    scope: "Namespaced",
-    versions: [{
-      additionalPrinterColumns: [{
-        jsonPath: ".status.conditions[?(@.type==\"Approved\")].status",
-        name: "Approved",
-        type: "string"
-      }, {
-        jsonPath: ".status.conditions[?(@.type==\"Denied\")].status",
-        name: "Denied",
-        type: "string"
-      }, {
-        jsonPath: ".status.conditions[?(@.type==\"Ready\")].status",
-        name: "Ready",
-        type: "string"
-      }, {
-        jsonPath: ".spec.issuerRef.name",
-        name: "Issuer",
-        type: "string"
-      }, {
-        jsonPath: ".spec.username",
-        name: "Requester",
-        type: "string"
-      }, {
-        jsonPath: ".status.conditions[?(@.type==\"Ready\")].message",
-        name: "Status",
-        priority: 1,
-        type: "string"
-      }, {
-        description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-        jsonPath: ".metadata.creationTimestamp",
-        name: "Age",
-        type: "date"
-      }],
-      name: "v1",
-      schema: {
-        openAPIV3Schema: {
-          description: "A CertificateRequest is used to request a signed certificate from one of the\nconfigured issuers.\n\nAll fields within the CertificateRequest's `spec` are immutable after creation.\nA CertificateRequest will either succeed or fail, as denoted by its `Ready` status\ncondition and its `status.failureTime` field.\n\nA CertificateRequest is a one-shot resource, meaning it represents a single\npoint in time request for a certificate and cannot be re-used.",
-          properties: {
-            apiVersion: {
-              description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-              type: "string"
-            },
-            kind: {
-              description: "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-              type: "string"
-            },
-            metadata: {
-              type: "object"
-            },
-            spec: {
-              description: "Specification of the desired state of the CertificateRequest resource.\nhttps://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
-              properties: {
-                duration: {
-                  description: "Requested 'duration' (i.e. lifetime) of the Certificate. Note that the\nissuer may choose to ignore the requested duration, just like any other\nrequested attribute.",
-                  type: "string"
-                },
-                extra: {
-                  additionalProperties: {
-                    items: {
-                      type: "string"
-                    },
-                    type: "array"
-                  },
-                  description: "Extra contains extra attributes of the user that created the CertificateRequest.\nPopulated by the cert-manager webhook on creation and immutable.",
-                  type: "object"
-                },
-                groups: {
-                  description: "Groups contains group membership of the user that created the CertificateRequest.\nPopulated by the cert-manager webhook on creation and immutable.",
-                  items: {
-                    type: "string"
-                  },
-                  type: "array",
-                  "x-kubernetes-list-type": "atomic"
-                },
-                isCA: {
-                  description: "Requested basic constraints isCA value. Note that the issuer may choose\nto ignore the requested isCA value, just like any other requested attribute.\n\nNOTE: If the CSR in the `Request` field has a BasicConstraints extension,\nit must have the same isCA value as specified here.\n\nIf true, this will automatically add the `cert sign` usage to the list\nof requested `usages`.",
-                  type: "boolean"
-                },
-                issuerRef: {
-                  description: "Reference to the issuer responsible for issuing the certificate.\nIf the issuer is namespace-scoped, it must be in the same namespace\nas the Certificate. If the issuer is cluster-scoped, it can be used\nfrom any namespace.\n\nThe `name` field of the reference must always be specified.",
-                  properties: {
-                    group: {
-                      description: "Group of the resource being referred to.",
-                      type: "string"
-                    },
-                    kind: {
-                      description: "Kind of the resource being referred to.",
-                      type: "string"
-                    },
-                    name: {
-                      description: "Name of the resource being referred to.",
-                      type: "string"
-                    }
-                  },
-                  required: ["name"],
-                  type: "object"
-                },
-                request: {
-                  description: "The PEM-encoded X.509 certificate signing request to be submitted to the\nissuer for signing.\n\nIf the CSR has a BasicConstraints extension, its isCA attribute must\nmatch the `isCA` value of this CertificateRequest.\nIf the CSR has a KeyUsage extension, its key usages must match the\nkey usages in the `usages` field of this CertificateRequest.\nIf the CSR has a ExtKeyUsage extension, its extended key usages\nmust match the extended key usages in the `usages` field of this\nCertificateRequest.",
-                  format: "byte",
-                  type: "string"
-                },
-                uid: {
-                  description: "UID contains the uid of the user that created the CertificateRequest.\nPopulated by the cert-manager webhook on creation and immutable.",
-                  type: "string"
-                },
-                usages: {
-                  description: "Requested key usages and extended key usages.\n\nNOTE: If the CSR in the `Request` field has uses the KeyUsage or\nExtKeyUsage extension, these extensions must have the same values\nas specified here without any additional values.\n\nIf unset, defaults to `digital signature` and `key encipherment`.",
-                  items: {
-                    description: "KeyUsage specifies valid usage contexts for keys.\nSee:\nhttps://tools.ietf.org/html/rfc5280#section-4.2.1.3\nhttps://tools.ietf.org/html/rfc5280#section-4.2.1.12\n\nValid KeyUsage values are as follows:\n\"signing\",\n\"digital signature\",\n\"content commitment\",\n\"key encipherment\",\n\"key agreement\",\n\"data encipherment\",\n\"cert sign\",\n\"crl sign\",\n\"encipher only\",\n\"decipher only\",\n\"any\",\n\"server auth\",\n\"client auth\",\n\"code signing\",\n\"email protection\",\n\"s/mime\",\n\"ipsec end system\",\n\"ipsec tunnel\",\n\"ipsec user\",\n\"timestamping\",\n\"ocsp signing\",\n\"microsoft sgc\",\n\"netscape sgc\"",
-                    enum: ["signing", "digital signature", "content commitment", "key encipherment", "key agreement", "data encipherment", "cert sign", "crl sign", "encipher only", "decipher only", "any", "server auth", "client auth", "code signing", "email protection", "s/mime", "ipsec end system", "ipsec tunnel", "ipsec user", "timestamping", "ocsp signing", "microsoft sgc", "netscape sgc"],
-                    type: "string"
-                  },
-                  type: "array"
-                },
-                username: {
-                  description: "Username contains the name of the user that created the CertificateRequest.\nPopulated by the cert-manager webhook on creation and immutable.",
-                  type: "string"
-                }
-              },
-              required: ["issuerRef", "request"],
-              type: "object"
-            },
-            status: {
-              description: "Status of the CertificateRequest.\nThis is set and managed automatically.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
-              properties: {
-                ca: {
-                  description: "The PEM encoded X.509 certificate of the signer, also known as the CA\n(Certificate Authority).\nThis is set on a best-effort basis by different issuers.\nIf not set, the CA is assumed to be unknown/not available.",
-                  format: "byte",
-                  type: "string"
-                },
-                certificate: {
-                  description: "The PEM encoded X.509 certificate resulting from the certificate\nsigning request.\nIf not set, the CertificateRequest has either not been completed or has\nfailed. More information on failure can be found by checking the\n`conditions` field.",
-                  format: "byte",
-                  type: "string"
-                },
-                conditions: {
-                  description: "List of status conditions to indicate the status of a CertificateRequest.\nKnown condition types are `Ready`, `InvalidRequest`, `Approved` and `Denied`.",
-                  items: {
-                    description: "CertificateRequestCondition contains condition information for a CertificateRequest.",
-                    properties: {
-                      lastTransitionTime: {
-                        description: "LastTransitionTime is the timestamp corresponding to the last status\nchange of this condition.",
-                        format: "date-time",
-                        type: "string"
-                      },
-                      message: {
-                        description: "Message is a human readable description of the details of the last\ntransition, complementing reason.",
-                        type: "string"
-                      },
-                      reason: {
-                        description: "Reason is a brief machine readable explanation for the condition's last\ntransition.",
-                        type: "string"
-                      },
-                      status: {
-                        description: "Status of the condition, one of (`True`, `False`, `Unknown`).",
-                        enum: ["True", "False", "Unknown"],
-                        type: "string"
-                      },
-                      type: {
-                        description: "Type of the condition, known values are (`Ready`, `InvalidRequest`,\n`Approved`, `Denied`).",
-                        type: "string"
-                      }
-                    },
-                    required: ["status", "type"],
-                    type: "object"
-                  },
-                  type: "array",
-                  "x-kubernetes-list-map-keys": ["type"],
-                  "x-kubernetes-list-type": "map"
-                },
-                failureTime: {
-                  description: "FailureTime stores the time that this CertificateRequest failed. This is\nused to influence garbage collection and back-off.",
-                  format: "date-time",
-                  type: "string"
-                }
-              },
-              type: "object"
-            }
-          },
-          type: "object"
-        }
-      },
-      served: true,
-      storage: true,
-      subresources: {
-        status: {}
-      }
-    }]
-  }
-};
-export const CustomResourceDefinition_CertificatesCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
-  apiVersion: "apiextensions.k8s.io/v1",
-  kind: "CustomResourceDefinition",
-  metadata: {
-    annotations: {
-      "helm.sh/resource-policy": "keep"
-    },
-    labels: {
-      app: "cert-manager",
-      "app.kubernetes.io/instance": "cert-manager",
-      "app.kubernetes.io/managed-by": "Helm",
-      "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
-    },
-    name: "certificates.cert-manager.io"
-  },
-  spec: {
-    group: "cert-manager.io",
-    names: {
-      categories: ["cert-manager"],
-      kind: "Certificate",
-      listKind: "CertificateList",
-      plural: "certificates",
-      shortNames: ["cert", "certs"],
-      singular: "certificate"
-    },
-    scope: "Namespaced",
-    versions: [{
-      additionalPrinterColumns: [{
-        jsonPath: ".status.conditions[?(@.type==\"Ready\")].status",
-        name: "Ready",
-        type: "string"
-      }, {
-        jsonPath: ".spec.secretName",
-        name: "Secret",
-        type: "string"
-      }, {
-        jsonPath: ".spec.issuerRef.name",
-        name: "Issuer",
-        priority: 1,
-        type: "string"
-      }, {
-        jsonPath: ".status.conditions[?(@.type==\"Ready\")].message",
-        name: "Status",
-        priority: 1,
-        type: "string"
-      }, {
-        description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-        jsonPath: ".metadata.creationTimestamp",
-        name: "Age",
-        type: "date"
-      }],
-      name: "v1",
-      schema: {
-        openAPIV3Schema: {
-          description: "A Certificate resource should be created to ensure an up to date and signed\nX.509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`.\n\nThe stored certificate will be renewed before it expires (as configured by `spec.renewBefore`).",
-          properties: {
-            apiVersion: {
-              description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-              type: "string"
-            },
-            kind: {
-              description: "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-              type: "string"
-            },
-            metadata: {
-              type: "object"
-            },
-            spec: {
-              description: "Specification of the desired state of the Certificate resource.\nhttps://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
-              properties: {
-                additionalOutputFormats: {
-                  description: "Defines extra output formats of the private key and signed certificate chain\nto be written to this Certificate's target Secret.\n\nThis is a Beta Feature enabled by default. It can be disabled with the\n`--feature-gates=AdditionalCertificateOutputFormats=false` option set on both\nthe controller and webhook components.",
-                  items: {
-                    description: "CertificateAdditionalOutputFormat defines an additional output format of a\nCertificate resource. These contain supplementary data formats of the signed\ncertificate chain and paired private key.",
-                    properties: {
-                      type: {
-                        description: "Type is the name of the format type that should be written to the\nCertificate's target Secret.",
-                        enum: ["DER", "CombinedPEM"],
-                        type: "string"
-                      }
-                    },
-                    required: ["type"],
-                    type: "object"
-                  },
-                  type: "array"
-                },
-                commonName: {
-                  description: "Requested common name X509 certificate subject attribute.\nMore info: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6\nNOTE: TLS clients will ignore this value when any subject alternative name is\nset (see https://tools.ietf.org/html/rfc6125#section-6.4.4).\n\nShould have a length of 64 characters or fewer to avoid generating invalid CSRs.\nCannot be set if the `literalSubject` field is set.",
-                  type: "string"
-                },
-                dnsNames: {
-                  description: "Requested DNS subject alternative names.",
-                  items: {
-                    type: "string"
-                  },
-                  type: "array"
-                },
-                duration: {
-                  description: "Requested 'duration' (i.e. lifetime) of the Certificate. Note that the\nissuer may choose to ignore the requested duration, just like any other\nrequested attribute.\n\nIf unset, this defaults to 90 days.\nMinimum accepted duration is 1 hour.\nValue must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration.",
-                  type: "string"
-                },
-                emailAddresses: {
-                  description: "Requested email subject alternative names.",
-                  items: {
-                    type: "string"
-                  },
-                  type: "array"
-                },
-                encodeUsagesInRequest: {
-                  description: "Whether the KeyUsage and ExtKeyUsage extensions should be set in the encoded CSR.\n\nThis option defaults to true, and should only be disabled if the target\nissuer does not support CSRs with these X509 KeyUsage/ ExtKeyUsage extensions.",
-                  type: "boolean"
-                },
-                ipAddresses: {
-                  description: "Requested IP address subject alternative names.",
-                  items: {
-                    type: "string"
-                  },
-                  type: "array"
-                },
-                isCA: {
-                  description: "Requested basic constraints isCA value.\nThe isCA value is used to set the `isCA` field on the created CertificateRequest\nresources. Note that the issuer may choose to ignore the requested isCA value, just\nlike any other requested attribute.\n\nIf true, this will automatically add the `cert sign` usage to the list\nof requested `usages`.",
-                  type: "boolean"
-                },
-                issuerRef: {
-                  description: "Reference to the issuer responsible for issuing the certificate.\nIf the issuer is namespace-scoped, it must be in the same namespace\nas the Certificate. If the issuer is cluster-scoped, it can be used\nfrom any namespace.\n\nThe `name` field of the reference must always be specified.",
-                  properties: {
-                    group: {
-                      description: "Group of the resource being referred to.",
-                      type: "string"
-                    },
-                    kind: {
-                      description: "Kind of the resource being referred to.",
-                      type: "string"
-                    },
-                    name: {
-                      description: "Name of the resource being referred to.",
-                      type: "string"
-                    }
-                  },
-                  required: ["name"],
-                  type: "object"
-                },
-                keystores: {
-                  description: "Additional keystore output formats to be stored in the Certificate's Secret.",
-                  properties: {
-                    jks: {
-                      description: "JKS configures options for storing a JKS keystore in the\n`spec.secretName` Secret resource.",
-                      properties: {
-                        alias: {
-                          description: "Alias specifies the alias of the key in the keystore, required by the JKS format.\nIf not provided, the default alias `certificate` will be used.",
-                          type: "string"
-                        },
-                        create: {
-                          description: "Create enables JKS keystore creation for the Certificate.\nIf true, a file named `keystore.jks` will be created in the target\nSecret resource, encrypted using the password stored in\n`passwordSecretRef` or `password`.\nThe keystore file will be updated immediately.\nIf the issuer provided a CA certificate, a file named `truststore.jks`\nwill also be created in the target Secret resource, encrypted using the\npassword stored in `passwordSecretRef`\ncontaining the issuing Certificate Authority",
-                          type: "boolean"
-                        },
-                        password: {
-                          description: "Password provides a literal password used to encrypt the JKS keystore.\nMutually exclusive with passwordSecretRef.\nOne of password or passwordSecretRef must provide a password with a non-zero length.",
-                          type: "string"
-                        },
-                        passwordSecretRef: {
-                          description: "PasswordSecretRef is a reference to a non-empty key in a Secret resource\ncontaining the password used to encrypt the JKS keystore.\nMutually exclusive with password.\nOne of password or passwordSecretRef must provide a password with a non-zero length.",
-                          properties: {
-                            key: {
-                              description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
-                              type: "string"
-                            },
-                            name: {
-                              description: "Name of the resource being referred to.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
-                              type: "string"
-                            }
-                          },
-                          required: ["name"],
-                          type: "object"
-                        }
-                      },
-                      required: ["create"],
-                      type: "object"
-                    },
-                    pkcs12: {
-                      description: "PKCS12 configures options for storing a PKCS12 keystore in the\n`spec.secretName` Secret resource.",
-                      properties: {
-                        create: {
-                          description: "Create enables PKCS12 keystore creation for the Certificate.\nIf true, a file named `keystore.p12` will be created in the target\nSecret resource, encrypted using the password stored in\n`passwordSecretRef` or in `password`.\nThe keystore file will be updated immediately.\nIf the issuer provided a CA certificate, a file named `truststore.p12` will\nalso be created in the target Secret resource, encrypted using the\npassword stored in `passwordSecretRef` containing the issuing Certificate\nAuthority",
-                          type: "boolean"
-                        },
-                        password: {
-                          description: "Password provides a literal password used to encrypt the PKCS#12 keystore.\nMutually exclusive with passwordSecretRef.\nOne of password or passwordSecretRef must provide a password with a non-zero length.",
-                          type: "string"
-                        },
-                        passwordSecretRef: {
-                          description: "PasswordSecretRef is a reference to a non-empty key in a Secret resource\ncontaining the password used to encrypt the PKCS#12 keystore.\nMutually exclusive with password.\nOne of password or passwordSecretRef must provide a password with a non-zero length.",
-                          properties: {
-                            key: {
-                              description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
-                              type: "string"
-                            },
-                            name: {
-                              description: "Name of the resource being referred to.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
-                              type: "string"
-                            }
-                          },
-                          required: ["name"],
-                          type: "object"
-                        },
-                        profile: {
-                          description: "Profile specifies the key and certificate encryption algorithms and the HMAC algorithm\nused to create the PKCS12 keystore. Default value is `LegacyRC2` for backward compatibility.\n\nIf provided, allowed values are:\n`LegacyRC2`: Deprecated. Not supported by default in OpenSSL 3 or Java 20.\n`LegacyDES`: Less secure algorithm. Use this option for maximal compatibility.\n`Modern2023`: Secure algorithm. Use this option in case you have to always use secure algorithms\n(eg. because of company policy). Please note that the security of the algorithm is not that important\nin reality, because the unencrypted certificate and private key are also stored in the Secret.",
-                          enum: ["LegacyRC2", "LegacyDES", "Modern2023"],
-                          type: "string"
-                        }
-                      },
-                      required: ["create"],
-                      type: "object"
-                    }
-                  },
-                  type: "object"
-                },
-                literalSubject: {
-                  description: "Requested X.509 certificate subject, represented using the LDAP \"String\nRepresentation of a Distinguished Name\" [1].\nImportant: the LDAP string format also specifies the order of the attributes\nin the subject, this is important when issuing certs for LDAP authentication.\nExample: `CN=foo,DC=corp,DC=example,DC=com`\nMore info [1]: https://datatracker.ietf.org/doc/html/rfc4514\nMore info: https://github.com/cert-manager/cert-manager/issues/3203\nMore info: https://github.com/cert-manager/cert-manager/issues/4424\n\nCannot be set if the `subject` or `commonName` field is set.",
-                  type: "string"
-                },
-                nameConstraints: {
-                  description: "x.509 certificate NameConstraint extension which MUST NOT be used in a non-CA certificate.\nMore Info: https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.10\n\nThis is an Alpha Feature and is only enabled with the\n`--feature-gates=NameConstraints=true` option set on both\nthe controller and webhook components.",
-                  properties: {
-                    critical: {
-                      description: "if true then the name constraints are marked critical.",
-                      type: "boolean"
-                    },
-                    excluded: {
-                      description: "Excluded contains the constraints which must be disallowed. Any name matching a\nrestriction in the excluded field is invalid regardless\nof information appearing in the permitted",
-                      properties: {
-                        dnsDomains: {
-                          description: "DNSDomains is a list of DNS domains that are permitted or excluded.",
-                          items: {
-                            type: "string"
-                          },
-                          type: "array"
-                        },
-                        emailAddresses: {
-                          description: "EmailAddresses is a list of Email Addresses that are permitted or excluded.",
-                          items: {
-                            type: "string"
-                          },
-                          type: "array"
-                        },
-                        ipRanges: {
-                          description: "IPRanges is a list of IP Ranges that are permitted or excluded.\nThis should be a valid CIDR notation.",
-                          items: {
-                            type: "string"
-                          },
-                          type: "array"
-                        },
-                        uriDomains: {
-                          description: "URIDomains is a list of URI domains that are permitted or excluded.",
-                          items: {
-                            type: "string"
-                          },
-                          type: "array"
-                        }
-                      },
-                      type: "object"
-                    },
-                    permitted: {
-                      description: "Permitted contains the constraints in which the names must be located.",
-                      properties: {
-                        dnsDomains: {
-                          description: "DNSDomains is a list of DNS domains that are permitted or excluded.",
-                          items: {
-                            type: "string"
-                          },
-                          type: "array"
-                        },
-                        emailAddresses: {
-                          description: "EmailAddresses is a list of Email Addresses that are permitted or excluded.",
-                          items: {
-                            type: "string"
-                          },
-                          type: "array"
-                        },
-                        ipRanges: {
-                          description: "IPRanges is a list of IP Ranges that are permitted or excluded.\nThis should be a valid CIDR notation.",
-                          items: {
-                            type: "string"
-                          },
-                          type: "array"
-                        },
-                        uriDomains: {
-                          description: "URIDomains is a list of URI domains that are permitted or excluded.",
-                          items: {
-                            type: "string"
-                          },
-                          type: "array"
-                        }
-                      },
-                      type: "object"
-                    }
-                  },
-                  type: "object"
-                },
-                otherNames: {
-                  description: "`otherNames` is an escape hatch for SAN that allows any type. We currently restrict the support to string like otherNames, cf RFC 5280 p 37\nAny UTF8 String valued otherName can be passed with by setting the keys oid: x.x.x.x and UTF8Value: somevalue for `otherName`.\nMost commonly this would be UPN set with oid: 1.3.6.1.4.1.311.20.2.3\nYou should ensure that any OID passed is valid for the UTF8String type as we do not explicitly validate this.",
-                  items: {
-                    properties: {
-                      oid: {
-                        description: "OID is the object identifier for the otherName SAN.\nThe object identifier must be expressed as a dotted string, for\nexample, \"1.2.840.113556.1.4.221\".",
-                        type: "string"
-                      },
-                      utf8Value: {
-                        description: "utf8Value is the string value of the otherName SAN.\nThe utf8Value accepts any valid UTF8 string to set as value for the otherName SAN.",
-                        type: "string"
-                      }
-                    },
-                    type: "object"
-                  },
-                  type: "array"
-                },
-                privateKey: {
-                  description: "Private key options. These include the key algorithm and size, the used\nencoding and the rotation policy.",
-                  properties: {
-                    algorithm: {
-                      description: "Algorithm is the private key algorithm of the corresponding private key\nfor this certificate.\n\nIf provided, allowed values are either `RSA`, `ECDSA` or `Ed25519`.\nIf `algorithm` is specified and `size` is not provided,\nkey size of 2048 will be used for `RSA` key algorithm and\nkey size of 256 will be used for `ECDSA` key algorithm.\nkey size is ignored when using the `Ed25519` key algorithm.",
-                      enum: ["RSA", "ECDSA", "Ed25519"],
-                      type: "string"
-                    },
-                    encoding: {
-                      description: "The private key cryptography standards (PKCS) encoding for this\ncertificate's private key to be encoded in.\n\nIf provided, allowed values are `PKCS1` and `PKCS8` standing for PKCS#1\nand PKCS#8, respectively.\nDefaults to `PKCS1` if not specified.",
-                      enum: ["PKCS1", "PKCS8"],
-                      type: "string"
-                    },
-                    rotationPolicy: {
-                      description: "RotationPolicy controls how private keys should be regenerated when a\nre-issuance is being processed.\n\nIf set to `Never`, a private key will only be generated if one does not\nalready exist in the target `spec.secretName`. If one does exist but it\ndoes not have the correct algorithm or size, a warning will be raised\nto await user intervention.\nIf set to `Always`, a private key matching the specified requirements\nwill be generated whenever a re-issuance occurs.\nDefault is `Never` for backward compatibility.",
-                      enum: ["Never", "Always"],
-                      type: "string"
-                    },
-                    size: {
-                      description: "Size is the key bit size of the corresponding private key for this certificate.\n\nIf `algorithm` is set to `RSA`, valid values are `2048`, `4096` or `8192`,\nand will default to `2048` if not specified.\nIf `algorithm` is set to `ECDSA`, valid values are `256`, `384` or `521`,\nand will default to `256` if not specified.\nIf `algorithm` is set to `Ed25519`, Size is ignored.\nNo other values are allowed.",
-                      type: "integer"
-                    }
-                  },
-                  type: "object"
-                },
-                renewBefore: {
-                  description: "How long before the currently issued certificate's expiry cert-manager should\nrenew the certificate. For example, if a certificate is valid for 60 minutes,\nand `renewBefore=10m`, cert-manager will begin to attempt to renew the certificate\n50 minutes after it was issued (i.e. when there are 10 minutes remaining until\nthe certificate is no longer valid).\n\nNOTE: The actual lifetime of the issued certificate is used to determine the\nrenewal time. If an issuer returns a certificate with a different lifetime than\nthe one requested, cert-manager will use the lifetime of the issued certificate.\n\nIf unset, this defaults to 1/3 of the issued certificate's lifetime.\nMinimum accepted value is 5 minutes.\nValue must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration.\nCannot be set if the `renewBeforePercentage` field is set.",
-                  type: "string"
-                },
-                renewBeforePercentage: {
-                  description: "`renewBeforePercentage` is like `renewBefore`, except it is a relative percentage\nrather than an absolute duration. For example, if a certificate is valid for 60\nminutes, and  `renewBeforePercentage=25`, cert-manager will begin to attempt to\nrenew the certificate 45 minutes after it was issued (i.e. when there are 15\nminutes (25%) remaining until the certificate is no longer valid).\n\nNOTE: The actual lifetime of the issued certificate is used to determine the\nrenewal time. If an issuer returns a certificate with a different lifetime than\nthe one requested, cert-manager will use the lifetime of the issued certificate.\n\nValue must be an integer in the range (0,100). The minimum effective\n`renewBefore` derived from the `renewBeforePercentage` and `duration` fields is 5\nminutes.\nCannot be set if the `renewBefore` field is set.",
-                  format: "int32",
-                  type: "integer"
-                },
-                revisionHistoryLimit: {
-                  description: "The maximum number of CertificateRequest revisions that are maintained in\nthe Certificate's history. Each revision represents a single `CertificateRequest`\ncreated by this Certificate, either when it was created, renewed, or Spec\nwas changed. Revisions will be removed by oldest first if the number of\nrevisions exceeds this number.\n\nIf set, revisionHistoryLimit must be a value of `1` or greater.\nIf unset (`nil`), revisions will not be garbage collected.\nDefault value is `nil`.",
-                  format: "int32",
-                  type: "integer"
-                },
-                secretName: {
-                  description: "Name of the Secret resource that will be automatically created and\nmanaged by this Certificate resource. It will be populated with a\nprivate key and certificate, signed by the denoted issuer. The Secret\nresource lives in the same namespace as the Certificate resource.",
-                  type: "string"
-                },
-                secretTemplate: {
-                  description: "Defines annotations and labels to be copied to the Certificate's Secret.\nLabels and annotations on the Secret will be changed as they appear on the\nSecretTemplate when added or removed. SecretTemplate annotations are added\nin conjunction with, and cannot overwrite, the base set of annotations\ncert-manager sets on the Certificate's Secret.",
-                  properties: {
-                    annotations: {
-                      additionalProperties: {
-                        type: "string"
-                      },
-                      description: "Annotations is a key value map to be copied to the target Kubernetes Secret.",
-                      type: "object"
-                    },
-                    labels: {
-                      additionalProperties: {
-                        type: "string"
-                      },
-                      description: "Labels is a key value map to be copied to the target Kubernetes Secret.",
-                      type: "object"
-                    }
-                  },
-                  type: "object"
-                },
-                subject: {
-                  description: "Requested set of X509 certificate subject attributes.\nMore info: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6\n\nThe common name attribute is specified separately in the `commonName` field.\nCannot be set if the `literalSubject` field is set.",
-                  properties: {
-                    countries: {
-                      description: "Countries to be used on the Certificate.",
-                      items: {
-                        type: "string"
-                      },
-                      type: "array"
-                    },
-                    localities: {
-                      description: "Cities to be used on the Certificate.",
-                      items: {
-                        type: "string"
-                      },
-                      type: "array"
-                    },
-                    organizationalUnits: {
-                      description: "Organizational Units to be used on the Certificate.",
-                      items: {
-                        type: "string"
-                      },
-                      type: "array"
-                    },
-                    organizations: {
-                      description: "Organizations to be used on the Certificate.",
-                      items: {
-                        type: "string"
-                      },
-                      type: "array"
-                    },
-                    postalCodes: {
-                      description: "Postal codes to be used on the Certificate.",
-                      items: {
-                        type: "string"
-                      },
-                      type: "array"
-                    },
-                    provinces: {
-                      description: "State/Provinces to be used on the Certificate.",
-                      items: {
-                        type: "string"
-                      },
-                      type: "array"
-                    },
-                    serialNumber: {
-                      description: "Serial number to be used on the Certificate.",
-                      type: "string"
-                    },
-                    streetAddresses: {
-                      description: "Street addresses to be used on the Certificate.",
-                      items: {
-                        type: "string"
-                      },
-                      type: "array"
-                    }
-                  },
-                  type: "object"
-                },
-                uris: {
-                  description: "Requested URI subject alternative names.",
-                  items: {
-                    type: "string"
-                  },
-                  type: "array"
-                },
-                usages: {
-                  description: "Requested key usages and extended key usages.\nThese usages are used to set the `usages` field on the created CertificateRequest\nresources. If `encodeUsagesInRequest` is unset or set to `true`, the usages\nwill additionally be encoded in the `request` field which contains the CSR blob.\n\nIf unset, defaults to `digital signature` and `key encipherment`.",
-                  items: {
-                    description: "KeyUsage specifies valid usage contexts for keys.\nSee:\nhttps://tools.ietf.org/html/rfc5280#section-4.2.1.3\nhttps://tools.ietf.org/html/rfc5280#section-4.2.1.12\n\nValid KeyUsage values are as follows:\n\"signing\",\n\"digital signature\",\n\"content commitment\",\n\"key encipherment\",\n\"key agreement\",\n\"data encipherment\",\n\"cert sign\",\n\"crl sign\",\n\"encipher only\",\n\"decipher only\",\n\"any\",\n\"server auth\",\n\"client auth\",\n\"code signing\",\n\"email protection\",\n\"s/mime\",\n\"ipsec end system\",\n\"ipsec tunnel\",\n\"ipsec user\",\n\"timestamping\",\n\"ocsp signing\",\n\"microsoft sgc\",\n\"netscape sgc\"",
-                    enum: ["signing", "digital signature", "content commitment", "key encipherment", "key agreement", "data encipherment", "cert sign", "crl sign", "encipher only", "decipher only", "any", "server auth", "client auth", "code signing", "email protection", "s/mime", "ipsec end system", "ipsec tunnel", "ipsec user", "timestamping", "ocsp signing", "microsoft sgc", "netscape sgc"],
-                    type: "string"
-                  },
-                  type: "array"
-                }
-              },
-              required: ["issuerRef", "secretName"],
-              type: "object"
-            },
-            status: {
-              description: "Status of the Certificate.\nThis is set and managed automatically.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
-              properties: {
-                conditions: {
-                  description: "List of status conditions to indicate the status of certificates.\nKnown condition types are `Ready` and `Issuing`.",
-                  items: {
-                    description: "CertificateCondition contains condition information for a Certificate.",
-                    properties: {
-                      lastTransitionTime: {
-                        description: "LastTransitionTime is the timestamp corresponding to the last status\nchange of this condition.",
-                        format: "date-time",
-                        type: "string"
-                      },
-                      message: {
-                        description: "Message is a human readable description of the details of the last\ntransition, complementing reason.",
-                        type: "string"
-                      },
-                      observedGeneration: {
-                        description: "If set, this represents the .metadata.generation that the condition was\nset based upon.\nFor instance, if .metadata.generation is currently 12, but the\n.status.condition[x].observedGeneration is 9, the condition is out of date\nwith respect to the current state of the Certificate.",
-                        format: "int64",
-                        type: "integer"
-                      },
-                      reason: {
-                        description: "Reason is a brief machine readable explanation for the condition's last\ntransition.",
-                        type: "string"
-                      },
-                      status: {
-                        description: "Status of the condition, one of (`True`, `False`, `Unknown`).",
-                        enum: ["True", "False", "Unknown"],
-                        type: "string"
-                      },
-                      type: {
-                        description: "Type of the condition, known values are (`Ready`, `Issuing`).",
-                        type: "string"
-                      }
-                    },
-                    required: ["status", "type"],
-                    type: "object"
-                  },
-                  type: "array",
-                  "x-kubernetes-list-map-keys": ["type"],
-                  "x-kubernetes-list-type": "map"
-                },
-                failedIssuanceAttempts: {
-                  description: "The number of continuous failed issuance attempts up till now. This\nfield gets removed (if set) on a successful issuance and gets set to\n1 if unset and an issuance has failed. If an issuance has failed, the\ndelay till the next issuance will be calculated using formula\ntime.Hour * 2 ^ (failedIssuanceAttempts - 1).",
-                  type: "integer"
-                },
-                lastFailureTime: {
-                  description: "LastFailureTime is set only if the latest issuance for this\nCertificate failed and contains the time of the failure. If an\nissuance has failed, the delay till the next issuance will be\ncalculated using formula time.Hour * 2 ^ (failedIssuanceAttempts -\n1). If the latest issuance has succeeded this field will be unset.",
-                  format: "date-time",
-                  type: "string"
-                },
-                nextPrivateKeySecretName: {
-                  description: "The name of the Secret resource containing the private key to be used\nfor the next certificate iteration.\nThe keymanager controller will automatically set this field if the\n`Issuing` condition is set to `True`.\nIt will automatically unset this field when the Issuing condition is\nnot set or False.",
-                  type: "string"
-                },
-                notAfter: {
-                  description: "The expiration time of the certificate stored in the secret named\nby this resource in `spec.secretName`.",
-                  format: "date-time",
-                  type: "string"
-                },
-                notBefore: {
-                  description: "The time after which the certificate stored in the secret named\nby this resource in `spec.secretName` is valid.",
-                  format: "date-time",
-                  type: "string"
-                },
-                renewalTime: {
-                  description: "RenewalTime is the time at which the certificate will be next\nrenewed.\nIf not set, no upcoming renewal is scheduled.",
-                  format: "date-time",
-                  type: "string"
-                },
-                revision: {
-                  description: "The current 'revision' of the certificate as issued.\n\nWhen a CertificateRequest resource is created, it will have the\n`cert-manager.io/certificate-revision` set to one greater than the\ncurrent value of this field.\n\nUpon issuance, this field will be set to the value of the annotation\non the CertificateRequest resource used to issue the certificate.\n\nPersisting the value on the CertificateRequest resource allows the\ncertificates controller to know whether a request is part of an old\nissuance or if it is part of the ongoing revision's issuance by\nchecking if the revision value in the annotation is greater than this\nfield.",
-                  type: "integer"
-                }
-              },
-              type: "object"
-            }
-          },
-          type: "object"
-        }
-      },
-      served: true,
-      storage: true,
-      subresources: {
-        status: {}
-      }
-    }]
-  }
-};
-export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
-  apiVersion: "apiextensions.k8s.io/v1",
-  kind: "CustomResourceDefinition",
-  metadata: {
-    annotations: {
-      "helm.sh/resource-policy": "keep"
-    },
-    labels: {
-      app: "cert-manager",
-      "app.kubernetes.io/instance": "cert-manager",
-      "app.kubernetes.io/managed-by": "Helm",
-      "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "challenges.acme.cert-manager.io"
   },
@@ -902,22 +135,22 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                   type: "string"
                 },
                 dnsName: {
-                  description: "dnsName is the identifier that this challenge is for, e.g. example.com.\nIf the requested DNSName is a 'wildcard', this field MUST be set to the\nnon-wildcard domain, e.g. for `*.example.com`, it must be `example.com`.",
+                  description: "dnsName is the identifier that this challenge is for, e.g., example.com.\nIf the requested DNSName is a 'wildcard', this field MUST be set to the\nnon-wildcard domain, e.g., for `*.example.com`, it must be `example.com`.",
                   type: "string"
                 },
                 issuerRef: {
                   description: "References a properly configured ACME-type Issuer which should\nbe used to create this Challenge.\nIf the Issuer does not exist, processing will be retried.\nIf the Issuer is not an 'ACME' Issuer, an error will be returned and the\nChallenge will be marked as failed.",
                   properties: {
                     group: {
-                      description: "Group of the resource being referred to.",
+                      description: "Group of the issuer being referred to.\nDefaults to 'cert-manager.io'.",
                       type: "string"
                     },
                     kind: {
-                      description: "Kind of the resource being referred to.",
+                      description: "Kind of the issuer being referred to.\nDefaults to 'Issuer'.",
                       type: "string"
                     },
                     name: {
-                      description: "Name of the resource being referred to.",
+                      description: "Name of the issuer being referred to.",
                       type: "string"
                     }
                   },
@@ -1049,15 +282,15 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                               description: "Auth: Azure Workload Identity or Azure Managed Service Identity:\nSettings to enable Azure Workload Identity or Azure Managed Service Identity\nIf set, ClientID, ClientSecret and TenantID must not be set.",
                               properties: {
                                 clientID: {
-                                  description: "client ID of the managed identity, can not be used at the same time as resourceID",
+                                  description: "client ID of the managed identity, cannot be used at the same time as resourceID",
                                   type: "string"
                                 },
                                 resourceID: {
-                                  description: "resource ID of the managed identity, can not be used at the same time as clientID\nCannot be used for Azure Managed Service Identity",
+                                  description: "resource ID of the managed identity, cannot be used at the same time as clientID\nCannot be used for Azure Managed Service Identity",
                                   type: "string"
                                 },
                                 tenantID: {
-                                  description: "tenant ID of the managed identity, can not be used at the same time as resourceID",
+                                  description: "tenant ID of the managed identity, cannot be used at the same time as resourceID",
                                   type: "string"
                                 }
                               },
@@ -1073,6 +306,11 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                             },
                             tenantID: {
                               description: "Auth: Azure Service Principal:\nThe TenantID of the Azure Service Principal used to authenticate with Azure DNS.\nIf set, ClientID and ClientSecret must also be set.",
+                              type: "string"
+                            },
+                            zoneType: {
+                              description: "ZoneType determines which type of Azure DNS zone to use.\n\nValid values are:\n  - AzurePublicZone  (default): Use a public Azure DNS zone.\n  - AzurePrivateZone: Use an Azure Private DNS zone.\n\nIf not specified, AzurePublicZone is used.\n\nSupport for Azure Private DNS zones is currently\nexperimental and may change in future releases.",
+                              enum: ["AzurePublicZone", "AzurePrivateZone"],
                               type: "string"
                             }
                           },
@@ -1179,7 +417,12 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                           description: "Use RFC2136 (\"Dynamic Updates in the Domain Name System\") (https://datatracker.ietf.org/doc/rfc2136/)\nto manage DNS01 challenge records.",
                           properties: {
                             nameserver: {
-                              description: "The IP address or hostname of an authoritative DNS server supporting\nRFC2136 in the form host:port. If the host is an IPv6 address it must be\nenclosed in square brackets (e.g [2001:db8::1])\xA0; port is optional.\nThis field is required.",
+                              description: "The IP address or hostname of an authoritative DNS server supporting\nRFC2136 in the form host:port. If the host is an IPv6 address it must be\nenclosed in square brackets (e.g [2001:db8::1]); port is optional.\nThis field is required.",
+                              type: "string"
+                            },
+                            protocol: {
+                              description: "Protocol to use for dynamic DNS update queries. Valid values are (case-sensitive) ``TCP`` and ``UDP``; ``UDP`` (default).",
+                              enum: ["TCP", "UDP"],
                               type: "string"
                             },
                             tsigAlgorithm: {
@@ -1213,11 +456,11 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                           description: "Use the AWS Route53 API to manage DNS01 challenge records.",
                           properties: {
                             accessKeyID: {
-                              description: "The AccessKeyID is used for authentication.\nCannot be set when SecretAccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall-back to using env\nvars, shared credentials file or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
+                              description: "The AccessKeyID is used for authentication.\nCannot be set when SecretAccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall back to using env\nvars, shared credentials file, or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                               type: "string"
                             },
                             accessKeyIDSecretRef: {
-                              description: "The SecretAccessKey is used for authentication. If set, pull the AWS\naccess key ID from a key within a Kubernetes Secret.\nCannot be set when AccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall-back to using env\nvars, shared credentials file or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
+                              description: "The SecretAccessKey is used for authentication. If set, pull the AWS\naccess key ID from a key within a Kubernetes Secret.\nCannot be set when AccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall back to using env\nvars, shared credentials file, or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                               properties: {
                                 key: {
                                   description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
@@ -1245,7 +488,8 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                           items: {
                                             type: "string"
                                           },
-                                          type: "array"
+                                          type: "array",
+                                          "x-kubernetes-list-type": "atomic"
                                         },
                                         name: {
                                           description: "Name of the ServiceAccount used to request a token.",
@@ -1276,7 +520,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                               type: "string"
                             },
                             secretAccessKeySecretRef: {
-                              description: "The SecretAccessKey is used for authentication.\nIf neither the Access Key nor Key ID are set, we fall-back to using env\nvars, shared credentials file or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
+                              description: "The SecretAccessKey is used for authentication.\nIf neither the Access Key nor Key ID are set, we fall back to using env\nvars, shared credentials file, or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                               properties: {
                                 key: {
                                   description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
@@ -1297,7 +541,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                           description: "Configure an external webhook based DNS01 challenge solver to manage\nDNS01 challenge records.",
                           properties: {
                             config: {
-                              description: "Additional configuration that should be passed to the webhook apiserver\nwhen challenges are processed.\nThis can contain arbitrary JSON data.\nSecret values should not be specified in this stanza.\nIf secret values are needed (e.g. credentials for a DNS service), you\nshould use a SecretKeySelector to reference a Secret resource.\nFor details on the schema of this field, consult the webhook provider\nimplementation's documentation.",
+                              description: "Additional configuration that should be passed to the webhook apiserver\nwhen challenges are processed.\nThis can contain arbitrary JSON data.\nSecret values should not be specified in this stanza.\nIf secret values are needed (e.g., credentials for a DNS service), you\nshould use a SecretKeySelector to reference a Secret resource.\nFor details on the schema of this field, consult the webhook provider\nimplementation's documentation.",
                               "x-kubernetes-preserve-unknown-fields": true
                             },
                             groupName: {
@@ -1305,7 +549,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                               type: "string"
                             },
                             solverName: {
-                              description: "The name of the solver to use, as defined in the webhook provider\nimplementation.\nThis will typically be the name of the provider, e.g. 'cloudflare'.",
+                              description: "The name of the solver to use, as defined in the webhook provider\nimplementation.\nThis will typically be the name of the provider, e.g., 'cloudflare'.",
                               type: "string"
                             }
                           },
@@ -1316,7 +560,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                       type: "object"
                     },
                     http01: {
-                      description: "Configures cert-manager to attempt to complete authorizations by\nperforming the HTTP01 challenge flow.\nIt is not possible to obtain certificates for wildcard domain names\n(e.g. `*.example.com`) using the HTTP01 challenge mechanism.",
+                      description: "Configures cert-manager to attempt to complete authorizations by\nperforming the HTTP01 challenge flow.\nIt is not possible to obtain certificates for wildcard domain names\n(e.g., `*.example.com`) using the HTTP01 challenge mechanism.",
                       properties: {
                         gatewayHTTPRoute: {
                           description: "The Gateway API is a sig-network community API that models service networking\nin Kubernetes (https://gateway-api.sigs.k8s.io/). The Gateway solver will\ncreate HTTPRoutes with the specified labels in the same namespace as the challenge.\nThis solver is experimental, and fields / behaviour may change in the future.",
@@ -1379,7 +623,8 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                 required: ["name"],
                                 type: "object"
                               },
-                              type: "array"
+                              type: "array",
+                              "x-kubernetes-list-type": "atomic"
                             },
                             podTemplate: {
                               description: "Optional pod template used to configure the ACME challenge solver pods\nused for HTTP01 challenges.",
@@ -1626,7 +871,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                         "x-kubernetes-map-type": "atomic"
                                                       },
                                                       matchLabelKeys: {
-                                                        description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                        description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                         items: {
                                                           type: "string"
                                                         },
@@ -1634,7 +879,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                         "x-kubernetes-list-type": "atomic"
                                                       },
                                                       mismatchLabelKeys: {
-                                                        description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                        description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                         items: {
                                                           type: "string"
                                                         },
@@ -1759,7 +1004,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                     "x-kubernetes-map-type": "atomic"
                                                   },
                                                   matchLabelKeys: {
-                                                    description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                    description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                     items: {
                                                       type: "string"
                                                     },
@@ -1767,7 +1012,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                     "x-kubernetes-list-type": "atomic"
                                                   },
                                                   mismatchLabelKeys: {
-                                                    description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                    description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                     items: {
                                                       type: "string"
                                                     },
@@ -1842,7 +1087,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                           description: "Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node, zone, etc. as some other pod(s)).",
                                           properties: {
                                             preferredDuringSchedulingIgnoredDuringExecution: {
-                                              description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and adding\n\"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
+                                              description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and subtracting\n\"weight\" from the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
                                               items: {
                                                 description: "The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)",
                                                 properties: {
@@ -1892,7 +1137,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                         "x-kubernetes-map-type": "atomic"
                                                       },
                                                       matchLabelKeys: {
-                                                        description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                        description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                         items: {
                                                           type: "string"
                                                         },
@@ -1900,7 +1145,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                         "x-kubernetes-list-type": "atomic"
                                                       },
                                                       mismatchLabelKeys: {
-                                                        description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                        description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                         items: {
                                                           type: "string"
                                                         },
@@ -2025,7 +1270,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                     "x-kubernetes-map-type": "atomic"
                                                   },
                                                   matchLabelKeys: {
-                                                    description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                    description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                     items: {
                                                       type: "string"
                                                     },
@@ -2033,7 +1278,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                     "x-kubernetes-list-type": "atomic"
                                                   },
                                                   mismatchLabelKeys: {
-                                                    description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                    description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                     items: {
                                                       type: "string"
                                                     },
@@ -2121,7 +1366,9 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                         type: "object",
                                         "x-kubernetes-map-type": "atomic"
                                       },
-                                      type: "array"
+                                      type: "array",
+                                      "x-kubernetes-list-map-keys": ["name"],
+                                      "x-kubernetes-list-type": "map"
                                     },
                                     nodeSelector: {
                                       additionalProperties: {
@@ -2133,6 +1380,38 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                     priorityClassName: {
                                       description: "If specified, the pod's priorityClassName.",
                                       type: "string"
+                                    },
+                                    resources: {
+                                      description: "If specified, the pod's resource requirements.\nThese values override the global resource configuration flags.\nNote that when only specifying resource limits, ensure they are greater than or equal\nto the corresponding global resource requests configured via controller flags\n(--acme-http01-solver-resource-request-cpu, --acme-http01-solver-resource-request-memory).\nKubernetes will reject pod creation if limits are lower than requests, causing challenge failures.",
+                                      properties: {
+                                        limits: {
+                                          additionalProperties: {
+                                            anyOf: [{
+                                              type: "integer"
+                                            }, {
+                                              type: "string"
+                                            }],
+                                            pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                            "x-kubernetes-int-or-string": true
+                                          },
+                                          description: "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                          type: "object"
+                                        },
+                                        requests: {
+                                          additionalProperties: {
+                                            anyOf: [{
+                                              type: "integer"
+                                            }, {
+                                              type: "string"
+                                            }],
+                                            pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                            "x-kubernetes-int-or-string": true
+                                          },
+                                          description: "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to the global values configured via controller flags. Requests cannot exceed Limits.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                          type: "object"
+                                        }
+                                      },
+                                      type: "object"
                                     },
                                     securityContext: {
                                       description: "If specified, the pod's security context",
@@ -2203,7 +1482,8 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                             format: "int64",
                                             type: "integer"
                                           },
-                                          type: "array"
+                                          type: "array",
+                                          "x-kubernetes-list-type": "atomic"
                                         },
                                         sysctls: {
                                           description: "Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported\nsysctls (by the container runtime) might fail to launch.\nNote that this field cannot be set when spec.os.name is windows.",
@@ -2222,7 +1502,8 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                             required: ["name", "value"],
                                             type: "object"
                                           },
-                                          type: "array"
+                                          type: "array",
+                                          "x-kubernetes-list-type": "atomic"
                                         }
                                       },
                                       type: "object"
@@ -2245,7 +1526,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                             type: "string"
                                           },
                                           operator: {
-                                            description: "Operator represents a key's relationship to the value.\nValid operators are Exists and Equal. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.",
+                                            description: "Operator represents a key's relationship to the value.\nValid operators are Exists, Equal, Lt, and Gt. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.\nLt and Gt perform numeric comparisons (requires feature gate TaintTolerationComparisonOperators).",
                                             type: "string"
                                           },
                                           tolerationSeconds: {
@@ -2260,7 +1541,8 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                         },
                                         type: "object"
                                       },
-                                      type: "array"
+                                      type: "array",
+                                      "x-kubernetes-list-type": "atomic"
                                     }
                                   },
                                   type: "object"
@@ -2561,7 +1843,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                         "x-kubernetes-map-type": "atomic"
                                                       },
                                                       matchLabelKeys: {
-                                                        description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                        description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                         items: {
                                                           type: "string"
                                                         },
@@ -2569,7 +1851,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                         "x-kubernetes-list-type": "atomic"
                                                       },
                                                       mismatchLabelKeys: {
-                                                        description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                        description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                         items: {
                                                           type: "string"
                                                         },
@@ -2694,7 +1976,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                     "x-kubernetes-map-type": "atomic"
                                                   },
                                                   matchLabelKeys: {
-                                                    description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                    description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                     items: {
                                                       type: "string"
                                                     },
@@ -2702,7 +1984,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                     "x-kubernetes-list-type": "atomic"
                                                   },
                                                   mismatchLabelKeys: {
-                                                    description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                    description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                     items: {
                                                       type: "string"
                                                     },
@@ -2777,7 +2059,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                           description: "Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node, zone, etc. as some other pod(s)).",
                                           properties: {
                                             preferredDuringSchedulingIgnoredDuringExecution: {
-                                              description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and adding\n\"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
+                                              description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and subtracting\n\"weight\" from the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
                                               items: {
                                                 description: "The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)",
                                                 properties: {
@@ -2827,7 +2109,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                         "x-kubernetes-map-type": "atomic"
                                                       },
                                                       matchLabelKeys: {
-                                                        description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                        description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                         items: {
                                                           type: "string"
                                                         },
@@ -2835,7 +2117,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                         "x-kubernetes-list-type": "atomic"
                                                       },
                                                       mismatchLabelKeys: {
-                                                        description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                        description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                         items: {
                                                           type: "string"
                                                         },
@@ -2960,7 +2242,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                     "x-kubernetes-map-type": "atomic"
                                                   },
                                                   matchLabelKeys: {
-                                                    description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                    description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                     items: {
                                                       type: "string"
                                                     },
@@ -2968,7 +2250,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                                     "x-kubernetes-list-type": "atomic"
                                                   },
                                                   mismatchLabelKeys: {
-                                                    description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                    description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                     items: {
                                                       type: "string"
                                                     },
@@ -3056,7 +2338,9 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                         type: "object",
                                         "x-kubernetes-map-type": "atomic"
                                       },
-                                      type: "array"
+                                      type: "array",
+                                      "x-kubernetes-list-map-keys": ["name"],
+                                      "x-kubernetes-list-type": "map"
                                     },
                                     nodeSelector: {
                                       additionalProperties: {
@@ -3068,6 +2352,38 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                     priorityClassName: {
                                       description: "If specified, the pod's priorityClassName.",
                                       type: "string"
+                                    },
+                                    resources: {
+                                      description: "If specified, the pod's resource requirements.\nThese values override the global resource configuration flags.\nNote that when only specifying resource limits, ensure they are greater than or equal\nto the corresponding global resource requests configured via controller flags\n(--acme-http01-solver-resource-request-cpu, --acme-http01-solver-resource-request-memory).\nKubernetes will reject pod creation if limits are lower than requests, causing challenge failures.",
+                                      properties: {
+                                        limits: {
+                                          additionalProperties: {
+                                            anyOf: [{
+                                              type: "integer"
+                                            }, {
+                                              type: "string"
+                                            }],
+                                            pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                            "x-kubernetes-int-or-string": true
+                                          },
+                                          description: "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                          type: "object"
+                                        },
+                                        requests: {
+                                          additionalProperties: {
+                                            anyOf: [{
+                                              type: "integer"
+                                            }, {
+                                              type: "string"
+                                            }],
+                                            pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                            "x-kubernetes-int-or-string": true
+                                          },
+                                          description: "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to the global values configured via controller flags. Requests cannot exceed Limits.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                          type: "object"
+                                        }
+                                      },
+                                      type: "object"
                                     },
                                     securityContext: {
                                       description: "If specified, the pod's security context",
@@ -3138,7 +2454,8 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                             format: "int64",
                                             type: "integer"
                                           },
-                                          type: "array"
+                                          type: "array",
+                                          "x-kubernetes-list-type": "atomic"
                                         },
                                         sysctls: {
                                           description: "Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported\nsysctls (by the container runtime) might fail to launch.\nNote that this field cannot be set when spec.os.name is windows.",
@@ -3157,7 +2474,8 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                             required: ["name", "value"],
                                             type: "object"
                                           },
-                                          type: "array"
+                                          type: "array",
+                                          "x-kubernetes-list-type": "atomic"
                                         }
                                       },
                                       type: "object"
@@ -3180,7 +2498,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                             type: "string"
                                           },
                                           operator: {
-                                            description: "Operator represents a key's relationship to the value.\nValid operators are Exists and Equal. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.",
+                                            description: "Operator represents a key's relationship to the value.\nValid operators are Exists, Equal, Lt, and Gt. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.\nLt and Gt perform numeric comparisons (requires feature gate TaintTolerationComparisonOperators).",
                                             type: "string"
                                           },
                                           tolerationSeconds: {
@@ -3195,7 +2513,8 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                                         },
                                         type: "object"
                                       },
-                                      type: "array"
+                                      type: "array",
+                                      "x-kubernetes-list-type": "atomic"
                                     }
                                   },
                                   type: "object"
@@ -3221,14 +2540,16 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                           items: {
                             type: "string"
                           },
-                          type: "array"
+                          type: "array",
+                          "x-kubernetes-list-type": "atomic"
                         },
                         dnsZones: {
                           description: "List of DNSZones that this solver will be used to solve.\nThe most specific DNS zone match specified here will take precedence\nover other DNS zone matches, so a solver specifying sys.example.com\nwill be selected over one specifying example.com for the domain\nwww.sys.example.com.\nIf multiple solvers match with the same dnsZones value, the solver\nwith the most matching labels in matchLabels will be selected.\nIf neither has more matches, the solver defined earlier in the list\nwill be selected.",
                           items: {
                             type: "string"
                           },
-                          type: "array"
+                          type: "array",
+                          "x-kubernetes-list-type": "atomic"
                         },
                         matchLabels: {
                           additionalProperties: {
@@ -3239,6 +2560,10 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
                         }
                       },
                       type: "object"
+                    },
+                    waitInsteadOfSelfCheck: {
+                      description: "WaitInsteadOfSelfCheck, if set, skips cert-manager's self-check and\ninstead waits this long after presentation before asking the ACME server\nto validate the challenge.\n\nThis is an advanced escape hatch for environments where cert-manager's\nself-check cannot succeed from its own network or DNS viewpoint even\nthough the ACME server can still validate successfully, for example due\nto split-horizon DNS or NAT hairpinning.\n\nA value of 0 skips the self-check and asks the ACME server to validate\nimmediately after presentation, relying on the ACME server's own\nvalidation retries (RFC 8555 section 8.2) to succeed once the challenge\nhas propagated. A negative duration is rejected.\nValue must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration,\nfor example `30s` or `2m`.",
+                      type: "string"
                     }
                   },
                   type: "object"
@@ -3267,8 +2592,13 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
             status: {
               properties: {
                 presented: {
-                  description: "presented will be set to true if the challenge values for this challenge\nare currently 'presented'.\nThis *does not* imply the self check is passing. Only that the values\nhave been 'submitted' for the appropriate challenge mechanism (i.e. the\nDNS01 TXT record has been presented, or the HTTP01 configuration has been\nconfigured).",
+                  description: "Presented is true once cert-manager has configured the solver resources\nneeded to expose this challenge's validation material.\nFor example, the DNS01 TXT record has been created, or the HTTP01 solver\nhas been configured to serve the challenge token.\nThis does not imply the self check is passing, that the ACME server has\nvalidated the challenge, or that cert-manager has already accepted the\nchallenge with the ACME server.",
                   type: "boolean"
+                },
+                presentedAt: {
+                  description: "PresentedAt records when cert-manager first configured the solver\nresources for this challenge. This is used by the optional delay-based\nreadiness logic.",
+                  format: "date-time",
+                  type: "string"
                 },
                 processing: {
                   description: "Used to denote whether this challenge should be processed or not.\nThis field will only be set to true by the 'scheduling' component.\nIt will only be set to false by the 'challenges' controller, after the\nchallenge has reached a final state or timed out.\nIf this field is set to false, the challenge controller will not take\nany more action.",
@@ -3291,6 +2621,13 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
           type: "object"
         }
       },
+      selectableFields: [{
+        jsonPath: ".spec.issuerRef.group"
+      }, {
+        jsonPath: ".spec.issuerRef.kind"
+      }, {
+        jsonPath: ".spec.issuerRef.name"
+      }],
       served: true,
       storage: true,
       subresources: {
@@ -3299,7 +2636,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
     }]
   }
 };
-export const CustomResourceDefinition_ClusterissuersCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_OrdersAcmeCertManagerIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -3308,11 +2645,1141 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
     },
     labels: {
       app: "cert-manager",
+      "app.kubernetes.io/component": "crds",
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
+    },
+    name: "orders.acme.cert-manager.io"
+  },
+  spec: {
+    group: "acme.cert-manager.io",
+    names: {
+      categories: ["cert-manager", "cert-manager-acme"],
+      kind: "Order",
+      listKind: "OrderList",
+      plural: "orders",
+      singular: "order"
+    },
+    scope: "Namespaced",
+    versions: [{
+      additionalPrinterColumns: [{
+        jsonPath: ".status.state",
+        name: "State",
+        type: "string"
+      }, {
+        jsonPath: ".spec.issuerRef.name",
+        name: "Issuer",
+        priority: 1,
+        type: "string"
+      }, {
+        jsonPath: ".status.reason",
+        name: "Reason",
+        priority: 1,
+        type: "string"
+      }, {
+        description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
+        jsonPath: ".metadata.creationTimestamp",
+        name: "Age",
+        type: "date"
+      }],
+      name: "v1",
+      schema: {
+        openAPIV3Schema: {
+          description: "Order is a type to represent an Order with an ACME server",
+          properties: {
+            apiVersion: {
+              description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+              type: "string"
+            },
+            kind: {
+              description: "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+              type: "string"
+            },
+            metadata: {
+              type: "object"
+            },
+            spec: {
+              properties: {
+                commonName: {
+                  description: "CommonName is the common name as specified on the DER encoded CSR.\nIf specified, this value must also be present in `dnsNames` or `ipAddresses`.\nThis field must match the corresponding field on the DER encoded CSR.",
+                  type: "string"
+                },
+                dnsNames: {
+                  description: "DNSNames is a list of DNS names that should be included as part of the Order\nvalidation process.\nThis field must match the corresponding field on the DER encoded CSR.",
+                  items: {
+                    type: "string"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                duration: {
+                  description: "Duration is the duration for the not after date for the requested certificate.\nThis is set on order creation as per the ACME spec.",
+                  type: "string"
+                },
+                ipAddresses: {
+                  description: "IPAddresses is a list of IP addresses that should be included as part of the Order\nvalidation process.\nThis field must match the corresponding field on the DER encoded CSR.",
+                  items: {
+                    type: "string"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                issuerRef: {
+                  description: "IssuerRef references a properly configured ACME-type Issuer which should\nbe used to create this Order.\nIf the Issuer does not exist, processing will be retried.\nIf the Issuer is not an 'ACME' Issuer, an error will be returned and the\nOrder will be marked as failed.",
+                  properties: {
+                    group: {
+                      description: "Group of the issuer being referred to.\nDefaults to 'cert-manager.io'.",
+                      type: "string"
+                    },
+                    kind: {
+                      description: "Kind of the issuer being referred to.\nDefaults to 'Issuer'.",
+                      type: "string"
+                    },
+                    name: {
+                      description: "Name of the issuer being referred to.",
+                      type: "string"
+                    }
+                  },
+                  required: ["name"],
+                  type: "object"
+                },
+                profile: {
+                  description: "Profile allows requesting a certificate profile from the ACME server.\nSupported profiles are listed by the server's ACME directory URL.",
+                  type: "string"
+                },
+                replaces: {
+                  description: "Replaces is the ARI CertID (RFC 9773 §4.1) of the certificate that this\nOrder is intended to replace. When set, cert-manager will include the\n\"replaces\" field on the newOrder request to the ACME server if and only\nif the server advertises ARI support in its directory. The CertID has\nthe form \"base64url(AKI).base64url(serial)\" and is derived locally from\nthe currently issued leaf certificate.",
+                  type: "string"
+                },
+                request: {
+                  description: "Certificate signing request bytes in DER encoding.\nThis will be used when finalizing the order.\nThis field must be set on the order.",
+                  format: "byte",
+                  type: "string"
+                }
+              },
+              required: ["issuerRef", "request"],
+              type: "object"
+            },
+            status: {
+              properties: {
+                authorizations: {
+                  description: "Authorizations contains data returned from the ACME server on what\nauthorizations must be completed in order to validate the DNS names\nspecified on the Order.",
+                  items: {
+                    description: "ACMEAuthorization contains data returned from the ACME server on an\nauthorization that must be completed in order validate a DNS name on an ACME\nOrder resource.",
+                    properties: {
+                      challenges: {
+                        description: "Challenges specifies the challenge types offered by the ACME server.\nOne of these challenge types will be selected when validating the DNS\nname and an appropriate Challenge resource will be created to perform\nthe ACME challenge process.",
+                        items: {
+                          description: "Challenge specifies a challenge offered by the ACME server for an Order.\nAn appropriate Challenge resource can be created to perform the ACME\nchallenge process.",
+                          properties: {
+                            token: {
+                              description: "Token is the token that must be presented for this challenge.\nThis is used to compute the 'key' that must also be presented.",
+                              type: "string"
+                            },
+                            type: {
+                              description: "Type is the type of challenge being offered, e.g., 'http-01', 'dns-01',\n'tls-sni-01', etc.\nThis is the raw value retrieved from the ACME server.\nOnly 'http-01' and 'dns-01' are supported by cert-manager, other values\nwill be ignored.",
+                              type: "string"
+                            },
+                            url: {
+                              description: "URL is the URL of this challenge. It can be used to retrieve additional\nmetadata about the Challenge from the ACME server.",
+                              type: "string"
+                            }
+                          },
+                          required: ["token", "type", "url"],
+                          type: "object"
+                        },
+                        type: "array",
+                        "x-kubernetes-list-type": "atomic"
+                      },
+                      identifier: {
+                        description: "Identifier is the DNS name to be validated as part of this authorization",
+                        type: "string"
+                      },
+                      initialState: {
+                        description: "InitialState is the initial state of the ACME authorization when first\nfetched from the ACME server.\nIf an Authorization is already 'valid', the Order controller will not\ncreate a Challenge resource for the authorization. This will occur when\nworking with an ACME server that enables 'authz reuse' (such as Let's\nEncrypt's production endpoint).\nIf not set and 'identifier' is set, the state is assumed to be pending\nand a Challenge will be created.",
+                        enum: ["valid", "ready", "pending", "processing", "invalid", "expired", "errored"],
+                        type: "string"
+                      },
+                      url: {
+                        description: "URL is the URL of the Authorization that must be completed",
+                        type: "string"
+                      },
+                      wildcard: {
+                        description: "Wildcard will be true if this authorization is for a wildcard DNS name.\nIf this is true, the identifier will be the *non-wildcard* version of\nthe DNS name.\nFor example, if '*.example.com' is the DNS name being validated, this\nfield will be 'true' and the 'identifier' field will be 'example.com'.",
+                        type: "boolean"
+                      }
+                    },
+                    required: ["url"],
+                    type: "object"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                certificate: {
+                  description: "Certificate is a copy of the PEM encoded certificate for this Order.\nThis field will be populated after the order has been successfully\nfinalized with the ACME server, and the order has transitioned to the\n'valid' state.",
+                  format: "byte",
+                  type: "string"
+                },
+                failureTime: {
+                  description: "FailureTime stores the time that this order failed.\nThis is used to influence garbage collection and back-off.",
+                  format: "date-time",
+                  type: "string"
+                },
+                finalizeURL: {
+                  description: "FinalizeURL of the Order.\nThis is used to obtain certificates for this order once it has been completed.",
+                  type: "string"
+                },
+                reason: {
+                  description: "Reason optionally provides more information about a why the order is in\nthe current state.",
+                  type: "string"
+                },
+                state: {
+                  description: "State contains the current state of this Order resource.\nStates 'success' and 'expired' are 'final'",
+                  enum: ["valid", "ready", "pending", "processing", "invalid", "expired", "errored"],
+                  type: "string"
+                },
+                url: {
+                  description: "URL of the Order.\nThis will initially be empty when the resource is first created.\nThe Order controller will populate this field when the Order is first processed.\nThis field will be immutable after it is initially set.",
+                  type: "string"
+                }
+              },
+              type: "object"
+            }
+          },
+          required: ["metadata", "spec"],
+          type: "object"
+        }
+      },
+      selectableFields: [{
+        jsonPath: ".spec.issuerRef.group"
+      }, {
+        jsonPath: ".spec.issuerRef.kind"
+      }, {
+        jsonPath: ".spec.issuerRef.name"
+      }],
+      served: true,
+      storage: true,
+      subresources: {
+        status: {}
+      }
+    }]
+  }
+};
+export const CustomResourceDefinition_CertificaterequestsCertManagerIo: KubernetesResource = {
+  apiVersion: "apiextensions.k8s.io/v1",
+  kind: "CustomResourceDefinition",
+  metadata: {
+    annotations: {
+      "helm.sh/resource-policy": "keep"
+    },
+    labels: {
+      app: "cert-manager",
+      "app.kubernetes.io/component": "crds",
+      "app.kubernetes.io/instance": "cert-manager",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "cert-manager",
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
+    },
+    name: "certificaterequests.cert-manager.io"
+  },
+  spec: {
+    group: "cert-manager.io",
+    names: {
+      categories: ["cert-manager"],
+      kind: "CertificateRequest",
+      listKind: "CertificateRequestList",
+      plural: "certificaterequests",
+      shortNames: ["cr", "crs"],
+      singular: "certificaterequest"
+    },
+    scope: "Namespaced",
+    versions: [{
+      additionalPrinterColumns: [{
+        jsonPath: ".status.conditions[?(@.type == \"Approved\")].status",
+        name: "Approved",
+        type: "string"
+      }, {
+        jsonPath: ".status.conditions[?(@.type == \"Denied\")].status",
+        name: "Denied",
+        type: "string"
+      }, {
+        jsonPath: ".status.conditions[?(@.type == \"Ready\")].status",
+        name: "Ready",
+        type: "string"
+      }, {
+        jsonPath: ".spec.issuerRef.name",
+        name: "Issuer",
+        type: "string"
+      }, {
+        jsonPath: ".spec.username",
+        name: "Requester",
+        type: "string"
+      }, {
+        jsonPath: ".status.conditions[?(@.type == \"Ready\")].message",
+        name: "Status",
+        priority: 1,
+        type: "string"
+      }, {
+        description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
+        jsonPath: ".metadata.creationTimestamp",
+        name: "Age",
+        type: "date"
+      }],
+      name: "v1",
+      schema: {
+        openAPIV3Schema: {
+          description: "A CertificateRequest is used to request a signed certificate from one of the\nconfigured issuers.\n\nAll fields within the CertificateRequest's `spec` are immutable after creation.\nA CertificateRequest will either succeed or fail, as denoted by its `Ready` status\ncondition and its `status.failureTime` field.\n\nA CertificateRequest is a one-shot resource, meaning it represents a single\npoint in time request for a certificate and cannot be re-used.",
+          properties: {
+            apiVersion: {
+              description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+              type: "string"
+            },
+            kind: {
+              description: "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+              type: "string"
+            },
+            metadata: {
+              type: "object"
+            },
+            spec: {
+              description: "Specification of the desired state of the CertificateRequest resource.\nhttps://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+              properties: {
+                duration: {
+                  description: "Requested 'duration' (i.e. lifetime) of the Certificate. Note that the\nissuer may choose to ignore the requested duration, just like any other\nrequested attribute.",
+                  type: "string"
+                },
+                extra: {
+                  additionalProperties: {
+                    items: {
+                      type: "string"
+                    },
+                    type: "array"
+                  },
+                  description: "Extra contains extra attributes of the user that created the CertificateRequest.\nPopulated by the cert-manager webhook on creation and immutable.",
+                  type: "object"
+                },
+                groups: {
+                  description: "Groups contains group membership of the user that created the CertificateRequest.\nPopulated by the cert-manager webhook on creation and immutable.",
+                  items: {
+                    type: "string"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                isCA: {
+                  description: "Requested basic constraints isCA value. Note that the issuer may choose\nto ignore the requested isCA value, just like any other requested attribute.\n\nNOTE: If the CSR in the `Request` field has a BasicConstraints extension,\nit must have the same isCA value as specified here.\n\nIf true, this will automatically add the `cert sign` usage to the list\nof requested `usages`.",
+                  type: "boolean"
+                },
+                issuerRef: {
+                  description: "Reference to the issuer responsible for issuing the certificate.\nIf the issuer is namespace-scoped, it must be in the same namespace\nas the Certificate. If the issuer is cluster-scoped, it can be used\nfrom any namespace.\n\nThe `name` field of the reference must always be specified.",
+                  properties: {
+                    group: {
+                      description: "Group of the issuer being referred to.\nDefaults to 'cert-manager.io'.",
+                      type: "string"
+                    },
+                    kind: {
+                      description: "Kind of the issuer being referred to.\nDefaults to 'Issuer'.",
+                      type: "string"
+                    },
+                    name: {
+                      description: "Name of the issuer being referred to.",
+                      type: "string"
+                    }
+                  },
+                  required: ["name"],
+                  type: "object"
+                },
+                request: {
+                  description: "The PEM-encoded X.509 certificate signing request to be submitted to the\nissuer for signing.\n\nIf the CSR has a BasicConstraints extension, its isCA attribute must\nmatch the `isCA` value of this CertificateRequest.\nIf the CSR has a KeyUsage extension, its key usages must match the\nkey usages in the `usages` field of this CertificateRequest.\nIf the CSR has a ExtKeyUsage extension, its extended key usages\nmust match the extended key usages in the `usages` field of this\nCertificateRequest.",
+                  format: "byte",
+                  type: "string"
+                },
+                uid: {
+                  description: "UID contains the uid of the user that created the CertificateRequest.\nPopulated by the cert-manager webhook on creation and immutable.",
+                  type: "string"
+                },
+                usages: {
+                  description: "Requested key usages and extended key usages.\n\nNOTE: If the CSR in the `Request` field has uses the KeyUsage or\nExtKeyUsage extension, these extensions must have the same values\nas specified here without any additional values.\n\nIf unset, defaults to `digital signature` and `key encipherment`.",
+                  items: {
+                    description: "KeyUsage specifies valid usage contexts for keys.\nSee:\nhttps://tools.ietf.org/html/rfc5280#section-4.2.1.3\nhttps://tools.ietf.org/html/rfc5280#section-4.2.1.12\n\nValid KeyUsage values are as follows:\n\"signing\",\n\"digital signature\",\n\"content commitment\",\n\"key encipherment\",\n\"key agreement\",\n\"data encipherment\",\n\"cert sign\",\n\"crl sign\",\n\"encipher only\",\n\"decipher only\",\n\"any\",\n\"server auth\",\n\"client auth\",\n\"code signing\",\n\"email protection\",\n\"s/mime\",\n\"ipsec end system\",\n\"ipsec tunnel\",\n\"ipsec user\",\n\"timestamping\",\n\"ocsp signing\",\n\"microsoft sgc\",\n\"netscape sgc\"",
+                    enum: ["signing", "digital signature", "content commitment", "key encipherment", "key agreement", "data encipherment", "cert sign", "crl sign", "encipher only", "decipher only", "any", "server auth", "client auth", "code signing", "email protection", "s/mime", "ipsec end system", "ipsec tunnel", "ipsec user", "timestamping", "ocsp signing", "microsoft sgc", "netscape sgc"],
+                    type: "string"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                username: {
+                  description: "Username contains the name of the user that created the CertificateRequest.\nPopulated by the cert-manager webhook on creation and immutable.",
+                  type: "string"
+                }
+              },
+              required: ["issuerRef", "request"],
+              type: "object"
+            },
+            status: {
+              description: "Status of the CertificateRequest.\nThis is set and managed automatically.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+              properties: {
+                ca: {
+                  description: "The PEM encoded X.509 certificate of the signer, also known as the CA\n(Certificate Authority).\nThis is set on a best-effort basis by different issuers.\nIf not set, the CA is assumed to be unknown/not available.",
+                  format: "byte",
+                  type: "string"
+                },
+                certificate: {
+                  description: "The PEM encoded X.509 certificate resulting from the certificate\nsigning request.\nIf not set, the CertificateRequest has either not been completed or has\nfailed. More information on failure can be found by checking the\n`conditions` field.",
+                  format: "byte",
+                  type: "string"
+                },
+                conditions: {
+                  description: "List of status conditions to indicate the status of a CertificateRequest.\nKnown condition types are `Ready`, `InvalidRequest`, `Approved` and `Denied`.",
+                  items: {
+                    description: "CertificateRequestCondition contains condition information for a CertificateRequest.",
+                    properties: {
+                      lastTransitionTime: {
+                        description: "LastTransitionTime is the timestamp corresponding to the last status\nchange of this condition.",
+                        format: "date-time",
+                        type: "string"
+                      },
+                      message: {
+                        description: "Message is a human readable description of the details of the last\ntransition, complementing reason.",
+                        type: "string"
+                      },
+                      reason: {
+                        description: "Reason is a brief machine readable explanation for the condition's last\ntransition.",
+                        type: "string"
+                      },
+                      status: {
+                        description: "Status of the condition, one of (`True`, `False`, `Unknown`).",
+                        enum: ["True", "False", "Unknown"],
+                        type: "string"
+                      },
+                      type: {
+                        description: "Type of the condition, known values are (`Ready`, `InvalidRequest`,\n`Approved`, `Denied`).",
+                        type: "string"
+                      }
+                    },
+                    required: ["status", "type"],
+                    type: "object"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-map-keys": ["type"],
+                  "x-kubernetes-list-type": "map"
+                },
+                failureTime: {
+                  description: "FailureTime stores the time that this CertificateRequest failed. This is\nused to influence garbage collection and back-off.",
+                  format: "date-time",
+                  type: "string"
+                }
+              },
+              type: "object"
+            }
+          },
+          type: "object"
+        }
+      },
+      selectableFields: [{
+        jsonPath: ".spec.issuerRef.group"
+      }, {
+        jsonPath: ".spec.issuerRef.kind"
+      }, {
+        jsonPath: ".spec.issuerRef.name"
+      }],
+      served: true,
+      storage: true,
+      subresources: {
+        status: {}
+      }
+    }]
+  }
+};
+export const CustomResourceDefinition_CertificatesCertManagerIo: KubernetesResource = {
+  apiVersion: "apiextensions.k8s.io/v1",
+  kind: "CustomResourceDefinition",
+  metadata: {
+    annotations: {
+      "helm.sh/resource-policy": "keep"
+    },
+    labels: {
+      app: "cert-manager",
+      "app.kubernetes.io/component": "crds",
+      "app.kubernetes.io/instance": "cert-manager",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "cert-manager",
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
+    },
+    name: "certificates.cert-manager.io"
+  },
+  spec: {
+    group: "cert-manager.io",
+    names: {
+      categories: ["cert-manager"],
+      kind: "Certificate",
+      listKind: "CertificateList",
+      plural: "certificates",
+      shortNames: ["cert", "certs"],
+      singular: "certificate"
+    },
+    scope: "Namespaced",
+    versions: [{
+      additionalPrinterColumns: [{
+        jsonPath: ".status.conditions[?(@.type == \"Ready\")].status",
+        name: "Ready",
+        type: "string"
+      }, {
+        jsonPath: ".spec.secretName",
+        name: "Secret",
+        type: "string"
+      }, {
+        jsonPath: ".spec.issuerRef.name",
+        name: "Issuer",
+        priority: 1,
+        type: "string"
+      }, {
+        jsonPath: ".status.conditions[?(@.type == \"Ready\")].message",
+        name: "Status",
+        priority: 1,
+        type: "string"
+      }, {
+        description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
+        jsonPath: ".metadata.creationTimestamp",
+        name: "Age",
+        type: "date"
+      }],
+      name: "v1",
+      schema: {
+        openAPIV3Schema: {
+          description: "A Certificate resource should be created to ensure an up to date and signed\nX.509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`.\n\nThe stored certificate will be renewed before it expires (as configured by `spec.renewBefore`).",
+          properties: {
+            apiVersion: {
+              description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+              type: "string"
+            },
+            kind: {
+              description: "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+              type: "string"
+            },
+            metadata: {
+              type: "object"
+            },
+            spec: {
+              description: "Specification of the desired state of the Certificate resource.\nhttps://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+              properties: {
+                additionalOutputFormats: {
+                  description: "Defines extra output formats of the private key and signed certificate chain\nto be written to this Certificate's target Secret.",
+                  items: {
+                    description: "CertificateAdditionalOutputFormat defines an additional output format of a\nCertificate resource. These contain supplementary data formats of the signed\ncertificate chain and paired private key.",
+                    properties: {
+                      type: {
+                        description: "Type is the name of the format type that should be written to the\nCertificate's target Secret.",
+                        enum: ["DER", "CombinedPEM"],
+                        type: "string"
+                      }
+                    },
+                    required: ["type"],
+                    type: "object"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                commonName: {
+                  description: "Requested common name X509 certificate subject attribute.\nMore info: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6\nNOTE: TLS clients will ignore this value when any subject alternative name is\nset (see https://tools.ietf.org/html/rfc6125#section-6.4.4).\n\nShould have a length of 64 characters or fewer to avoid generating invalid CSRs.\nCannot be set if the `literalSubject` field is set.",
+                  type: "string"
+                },
+                dnsNames: {
+                  description: "Requested DNS subject alternative names.",
+                  items: {
+                    type: "string"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                duration: {
+                  description: "Requested 'duration' (i.e. lifetime) of the Certificate. Note that the\nissuer may choose to ignore the requested duration, just like any other\nrequested attribute.\n\nIf unset, this defaults to 90 days.\nMinimum accepted duration is 1 hour.\nValue must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration.",
+                  type: "string"
+                },
+                emailAddresses: {
+                  description: "Requested email subject alternative names.",
+                  items: {
+                    type: "string"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                encodeUsagesInRequest: {
+                  description: "Whether the KeyUsage and ExtKeyUsage extensions should be set in the encoded CSR.\n\nThis option defaults to true, and should only be disabled if the target\nissuer does not support CSRs with these X509 KeyUsage/ ExtKeyUsage extensions.",
+                  type: "boolean"
+                },
+                ipAddresses: {
+                  description: "Requested IP address subject alternative names.",
+                  items: {
+                    type: "string"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                isCA: {
+                  description: "Requested basic constraints isCA value.\nThe isCA value is used to set the `isCA` field on the created CertificateRequest\nresources. Note that the issuer may choose to ignore the requested isCA value, just\nlike any other requested attribute.\n\nIf true, this will automatically add the `cert sign` usage to the list\nof requested `usages`.",
+                  type: "boolean"
+                },
+                issuerRef: {
+                  description: "Reference to the issuer responsible for issuing the certificate.\nIf the issuer is namespace-scoped, it must be in the same namespace\nas the Certificate. If the issuer is cluster-scoped, it can be used\nfrom any namespace.\n\nThe `name` field of the reference must always be specified.",
+                  properties: {
+                    group: {
+                      description: "Group of the issuer being referred to.\nDefaults to 'cert-manager.io'.",
+                      type: "string"
+                    },
+                    kind: {
+                      description: "Kind of the issuer being referred to.\nDefaults to 'Issuer'.",
+                      type: "string"
+                    },
+                    name: {
+                      description: "Name of the issuer being referred to.",
+                      type: "string"
+                    }
+                  },
+                  required: ["name"],
+                  type: "object"
+                },
+                keystores: {
+                  description: "Additional keystore output formats to be stored in the Certificate's Secret.",
+                  properties: {
+                    jks: {
+                      description: "JKS configures options for storing a JKS keystore in the\n`spec.secretName` Secret resource.",
+                      properties: {
+                        alias: {
+                          description: "Alias specifies the alias of the key in the keystore, required by the JKS format.\nIf not provided, the default alias `certificate` will be used.",
+                          type: "string"
+                        },
+                        create: {
+                          description: "Create enables JKS keystore creation for the Certificate.\nIf true, a file named `keystore.jks` will be created in the target\nSecret resource, encrypted using the password stored in\n`passwordSecretRef` or `password`.\nThe keystore file will be updated immediately.\nIf the issuer provided a CA certificate, a file named `truststore.jks`\nwill also be created in the target Secret resource, encrypted using the\npassword stored in `passwordSecretRef`\ncontaining the issuing Certificate Authority",
+                          type: "boolean"
+                        },
+                        password: {
+                          description: "Password provides a literal password used to encrypt the JKS keystore.\nMutually exclusive with passwordSecretRef.\nOne of password or passwordSecretRef must provide a password with a non-zero length.",
+                          type: "string"
+                        },
+                        passwordSecretRef: {
+                          description: "PasswordSecretRef is a reference to a non-empty key in a Secret resource\ncontaining the password used to encrypt the JKS keystore.\nMutually exclusive with password.\nOne of password or passwordSecretRef must provide a password with a non-zero length.",
+                          properties: {
+                            key: {
+                              description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
+                              type: "string"
+                            },
+                            name: {
+                              description: "Name of the resource being referred to.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                              type: "string"
+                            }
+                          },
+                          required: ["name"],
+                          type: "object"
+                        }
+                      },
+                      required: ["create"],
+                      type: "object"
+                    },
+                    pkcs12: {
+                      description: "PKCS12 configures options for storing a PKCS12 keystore in the\n`spec.secretName` Secret resource.",
+                      properties: {
+                        create: {
+                          description: "Create enables PKCS12 keystore creation for the Certificate.\nIf true, a file named `keystore.p12` will be created in the target\nSecret resource, encrypted using the password stored in\n`passwordSecretRef` or in `password`.\nThe keystore file will be updated immediately.\nIf the issuer provided a CA certificate, a file named `truststore.p12` will\nalso be created in the target Secret resource, encrypted using the\npassword stored in `passwordSecretRef` containing the issuing Certificate\nAuthority",
+                          type: "boolean"
+                        },
+                        password: {
+                          description: "Password provides a literal password used to encrypt the PKCS#12 keystore.\nMutually exclusive with passwordSecretRef.\nOne of password or passwordSecretRef must provide a password with a non-zero length.",
+                          type: "string"
+                        },
+                        passwordSecretRef: {
+                          description: "PasswordSecretRef is a reference to a non-empty key in a Secret resource\ncontaining the password used to encrypt the PKCS#12 keystore.\nMutually exclusive with password.\nOne of password or passwordSecretRef must provide a password with a non-zero length.",
+                          properties: {
+                            key: {
+                              description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
+                              type: "string"
+                            },
+                            name: {
+                              description: "Name of the resource being referred to.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                              type: "string"
+                            }
+                          },
+                          required: ["name"],
+                          type: "object"
+                        },
+                        profile: {
+                          description: "Profile specifies the key and certificate encryption algorithms and the HMAC algorithm\nused to create the PKCS12 keystore. Default value is `LegacyRC2` for backward compatibility.\n\nIf provided, allowed values are:\n`LegacyRC2`: Deprecated. Not supported by default in OpenSSL 3 or Java 20.\n`LegacyDES`: Less secure algorithm. Use this option for maximal compatibility.\n`Modern2023`: Secure algorithm. Use this option in case you have to always use secure algorithms\n(e.g., because of company policy). Please note that the security of the algorithm is not that important\nin reality, because the unencrypted certificate and private key are also stored in the Secret.\n`Modern2026`: Encodes PKCS#12 files using algorithms that are considered modern as of 2026.\nPrivate keys and certificates are encrypted using PBES2 with PBKDF2-HMAC-SHA-256 and AES-256-CBC.\nThe MAC algorithm is PBMAC1 with PBKDF2-HMAC-SHA-256 and HMAC-SHA256.\nFiles produced with this profile can be read by OpenSSL 3.4.0 and higher, Java 26 and higher,\nor with Java using compatible versions of Bouncy Castle. Meets FIPS 140-3 requirements.",
+                          enum: ["LegacyRC2", "LegacyDES", "Modern2023", "Modern2026"],
+                          type: "string"
+                        }
+                      },
+                      required: ["create"],
+                      type: "object"
+                    }
+                  },
+                  type: "object"
+                },
+                literalSubject: {
+                  description: "Requested X.509 certificate subject, represented using the LDAP \"String\nRepresentation of a Distinguished Name\" [1].\nImportant: the LDAP string format also specifies the order of the attributes\nin the subject, this is important when issuing certs for LDAP authentication.\nExample: `CN=foo,DC=corp,DC=example,DC=com`\nMore info [1]: https://datatracker.ietf.org/doc/html/rfc4514\nMore info: https://github.com/cert-manager/cert-manager/issues/3203\nMore info: https://github.com/cert-manager/cert-manager/issues/4424\n\nCannot be set if the `subject` or `commonName` field is set.",
+                  type: "string"
+                },
+                nameConstraints: {
+                  description: "x.509 certificate NameConstraint extension which MUST NOT be used in a non-CA certificate.\nMore Info: https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.10\n\nThis is an Alpha Feature and is only enabled with the\n`--feature-gates=NameConstraints=true` option set on both\nthe controller and webhook components.",
+                  properties: {
+                    critical: {
+                      description: "if true then the name constraints are marked critical.",
+                      type: "boolean"
+                    },
+                    excluded: {
+                      description: "Excluded contains the constraints which must be disallowed. Any name matching a\nrestriction in the excluded field is invalid regardless\nof information appearing in the permitted",
+                      properties: {
+                        dnsDomains: {
+                          description: "DNSDomains is a list of DNS domains that are permitted or excluded.",
+                          items: {
+                            type: "string"
+                          },
+                          type: "array",
+                          "x-kubernetes-list-type": "atomic"
+                        },
+                        emailAddresses: {
+                          description: "EmailAddresses is a list of Email Addresses that are permitted or excluded.",
+                          items: {
+                            type: "string"
+                          },
+                          type: "array",
+                          "x-kubernetes-list-type": "atomic"
+                        },
+                        ipRanges: {
+                          description: "IPRanges is a list of IP Ranges that are permitted or excluded.\nThis should be a valid CIDR notation.",
+                          items: {
+                            type: "string"
+                          },
+                          type: "array",
+                          "x-kubernetes-list-type": "atomic"
+                        },
+                        uriDomains: {
+                          description: "URIDomains is a list of URI domains that are permitted or excluded.",
+                          items: {
+                            type: "string"
+                          },
+                          type: "array",
+                          "x-kubernetes-list-type": "atomic"
+                        }
+                      },
+                      type: "object"
+                    },
+                    permitted: {
+                      description: "Permitted contains the constraints in which the names must be located.",
+                      properties: {
+                        dnsDomains: {
+                          description: "DNSDomains is a list of DNS domains that are permitted or excluded.",
+                          items: {
+                            type: "string"
+                          },
+                          type: "array",
+                          "x-kubernetes-list-type": "atomic"
+                        },
+                        emailAddresses: {
+                          description: "EmailAddresses is a list of Email Addresses that are permitted or excluded.",
+                          items: {
+                            type: "string"
+                          },
+                          type: "array",
+                          "x-kubernetes-list-type": "atomic"
+                        },
+                        ipRanges: {
+                          description: "IPRanges is a list of IP Ranges that are permitted or excluded.\nThis should be a valid CIDR notation.",
+                          items: {
+                            type: "string"
+                          },
+                          type: "array",
+                          "x-kubernetes-list-type": "atomic"
+                        },
+                        uriDomains: {
+                          description: "URIDomains is a list of URI domains that are permitted or excluded.",
+                          items: {
+                            type: "string"
+                          },
+                          type: "array",
+                          "x-kubernetes-list-type": "atomic"
+                        }
+                      },
+                      type: "object"
+                    }
+                  },
+                  type: "object"
+                },
+                otherNames: {
+                  description: "`otherNames` is an escape hatch for SAN that allows any type. We currently restrict the support to string like otherNames, cf RFC 5280 p 37\nAny UTF8 String valued otherName can be passed with by setting the keys oid: x.x.x.x and UTF8Value: somevalue for `otherName`.\nMost commonly this would be UPN set with oid: 1.3.6.1.4.1.311.20.2.3\nYou should ensure that any OID passed is valid for the UTF8String type as we do not explicitly validate this.",
+                  items: {
+                    properties: {
+                      oid: {
+                        description: "OID is the object identifier for the otherName SAN.\nThe object identifier must be expressed as a dotted string, for\nexample, \"1.2.840.113556.1.4.221\".",
+                        type: "string"
+                      },
+                      utf8Value: {
+                        description: "utf8Value is the string value of the otherName SAN.\nThe utf8Value accepts any valid UTF8 string to set as value for the otherName SAN.",
+                        type: "string"
+                      }
+                    },
+                    type: "object"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                privateKey: {
+                  description: "Private key options. These include the key algorithm and size, the used\nencoding and the rotation policy.",
+                  properties: {
+                    algorithm: {
+                      description: "Algorithm is the private key algorithm of the corresponding private key\nfor this certificate.\n\nIf provided, allowed values are either `RSA`, `ECDSA` or `Ed25519`.\nIf `algorithm` is specified and `size` is not provided,\nkey size of 2048 will be used for `RSA` key algorithm and\nkey size of 256 will be used for `ECDSA` key algorithm.\nkey size is ignored when using the `Ed25519` key algorithm.",
+                      enum: ["RSA", "ECDSA", "Ed25519"],
+                      type: "string"
+                    },
+                    encoding: {
+                      description: "The private key cryptography standards (PKCS) encoding for this\ncertificate's private key to be encoded in.\n\nIf provided, allowed values are `PKCS1` and `PKCS8` standing for PKCS#1\nand PKCS#8, respectively.\nDefaults to `PKCS1` if not specified.",
+                      enum: ["PKCS1", "PKCS8"],
+                      type: "string"
+                    },
+                    rotationPolicy: {
+                      description: "RotationPolicy controls how private keys should be regenerated when a\nre-issuance is being processed.\n\nIf set to `Never`, a private key will only be generated if one does not\nalready exist in the target `spec.secretName`. If one does exist but it\ndoes not have the correct algorithm or size, a warning will be raised\nto await user intervention.\nIf set to `Always`, a private key matching the specified requirements\nwill be generated whenever a re-issuance occurs.\nDefault is `Always`.\nThe default was changed from `Never` to `Always` in cert-manager >=v1.18.0.",
+                      enum: ["Never", "Always"],
+                      type: "string"
+                    },
+                    size: {
+                      description: "Size is the key bit size of the corresponding private key for this certificate.\n\nIf `algorithm` is set to `RSA`, valid values are `2048`, `4096` or `8192`,\nand will default to `2048` if not specified.\nIf `algorithm` is set to `ECDSA`, valid values are `256`, `384` or `521`,\nand will default to `256` if not specified.\nIf `algorithm` is set to `Ed25519`, Size is ignored.\nNo other values are allowed.",
+                      type: "integer"
+                    }
+                  },
+                  type: "object"
+                },
+                renewal: {
+                  description: "`renewal` allows configuration of how your certificate is renewed. If the policy mentioned is\n`RenewBefore` then the controller respects `renewBefore` and `renewBeforePercentage`.",
+                  properties: {
+                    policy: {
+                      description: "`policy` must be one of `Disabled`, `RenewBefore`.",
+                      enum: ["RenewBefore", "Disabled"],
+                      type: "string"
+                    },
+                    windows: {
+                      description: "`windows` mentions the behavior of when the renewal must happen.",
+                      items: {
+                        description: "CertificateRenewalWindows is the definition for renewal windows",
+                        properties: {
+                          cron: {
+                            description: "`cron` is a cron compliant string to allow when the renewal should be allowed. Format is as shown below:\n* * * * *\n| | | | |\n| | | | day of the week (0–6) (Sunday to Saturday;\n| | | month (1–12)             7 is also Sunday on some systems)\n| | day of the month (1–31)\n| hour (0–23)\nminute (0–59)",
+                            minLength: 1,
+                            type: "string"
+                          },
+                          timezone: {
+                            description: "`timezone` is IANA compliant timezone. For example America/Denver.\nIf this field is not set, timezone is treated as UTC.",
+                            minLength: 1,
+                            type: "string"
+                          },
+                          windowDuration: {
+                            description: "`windowDuration` is how long the cron definition is active for.\nValue must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration.",
+                            pattern: "^([0-9]+(\\.[0-9]+)?(s|m|h))+$",
+                            type: "string"
+                          }
+                        },
+                        required: ["cron", "windowDuration"],
+                        type: "object"
+                      },
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
+                    }
+                  },
+                  type: "object"
+                },
+                renewBefore: {
+                  description: "How long before the currently issued certificate's expiry cert-manager should\nrenew the certificate. For example, if a certificate is valid for 60 minutes,\nand `renewBefore=10m`, cert-manager will begin to attempt to renew the certificate\n50 minutes after it was issued (i.e. when there are 10 minutes remaining until\nthe certificate is no longer valid).\n\nNOTE: The actual lifetime of the issued certificate is used to determine the\nrenewal time. If an issuer returns a certificate with a different lifetime than\nthe one requested, cert-manager will use the lifetime of the issued certificate.\n\nIf unset, this defaults to 1/3 of the issued certificate's lifetime.\nMinimum accepted value is 5 minutes.\nValue must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration.\nCannot be set if the `renewBeforePercentage` field is set.",
+                  type: "string"
+                },
+                renewBeforePercentage: {
+                  description: "`renewBeforePercentage` is like `renewBefore`, except it is a relative percentage\nrather than an absolute duration. For example, if a certificate is valid for 60\nminutes, and  `renewBeforePercentage=25`, cert-manager will begin to attempt to\nrenew the certificate 45 minutes after it was issued (i.e. when there are 15\nminutes (25%) remaining until the certificate is no longer valid).\n\nNOTE: The actual lifetime of the issued certificate is used to determine the\nrenewal time. If an issuer returns a certificate with a different lifetime than\nthe one requested, cert-manager will use the lifetime of the issued certificate.\n\nValue must be an integer in the range (0,100). The minimum effective\n`renewBefore` derived from the `renewBeforePercentage` and `duration` fields is 5\nminutes.\nCannot be set if the `renewBefore` field is set.",
+                  format: "int32",
+                  type: "integer"
+                },
+                revisionHistoryLimit: {
+                  description: "The maximum number of CertificateRequest revisions that are maintained in\nthe Certificate's history. Each revision represents a single `CertificateRequest`\ncreated by this Certificate, either when it was created, renewed, or Spec\nwas changed. Revisions will be removed by oldest first if the number of\nrevisions exceeds this number.\n\nIf set, revisionHistoryLimit must be a value of `1` or greater.\nDefault value is `1`.",
+                  format: "int32",
+                  type: "integer"
+                },
+                secretName: {
+                  description: "Name of the Secret resource that will be automatically created and\nmanaged by this Certificate resource. It will be populated with a\nprivate key and certificate, signed by the denoted issuer. The Secret\nresource lives in the same namespace as the Certificate resource.",
+                  type: "string"
+                },
+                secretTemplate: {
+                  description: "Defines annotations and labels to be copied to the Certificate's Secret.\nLabels and annotations on the Secret will be changed as they appear on the\nSecretTemplate when added or removed. SecretTemplate annotations are added\nin conjunction with, and cannot overwrite, the base set of annotations\ncert-manager sets on the Certificate's Secret.",
+                  properties: {
+                    annotations: {
+                      additionalProperties: {
+                        type: "string"
+                      },
+                      description: "Annotations is a key value map to be copied to the target Kubernetes Secret.",
+                      type: "object"
+                    },
+                    labels: {
+                      additionalProperties: {
+                        type: "string"
+                      },
+                      description: "Labels is a key value map to be copied to the target Kubernetes Secret.",
+                      type: "object"
+                    }
+                  },
+                  type: "object"
+                },
+                signatureAlgorithm: {
+                  description: "Signature algorithm to use.\nAllowed values for RSA keys: SHA256WithRSA, SHA384WithRSA, SHA512WithRSA.\nAllowed values for ECDSA keys: ECDSAWithSHA256, ECDSAWithSHA384, ECDSAWithSHA512.\nAllowed values for Ed25519 keys: PureEd25519.",
+                  enum: ["SHA256WithRSA", "SHA384WithRSA", "SHA512WithRSA", "ECDSAWithSHA256", "ECDSAWithSHA384", "ECDSAWithSHA512", "PureEd25519"],
+                  type: "string"
+                },
+                subject: {
+                  description: "Requested set of X509 certificate subject attributes.\nMore info: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6\n\nThe common name attribute is specified separately in the `commonName` field.\nCannot be set if the `literalSubject` field is set.",
+                  properties: {
+                    countries: {
+                      description: "Countries to be used on the Certificate.",
+                      items: {
+                        type: "string"
+                      },
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
+                    },
+                    localities: {
+                      description: "Cities to be used on the Certificate.",
+                      items: {
+                        type: "string"
+                      },
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
+                    },
+                    organizationalUnits: {
+                      description: "Organizational Units to be used on the Certificate.",
+                      items: {
+                        type: "string"
+                      },
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
+                    },
+                    organizations: {
+                      description: "Organizations to be used on the Certificate.",
+                      items: {
+                        type: "string"
+                      },
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
+                    },
+                    postalCodes: {
+                      description: "Postal codes to be used on the Certificate.",
+                      items: {
+                        type: "string"
+                      },
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
+                    },
+                    provinces: {
+                      description: "State/Provinces to be used on the Certificate.",
+                      items: {
+                        type: "string"
+                      },
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
+                    },
+                    serialNumber: {
+                      description: "Serial number to be used on the Certificate.",
+                      type: "string"
+                    },
+                    streetAddresses: {
+                      description: "Street addresses to be used on the Certificate.",
+                      items: {
+                        type: "string"
+                      },
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
+                    }
+                  },
+                  type: "object"
+                },
+                uris: {
+                  description: "Requested URI subject alternative names.",
+                  items: {
+                    type: "string"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                },
+                usages: {
+                  description: "Requested key usages and extended key usages.\nThese usages are used to set the `usages` field on the created CertificateRequest\nresources. If `encodeUsagesInRequest` is unset or set to `true`, the usages\nwill additionally be encoded in the `request` field which contains the CSR blob.\n\nIf unset, defaults to `digital signature` and `key encipherment`.",
+                  items: {
+                    description: "KeyUsage specifies valid usage contexts for keys.\nSee:\nhttps://tools.ietf.org/html/rfc5280#section-4.2.1.3\nhttps://tools.ietf.org/html/rfc5280#section-4.2.1.12\n\nValid KeyUsage values are as follows:\n\"signing\",\n\"digital signature\",\n\"content commitment\",\n\"key encipherment\",\n\"key agreement\",\n\"data encipherment\",\n\"cert sign\",\n\"crl sign\",\n\"encipher only\",\n\"decipher only\",\n\"any\",\n\"server auth\",\n\"client auth\",\n\"code signing\",\n\"email protection\",\n\"s/mime\",\n\"ipsec end system\",\n\"ipsec tunnel\",\n\"ipsec user\",\n\"timestamping\",\n\"ocsp signing\",\n\"microsoft sgc\",\n\"netscape sgc\"",
+                    enum: ["signing", "digital signature", "content commitment", "key encipherment", "key agreement", "data encipherment", "cert sign", "crl sign", "encipher only", "decipher only", "any", "server auth", "client auth", "code signing", "email protection", "s/mime", "ipsec end system", "ipsec tunnel", "ipsec user", "timestamping", "ocsp signing", "microsoft sgc", "netscape sgc"],
+                    type: "string"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-type": "atomic"
+                }
+              },
+              required: ["issuerRef", "secretName"],
+              type: "object"
+            },
+            status: {
+              description: "Status of the Certificate.\nThis is set and managed automatically.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+              properties: {
+                acme: {
+                  description: "ACME stores information that is fetched from the ACME CA server.",
+                  properties: {
+                    ari: {
+                      description: "ARI stores the ACME Renewal Information that is fetched from the ACME server\nin accordance with RFC 9773. This is only populated if the ARI feature gate is enabled.",
+                      properties: {
+                        explanationURL: {
+                          description: "ExplanationURL is a human-readable URL that may explain why the suggested window\nhas its current value.",
+                          type: "string"
+                        },
+                        lastChecked: {
+                          description: "LastChecked is the time at which the ACME server was last checked for renewal information.",
+                          format: "date-time",
+                          type: "string"
+                        },
+                        lastError: {
+                          description: "LastError is the last error encountered when checking the ACME server for renewal information, if any.",
+                          type: "string"
+                        },
+                        nextCheck: {
+                          description: "NextCheck is the time at which the ACME server will next be checked for renewal information.",
+                          format: "date-time",
+                          type: "string"
+                        },
+                        suggestedWindow: {
+                          description: "SuggestedWindow is the suggested renewal window as returned by the ACME server in accordance with RFC 9773.",
+                          properties: {
+                            end: {
+                              description: "End is the end of the suggested renewal window.",
+                              format: "date-time",
+                              type: "string"
+                            },
+                            start: {
+                              description: "Start is the start of the suggested renewal window.",
+                              format: "date-time",
+                              type: "string"
+                            }
+                          },
+                          required: ["end", "start"],
+                          type: "object"
+                        }
+                      },
+                      type: "object"
+                    }
+                  },
+                  type: "object"
+                },
+                conditions: {
+                  description: "List of status conditions to indicate the status of certificates.\nKnown condition types are `Ready` and `Issuing`.",
+                  items: {
+                    description: "CertificateCondition contains condition information for a Certificate.",
+                    properties: {
+                      lastTransitionTime: {
+                        description: "LastTransitionTime is the timestamp corresponding to the last status\nchange of this condition.",
+                        format: "date-time",
+                        type: "string"
+                      },
+                      message: {
+                        description: "Message is a human readable description of the details of the last\ntransition, complementing reason.",
+                        type: "string"
+                      },
+                      observedGeneration: {
+                        description: "If set, this represents the .metadata.generation that the condition was\nset based upon.\nFor instance, if .metadata.generation is currently 12, but the\n.status.condition[x].observedGeneration is 9, the condition is out of date\nwith respect to the current state of the Certificate.",
+                        format: "int64",
+                        type: "integer"
+                      },
+                      reason: {
+                        description: "Reason is a brief machine readable explanation for the condition's last\ntransition.",
+                        type: "string"
+                      },
+                      status: {
+                        description: "Status of the condition, one of (`True`, `False`, `Unknown`).",
+                        enum: ["True", "False", "Unknown"],
+                        type: "string"
+                      },
+                      type: {
+                        description: "Type of the condition, known values are (`Ready`, `Issuing`).",
+                        type: "string"
+                      }
+                    },
+                    required: ["status", "type"],
+                    type: "object"
+                  },
+                  type: "array",
+                  "x-kubernetes-list-map-keys": ["type"],
+                  "x-kubernetes-list-type": "map"
+                },
+                failedIssuanceAttempts: {
+                  description: "The number of continuous failed issuance attempts up till now. This\nfield gets removed (if set) on a successful issuance and gets set to\n1 if unset and an issuance has failed. If an issuance has failed, the\ndelay till the next issuance will be calculated using formula\ntime.Hour * 2 ^ (failedIssuanceAttempts - 1).",
+                  type: "integer"
+                },
+                lastFailureTime: {
+                  description: "LastFailureTime is set only if the latest issuance for this\nCertificate failed and contains the time of the failure. If an\nissuance has failed, the delay till the next issuance will be\ncalculated using formula time.Hour * 2 ^ (failedIssuanceAttempts -\n1). If the latest issuance has succeeded this field will be unset.",
+                  format: "date-time",
+                  type: "string"
+                },
+                nextPrivateKeySecretName: {
+                  description: "The name of the Secret resource containing the private key to be used\nfor the next certificate iteration.\nThe keymanager controller will automatically set this field if the\n`Issuing` condition is set to `True`.\nIt will automatically unset this field when the Issuing condition is\nnot set or False.",
+                  type: "string"
+                },
+                notAfter: {
+                  description: "The expiration time of the certificate stored in the secret named\nby this resource in `spec.secretName`.",
+                  format: "date-time",
+                  type: "string"
+                },
+                notBefore: {
+                  description: "The time after which the certificate stored in the secret named\nby this resource in `spec.secretName` is valid.",
+                  format: "date-time",
+                  type: "string"
+                },
+                renewalTime: {
+                  description: "RenewalTime is the time at which the certificate will be next\nrenewed.\nIf not set, no upcoming renewal is scheduled.",
+                  format: "date-time",
+                  type: "string"
+                },
+                revision: {
+                  description: "The current 'revision' of the certificate as issued.\n\nWhen a CertificateRequest resource is created, it will have the\n`cert-manager.io/certificate-revision` set to one greater than the\ncurrent value of this field.\n\nUpon issuance, this field will be set to the value of the annotation\non the CertificateRequest resource used to issue the certificate.\n\nPersisting the value on the CertificateRequest resource allows the\ncertificates controller to know whether a request is part of an old\nissuance or if it is part of the ongoing revision's issuance by\nchecking if the revision value in the annotation is greater than this\nfield.",
+                  type: "integer"
+                }
+              },
+              type: "object"
+            }
+          },
+          type: "object"
+        }
+      },
+      selectableFields: [{
+        jsonPath: ".spec.issuerRef.group"
+      }, {
+        jsonPath: ".spec.issuerRef.kind"
+      }, {
+        jsonPath: ".spec.issuerRef.name"
+      }],
+      served: true,
+      storage: true,
+      subresources: {
+        status: {}
+      }
+    }]
+  }
+};
+export const CustomResourceDefinition_ClusterissuersCertManagerIo: KubernetesResource = {
+  apiVersion: "apiextensions.k8s.io/v1",
+  kind: "CustomResourceDefinition",
+  metadata: {
+    annotations: {
+      "helm.sh/resource-policy": "keep"
+    },
+    labels: {
+      app: "cert-manager",
+      "app.kubernetes.io/component": "crds",
+      "app.kubernetes.io/instance": "cert-manager",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "cert-manager",
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "clusterissuers.cert-manager.io"
   },
@@ -3323,16 +3790,17 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
       kind: "ClusterIssuer",
       listKind: "ClusterIssuerList",
       plural: "clusterissuers",
+      shortNames: ["ciss"],
       singular: "clusterissuer"
     },
     scope: "Cluster",
     versions: [{
       additionalPrinterColumns: [{
-        jsonPath: ".status.conditions[?(@.type==\"Ready\")].status",
+        jsonPath: ".status.conditions[?(@.type == \"Ready\")].status",
         name: "Ready",
         type: "string"
       }, {
-        jsonPath: ".status.conditions[?(@.type==\"Ready\")].message",
+        jsonPath: ".status.conditions[?(@.type == \"Ready\")].message",
         name: "Status",
         priority: 1,
         type: "string"
@@ -3413,7 +3881,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                       type: "object"
                     },
                     preferredChain: {
-                      description: "PreferredChain is the chain to use if the ACME server outputs multiple.\nPreferredChain is no guarantee that this one gets delivered by the ACME\nendpoint.\nFor example, for Let's Encrypt's DST crosssign you would use:\n\"DST Root CA X3\" or \"ISRG Root X1\" for the newer Let's Encrypt root CA.\nThis value picks the first certificate bundle in the combined set of\nACME default and alternative chains that has a root-most certificate with\nthis value as its issuer's commonname.",
+                      description: "PreferredChain is the chain to use if the ACME server outputs multiple.\nPreferredChain is no guarantee that this one gets delivered by the ACME\nendpoint.\nFor example, for Let's Encrypt's DST cross-sign you would use:\n\"DST Root CA X3\" or \"ISRG Root X1\" for the newer Let's Encrypt root CA.\nThis value picks the first certificate bundle in the combined set of\nACME default and alternative chains that has a root-most certificate with\nthis value as its issuer's commonname.",
                       maxLength: 64,
                       type: "string"
                     },
@@ -3431,6 +3899,10 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                       },
                       required: ["name"],
                       type: "object"
+                    },
+                    profile: {
+                      description: "Profile allows requesting a certificate profile from the ACME server.\nSupported profiles are listed by the server's ACME directory URL.",
+                      type: "string"
                     },
                     server: {
                       description: "Server is the URL used to access the ACME server's 'directory' endpoint.\nFor example, for Let's Encrypt's staging endpoint, you would use:\n\"https://acme-staging-v02.api.letsencrypt.org/directory\".\nOnly ACME v2 endpoints (i.e. RFC 8555) are supported.",
@@ -3563,15 +4035,15 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                     description: "Auth: Azure Workload Identity or Azure Managed Service Identity:\nSettings to enable Azure Workload Identity or Azure Managed Service Identity\nIf set, ClientID, ClientSecret and TenantID must not be set.",
                                     properties: {
                                       clientID: {
-                                        description: "client ID of the managed identity, can not be used at the same time as resourceID",
+                                        description: "client ID of the managed identity, cannot be used at the same time as resourceID",
                                         type: "string"
                                       },
                                       resourceID: {
-                                        description: "resource ID of the managed identity, can not be used at the same time as clientID\nCannot be used for Azure Managed Service Identity",
+                                        description: "resource ID of the managed identity, cannot be used at the same time as clientID\nCannot be used for Azure Managed Service Identity",
                                         type: "string"
                                       },
                                       tenantID: {
-                                        description: "tenant ID of the managed identity, can not be used at the same time as resourceID",
+                                        description: "tenant ID of the managed identity, cannot be used at the same time as resourceID",
                                         type: "string"
                                       }
                                     },
@@ -3587,6 +4059,11 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                   },
                                   tenantID: {
                                     description: "Auth: Azure Service Principal:\nThe TenantID of the Azure Service Principal used to authenticate with Azure DNS.\nIf set, ClientID and ClientSecret must also be set.",
+                                    type: "string"
+                                  },
+                                  zoneType: {
+                                    description: "ZoneType determines which type of Azure DNS zone to use.\n\nValid values are:\n  - AzurePublicZone  (default): Use a public Azure DNS zone.\n  - AzurePrivateZone: Use an Azure Private DNS zone.\n\nIf not specified, AzurePublicZone is used.\n\nSupport for Azure Private DNS zones is currently\nexperimental and may change in future releases.",
+                                    enum: ["AzurePublicZone", "AzurePrivateZone"],
                                     type: "string"
                                   }
                                 },
@@ -3693,7 +4170,12 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                 description: "Use RFC2136 (\"Dynamic Updates in the Domain Name System\") (https://datatracker.ietf.org/doc/rfc2136/)\nto manage DNS01 challenge records.",
                                 properties: {
                                   nameserver: {
-                                    description: "The IP address or hostname of an authoritative DNS server supporting\nRFC2136 in the form host:port. If the host is an IPv6 address it must be\nenclosed in square brackets (e.g [2001:db8::1])\xA0; port is optional.\nThis field is required.",
+                                    description: "The IP address or hostname of an authoritative DNS server supporting\nRFC2136 in the form host:port. If the host is an IPv6 address it must be\nenclosed in square brackets (e.g [2001:db8::1]); port is optional.\nThis field is required.",
+                                    type: "string"
+                                  },
+                                  protocol: {
+                                    description: "Protocol to use for dynamic DNS update queries. Valid values are (case-sensitive) ``TCP`` and ``UDP``; ``UDP`` (default).",
+                                    enum: ["TCP", "UDP"],
                                     type: "string"
                                   },
                                   tsigAlgorithm: {
@@ -3727,11 +4209,11 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                 description: "Use the AWS Route53 API to manage DNS01 challenge records.",
                                 properties: {
                                   accessKeyID: {
-                                    description: "The AccessKeyID is used for authentication.\nCannot be set when SecretAccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall-back to using env\nvars, shared credentials file or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
+                                    description: "The AccessKeyID is used for authentication.\nCannot be set when SecretAccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall back to using env\nvars, shared credentials file, or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                                     type: "string"
                                   },
                                   accessKeyIDSecretRef: {
-                                    description: "The SecretAccessKey is used for authentication. If set, pull the AWS\naccess key ID from a key within a Kubernetes Secret.\nCannot be set when AccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall-back to using env\nvars, shared credentials file or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
+                                    description: "The SecretAccessKey is used for authentication. If set, pull the AWS\naccess key ID from a key within a Kubernetes Secret.\nCannot be set when AccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall back to using env\nvars, shared credentials file, or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                                     properties: {
                                       key: {
                                         description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
@@ -3759,7 +4241,8 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                 items: {
                                                   type: "string"
                                                 },
-                                                type: "array"
+                                                type: "array",
+                                                "x-kubernetes-list-type": "atomic"
                                               },
                                               name: {
                                                 description: "Name of the ServiceAccount used to request a token.",
@@ -3790,7 +4273,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                     type: "string"
                                   },
                                   secretAccessKeySecretRef: {
-                                    description: "The SecretAccessKey is used for authentication.\nIf neither the Access Key nor Key ID are set, we fall-back to using env\nvars, shared credentials file or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
+                                    description: "The SecretAccessKey is used for authentication.\nIf neither the Access Key nor Key ID are set, we fall back to using env\nvars, shared credentials file, or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                                     properties: {
                                       key: {
                                         description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
@@ -3811,7 +4294,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                 description: "Configure an external webhook based DNS01 challenge solver to manage\nDNS01 challenge records.",
                                 properties: {
                                   config: {
-                                    description: "Additional configuration that should be passed to the webhook apiserver\nwhen challenges are processed.\nThis can contain arbitrary JSON data.\nSecret values should not be specified in this stanza.\nIf secret values are needed (e.g. credentials for a DNS service), you\nshould use a SecretKeySelector to reference a Secret resource.\nFor details on the schema of this field, consult the webhook provider\nimplementation's documentation.",
+                                    description: "Additional configuration that should be passed to the webhook apiserver\nwhen challenges are processed.\nThis can contain arbitrary JSON data.\nSecret values should not be specified in this stanza.\nIf secret values are needed (e.g., credentials for a DNS service), you\nshould use a SecretKeySelector to reference a Secret resource.\nFor details on the schema of this field, consult the webhook provider\nimplementation's documentation.",
                                     "x-kubernetes-preserve-unknown-fields": true
                                   },
                                   groupName: {
@@ -3819,7 +4302,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                     type: "string"
                                   },
                                   solverName: {
-                                    description: "The name of the solver to use, as defined in the webhook provider\nimplementation.\nThis will typically be the name of the provider, e.g. 'cloudflare'.",
+                                    description: "The name of the solver to use, as defined in the webhook provider\nimplementation.\nThis will typically be the name of the provider, e.g., 'cloudflare'.",
                                     type: "string"
                                   }
                                 },
@@ -3830,7 +4313,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                             type: "object"
                           },
                           http01: {
-                            description: "Configures cert-manager to attempt to complete authorizations by\nperforming the HTTP01 challenge flow.\nIt is not possible to obtain certificates for wildcard domain names\n(e.g. `*.example.com`) using the HTTP01 challenge mechanism.",
+                            description: "Configures cert-manager to attempt to complete authorizations by\nperforming the HTTP01 challenge flow.\nIt is not possible to obtain certificates for wildcard domain names\n(e.g., `*.example.com`) using the HTTP01 challenge mechanism.",
                             properties: {
                               gatewayHTTPRoute: {
                                 description: "The Gateway API is a sig-network community API that models service networking\nin Kubernetes (https://gateway-api.sigs.k8s.io/). The Gateway solver will\ncreate HTTPRoutes with the specified labels in the same namespace as the challenge.\nThis solver is experimental, and fields / behaviour may change in the future.",
@@ -3893,7 +4376,8 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                       required: ["name"],
                                       type: "object"
                                     },
-                                    type: "array"
+                                    type: "array",
+                                    "x-kubernetes-list-type": "atomic"
                                   },
                                   podTemplate: {
                                     description: "Optional pod template used to configure the ACME challenge solver pods\nused for HTTP01 challenges.",
@@ -4140,7 +4624,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                               "x-kubernetes-map-type": "atomic"
                                                             },
                                                             matchLabelKeys: {
-                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -4148,7 +4632,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                               "x-kubernetes-list-type": "atomic"
                                                             },
                                                             mismatchLabelKeys: {
-                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -4273,7 +4757,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                           "x-kubernetes-map-type": "atomic"
                                                         },
                                                         matchLabelKeys: {
-                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -4281,7 +4765,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                           "x-kubernetes-list-type": "atomic"
                                                         },
                                                         mismatchLabelKeys: {
-                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -4356,7 +4840,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                 description: "Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node, zone, etc. as some other pod(s)).",
                                                 properties: {
                                                   preferredDuringSchedulingIgnoredDuringExecution: {
-                                                    description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and adding\n\"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
+                                                    description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and subtracting\n\"weight\" from the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
                                                     items: {
                                                       description: "The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)",
                                                       properties: {
@@ -4406,7 +4890,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                               "x-kubernetes-map-type": "atomic"
                                                             },
                                                             matchLabelKeys: {
-                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -4414,7 +4898,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                               "x-kubernetes-list-type": "atomic"
                                                             },
                                                             mismatchLabelKeys: {
-                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -4539,7 +5023,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                           "x-kubernetes-map-type": "atomic"
                                                         },
                                                         matchLabelKeys: {
-                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -4547,7 +5031,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                           "x-kubernetes-list-type": "atomic"
                                                         },
                                                         mismatchLabelKeys: {
-                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -4635,7 +5119,9 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                               type: "object",
                                               "x-kubernetes-map-type": "atomic"
                                             },
-                                            type: "array"
+                                            type: "array",
+                                            "x-kubernetes-list-map-keys": ["name"],
+                                            "x-kubernetes-list-type": "map"
                                           },
                                           nodeSelector: {
                                             additionalProperties: {
@@ -4647,6 +5133,38 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                           priorityClassName: {
                                             description: "If specified, the pod's priorityClassName.",
                                             type: "string"
+                                          },
+                                          resources: {
+                                            description: "If specified, the pod's resource requirements.\nThese values override the global resource configuration flags.\nNote that when only specifying resource limits, ensure they are greater than or equal\nto the corresponding global resource requests configured via controller flags\n(--acme-http01-solver-resource-request-cpu, --acme-http01-solver-resource-request-memory).\nKubernetes will reject pod creation if limits are lower than requests, causing challenge failures.",
+                                            properties: {
+                                              limits: {
+                                                additionalProperties: {
+                                                  anyOf: [{
+                                                    type: "integer"
+                                                  }, {
+                                                    type: "string"
+                                                  }],
+                                                  pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                                  "x-kubernetes-int-or-string": true
+                                                },
+                                                description: "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                                type: "object"
+                                              },
+                                              requests: {
+                                                additionalProperties: {
+                                                  anyOf: [{
+                                                    type: "integer"
+                                                  }, {
+                                                    type: "string"
+                                                  }],
+                                                  pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                                  "x-kubernetes-int-or-string": true
+                                                },
+                                                description: "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to the global values configured via controller flags. Requests cannot exceed Limits.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                                type: "object"
+                                              }
+                                            },
+                                            type: "object"
                                           },
                                           securityContext: {
                                             description: "If specified, the pod's security context",
@@ -4717,7 +5235,8 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                   format: "int64",
                                                   type: "integer"
                                                 },
-                                                type: "array"
+                                                type: "array",
+                                                "x-kubernetes-list-type": "atomic"
                                               },
                                               sysctls: {
                                                 description: "Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported\nsysctls (by the container runtime) might fail to launch.\nNote that this field cannot be set when spec.os.name is windows.",
@@ -4736,7 +5255,8 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                   required: ["name", "value"],
                                                   type: "object"
                                                 },
-                                                type: "array"
+                                                type: "array",
+                                                "x-kubernetes-list-type": "atomic"
                                               }
                                             },
                                             type: "object"
@@ -4759,7 +5279,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                   type: "string"
                                                 },
                                                 operator: {
-                                                  description: "Operator represents a key's relationship to the value.\nValid operators are Exists and Equal. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.",
+                                                  description: "Operator represents a key's relationship to the value.\nValid operators are Exists, Equal, Lt, and Gt. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.\nLt and Gt perform numeric comparisons (requires feature gate TaintTolerationComparisonOperators).",
                                                   type: "string"
                                                 },
                                                 tolerationSeconds: {
@@ -4774,7 +5294,8 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                               },
                                               type: "object"
                                             },
-                                            type: "array"
+                                            type: "array",
+                                            "x-kubernetes-list-type": "atomic"
                                           }
                                         },
                                         type: "object"
@@ -5075,7 +5596,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                               "x-kubernetes-map-type": "atomic"
                                                             },
                                                             matchLabelKeys: {
-                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -5083,7 +5604,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                               "x-kubernetes-list-type": "atomic"
                                                             },
                                                             mismatchLabelKeys: {
-                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -5208,7 +5729,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                           "x-kubernetes-map-type": "atomic"
                                                         },
                                                         matchLabelKeys: {
-                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -5216,7 +5737,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                           "x-kubernetes-list-type": "atomic"
                                                         },
                                                         mismatchLabelKeys: {
-                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -5291,7 +5812,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                 description: "Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node, zone, etc. as some other pod(s)).",
                                                 properties: {
                                                   preferredDuringSchedulingIgnoredDuringExecution: {
-                                                    description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and adding\n\"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
+                                                    description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and subtracting\n\"weight\" from the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
                                                     items: {
                                                       description: "The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)",
                                                       properties: {
@@ -5341,7 +5862,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                               "x-kubernetes-map-type": "atomic"
                                                             },
                                                             matchLabelKeys: {
-                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -5349,7 +5870,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                               "x-kubernetes-list-type": "atomic"
                                                             },
                                                             mismatchLabelKeys: {
-                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -5474,7 +5995,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                           "x-kubernetes-map-type": "atomic"
                                                         },
                                                         matchLabelKeys: {
-                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -5482,7 +6003,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                           "x-kubernetes-list-type": "atomic"
                                                         },
                                                         mismatchLabelKeys: {
-                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -5570,7 +6091,9 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                               type: "object",
                                               "x-kubernetes-map-type": "atomic"
                                             },
-                                            type: "array"
+                                            type: "array",
+                                            "x-kubernetes-list-map-keys": ["name"],
+                                            "x-kubernetes-list-type": "map"
                                           },
                                           nodeSelector: {
                                             additionalProperties: {
@@ -5582,6 +6105,38 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                           priorityClassName: {
                                             description: "If specified, the pod's priorityClassName.",
                                             type: "string"
+                                          },
+                                          resources: {
+                                            description: "If specified, the pod's resource requirements.\nThese values override the global resource configuration flags.\nNote that when only specifying resource limits, ensure they are greater than or equal\nto the corresponding global resource requests configured via controller flags\n(--acme-http01-solver-resource-request-cpu, --acme-http01-solver-resource-request-memory).\nKubernetes will reject pod creation if limits are lower than requests, causing challenge failures.",
+                                            properties: {
+                                              limits: {
+                                                additionalProperties: {
+                                                  anyOf: [{
+                                                    type: "integer"
+                                                  }, {
+                                                    type: "string"
+                                                  }],
+                                                  pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                                  "x-kubernetes-int-or-string": true
+                                                },
+                                                description: "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                                type: "object"
+                                              },
+                                              requests: {
+                                                additionalProperties: {
+                                                  anyOf: [{
+                                                    type: "integer"
+                                                  }, {
+                                                    type: "string"
+                                                  }],
+                                                  pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                                  "x-kubernetes-int-or-string": true
+                                                },
+                                                description: "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to the global values configured via controller flags. Requests cannot exceed Limits.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                                type: "object"
+                                              }
+                                            },
+                                            type: "object"
                                           },
                                           securityContext: {
                                             description: "If specified, the pod's security context",
@@ -5652,7 +6207,8 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                   format: "int64",
                                                   type: "integer"
                                                 },
-                                                type: "array"
+                                                type: "array",
+                                                "x-kubernetes-list-type": "atomic"
                                               },
                                               sysctls: {
                                                 description: "Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported\nsysctls (by the container runtime) might fail to launch.\nNote that this field cannot be set when spec.os.name is windows.",
@@ -5671,7 +6227,8 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                   required: ["name", "value"],
                                                   type: "object"
                                                 },
-                                                type: "array"
+                                                type: "array",
+                                                "x-kubernetes-list-type": "atomic"
                                               }
                                             },
                                             type: "object"
@@ -5694,7 +6251,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                                   type: "string"
                                                 },
                                                 operator: {
-                                                  description: "Operator represents a key's relationship to the value.\nValid operators are Exists and Equal. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.",
+                                                  description: "Operator represents a key's relationship to the value.\nValid operators are Exists, Equal, Lt, and Gt. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.\nLt and Gt perform numeric comparisons (requires feature gate TaintTolerationComparisonOperators).",
                                                   type: "string"
                                                 },
                                                 tolerationSeconds: {
@@ -5709,7 +6266,8 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                               },
                                               type: "object"
                                             },
-                                            type: "array"
+                                            type: "array",
+                                            "x-kubernetes-list-type": "atomic"
                                           }
                                         },
                                         type: "object"
@@ -5735,14 +6293,16 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               dnsZones: {
                                 description: "List of DNSZones that this solver will be used to solve.\nThe most specific DNS zone match specified here will take precedence\nover other DNS zone matches, so a solver specifying sys.example.com\nwill be selected over one specifying example.com for the domain\nwww.sys.example.com.\nIf multiple solvers match with the same dnsZones value, the solver\nwith the most matching labels in matchLabels will be selected.\nIf neither has more matches, the solver defined earlier in the list\nwill be selected.",
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               matchLabels: {
                                 additionalProperties: {
@@ -5753,11 +6313,16 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                               }
                             },
                             type: "object"
+                          },
+                          waitInsteadOfSelfCheck: {
+                            description: "WaitInsteadOfSelfCheck, if set, skips cert-manager's self-check and\ninstead waits this long after presentation before asking the ACME server\nto validate the challenge.\n\nThis is an advanced escape hatch for environments where cert-manager's\nself-check cannot succeed from its own network or DNS viewpoint even\nthough the ACME server can still validate successfully, for example due\nto split-horizon DNS or NAT hairpinning.\n\nA value of 0 skips the self-check and asks the ACME server to validate\nimmediately after presentation, relying on the ACME server's own\nvalidation retries (RFC 8555 section 8.2) to succeed once the challenge\nhas propagated. A negative duration is rejected.\nValue must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration,\nfor example `30s` or `2m`.",
+                            type: "string"
                           }
                         },
                         type: "object"
                       },
-                      type: "array"
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
                     }
                   },
                   required: ["privateKeySecretRef", "server"],
@@ -5771,21 +6336,24 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                       items: {
                         type: "string"
                       },
-                      type: "array"
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     issuingCertificateURLs: {
                       description: "IssuingCertificateURLs is a list of URLs which this issuer should embed into certificates\nit creates. See https://www.rfc-editor.org/rfc/rfc5280#section-4.2.2.1 for more details.\nAs an example, such a URL might be \"http://ca.domain.com/ca.crt\".",
                       items: {
                         type: "string"
                       },
-                      type: "array"
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     ocspServers: {
                       description: "The OCSP server list is an X.509 v3 extension that defines a list of\nURLs of OCSP responders. The OCSP responders can be queried for the\nrevocation status of an issued certificate. If not set, the\ncertificate will be issued with no OCSP servers set. For example, an\nOCSP server URL could be \"http://ocsp.int-x3.letsencrypt.org\".",
                       items: {
                         type: "string"
                       },
-                      type: "array"
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     secretName: {
                       description: "SecretName is the name of the secret used to sign Certificates issued\nby this Issuer.",
@@ -5803,7 +6371,8 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                       items: {
                         type: "string"
                       },
-                      type: "array"
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
                     }
                   },
                   type: "object"
@@ -5842,6 +6411,53 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                             }
                           },
                           required: ["path", "roleId", "secretRef"],
+                          type: "object"
+                        },
+                        aws: {
+                          description: "AWS authenticates with Vault using AWS IAM authentication.\nThis allows authentication using IAM roles for service accounts (IRSA),\nEKS Pod Identity (PIA), or ambient credentials (EC2 instance profiles, ECS task role).",
+                          properties: {
+                            iamRoleArn: {
+                              description: "The ARN of the AWS IAM role to assume using the Kubernetes service account\ntoken. Required when using IRSA (serviceAccountRef is set).\nThis role must have a trust policy that allows the OIDC provider to assume it.",
+                              type: "string"
+                            },
+                            mountPath: {
+                              description: "The Vault mountPath here is the mount path to use when authenticating with\nVault. For example, setting a value to `/v1/auth/foo`, will use the path\n`/v1/auth/foo/login` to authenticate with Vault. If unspecified, the\ndefault value \"/v1/auth/aws\" will be used.",
+                              type: "string"
+                            },
+                            region: {
+                              description: "The AWS region to use for authentication. If not specified, the region\nwill be determined from AWS_REGION or AWS_DEFAULT_REGION environment\nvariables, falling back to \"us-east-1\" if not set.",
+                              type: "string"
+                            },
+                            role: {
+                              description: "A required field containing the Vault Role to assume when authenticating.",
+                              minLength: 1,
+                              type: "string"
+                            },
+                            serviceAccountRef: {
+                              description: "A reference to a service account that will be used to request a web identity\ntoken for IRSA (IAM Roles for Service Accounts) authentication.",
+                              properties: {
+                                audiences: {
+                                  description: "TokenAudiences is an optional list of extra audiences to include in the token passed to Vault.\nThe default audiences are always included in the token.",
+                                  items: {
+                                    type: "string"
+                                  },
+                                  type: "array",
+                                  "x-kubernetes-list-type": "atomic"
+                                },
+                                name: {
+                                  description: "Name of the ServiceAccount used to request a token.",
+                                  type: "string"
+                                }
+                              },
+                              required: ["name"],
+                              type: "object"
+                            },
+                            vaultHeaderValue: {
+                              description: "The Vault header value to include in the STS signing request.\nThis is used to prevent replay attacks.",
+                              type: "string"
+                            }
+                          },
+                          required: ["role"],
                           type: "object"
                         },
                         clientCertificate: {
@@ -5892,11 +6508,12 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                               description: "A reference to a service account that will be used to request a bound\ntoken (also known as \"projected token\"). Compared to using \"secretRef\",\nusing this field means that you don't rely on statically bound tokens. To\nuse this field, you must configure an RBAC rule to let cert-manager\nrequest a token.",
                               properties: {
                                 audiences: {
-                                  description: "TokenAudiences is an optional list of extra audiences to include in the token passed to Vault. The default token\nconsisting of the issuer's namespace and name is always included.",
+                                  description: "TokenAudiences is an optional list of extra audiences to include in the token passed to Vault.\nThe default audiences are always included in the token.",
                                   items: {
                                     type: "string"
                                   },
-                                  type: "array"
+                                  type: "array",
+                                  "x-kubernetes-list-type": "atomic"
                                 },
                                 name: {
                                   description: "Name of the ServiceAccount used to request a token.",
@@ -5989,19 +6606,23 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                     server: {
                       description: "Server is the connection address for the Vault server, e.g: \"https://vault.example.com:8200\".",
                       type: "string"
+                    },
+                    serverName: {
+                      description: "ServerName is used to verify the hostname on the returned certificates\nby the Vault server.",
+                      type: "string"
                     }
                   },
                   required: ["auth", "path", "server"],
                   type: "object"
                 },
                 venafi: {
-                  description: "Venafi configures this issuer to sign certificates using a Venafi TPP\nor Venafi Cloud policy zone.",
+                  description: "Venafi configures this issuer to sign certificates using a CyberArk Certificate Manager Self-Hosted\nor SaaS policy zone.",
                   properties: {
                     cloud: {
-                      description: "Cloud specifies the Venafi cloud configuration settings.\nOnly one of TPP or Cloud may be specified.",
+                      description: "Cloud specifies the CyberArk Certificate Manager SaaS configuration settings.\nOnly one of CyberArk Certificate Manager may be specified.",
                       properties: {
                         apiTokenSecretRef: {
-                          description: "APITokenSecretRef is a secret key selector for the Venafi Cloud API token.",
+                          description: "APITokenSecretRef is a secret key selector for the CyberArk Certificate Manager SaaS API token.",
                           properties: {
                             key: {
                               description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
@@ -6016,23 +6637,53 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                           type: "object"
                         },
                         url: {
-                          description: "URL is the base URL for Venafi Cloud.\nDefaults to \"https://api.venafi.cloud/v1\".",
+                          description: "URL is the base URL for CyberArk Certificate Manager SaaS.\nDefaults to \"https://api.venafi.cloud/\".",
                           type: "string"
                         }
                       },
                       required: ["apiTokenSecretRef"],
                       type: "object"
                     },
+                    ngts: {
+                      description: "NGTS specifies Palo Alto Networks Next Generation Trust Services (NGTS) configuration\nusing OAuth 2.0 Client Credentials. Only one of tpp, cloud, or ngts may be specified.",
+                      properties: {
+                        credentialsRef: {
+                          description: "CredentialsRef is a reference to a Kubernetes Secret containing the OAuth 2.0\nClient ID and Client Secret. The secret must contain the keys 'client-id' and\n'client-secret'.",
+                          properties: {
+                            name: {
+                              description: "Name of the resource being referred to.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                              type: "string"
+                            }
+                          },
+                          required: ["name"],
+                          type: "object"
+                        },
+                        tokenEndpoint: {
+                          description: "TokenEndpoint is the OAuth 2.0 token endpoint URL used to obtain access tokens,\nfor example \"https://auth.apps.paloaltonetworks.com/oauth2/access_token\".\nDefaults to \"https://auth.apps.paloaltonetworks.com/oauth2/access_token\" if not set.",
+                          type: "string"
+                        },
+                        tsgID: {
+                          description: "TSGID is the Tenant Service Group ID used to scope the OAuth 2.0 access token,\nfor example \"1234567890\". The tsg_id: prefix is added automatically.\nThis field is required.",
+                          type: "string"
+                        },
+                        url: {
+                          description: "URL is the base URL for the NGTS API endpoint.\nDefaults to \"https://api.strata.paloaltonetworks.com/ngts\" if not set.",
+                          type: "string"
+                        }
+                      },
+                      required: ["credentialsRef", "tsgID"],
+                      type: "object"
+                    },
                     tpp: {
-                      description: "TPP specifies Trust Protection Platform configuration settings.\nOnly one of TPP or Cloud may be specified.",
+                      description: "TPP specifies CyberArk Certificate Manager Self-Hosted configuration settings.\nOnly one of CyberArk Certificate Manager may be specified.",
                       properties: {
                         caBundle: {
-                          description: "Base64-encoded bundle of PEM CAs which will be used to validate the certificate\nchain presented by the TPP server. Only used if using HTTPS; ignored for HTTP.\nIf undefined, the certificate bundle in the cert-manager controller container\nis used to validate the chain.",
+                          description: "Base64-encoded bundle of PEM CAs which will be used to validate the certificate\nchain presented by the CyberArk Certificate Manager Self-Hosted server. Only used if using HTTPS; ignored for HTTP.\nIf undefined, the certificate bundle in the cert-manager controller container\nis used to validate the chain.",
                           format: "byte",
                           type: "string"
                         },
                         caBundleSecretRef: {
-                          description: "Reference to a Secret containing a base64-encoded bundle of PEM CAs\nwhich will be used to validate the certificate chain presented by the TPP server.\nOnly used if using HTTPS; ignored for HTTP. Mutually exclusive with CABundle.\nIf neither CABundle nor CABundleSecretRef is defined, the certificate bundle in\nthe cert-manager controller container is used to validate the TLS connection.",
+                          description: "Reference to a Secret containing a base64-encoded bundle of PEM CAs\nwhich will be used to validate the certificate chain presented by the CyberArk Certificate Manager Self-Hosted server.\nOnly used if using HTTPS; ignored for HTTP. Mutually exclusive with CABundle.\nIf neither CABundle nor CABundleSecretRef is defined, the certificate bundle in\nthe cert-manager controller container is used to validate the TLS connection.",
                           properties: {
                             key: {
                               description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
@@ -6047,7 +6698,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                           type: "object"
                         },
                         credentialsRef: {
-                          description: "CredentialsRef is a reference to a Secret containing the Venafi TPP API credentials.\nThe secret must contain the key 'access-token' for the Access Token Authentication,\nor two keys, 'username' and 'password' for the API Keys Authentication.",
+                          description: "CredentialsRef is a reference to a Secret containing the CyberArk Certificate Manager Self-Hosted API credentials.\nThe secret must contain the key 'access-token' for the Access Token Authentication,\nor two keys, 'username' and 'password' for the API Keys Authentication.",
                           properties: {
                             name: {
                               description: "Name of the resource being referred to.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
@@ -6058,7 +6709,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                           type: "object"
                         },
                         url: {
-                          description: "URL is the base URL for the vedsdk endpoint of the Venafi TPP instance,\nfor example: \"https://tpp.example.com/vedsdk\".",
+                          description: "URL is the base URL for the vedsdk endpoint of the CyberArk Certificate Manager Self-Hosted instance,\nfor example: \"https://tpp.example.com/vedsdk\".",
                           type: "string"
                         }
                       },
@@ -6066,12 +6717,16 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
                       type: "object"
                     },
                     zone: {
-                      description: "Zone is the Venafi Policy Zone to use for this issuer.\nAll requests made to the Venafi platform will be restricted by the named\nzone policy.\nThis field is required.",
+                      description: "Zone is the Certificate Manager Policy Zone to use for this issuer.\nAll requests made to the Certificate Manager platform will be restricted by the named\nzone policy.\nThis field is required.",
                       type: "string"
                     }
                   },
                   required: ["zone"],
-                  type: "object"
+                  type: "object",
+                  "x-kubernetes-validations": [{
+                    message: "exactly one of tpp, cloud, or ngts must be configured",
+                    rule: "(has(self.tpp) ? 1 : 0) + (has(self.cloud) ? 1 : 0) + (has(self.ngts) ? 1 : 0) == 1"
+                  }]
                 }
               },
               type: "object"
@@ -6153,7 +6808,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
     }]
   }
 };
-export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_IssuersCertManagerIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -6166,8 +6821,8 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "issuers.cert-manager.io"
   },
@@ -6178,16 +6833,17 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
       kind: "Issuer",
       listKind: "IssuerList",
       plural: "issuers",
+      shortNames: ["iss"],
       singular: "issuer"
     },
     scope: "Namespaced",
     versions: [{
       additionalPrinterColumns: [{
-        jsonPath: ".status.conditions[?(@.type==\"Ready\")].status",
+        jsonPath: ".status.conditions[?(@.type == \"Ready\")].status",
         name: "Ready",
         type: "string"
       }, {
-        jsonPath: ".status.conditions[?(@.type==\"Ready\")].message",
+        jsonPath: ".status.conditions[?(@.type == \"Ready\")].message",
         name: "Status",
         priority: 1,
         type: "string"
@@ -6268,7 +6924,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                       type: "object"
                     },
                     preferredChain: {
-                      description: "PreferredChain is the chain to use if the ACME server outputs multiple.\nPreferredChain is no guarantee that this one gets delivered by the ACME\nendpoint.\nFor example, for Let's Encrypt's DST crosssign you would use:\n\"DST Root CA X3\" or \"ISRG Root X1\" for the newer Let's Encrypt root CA.\nThis value picks the first certificate bundle in the combined set of\nACME default and alternative chains that has a root-most certificate with\nthis value as its issuer's commonname.",
+                      description: "PreferredChain is the chain to use if the ACME server outputs multiple.\nPreferredChain is no guarantee that this one gets delivered by the ACME\nendpoint.\nFor example, for Let's Encrypt's DST cross-sign you would use:\n\"DST Root CA X3\" or \"ISRG Root X1\" for the newer Let's Encrypt root CA.\nThis value picks the first certificate bundle in the combined set of\nACME default and alternative chains that has a root-most certificate with\nthis value as its issuer's commonname.",
                       maxLength: 64,
                       type: "string"
                     },
@@ -6286,6 +6942,10 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                       },
                       required: ["name"],
                       type: "object"
+                    },
+                    profile: {
+                      description: "Profile allows requesting a certificate profile from the ACME server.\nSupported profiles are listed by the server's ACME directory URL.",
+                      type: "string"
                     },
                     server: {
                       description: "Server is the URL used to access the ACME server's 'directory' endpoint.\nFor example, for Let's Encrypt's staging endpoint, you would use:\n\"https://acme-staging-v02.api.letsencrypt.org/directory\".\nOnly ACME v2 endpoints (i.e. RFC 8555) are supported.",
@@ -6418,15 +7078,15 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                     description: "Auth: Azure Workload Identity or Azure Managed Service Identity:\nSettings to enable Azure Workload Identity or Azure Managed Service Identity\nIf set, ClientID, ClientSecret and TenantID must not be set.",
                                     properties: {
                                       clientID: {
-                                        description: "client ID of the managed identity, can not be used at the same time as resourceID",
+                                        description: "client ID of the managed identity, cannot be used at the same time as resourceID",
                                         type: "string"
                                       },
                                       resourceID: {
-                                        description: "resource ID of the managed identity, can not be used at the same time as clientID\nCannot be used for Azure Managed Service Identity",
+                                        description: "resource ID of the managed identity, cannot be used at the same time as clientID\nCannot be used for Azure Managed Service Identity",
                                         type: "string"
                                       },
                                       tenantID: {
-                                        description: "tenant ID of the managed identity, can not be used at the same time as resourceID",
+                                        description: "tenant ID of the managed identity, cannot be used at the same time as resourceID",
                                         type: "string"
                                       }
                                     },
@@ -6442,6 +7102,11 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                   },
                                   tenantID: {
                                     description: "Auth: Azure Service Principal:\nThe TenantID of the Azure Service Principal used to authenticate with Azure DNS.\nIf set, ClientID and ClientSecret must also be set.",
+                                    type: "string"
+                                  },
+                                  zoneType: {
+                                    description: "ZoneType determines which type of Azure DNS zone to use.\n\nValid values are:\n  - AzurePublicZone  (default): Use a public Azure DNS zone.\n  - AzurePrivateZone: Use an Azure Private DNS zone.\n\nIf not specified, AzurePublicZone is used.\n\nSupport for Azure Private DNS zones is currently\nexperimental and may change in future releases.",
+                                    enum: ["AzurePublicZone", "AzurePrivateZone"],
                                     type: "string"
                                   }
                                 },
@@ -6548,7 +7213,12 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                 description: "Use RFC2136 (\"Dynamic Updates in the Domain Name System\") (https://datatracker.ietf.org/doc/rfc2136/)\nto manage DNS01 challenge records.",
                                 properties: {
                                   nameserver: {
-                                    description: "The IP address or hostname of an authoritative DNS server supporting\nRFC2136 in the form host:port. If the host is an IPv6 address it must be\nenclosed in square brackets (e.g [2001:db8::1])\xA0; port is optional.\nThis field is required.",
+                                    description: "The IP address or hostname of an authoritative DNS server supporting\nRFC2136 in the form host:port. If the host is an IPv6 address it must be\nenclosed in square brackets (e.g [2001:db8::1]); port is optional.\nThis field is required.",
+                                    type: "string"
+                                  },
+                                  protocol: {
+                                    description: "Protocol to use for dynamic DNS update queries. Valid values are (case-sensitive) ``TCP`` and ``UDP``; ``UDP`` (default).",
+                                    enum: ["TCP", "UDP"],
                                     type: "string"
                                   },
                                   tsigAlgorithm: {
@@ -6582,11 +7252,11 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                 description: "Use the AWS Route53 API to manage DNS01 challenge records.",
                                 properties: {
                                   accessKeyID: {
-                                    description: "The AccessKeyID is used for authentication.\nCannot be set when SecretAccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall-back to using env\nvars, shared credentials file or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
+                                    description: "The AccessKeyID is used for authentication.\nCannot be set when SecretAccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall back to using env\nvars, shared credentials file, or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                                     type: "string"
                                   },
                                   accessKeyIDSecretRef: {
-                                    description: "The SecretAccessKey is used for authentication. If set, pull the AWS\naccess key ID from a key within a Kubernetes Secret.\nCannot be set when AccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall-back to using env\nvars, shared credentials file or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
+                                    description: "The SecretAccessKey is used for authentication. If set, pull the AWS\naccess key ID from a key within a Kubernetes Secret.\nCannot be set when AccessKeyID is set.\nIf neither the Access Key nor Key ID are set, we fall back to using env\nvars, shared credentials file, or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                                     properties: {
                                       key: {
                                         description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
@@ -6614,7 +7284,8 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                 items: {
                                                   type: "string"
                                                 },
-                                                type: "array"
+                                                type: "array",
+                                                "x-kubernetes-list-type": "atomic"
                                               },
                                               name: {
                                                 description: "Name of the ServiceAccount used to request a token.",
@@ -6645,7 +7316,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                     type: "string"
                                   },
                                   secretAccessKeySecretRef: {
-                                    description: "The SecretAccessKey is used for authentication.\nIf neither the Access Key nor Key ID are set, we fall-back to using env\nvars, shared credentials file or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
+                                    description: "The SecretAccessKey is used for authentication.\nIf neither the Access Key nor Key ID are set, we fall back to using env\nvars, shared credentials file, or AWS Instance metadata,\nsee: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials",
                                     properties: {
                                       key: {
                                         description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
@@ -6666,7 +7337,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                 description: "Configure an external webhook based DNS01 challenge solver to manage\nDNS01 challenge records.",
                                 properties: {
                                   config: {
-                                    description: "Additional configuration that should be passed to the webhook apiserver\nwhen challenges are processed.\nThis can contain arbitrary JSON data.\nSecret values should not be specified in this stanza.\nIf secret values are needed (e.g. credentials for a DNS service), you\nshould use a SecretKeySelector to reference a Secret resource.\nFor details on the schema of this field, consult the webhook provider\nimplementation's documentation.",
+                                    description: "Additional configuration that should be passed to the webhook apiserver\nwhen challenges are processed.\nThis can contain arbitrary JSON data.\nSecret values should not be specified in this stanza.\nIf secret values are needed (e.g., credentials for a DNS service), you\nshould use a SecretKeySelector to reference a Secret resource.\nFor details on the schema of this field, consult the webhook provider\nimplementation's documentation.",
                                     "x-kubernetes-preserve-unknown-fields": true
                                   },
                                   groupName: {
@@ -6674,7 +7345,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                     type: "string"
                                   },
                                   solverName: {
-                                    description: "The name of the solver to use, as defined in the webhook provider\nimplementation.\nThis will typically be the name of the provider, e.g. 'cloudflare'.",
+                                    description: "The name of the solver to use, as defined in the webhook provider\nimplementation.\nThis will typically be the name of the provider, e.g., 'cloudflare'.",
                                     type: "string"
                                   }
                                 },
@@ -6685,7 +7356,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                             type: "object"
                           },
                           http01: {
-                            description: "Configures cert-manager to attempt to complete authorizations by\nperforming the HTTP01 challenge flow.\nIt is not possible to obtain certificates for wildcard domain names\n(e.g. `*.example.com`) using the HTTP01 challenge mechanism.",
+                            description: "Configures cert-manager to attempt to complete authorizations by\nperforming the HTTP01 challenge flow.\nIt is not possible to obtain certificates for wildcard domain names\n(e.g., `*.example.com`) using the HTTP01 challenge mechanism.",
                             properties: {
                               gatewayHTTPRoute: {
                                 description: "The Gateway API is a sig-network community API that models service networking\nin Kubernetes (https://gateway-api.sigs.k8s.io/). The Gateway solver will\ncreate HTTPRoutes with the specified labels in the same namespace as the challenge.\nThis solver is experimental, and fields / behaviour may change in the future.",
@@ -6748,7 +7419,8 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                       required: ["name"],
                                       type: "object"
                                     },
-                                    type: "array"
+                                    type: "array",
+                                    "x-kubernetes-list-type": "atomic"
                                   },
                                   podTemplate: {
                                     description: "Optional pod template used to configure the ACME challenge solver pods\nused for HTTP01 challenges.",
@@ -6995,7 +7667,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                               "x-kubernetes-map-type": "atomic"
                                                             },
                                                             matchLabelKeys: {
-                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -7003,7 +7675,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                               "x-kubernetes-list-type": "atomic"
                                                             },
                                                             mismatchLabelKeys: {
-                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -7128,7 +7800,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                           "x-kubernetes-map-type": "atomic"
                                                         },
                                                         matchLabelKeys: {
-                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -7136,7 +7808,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                           "x-kubernetes-list-type": "atomic"
                                                         },
                                                         mismatchLabelKeys: {
-                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -7211,7 +7883,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                 description: "Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node, zone, etc. as some other pod(s)).",
                                                 properties: {
                                                   preferredDuringSchedulingIgnoredDuringExecution: {
-                                                    description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and adding\n\"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
+                                                    description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and subtracting\n\"weight\" from the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
                                                     items: {
                                                       description: "The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)",
                                                       properties: {
@@ -7261,7 +7933,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                               "x-kubernetes-map-type": "atomic"
                                                             },
                                                             matchLabelKeys: {
-                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -7269,7 +7941,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                               "x-kubernetes-list-type": "atomic"
                                                             },
                                                             mismatchLabelKeys: {
-                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -7394,7 +8066,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                           "x-kubernetes-map-type": "atomic"
                                                         },
                                                         matchLabelKeys: {
-                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -7402,7 +8074,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                           "x-kubernetes-list-type": "atomic"
                                                         },
                                                         mismatchLabelKeys: {
-                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -7490,7 +8162,9 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                               type: "object",
                                               "x-kubernetes-map-type": "atomic"
                                             },
-                                            type: "array"
+                                            type: "array",
+                                            "x-kubernetes-list-map-keys": ["name"],
+                                            "x-kubernetes-list-type": "map"
                                           },
                                           nodeSelector: {
                                             additionalProperties: {
@@ -7502,6 +8176,38 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                           priorityClassName: {
                                             description: "If specified, the pod's priorityClassName.",
                                             type: "string"
+                                          },
+                                          resources: {
+                                            description: "If specified, the pod's resource requirements.\nThese values override the global resource configuration flags.\nNote that when only specifying resource limits, ensure they are greater than or equal\nto the corresponding global resource requests configured via controller flags\n(--acme-http01-solver-resource-request-cpu, --acme-http01-solver-resource-request-memory).\nKubernetes will reject pod creation if limits are lower than requests, causing challenge failures.",
+                                            properties: {
+                                              limits: {
+                                                additionalProperties: {
+                                                  anyOf: [{
+                                                    type: "integer"
+                                                  }, {
+                                                    type: "string"
+                                                  }],
+                                                  pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                                  "x-kubernetes-int-or-string": true
+                                                },
+                                                description: "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                                type: "object"
+                                              },
+                                              requests: {
+                                                additionalProperties: {
+                                                  anyOf: [{
+                                                    type: "integer"
+                                                  }, {
+                                                    type: "string"
+                                                  }],
+                                                  pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                                  "x-kubernetes-int-or-string": true
+                                                },
+                                                description: "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to the global values configured via controller flags. Requests cannot exceed Limits.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                                type: "object"
+                                              }
+                                            },
+                                            type: "object"
                                           },
                                           securityContext: {
                                             description: "If specified, the pod's security context",
@@ -7572,7 +8278,8 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                   format: "int64",
                                                   type: "integer"
                                                 },
-                                                type: "array"
+                                                type: "array",
+                                                "x-kubernetes-list-type": "atomic"
                                               },
                                               sysctls: {
                                                 description: "Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported\nsysctls (by the container runtime) might fail to launch.\nNote that this field cannot be set when spec.os.name is windows.",
@@ -7591,7 +8298,8 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                   required: ["name", "value"],
                                                   type: "object"
                                                 },
-                                                type: "array"
+                                                type: "array",
+                                                "x-kubernetes-list-type": "atomic"
                                               }
                                             },
                                             type: "object"
@@ -7614,7 +8322,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                   type: "string"
                                                 },
                                                 operator: {
-                                                  description: "Operator represents a key's relationship to the value.\nValid operators are Exists and Equal. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.",
+                                                  description: "Operator represents a key's relationship to the value.\nValid operators are Exists, Equal, Lt, and Gt. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.\nLt and Gt perform numeric comparisons (requires feature gate TaintTolerationComparisonOperators).",
                                                   type: "string"
                                                 },
                                                 tolerationSeconds: {
@@ -7629,7 +8337,8 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                               },
                                               type: "object"
                                             },
-                                            type: "array"
+                                            type: "array",
+                                            "x-kubernetes-list-type": "atomic"
                                           }
                                         },
                                         type: "object"
@@ -7930,7 +8639,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                               "x-kubernetes-map-type": "atomic"
                                                             },
                                                             matchLabelKeys: {
-                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -7938,7 +8647,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                               "x-kubernetes-list-type": "atomic"
                                                             },
                                                             mismatchLabelKeys: {
-                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -8063,7 +8772,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                           "x-kubernetes-map-type": "atomic"
                                                         },
                                                         matchLabelKeys: {
-                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -8071,7 +8780,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                           "x-kubernetes-list-type": "atomic"
                                                         },
                                                         mismatchLabelKeys: {
-                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -8146,7 +8855,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                 description: "Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node, zone, etc. as some other pod(s)).",
                                                 properties: {
                                                   preferredDuringSchedulingIgnoredDuringExecution: {
-                                                    description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and adding\n\"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
+                                                    description: "The scheduler will prefer to schedule pods to nodes that satisfy\nthe anti-affinity expressions specified by this field, but it may choose\na node that violates one or more of the expressions. The node that is\nmost preferred is the one with the greatest sum of weights, i.e.\nfor each node that meets all of the scheduling requirements (resource\nrequest, requiredDuringScheduling anti-affinity expressions, etc.),\ncompute a sum by iterating through the elements of this field and subtracting\n\"weight\" from the sum if the node has pods which matches the corresponding podAffinityTerm; the\nnode(s) with the highest sum are the most preferred.",
                                                     items: {
                                                       description: "The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)",
                                                       properties: {
@@ -8196,7 +8905,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                               "x-kubernetes-map-type": "atomic"
                                                             },
                                                             matchLabelKeys: {
-                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -8204,7 +8913,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                               "x-kubernetes-list-type": "atomic"
                                                             },
                                                             mismatchLabelKeys: {
-                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                              description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                               items: {
                                                                 type: "string"
                                                               },
@@ -8329,7 +9038,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                           "x-kubernetes-map-type": "atomic"
                                                         },
                                                         matchLabelKeys: {
-                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key in (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both matchLabelKeys and labelSelector.\nAlso, matchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -8337,7 +9046,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                           "x-kubernetes-list-type": "atomic"
                                                         },
                                                         mismatchLabelKeys: {
-                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.\nThis is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).",
+                                                          description: "MismatchLabelKeys is a set of pod label keys to select which pods will\nbe taken into consideration. The keys are used to lookup values from the\nincoming pod labels, those key-value labels are merged with `labelSelector` as `key notin (value)`\nto select the group of existing pods which pods will be taken into consideration\nfor the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming\npod labels will be ignored. The default value is empty.\nThe same key is forbidden to exist in both mismatchLabelKeys and labelSelector.\nAlso, mismatchLabelKeys cannot be set when labelSelector isn't set.",
                                                           items: {
                                                             type: "string"
                                                           },
@@ -8425,7 +9134,9 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                               type: "object",
                                               "x-kubernetes-map-type": "atomic"
                                             },
-                                            type: "array"
+                                            type: "array",
+                                            "x-kubernetes-list-map-keys": ["name"],
+                                            "x-kubernetes-list-type": "map"
                                           },
                                           nodeSelector: {
                                             additionalProperties: {
@@ -8437,6 +9148,38 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                           priorityClassName: {
                                             description: "If specified, the pod's priorityClassName.",
                                             type: "string"
+                                          },
+                                          resources: {
+                                            description: "If specified, the pod's resource requirements.\nThese values override the global resource configuration flags.\nNote that when only specifying resource limits, ensure they are greater than or equal\nto the corresponding global resource requests configured via controller flags\n(--acme-http01-solver-resource-request-cpu, --acme-http01-solver-resource-request-memory).\nKubernetes will reject pod creation if limits are lower than requests, causing challenge failures.",
+                                            properties: {
+                                              limits: {
+                                                additionalProperties: {
+                                                  anyOf: [{
+                                                    type: "integer"
+                                                  }, {
+                                                    type: "string"
+                                                  }],
+                                                  pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                                  "x-kubernetes-int-or-string": true
+                                                },
+                                                description: "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                                type: "object"
+                                              },
+                                              requests: {
+                                                additionalProperties: {
+                                                  anyOf: [{
+                                                    type: "integer"
+                                                  }, {
+                                                    type: "string"
+                                                  }],
+                                                  pattern: "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                                                  "x-kubernetes-int-or-string": true
+                                                },
+                                                description: "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to the global values configured via controller flags. Requests cannot exceed Limits.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                                                type: "object"
+                                              }
+                                            },
+                                            type: "object"
                                           },
                                           securityContext: {
                                             description: "If specified, the pod's security context",
@@ -8507,7 +9250,8 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                   format: "int64",
                                                   type: "integer"
                                                 },
-                                                type: "array"
+                                                type: "array",
+                                                "x-kubernetes-list-type": "atomic"
                                               },
                                               sysctls: {
                                                 description: "Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported\nsysctls (by the container runtime) might fail to launch.\nNote that this field cannot be set when spec.os.name is windows.",
@@ -8526,7 +9270,8 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                   required: ["name", "value"],
                                                   type: "object"
                                                 },
-                                                type: "array"
+                                                type: "array",
+                                                "x-kubernetes-list-type": "atomic"
                                               }
                                             },
                                             type: "object"
@@ -8549,7 +9294,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                                   type: "string"
                                                 },
                                                 operator: {
-                                                  description: "Operator represents a key's relationship to the value.\nValid operators are Exists and Equal. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.",
+                                                  description: "Operator represents a key's relationship to the value.\nValid operators are Exists, Equal, Lt, and Gt. Defaults to Equal.\nExists is equivalent to wildcard for value, so that a pod can\ntolerate all taints of a particular category.\nLt and Gt perform numeric comparisons (requires feature gate TaintTolerationComparisonOperators).",
                                                   type: "string"
                                                 },
                                                 tolerationSeconds: {
@@ -8564,7 +9309,8 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                               },
                                               type: "object"
                                             },
-                                            type: "array"
+                                            type: "array",
+                                            "x-kubernetes-list-type": "atomic"
                                           }
                                         },
                                         type: "object"
@@ -8590,14 +9336,16 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               dnsZones: {
                                 description: "List of DNSZones that this solver will be used to solve.\nThe most specific DNS zone match specified here will take precedence\nover other DNS zone matches, so a solver specifying sys.example.com\nwill be selected over one specifying example.com for the domain\nwww.sys.example.com.\nIf multiple solvers match with the same dnsZones value, the solver\nwith the most matching labels in matchLabels will be selected.\nIf neither has more matches, the solver defined earlier in the list\nwill be selected.",
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               matchLabels: {
                                 additionalProperties: {
@@ -8608,11 +9356,16 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                               }
                             },
                             type: "object"
+                          },
+                          waitInsteadOfSelfCheck: {
+                            description: "WaitInsteadOfSelfCheck, if set, skips cert-manager's self-check and\ninstead waits this long after presentation before asking the ACME server\nto validate the challenge.\n\nThis is an advanced escape hatch for environments where cert-manager's\nself-check cannot succeed from its own network or DNS viewpoint even\nthough the ACME server can still validate successfully, for example due\nto split-horizon DNS or NAT hairpinning.\n\nA value of 0 skips the self-check and asks the ACME server to validate\nimmediately after presentation, relying on the ACME server's own\nvalidation retries (RFC 8555 section 8.2) to succeed once the challenge\nhas propagated. A negative duration is rejected.\nValue must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration,\nfor example `30s` or `2m`.",
+                            type: "string"
                           }
                         },
                         type: "object"
                       },
-                      type: "array"
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
                     }
                   },
                   required: ["privateKeySecretRef", "server"],
@@ -8626,21 +9379,24 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                       items: {
                         type: "string"
                       },
-                      type: "array"
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     issuingCertificateURLs: {
                       description: "IssuingCertificateURLs is a list of URLs which this issuer should embed into certificates\nit creates. See https://www.rfc-editor.org/rfc/rfc5280#section-4.2.2.1 for more details.\nAs an example, such a URL might be \"http://ca.domain.com/ca.crt\".",
                       items: {
                         type: "string"
                       },
-                      type: "array"
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     ocspServers: {
                       description: "The OCSP server list is an X.509 v3 extension that defines a list of\nURLs of OCSP responders. The OCSP responders can be queried for the\nrevocation status of an issued certificate. If not set, the\ncertificate will be issued with no OCSP servers set. For example, an\nOCSP server URL could be \"http://ocsp.int-x3.letsencrypt.org\".",
                       items: {
                         type: "string"
                       },
-                      type: "array"
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     secretName: {
                       description: "SecretName is the name of the secret used to sign Certificates issued\nby this Issuer.",
@@ -8658,7 +9414,8 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                       items: {
                         type: "string"
                       },
-                      type: "array"
+                      type: "array",
+                      "x-kubernetes-list-type": "atomic"
                     }
                   },
                   type: "object"
@@ -8697,6 +9454,53 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                             }
                           },
                           required: ["path", "roleId", "secretRef"],
+                          type: "object"
+                        },
+                        aws: {
+                          description: "AWS authenticates with Vault using AWS IAM authentication.\nThis allows authentication using IAM roles for service accounts (IRSA),\nEKS Pod Identity (PIA), or ambient credentials (EC2 instance profiles, ECS task role).",
+                          properties: {
+                            iamRoleArn: {
+                              description: "The ARN of the AWS IAM role to assume using the Kubernetes service account\ntoken. Required when using IRSA (serviceAccountRef is set).\nThis role must have a trust policy that allows the OIDC provider to assume it.",
+                              type: "string"
+                            },
+                            mountPath: {
+                              description: "The Vault mountPath here is the mount path to use when authenticating with\nVault. For example, setting a value to `/v1/auth/foo`, will use the path\n`/v1/auth/foo/login` to authenticate with Vault. If unspecified, the\ndefault value \"/v1/auth/aws\" will be used.",
+                              type: "string"
+                            },
+                            region: {
+                              description: "The AWS region to use for authentication. If not specified, the region\nwill be determined from AWS_REGION or AWS_DEFAULT_REGION environment\nvariables, falling back to \"us-east-1\" if not set.",
+                              type: "string"
+                            },
+                            role: {
+                              description: "A required field containing the Vault Role to assume when authenticating.",
+                              minLength: 1,
+                              type: "string"
+                            },
+                            serviceAccountRef: {
+                              description: "A reference to a service account that will be used to request a web identity\ntoken for IRSA (IAM Roles for Service Accounts) authentication.",
+                              properties: {
+                                audiences: {
+                                  description: "TokenAudiences is an optional list of extra audiences to include in the token passed to Vault.\nThe default audiences are always included in the token.",
+                                  items: {
+                                    type: "string"
+                                  },
+                                  type: "array",
+                                  "x-kubernetes-list-type": "atomic"
+                                },
+                                name: {
+                                  description: "Name of the ServiceAccount used to request a token.",
+                                  type: "string"
+                                }
+                              },
+                              required: ["name"],
+                              type: "object"
+                            },
+                            vaultHeaderValue: {
+                              description: "The Vault header value to include in the STS signing request.\nThis is used to prevent replay attacks.",
+                              type: "string"
+                            }
+                          },
+                          required: ["role"],
                           type: "object"
                         },
                         clientCertificate: {
@@ -8747,11 +9551,12 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                               description: "A reference to a service account that will be used to request a bound\ntoken (also known as \"projected token\"). Compared to using \"secretRef\",\nusing this field means that you don't rely on statically bound tokens. To\nuse this field, you must configure an RBAC rule to let cert-manager\nrequest a token.",
                               properties: {
                                 audiences: {
-                                  description: "TokenAudiences is an optional list of extra audiences to include in the token passed to Vault. The default token\nconsisting of the issuer's namespace and name is always included.",
+                                  description: "TokenAudiences is an optional list of extra audiences to include in the token passed to Vault.\nThe default audiences are always included in the token.",
                                   items: {
                                     type: "string"
                                   },
-                                  type: "array"
+                                  type: "array",
+                                  "x-kubernetes-list-type": "atomic"
                                 },
                                 name: {
                                   description: "Name of the ServiceAccount used to request a token.",
@@ -8844,19 +9649,23 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                     server: {
                       description: "Server is the connection address for the Vault server, e.g: \"https://vault.example.com:8200\".",
                       type: "string"
+                    },
+                    serverName: {
+                      description: "ServerName is used to verify the hostname on the returned certificates\nby the Vault server.",
+                      type: "string"
                     }
                   },
                   required: ["auth", "path", "server"],
                   type: "object"
                 },
                 venafi: {
-                  description: "Venafi configures this issuer to sign certificates using a Venafi TPP\nor Venafi Cloud policy zone.",
+                  description: "Venafi configures this issuer to sign certificates using a CyberArk Certificate Manager Self-Hosted\nor SaaS policy zone.",
                   properties: {
                     cloud: {
-                      description: "Cloud specifies the Venafi cloud configuration settings.\nOnly one of TPP or Cloud may be specified.",
+                      description: "Cloud specifies the CyberArk Certificate Manager SaaS configuration settings.\nOnly one of CyberArk Certificate Manager may be specified.",
                       properties: {
                         apiTokenSecretRef: {
-                          description: "APITokenSecretRef is a secret key selector for the Venafi Cloud API token.",
+                          description: "APITokenSecretRef is a secret key selector for the CyberArk Certificate Manager SaaS API token.",
                           properties: {
                             key: {
                               description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
@@ -8871,23 +9680,53 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                           type: "object"
                         },
                         url: {
-                          description: "URL is the base URL for Venafi Cloud.\nDefaults to \"https://api.venafi.cloud/v1\".",
+                          description: "URL is the base URL for CyberArk Certificate Manager SaaS.\nDefaults to \"https://api.venafi.cloud/\".",
                           type: "string"
                         }
                       },
                       required: ["apiTokenSecretRef"],
                       type: "object"
                     },
+                    ngts: {
+                      description: "NGTS specifies Palo Alto Networks Next Generation Trust Services (NGTS) configuration\nusing OAuth 2.0 Client Credentials. Only one of tpp, cloud, or ngts may be specified.",
+                      properties: {
+                        credentialsRef: {
+                          description: "CredentialsRef is a reference to a Kubernetes Secret containing the OAuth 2.0\nClient ID and Client Secret. The secret must contain the keys 'client-id' and\n'client-secret'.",
+                          properties: {
+                            name: {
+                              description: "Name of the resource being referred to.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                              type: "string"
+                            }
+                          },
+                          required: ["name"],
+                          type: "object"
+                        },
+                        tokenEndpoint: {
+                          description: "TokenEndpoint is the OAuth 2.0 token endpoint URL used to obtain access tokens,\nfor example \"https://auth.apps.paloaltonetworks.com/oauth2/access_token\".\nDefaults to \"https://auth.apps.paloaltonetworks.com/oauth2/access_token\" if not set.",
+                          type: "string"
+                        },
+                        tsgID: {
+                          description: "TSGID is the Tenant Service Group ID used to scope the OAuth 2.0 access token,\nfor example \"1234567890\". The tsg_id: prefix is added automatically.\nThis field is required.",
+                          type: "string"
+                        },
+                        url: {
+                          description: "URL is the base URL for the NGTS API endpoint.\nDefaults to \"https://api.strata.paloaltonetworks.com/ngts\" if not set.",
+                          type: "string"
+                        }
+                      },
+                      required: ["credentialsRef", "tsgID"],
+                      type: "object"
+                    },
                     tpp: {
-                      description: "TPP specifies Trust Protection Platform configuration settings.\nOnly one of TPP or Cloud may be specified.",
+                      description: "TPP specifies CyberArk Certificate Manager Self-Hosted configuration settings.\nOnly one of CyberArk Certificate Manager may be specified.",
                       properties: {
                         caBundle: {
-                          description: "Base64-encoded bundle of PEM CAs which will be used to validate the certificate\nchain presented by the TPP server. Only used if using HTTPS; ignored for HTTP.\nIf undefined, the certificate bundle in the cert-manager controller container\nis used to validate the chain.",
+                          description: "Base64-encoded bundle of PEM CAs which will be used to validate the certificate\nchain presented by the CyberArk Certificate Manager Self-Hosted server. Only used if using HTTPS; ignored for HTTP.\nIf undefined, the certificate bundle in the cert-manager controller container\nis used to validate the chain.",
                           format: "byte",
                           type: "string"
                         },
                         caBundleSecretRef: {
-                          description: "Reference to a Secret containing a base64-encoded bundle of PEM CAs\nwhich will be used to validate the certificate chain presented by the TPP server.\nOnly used if using HTTPS; ignored for HTTP. Mutually exclusive with CABundle.\nIf neither CABundle nor CABundleSecretRef is defined, the certificate bundle in\nthe cert-manager controller container is used to validate the TLS connection.",
+                          description: "Reference to a Secret containing a base64-encoded bundle of PEM CAs\nwhich will be used to validate the certificate chain presented by the CyberArk Certificate Manager Self-Hosted server.\nOnly used if using HTTPS; ignored for HTTP. Mutually exclusive with CABundle.\nIf neither CABundle nor CABundleSecretRef is defined, the certificate bundle in\nthe cert-manager controller container is used to validate the TLS connection.",
                           properties: {
                             key: {
                               description: "The key of the entry in the Secret resource's `data` field to be used.\nSome instances of this field may be defaulted, in others it may be\nrequired.",
@@ -8902,7 +9741,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                           type: "object"
                         },
                         credentialsRef: {
-                          description: "CredentialsRef is a reference to a Secret containing the Venafi TPP API credentials.\nThe secret must contain the key 'access-token' for the Access Token Authentication,\nor two keys, 'username' and 'password' for the API Keys Authentication.",
+                          description: "CredentialsRef is a reference to a Secret containing the CyberArk Certificate Manager Self-Hosted API credentials.\nThe secret must contain the key 'access-token' for the Access Token Authentication,\nor two keys, 'username' and 'password' for the API Keys Authentication.",
                           properties: {
                             name: {
                               description: "Name of the resource being referred to.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
@@ -8913,7 +9752,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                           type: "object"
                         },
                         url: {
-                          description: "URL is the base URL for the vedsdk endpoint of the Venafi TPP instance,\nfor example: \"https://tpp.example.com/vedsdk\".",
+                          description: "URL is the base URL for the vedsdk endpoint of the CyberArk Certificate Manager Self-Hosted instance,\nfor example: \"https://tpp.example.com/vedsdk\".",
                           type: "string"
                         }
                       },
@@ -8921,12 +9760,16 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
                       type: "object"
                     },
                     zone: {
-                      description: "Zone is the Venafi Policy Zone to use for this issuer.\nAll requests made to the Venafi platform will be restricted by the named\nzone policy.\nThis field is required.",
+                      description: "Zone is the Certificate Manager Policy Zone to use for this issuer.\nAll requests made to the Certificate Manager platform will be restricted by the named\nzone policy.\nThis field is required.",
                       type: "string"
                     }
                   },
                   required: ["zone"],
-                  type: "object"
+                  type: "object",
+                  "x-kubernetes-validations": [{
+                    message: "exactly one of tpp, cloud, or ngts must be configured",
+                    rule: "(has(self.tpp) ? 1 : 0) + (has(self.cloud) ? 1 : 0) + (has(self.ngts) ? 1 : 0) == 1"
+                  }]
                 }
               },
               type: "object"
@@ -9008,220 +9851,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
     }]
   }
 };
-export const CustomResourceDefinition_OrdersAcmeCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
-  apiVersion: "apiextensions.k8s.io/v1",
-  kind: "CustomResourceDefinition",
-  metadata: {
-    annotations: {
-      "helm.sh/resource-policy": "keep"
-    },
-    labels: {
-      app: "cert-manager",
-      "app.kubernetes.io/component": "crds",
-      "app.kubernetes.io/instance": "cert-manager",
-      "app.kubernetes.io/managed-by": "Helm",
-      "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
-    },
-    name: "orders.acme.cert-manager.io"
-  },
-  spec: {
-    group: "acme.cert-manager.io",
-    names: {
-      categories: ["cert-manager", "cert-manager-acme"],
-      kind: "Order",
-      listKind: "OrderList",
-      plural: "orders",
-      singular: "order"
-    },
-    scope: "Namespaced",
-    versions: [{
-      additionalPrinterColumns: [{
-        jsonPath: ".status.state",
-        name: "State",
-        type: "string"
-      }, {
-        jsonPath: ".spec.issuerRef.name",
-        name: "Issuer",
-        priority: 1,
-        type: "string"
-      }, {
-        jsonPath: ".status.reason",
-        name: "Reason",
-        priority: 1,
-        type: "string"
-      }, {
-        description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-        jsonPath: ".metadata.creationTimestamp",
-        name: "Age",
-        type: "date"
-      }],
-      name: "v1",
-      schema: {
-        openAPIV3Schema: {
-          description: "Order is a type to represent an Order with an ACME server",
-          properties: {
-            apiVersion: {
-              description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-              type: "string"
-            },
-            kind: {
-              description: "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-              type: "string"
-            },
-            metadata: {
-              type: "object"
-            },
-            spec: {
-              properties: {
-                commonName: {
-                  description: "CommonName is the common name as specified on the DER encoded CSR.\nIf specified, this value must also be present in `dnsNames` or `ipAddresses`.\nThis field must match the corresponding field on the DER encoded CSR.",
-                  type: "string"
-                },
-                dnsNames: {
-                  description: "DNSNames is a list of DNS names that should be included as part of the Order\nvalidation process.\nThis field must match the corresponding field on the DER encoded CSR.",
-                  items: {
-                    type: "string"
-                  },
-                  type: "array"
-                },
-                duration: {
-                  description: "Duration is the duration for the not after date for the requested certificate.\nthis is set on order creation as pe the ACME spec.",
-                  type: "string"
-                },
-                ipAddresses: {
-                  description: "IPAddresses is a list of IP addresses that should be included as part of the Order\nvalidation process.\nThis field must match the corresponding field on the DER encoded CSR.",
-                  items: {
-                    type: "string"
-                  },
-                  type: "array"
-                },
-                issuerRef: {
-                  description: "IssuerRef references a properly configured ACME-type Issuer which should\nbe used to create this Order.\nIf the Issuer does not exist, processing will be retried.\nIf the Issuer is not an 'ACME' Issuer, an error will be returned and the\nOrder will be marked as failed.",
-                  properties: {
-                    group: {
-                      description: "Group of the resource being referred to.",
-                      type: "string"
-                    },
-                    kind: {
-                      description: "Kind of the resource being referred to.",
-                      type: "string"
-                    },
-                    name: {
-                      description: "Name of the resource being referred to.",
-                      type: "string"
-                    }
-                  },
-                  required: ["name"],
-                  type: "object"
-                },
-                request: {
-                  description: "Certificate signing request bytes in DER encoding.\nThis will be used when finalizing the order.\nThis field must be set on the order.",
-                  format: "byte",
-                  type: "string"
-                }
-              },
-              required: ["issuerRef", "request"],
-              type: "object"
-            },
-            status: {
-              properties: {
-                authorizations: {
-                  description: "Authorizations contains data returned from the ACME server on what\nauthorizations must be completed in order to validate the DNS names\nspecified on the Order.",
-                  items: {
-                    description: "ACMEAuthorization contains data returned from the ACME server on an\nauthorization that must be completed in order validate a DNS name on an ACME\nOrder resource.",
-                    properties: {
-                      challenges: {
-                        description: "Challenges specifies the challenge types offered by the ACME server.\nOne of these challenge types will be selected when validating the DNS\nname and an appropriate Challenge resource will be created to perform\nthe ACME challenge process.",
-                        items: {
-                          description: "Challenge specifies a challenge offered by the ACME server for an Order.\nAn appropriate Challenge resource can be created to perform the ACME\nchallenge process.",
-                          properties: {
-                            token: {
-                              description: "Token is the token that must be presented for this challenge.\nThis is used to compute the 'key' that must also be presented.",
-                              type: "string"
-                            },
-                            type: {
-                              description: "Type is the type of challenge being offered, e.g. 'http-01', 'dns-01',\n'tls-sni-01', etc.\nThis is the raw value retrieved from the ACME server.\nOnly 'http-01' and 'dns-01' are supported by cert-manager, other values\nwill be ignored.",
-                              type: "string"
-                            },
-                            url: {
-                              description: "URL is the URL of this challenge. It can be used to retrieve additional\nmetadata about the Challenge from the ACME server.",
-                              type: "string"
-                            }
-                          },
-                          required: ["token", "type", "url"],
-                          type: "object"
-                        },
-                        type: "array"
-                      },
-                      identifier: {
-                        description: "Identifier is the DNS name to be validated as part of this authorization",
-                        type: "string"
-                      },
-                      initialState: {
-                        description: "InitialState is the initial state of the ACME authorization when first\nfetched from the ACME server.\nIf an Authorization is already 'valid', the Order controller will not\ncreate a Challenge resource for the authorization. This will occur when\nworking with an ACME server that enables 'authz reuse' (such as Let's\nEncrypt's production endpoint).\nIf not set and 'identifier' is set, the state is assumed to be pending\nand a Challenge will be created.",
-                        enum: ["valid", "ready", "pending", "processing", "invalid", "expired", "errored"],
-                        type: "string"
-                      },
-                      url: {
-                        description: "URL is the URL of the Authorization that must be completed",
-                        type: "string"
-                      },
-                      wildcard: {
-                        description: "Wildcard will be true if this authorization is for a wildcard DNS name.\nIf this is true, the identifier will be the *non-wildcard* version of\nthe DNS name.\nFor example, if '*.example.com' is the DNS name being validated, this\nfield will be 'true' and the 'identifier' field will be 'example.com'.",
-                        type: "boolean"
-                      }
-                    },
-                    required: ["url"],
-                    type: "object"
-                  },
-                  type: "array"
-                },
-                certificate: {
-                  description: "Certificate is a copy of the PEM encoded certificate for this Order.\nThis field will be populated after the order has been successfully\nfinalized with the ACME server, and the order has transitioned to the\n'valid' state.",
-                  format: "byte",
-                  type: "string"
-                },
-                failureTime: {
-                  description: "FailureTime stores the time that this order failed.\nThis is used to influence garbage collection and back-off.",
-                  format: "date-time",
-                  type: "string"
-                },
-                finalizeURL: {
-                  description: "FinalizeURL of the Order.\nThis is used to obtain certificates for this order once it has been completed.",
-                  type: "string"
-                },
-                reason: {
-                  description: "Reason optionally provides more information about a why the order is in\nthe current state.",
-                  type: "string"
-                },
-                state: {
-                  description: "State contains the current state of this Order resource.\nStates 'success' and 'expired' are 'final'",
-                  enum: ["valid", "ready", "pending", "processing", "invalid", "expired", "errored"],
-                  type: "string"
-                },
-                url: {
-                  description: "URL of the Order.\nThis will initially be empty when the resource is first created.\nThe Order controller will populate this field when the Order is first processed.\nThis field will be immutable after it is initially set.",
-                  type: "string"
-                }
-              },
-              type: "object"
-            }
-          },
-          required: ["metadata", "spec"],
-          type: "object"
-        }
-      },
-      served: true,
-      storage: true,
-      subresources: {
-        status: {}
-      }
-    }]
-  }
-};
-export const ClusterRole_CertManagerCainjector: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerCainjector: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9231,8 +9861,8 @@ export const ClusterRole_CertManagerCainjector: RbacAuthorizationK8sIoV1ClusterR
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cainjector",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-cainjector"
   },
@@ -9262,7 +9892,7 @@ export const ClusterRole_CertManagerCainjector: RbacAuthorizationK8sIoV1ClusterR
     verbs: ["get", "list", "watch", "update", "patch"]
   }]
 };
-export const ClusterRole_CertManagerControllerIssuers: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerIssuers: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9272,8 +9902,8 @@ export const ClusterRole_CertManagerControllerIssuers: RbacAuthorizationK8sIoV1C
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-issuers"
   },
@@ -9295,7 +9925,7 @@ export const ClusterRole_CertManagerControllerIssuers: RbacAuthorizationK8sIoV1C
     verbs: ["create", "patch"]
   }]
 };
-export const ClusterRole_CertManagerControllerClusterissuers: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerClusterissuers: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9305,8 +9935,8 @@ export const ClusterRole_CertManagerControllerClusterissuers: RbacAuthorizationK
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-clusterissuers"
   },
@@ -9328,7 +9958,7 @@ export const ClusterRole_CertManagerControllerClusterissuers: RbacAuthorizationK
     verbs: ["create", "patch"]
   }]
 };
-export const ClusterRole_CertManagerControllerCertificates: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerCertificates: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9338,8 +9968,8 @@ export const ClusterRole_CertManagerControllerCertificates: RbacAuthorizationK8s
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-certificates"
   },
@@ -9369,7 +9999,7 @@ export const ClusterRole_CertManagerControllerCertificates: RbacAuthorizationK8s
     verbs: ["create", "patch"]
   }]
 };
-export const ClusterRole_CertManagerControllerOrders: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerOrders: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9379,8 +10009,8 @@ export const ClusterRole_CertManagerControllerOrders: RbacAuthorizationK8sIoV1Cl
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-orders"
   },
@@ -9405,6 +10035,10 @@ export const ClusterRole_CertManagerControllerOrders: RbacAuthorizationK8sIoV1Cl
     resources: ["orders/finalizers"],
     verbs: ["update"]
   }, {
+    apiGroups: ["cert-manager.io"],
+    resources: ["clusterissuers/finalizers", "issuers/finalizers"],
+    verbs: ["update"]
+  }, {
     apiGroups: [""],
     resources: ["secrets"],
     verbs: ["get", "list", "watch"]
@@ -9414,7 +10048,7 @@ export const ClusterRole_CertManagerControllerOrders: RbacAuthorizationK8sIoV1Cl
     verbs: ["create", "patch"]
   }]
 };
-export const ClusterRole_CertManagerControllerChallenges: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerChallenges: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9424,8 +10058,8 @@ export const ClusterRole_CertManagerControllerChallenges: RbacAuthorizationK8sIo
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-challenges"
   },
@@ -9475,7 +10109,7 @@ export const ClusterRole_CertManagerControllerChallenges: RbacAuthorizationK8sIo
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_CertManagerControllerIngressShim: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerIngressShim: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9485,8 +10119,8 @@ export const ClusterRole_CertManagerControllerIngressShim: RbacAuthorizationK8sI
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-ingress-shim"
   },
@@ -9508,11 +10142,11 @@ export const ClusterRole_CertManagerControllerIngressShim: RbacAuthorizationK8sI
     verbs: ["update"]
   }, {
     apiGroups: ["gateway.networking.k8s.io"],
-    resources: ["gateways", "httproutes"],
+    resources: ["gateways", "httproutes", "listenersets"],
     verbs: ["get", "list", "watch"]
   }, {
     apiGroups: ["gateway.networking.k8s.io"],
-    resources: ["gateways/finalizers", "httproutes/finalizers"],
+    resources: ["gateways/finalizers", "httproutes/finalizers", "listenersets/finalizers"],
     verbs: ["update"]
   }, {
     apiGroups: [""],
@@ -9520,7 +10154,7 @@ export const ClusterRole_CertManagerControllerIngressShim: RbacAuthorizationK8sI
     verbs: ["create", "patch"]
   }]
 };
-export const ClusterRole_CertManagerClusterView: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerClusterView: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9530,8 +10164,8 @@ export const ClusterRole_CertManagerClusterView: RbacAuthorizationK8sIoV1Cluster
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0",
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1",
       "rbac.authorization.k8s.io/aggregate-to-cluster-reader": "true"
     },
     name: "cert-manager-cluster-view"
@@ -9542,7 +10176,7 @@ export const ClusterRole_CertManagerClusterView: RbacAuthorizationK8sIoV1Cluster
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_CertManagerView: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerView: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9552,8 +10186,8 @@ export const ClusterRole_CertManagerView: RbacAuthorizationK8sIoV1ClusterRole = 
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0",
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1",
       "rbac.authorization.k8s.io/aggregate-to-admin": "true",
       "rbac.authorization.k8s.io/aggregate-to-cluster-reader": "true",
       "rbac.authorization.k8s.io/aggregate-to-edit": "true",
@@ -9571,7 +10205,7 @@ export const ClusterRole_CertManagerView: RbacAuthorizationK8sIoV1ClusterRole = 
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_CertManagerEdit: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerEdit: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9581,8 +10215,8 @@ export const ClusterRole_CertManagerEdit: RbacAuthorizationK8sIoV1ClusterRole = 
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0",
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1",
       "rbac.authorization.k8s.io/aggregate-to-admin": "true",
       "rbac.authorization.k8s.io/aggregate-to-edit": "true"
     },
@@ -9598,11 +10232,15 @@ export const ClusterRole_CertManagerEdit: RbacAuthorizationK8sIoV1ClusterRole = 
     verbs: ["update"]
   }, {
     apiGroups: ["acme.cert-manager.io"],
-    resources: ["challenges", "orders"],
-    verbs: ["create", "delete", "deletecollection", "patch", "update"]
+    resources: ["challenges"],
+    verbs: ["delete", "deletecollection", "patch", "update"]
+  }, {
+    apiGroups: ["acme.cert-manager.io"],
+    resources: ["orders"],
+    verbs: ["delete", "deletecollection"]
   }]
 };
-export const ClusterRole_CertManagerControllerApproveCertManagerIo: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerApproveCertManagerIo: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9612,8 +10250,8 @@ export const ClusterRole_CertManagerControllerApproveCertManagerIo: RbacAuthoriz
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-approve:cert-manager-io"
   },
@@ -9624,7 +10262,7 @@ export const ClusterRole_CertManagerControllerApproveCertManagerIo: RbacAuthoriz
     verbs: ["approve"]
   }]
 };
-export const ClusterRole_CertManagerControllerCertificatesigningrequests: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerCertificatesigningrequests: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9634,8 +10272,8 @@ export const ClusterRole_CertManagerControllerCertificatesigningrequests: RbacAu
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-certificatesigningrequests"
   },
@@ -9658,7 +10296,7 @@ export const ClusterRole_CertManagerControllerCertificatesigningrequests: RbacAu
     verbs: ["create"]
   }]
 };
-export const ClusterRole_CertManagerWebhookSubjectaccessreviews: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerWebhookSubjectaccessreviews: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9668,8 +10306,8 @@ export const ClusterRole_CertManagerWebhookSubjectaccessreviews: RbacAuthorizati
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "webhook",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-webhook:subjectaccessreviews"
   },
@@ -9679,7 +10317,7 @@ export const ClusterRole_CertManagerWebhookSubjectaccessreviews: RbacAuthorizati
     verbs: ["create"]
   }]
 };
-export const ClusterRoleBinding_CertManagerCainjector: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerCainjector: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9689,8 +10327,8 @@ export const ClusterRoleBinding_CertManagerCainjector: RbacAuthorizationK8sIoV1C
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cainjector",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-cainjector"
   },
@@ -9705,7 +10343,7 @@ export const ClusterRoleBinding_CertManagerCainjector: RbacAuthorizationK8sIoV1C
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerIssuers: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerIssuers: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9715,8 +10353,8 @@ export const ClusterRoleBinding_CertManagerControllerIssuers: RbacAuthorizationK
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-issuers"
   },
@@ -9731,7 +10369,7 @@ export const ClusterRoleBinding_CertManagerControllerIssuers: RbacAuthorizationK
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerClusterissuers: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerClusterissuers: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9741,8 +10379,8 @@ export const ClusterRoleBinding_CertManagerControllerClusterissuers: RbacAuthori
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-clusterissuers"
   },
@@ -9757,7 +10395,7 @@ export const ClusterRoleBinding_CertManagerControllerClusterissuers: RbacAuthori
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerCertificates: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerCertificates: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9767,8 +10405,8 @@ export const ClusterRoleBinding_CertManagerControllerCertificates: RbacAuthoriza
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-certificates"
   },
@@ -9783,7 +10421,7 @@ export const ClusterRoleBinding_CertManagerControllerCertificates: RbacAuthoriza
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerOrders: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerOrders: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9793,8 +10431,8 @@ export const ClusterRoleBinding_CertManagerControllerOrders: RbacAuthorizationK8
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-orders"
   },
@@ -9809,7 +10447,7 @@ export const ClusterRoleBinding_CertManagerControllerOrders: RbacAuthorizationK8
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerChallenges: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerChallenges: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9819,8 +10457,8 @@ export const ClusterRoleBinding_CertManagerControllerChallenges: RbacAuthorizati
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-challenges"
   },
@@ -9835,7 +10473,7 @@ export const ClusterRoleBinding_CertManagerControllerChallenges: RbacAuthorizati
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerIngressShim: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerIngressShim: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9845,8 +10483,8 @@ export const ClusterRoleBinding_CertManagerControllerIngressShim: RbacAuthorizat
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-ingress-shim"
   },
@@ -9861,7 +10499,7 @@ export const ClusterRoleBinding_CertManagerControllerIngressShim: RbacAuthorizat
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerApproveCertManagerIo: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerApproveCertManagerIo: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9871,8 +10509,8 @@ export const ClusterRoleBinding_CertManagerControllerApproveCertManagerIo: RbacA
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-approve:cert-manager-io"
   },
@@ -9887,7 +10525,7 @@ export const ClusterRoleBinding_CertManagerControllerApproveCertManagerIo: RbacA
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerCertificatesigningrequests: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerCertificatesigningrequests: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9897,8 +10535,8 @@ export const ClusterRoleBinding_CertManagerControllerCertificatesigningrequests:
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-controller-certificatesigningrequests"
   },
@@ -9913,7 +10551,7 @@ export const ClusterRoleBinding_CertManagerControllerCertificatesigningrequests:
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerWebhookSubjectaccessreviews: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerWebhookSubjectaccessreviews: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9923,8 +10561,8 @@ export const ClusterRoleBinding_CertManagerWebhookSubjectaccessreviews: RbacAuth
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "webhook",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-webhook:subjectaccessreviews"
   },
@@ -9939,7 +10577,7 @@ export const ClusterRoleBinding_CertManagerWebhookSubjectaccessreviews: RbacAuth
     namespace: "cert-manager"
   }]
 };
-export const Role_CertManagerCainjectorLeaderelection: RbacAuthorizationK8sIoV1Role = {
+export const Role_CertManagerCainjectorLeaderelection: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "Role",
   metadata: {
@@ -9949,8 +10587,8 @@ export const Role_CertManagerCainjectorLeaderelection: RbacAuthorizationK8sIoV1R
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cainjector",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-cainjector:leaderelection",
     namespace: "cert-manager"
@@ -9966,7 +10604,7 @@ export const Role_CertManagerCainjectorLeaderelection: RbacAuthorizationK8sIoV1R
     verbs: ["create"]
   }]
 };
-export const Role_CertManagerLeaderelection: RbacAuthorizationK8sIoV1Role = {
+export const Role_CertManagerLeaderelection: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "Role",
   metadata: {
@@ -9976,8 +10614,8 @@ export const Role_CertManagerLeaderelection: RbacAuthorizationK8sIoV1Role = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager:leaderelection",
     namespace: "cert-manager"
@@ -9993,30 +10631,7 @@ export const Role_CertManagerLeaderelection: RbacAuthorizationK8sIoV1Role = {
     verbs: ["create"]
   }]
 };
-export const Role_CertManagerTokenrequest: RbacAuthorizationK8sIoV1Role = {
-  apiVersion: "rbac.authorization.k8s.io/v1",
-  kind: "Role",
-  metadata: {
-    labels: {
-      app: "cert-manager",
-      "app.kubernetes.io/component": "controller",
-      "app.kubernetes.io/instance": "cert-manager",
-      "app.kubernetes.io/managed-by": "Helm",
-      "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
-    },
-    name: "cert-manager-tokenrequest",
-    namespace: "cert-manager"
-  },
-  rules: [{
-    apiGroups: [""],
-    resourceNames: ["cert-manager"],
-    resources: ["serviceaccounts/token"],
-    verbs: ["create"]
-  }]
-};
-export const Role_CertManagerWebhookDynamicServing: RbacAuthorizationK8sIoV1Role = {
+export const Role_CertManagerWebhookDynamicServing: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "Role",
   metadata: {
@@ -10026,8 +10641,8 @@ export const Role_CertManagerWebhookDynamicServing: RbacAuthorizationK8sIoV1Role
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "webhook",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-webhook:dynamic-serving",
     namespace: "cert-manager"
@@ -10043,7 +10658,7 @@ export const Role_CertManagerWebhookDynamicServing: RbacAuthorizationK8sIoV1Role
     verbs: ["create"]
   }]
 };
-export const RoleBinding_CertManagerCainjectorLeaderelection: RbacAuthorizationK8sIoV1RoleBinding = {
+export const RoleBinding_CertManagerCainjectorLeaderelection: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "RoleBinding",
   metadata: {
@@ -10053,8 +10668,8 @@ export const RoleBinding_CertManagerCainjectorLeaderelection: RbacAuthorizationK
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cainjector",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-cainjector:leaderelection",
     namespace: "cert-manager"
@@ -10070,7 +10685,7 @@ export const RoleBinding_CertManagerCainjectorLeaderelection: RbacAuthorizationK
     namespace: "cert-manager"
   }]
 };
-export const RoleBinding_CertManagerLeaderelection: RbacAuthorizationK8sIoV1RoleBinding = {
+export const RoleBinding_CertManagerLeaderelection: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "RoleBinding",
   metadata: {
@@ -10080,8 +10695,8 @@ export const RoleBinding_CertManagerLeaderelection: RbacAuthorizationK8sIoV1Role
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager:leaderelection",
     namespace: "cert-manager"
@@ -10097,34 +10712,7 @@ export const RoleBinding_CertManagerLeaderelection: RbacAuthorizationK8sIoV1Role
     namespace: "cert-manager"
   }]
 };
-export const RoleBinding_CertManagerCertManagerTokenrequest: RbacAuthorizationK8sIoV1RoleBinding = {
-  apiVersion: "rbac.authorization.k8s.io/v1",
-  kind: "RoleBinding",
-  metadata: {
-    labels: {
-      app: "cert-manager",
-      "app.kubernetes.io/component": "controller",
-      "app.kubernetes.io/instance": "cert-manager",
-      "app.kubernetes.io/managed-by": "Helm",
-      "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
-    },
-    name: "cert-manager-cert-manager-tokenrequest",
-    namespace: "cert-manager"
-  },
-  roleRef: {
-    apiGroup: "rbac.authorization.k8s.io",
-    kind: "Role",
-    name: "cert-manager-tokenrequest"
-  },
-  subjects: [{
-    kind: "ServiceAccount",
-    name: "cert-manager",
-    namespace: "cert-manager"
-  }]
-};
-export const RoleBinding_CertManagerWebhookDynamicServing: RbacAuthorizationK8sIoV1RoleBinding = {
+export const RoleBinding_CertManagerWebhookDynamicServing: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "RoleBinding",
   metadata: {
@@ -10134,8 +10722,8 @@ export const RoleBinding_CertManagerWebhookDynamicServing: RbacAuthorizationK8sI
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "webhook",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-webhook:dynamic-serving",
     namespace: "cert-manager"
@@ -10151,7 +10739,7 @@ export const RoleBinding_CertManagerWebhookDynamicServing: RbacAuthorizationK8sI
     namespace: "cert-manager"
   }]
 };
-export const Service_CertManagerCainjector: Service = {
+export const Service_CertManagerCainjector: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -10161,8 +10749,8 @@ export const Service_CertManagerCainjector: Service = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cainjector",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-cainjector",
     namespace: "cert-manager"
@@ -10181,7 +10769,7 @@ export const Service_CertManagerCainjector: Service = {
     type: "ClusterIP"
   }
 };
-export const Service_CertManager: Service = {
+export const Service_CertManager: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -10191,18 +10779,17 @@ export const Service_CertManager: Service = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager",
     namespace: "cert-manager"
   },
   spec: {
     ports: [{
-      name: "tcp-prometheus-servicemonitor",
+      name: "http-metrics",
       port: 9402,
-      protocol: "TCP",
-      targetPort: 9402
+      protocol: "TCP"
     }],
     selector: {
       "app.kubernetes.io/component": "controller",
@@ -10212,7 +10799,7 @@ export const Service_CertManager: Service = {
     type: "ClusterIP"
   }
 };
-export const Service_CertManagerWebhook: Service = {
+export const Service_CertManagerWebhook: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -10222,8 +10809,8 @@ export const Service_CertManagerWebhook: Service = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "webhook",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-webhook",
     namespace: "cert-manager"
@@ -10248,7 +10835,7 @@ export const Service_CertManagerWebhook: Service = {
     type: "ClusterIP"
   }
 };
-export const Deployment_CertManagerCainjector: AppsV1Deployment = {
+export const Deployment_CertManagerCainjector: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -10258,8 +10845,8 @@ export const Deployment_CertManagerCainjector: AppsV1Deployment = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cainjector",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-cainjector",
     namespace: "cert-manager"
@@ -10286,8 +10873,8 @@ export const Deployment_CertManagerCainjector: AppsV1Deployment = {
           "app.kubernetes.io/instance": "cert-manager",
           "app.kubernetes.io/managed-by": "Helm",
           "app.kubernetes.io/name": "cainjector",
-          "app.kubernetes.io/version": "v1.17.0",
-          "helm.sh/chart": "cert-manager-v1.17.0"
+          "app.kubernetes.io/version": "v1.21.1",
+          "helm.sh/chart": "cert-manager-v1.21.1"
         }
       },
       spec: {
@@ -10301,7 +10888,7 @@ export const Deployment_CertManagerCainjector: AppsV1Deployment = {
               }
             }
           }],
-          image: "quay.io/jetstack/cert-manager-cainjector:v1.17.0",
+          image: "quay.io/jetstack/cert-manager-cainjector:v1.21.1",
           imagePullPolicy: "IfNotPresent",
           name: "cert-manager-cainjector",
           ports: [{
@@ -10332,7 +10919,7 @@ export const Deployment_CertManagerCainjector: AppsV1Deployment = {
     }
   }
 };
-export const Deployment_CertManager: AppsV1Deployment = {
+export const Deployment_CertManager: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -10342,8 +10929,8 @@ export const Deployment_CertManager: AppsV1Deployment = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "cert-manager",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager",
     namespace: "cert-manager"
@@ -10370,13 +10957,13 @@ export const Deployment_CertManager: AppsV1Deployment = {
           "app.kubernetes.io/instance": "cert-manager",
           "app.kubernetes.io/managed-by": "Helm",
           "app.kubernetes.io/name": "cert-manager",
-          "app.kubernetes.io/version": "v1.17.0",
-          "helm.sh/chart": "cert-manager-v1.17.0"
+          "app.kubernetes.io/version": "v1.21.1",
+          "helm.sh/chart": "cert-manager-v1.21.1"
         }
       },
       spec: {
         containers: [{
-          args: ["--v=2", "--cluster-resource-namespace=$(POD_NAMESPACE)", "--leader-election-namespace=cert-manager", "--acme-http01-solver-image=quay.io/jetstack/cert-manager-acmesolver:v1.17.0", "--max-concurrent-challenges=60"],
+          args: ["--v=2", "--cluster-resource-namespace=$(POD_NAMESPACE)", "--leader-election-namespace=cert-manager", "--acme-http01-solver-image=quay.io/jetstack/cert-manager-acmesolver:v1.21.1", "--max-concurrent-challenges=60"],
           env: [{
             name: "POD_NAMESPACE",
             valueFrom: {
@@ -10385,7 +10972,7 @@ export const Deployment_CertManager: AppsV1Deployment = {
               }
             }
           }],
-          image: "quay.io/jetstack/cert-manager-controller:v1.17.0",
+          image: "quay.io/jetstack/cert-manager-controller:v1.21.1",
           imagePullPolicy: "IfNotPresent",
           livenessProbe: {
             failureThreshold: 8,
@@ -10432,7 +11019,7 @@ export const Deployment_CertManager: AppsV1Deployment = {
     }
   }
 };
-export const Deployment_CertManagerWebhook: AppsV1Deployment = {
+export const Deployment_CertManagerWebhook: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -10442,8 +11029,8 @@ export const Deployment_CertManagerWebhook: AppsV1Deployment = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "webhook",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-webhook",
     namespace: "cert-manager"
@@ -10470,8 +11057,8 @@ export const Deployment_CertManagerWebhook: AppsV1Deployment = {
           "app.kubernetes.io/instance": "cert-manager",
           "app.kubernetes.io/managed-by": "Helm",
           "app.kubernetes.io/name": "webhook",
-          "app.kubernetes.io/version": "v1.17.0",
-          "helm.sh/chart": "cert-manager-v1.17.0"
+          "app.kubernetes.io/version": "v1.21.1",
+          "helm.sh/chart": "cert-manager-v1.21.1"
         }
       },
       spec: {
@@ -10485,13 +11072,13 @@ export const Deployment_CertManagerWebhook: AppsV1Deployment = {
               }
             }
           }],
-          image: "quay.io/jetstack/cert-manager-webhook:v1.17.0",
+          image: "quay.io/jetstack/cert-manager-webhook:v1.21.1",
           imagePullPolicy: "IfNotPresent",
           livenessProbe: {
             failureThreshold: 3,
             httpGet: {
               path: "/livez",
-              port: 6080,
+              port: "healthcheck",
               scheme: "HTTP"
             },
             initialDelaySeconds: 60,
@@ -10517,7 +11104,7 @@ export const Deployment_CertManagerWebhook: AppsV1Deployment = {
             failureThreshold: 3,
             httpGet: {
               path: "/healthz",
-              port: 6080,
+              port: "healthcheck",
               scheme: "HTTP"
             },
             initialDelaySeconds: 5,
@@ -10548,7 +11135,7 @@ export const Deployment_CertManagerWebhook: AppsV1Deployment = {
     }
   }
 };
-export const MutatingWebhookConfiguration_CertManagerWebhook: AdmissionregistrationK8sIoV1MutatingWebhookConfiguration = {
+export const MutatingWebhookConfiguration_CertManagerWebhook: KubernetesResource = {
   apiVersion: "admissionregistration.k8s.io/v1",
   kind: "MutatingWebhookConfiguration",
   metadata: {
@@ -10561,8 +11148,8 @@ export const MutatingWebhookConfiguration_CertManagerWebhook: Admissionregistrat
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "webhook",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-webhook"
   },
@@ -10588,7 +11175,7 @@ export const MutatingWebhookConfiguration_CertManagerWebhook: Admissionregistrat
     timeoutSeconds: 30
   }]
 };
-export const ValidatingWebhookConfiguration_CertManagerWebhook: AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration = {
+export const ValidatingWebhookConfiguration_CertManagerWebhook: KubernetesResource = {
   apiVersion: "admissionregistration.k8s.io/v1",
   kind: "ValidatingWebhookConfiguration",
   metadata: {
@@ -10601,8 +11188,8 @@ export const ValidatingWebhookConfiguration_CertManagerWebhook: Admissionregistr
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "webhook",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-webhook"
   },
@@ -10635,7 +11222,7 @@ export const ValidatingWebhookConfiguration_CertManagerWebhook: Admissionregistr
     timeoutSeconds: 30
   }]
 };
-export const ServiceAccount_CertManagerStartupapicheck: ServiceAccount = {
+export const ServiceAccount_CertManagerStartupapicheck: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -10650,15 +11237,15 @@ export const ServiceAccount_CertManagerStartupapicheck: ServiceAccount = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "startupapicheck",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-startupapicheck",
     namespace: "cert-manager"
   },
   automountServiceAccountToken: true
 };
-export const Role_CertManagerStartupapicheckCreateCert: RbacAuthorizationK8sIoV1Role = {
+export const Role_CertManagerStartupapicheckCreateCert: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "Role",
   metadata: {
@@ -10673,8 +11260,8 @@ export const Role_CertManagerStartupapicheckCreateCert: RbacAuthorizationK8sIoV1
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "startupapicheck",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-startupapicheck:create-cert",
     namespace: "cert-manager"
@@ -10685,7 +11272,7 @@ export const Role_CertManagerStartupapicheckCreateCert: RbacAuthorizationK8sIoV1
     verbs: ["create"]
   }]
 };
-export const RoleBinding_CertManagerStartupapicheckCreateCert: RbacAuthorizationK8sIoV1RoleBinding = {
+export const RoleBinding_CertManagerStartupapicheckCreateCert: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "RoleBinding",
   metadata: {
@@ -10700,8 +11287,8 @@ export const RoleBinding_CertManagerStartupapicheckCreateCert: RbacAuthorization
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "startupapicheck",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-startupapicheck:create-cert",
     namespace: "cert-manager"
@@ -10717,7 +11304,7 @@ export const RoleBinding_CertManagerStartupapicheckCreateCert: RbacAuthorization
     namespace: "cert-manager"
   }]
 };
-export const Job_CertManagerStartupapicheck: BatchV1Job = {
+export const Job_CertManagerStartupapicheck: KubernetesResource = {
   apiVersion: "batch/v1",
   kind: "Job",
   metadata: {
@@ -10732,8 +11319,8 @@ export const Job_CertManagerStartupapicheck: BatchV1Job = {
       "app.kubernetes.io/instance": "cert-manager",
       "app.kubernetes.io/managed-by": "Helm",
       "app.kubernetes.io/name": "startupapicheck",
-      "app.kubernetes.io/version": "v1.17.0",
-      "helm.sh/chart": "cert-manager-v1.17.0"
+      "app.kubernetes.io/version": "v1.21.1",
+      "helm.sh/chart": "cert-manager-v1.21.1"
     },
     name: "cert-manager-startupapicheck",
     namespace: "cert-manager"
@@ -10748,8 +11335,8 @@ export const Job_CertManagerStartupapicheck: BatchV1Job = {
           "app.kubernetes.io/instance": "cert-manager",
           "app.kubernetes.io/managed-by": "Helm",
           "app.kubernetes.io/name": "startupapicheck",
-          "app.kubernetes.io/version": "v1.17.0",
-          "helm.sh/chart": "cert-manager-v1.17.0"
+          "app.kubernetes.io/version": "v1.21.1",
+          "helm.sh/chart": "cert-manager-v1.21.1"
         }
       },
       spec: {
@@ -10763,7 +11350,7 @@ export const Job_CertManagerStartupapicheck: BatchV1Job = {
               }
             }
           }],
-          image: "quay.io/jetstack/cert-manager-startupapicheck:v1.17.0",
+          image: "quay.io/jetstack/cert-manager-startupapicheck:v1.21.1",
           imagePullPolicy: "IfNotPresent",
           name: "cert-manager-startupapicheck",
           securityContext: {
@@ -10790,7 +11377,7 @@ export const Job_CertManagerStartupapicheck: BatchV1Job = {
     }
   }
 };
-export const resources: ReadonlyArray<KubernetesResource> = [Namespace_CertManager, ServiceAccount_CertManagerCainjector, ServiceAccount_CertManager, ServiceAccount_CertManagerWebhook, CustomResourceDefinition_CertificaterequestsCertManagerIo, CustomResourceDefinition_CertificatesCertManagerIo, CustomResourceDefinition_ChallengesAcmeCertManagerIo, CustomResourceDefinition_ClusterissuersCertManagerIo, CustomResourceDefinition_IssuersCertManagerIo, CustomResourceDefinition_OrdersAcmeCertManagerIo, ClusterRole_CertManagerCainjector, ClusterRole_CertManagerControllerIssuers, ClusterRole_CertManagerControllerClusterissuers, ClusterRole_CertManagerControllerCertificates, ClusterRole_CertManagerControllerOrders, ClusterRole_CertManagerControllerChallenges, ClusterRole_CertManagerControllerIngressShim, ClusterRole_CertManagerClusterView, ClusterRole_CertManagerView, ClusterRole_CertManagerEdit, ClusterRole_CertManagerControllerApproveCertManagerIo, ClusterRole_CertManagerControllerCertificatesigningrequests, ClusterRole_CertManagerWebhookSubjectaccessreviews, ClusterRoleBinding_CertManagerCainjector, ClusterRoleBinding_CertManagerControllerIssuers, ClusterRoleBinding_CertManagerControllerClusterissuers, ClusterRoleBinding_CertManagerControllerCertificates, ClusterRoleBinding_CertManagerControllerOrders, ClusterRoleBinding_CertManagerControllerChallenges, ClusterRoleBinding_CertManagerControllerIngressShim, ClusterRoleBinding_CertManagerControllerApproveCertManagerIo, ClusterRoleBinding_CertManagerControllerCertificatesigningrequests, ClusterRoleBinding_CertManagerWebhookSubjectaccessreviews, Role_CertManagerCainjectorLeaderelection, Role_CertManagerLeaderelection, Role_CertManagerTokenrequest, Role_CertManagerWebhookDynamicServing, RoleBinding_CertManagerCainjectorLeaderelection, RoleBinding_CertManagerLeaderelection, RoleBinding_CertManagerCertManagerTokenrequest, RoleBinding_CertManagerWebhookDynamicServing, Service_CertManagerCainjector, Service_CertManager, Service_CertManagerWebhook, Deployment_CertManagerCainjector, Deployment_CertManager, Deployment_CertManagerWebhook, MutatingWebhookConfiguration_CertManagerWebhook, ValidatingWebhookConfiguration_CertManagerWebhook, ServiceAccount_CertManagerStartupapicheck, Role_CertManagerStartupapicheckCreateCert, RoleBinding_CertManagerStartupapicheckCreateCert, Job_CertManagerStartupapicheck];
+export const resources: ReadonlyArray<KubernetesResource> = [Namespace_CertManager, ServiceAccount_CertManagerCainjector, ServiceAccount_CertManager, ServiceAccount_CertManagerWebhook, CustomResourceDefinition_ChallengesAcmeCertManagerIo, CustomResourceDefinition_OrdersAcmeCertManagerIo, CustomResourceDefinition_CertificaterequestsCertManagerIo, CustomResourceDefinition_CertificatesCertManagerIo, CustomResourceDefinition_ClusterissuersCertManagerIo, CustomResourceDefinition_IssuersCertManagerIo, ClusterRole_CertManagerCainjector, ClusterRole_CertManagerControllerIssuers, ClusterRole_CertManagerControllerClusterissuers, ClusterRole_CertManagerControllerCertificates, ClusterRole_CertManagerControllerOrders, ClusterRole_CertManagerControllerChallenges, ClusterRole_CertManagerControllerIngressShim, ClusterRole_CertManagerClusterView, ClusterRole_CertManagerView, ClusterRole_CertManagerEdit, ClusterRole_CertManagerControllerApproveCertManagerIo, ClusterRole_CertManagerControllerCertificatesigningrequests, ClusterRole_CertManagerWebhookSubjectaccessreviews, ClusterRoleBinding_CertManagerCainjector, ClusterRoleBinding_CertManagerControllerIssuers, ClusterRoleBinding_CertManagerControllerClusterissuers, ClusterRoleBinding_CertManagerControllerCertificates, ClusterRoleBinding_CertManagerControllerOrders, ClusterRoleBinding_CertManagerControllerChallenges, ClusterRoleBinding_CertManagerControllerIngressShim, ClusterRoleBinding_CertManagerControllerApproveCertManagerIo, ClusterRoleBinding_CertManagerControllerCertificatesigningrequests, ClusterRoleBinding_CertManagerWebhookSubjectaccessreviews, Role_CertManagerCainjectorLeaderelection, Role_CertManagerLeaderelection, Role_CertManagerWebhookDynamicServing, RoleBinding_CertManagerCainjectorLeaderelection, RoleBinding_CertManagerLeaderelection, RoleBinding_CertManagerWebhookDynamicServing, Service_CertManagerCainjector, Service_CertManager, Service_CertManagerWebhook, Deployment_CertManagerCainjector, Deployment_CertManager, Deployment_CertManagerWebhook, MutatingWebhookConfiguration_CertManagerWebhook, ValidatingWebhookConfiguration_CertManagerWebhook, ServiceAccount_CertManagerStartupapicheck, Role_CertManagerStartupapicheckCreateCert, RoleBinding_CertManagerStartupapicheckCreateCert, Job_CertManagerStartupapicheck];
 export default {
   resources: resources
 };

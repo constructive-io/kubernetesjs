@@ -1,6 +1,6 @@
 /** Auto-generated typed resources for operator: minio-operator*/
-import type { KubernetesResource, ApiextensionsK8sIoV1CustomResourceDefinition, AppsV1Deployment, Namespace, RbacAuthorizationK8sIoV1ClusterRole, RbacAuthorizationK8sIoV1ClusterRoleBinding, Service, ServiceAccount } from "@kubernetesjs/ops";
-export const Namespace_MinioOperator: Namespace = {
+import type { KubernetesResource } from "@kubernetesjs/ops";
+export const Namespace_MinioOperator: KubernetesResource = {
   apiVersion: "v1",
   kind: "Namespace",
   metadata: {
@@ -10,7 +10,7 @@ export const Namespace_MinioOperator: Namespace = {
     name: "minio-operator"
   }
 };
-export const ServiceAccount_MinioOperator: ServiceAccount = {
+export const ServiceAccount_MinioOperator: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -23,7 +23,7 @@ export const ServiceAccount_MinioOperator: ServiceAccount = {
     namespace: "minio-operator"
   }
 };
-export const CustomResourceDefinition_TenantsMinioMinIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_TenantsMinioMinIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -7911,7 +7911,7 @@ export const CustomResourceDefinition_TenantsMinioMinIo: ApiextensionsK8sIoV1Cus
     }]
   }
 };
-export const CustomResourceDefinition_PolicybindingsStsMinIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_PolicybindingsStsMinIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -8084,7 +8084,7 @@ export const CustomResourceDefinition_PolicybindingsStsMinIo: ApiextensionsK8sIo
     }]
   }
 };
-export const ClusterRole_MinioOperatorRole: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_MinioOperatorRole: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -8166,7 +8166,7 @@ export const ClusterRole_MinioOperatorRole: RbacAuthorizationK8sIoV1ClusterRole 
     verbs: ["create", "delete", "get", "list", "patch", "update", "deletecollection"]
   }]
 };
-export const ClusterRoleBinding_MinioOperatorBinding: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_MinioOperatorBinding: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -8188,7 +8188,7 @@ export const ClusterRoleBinding_MinioOperatorBinding: RbacAuthorizationK8sIoV1Cl
     namespace: "minio-operator"
   }]
 };
-export const Service_Operator: Service = {
+export const Service_Operator: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -8213,7 +8213,7 @@ export const Service_Operator: Service = {
     type: "ClusterIP"
   }
 };
-export const Service_Sts: Service = {
+export const Service_Sts: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -8237,7 +8237,7 @@ export const Service_Sts: Service = {
     type: "ClusterIP"
   }
 };
-export const Deployment_MinioOperator: AppsV1Deployment = {
+export const Deployment_MinioOperator: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {

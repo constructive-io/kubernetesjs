@@ -20,6 +20,7 @@ metadata:
     helm.sh/chart: operator-7.1.1
     app.kubernetes.io/version: "v7.1.1"
     app.kubernetes.io/managed-by: Helm
+
 ---
 # Source: operator/templates/minio.min.io_tenants.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -5774,6 +5775,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: operator/templates/sts.min.io_policybindings.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -5908,6 +5910,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: operator/templates/operator-clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6096,6 +6099,7 @@ rules:
       - patch
       - update
       - deletecollection
+
 ---
 # Source: operator/templates/operator-clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6114,6 +6118,7 @@ subjects:
   - kind: ServiceAccount
     name: minio-operator
     namespace: minio-operator
+
 ---
 # Source: operator/templates/operator-service.yaml
 apiVersion: v1
@@ -6134,6 +6139,7 @@ spec:
     operator: leader
     app.kubernetes.io/name: operator
     app.kubernetes.io/instance: minio-operator
+
 ---
 # Source: operator/templates/sts-service.yaml
 apiVersion: v1
@@ -6153,6 +6159,7 @@ spec:
   selector:
     app.kubernetes.io/name: operator
     app.kubernetes.io/instance: minio-operator
+
 ---
 # Source: operator/templates/operator-deployment.yaml
 apiVersion: apps/v1
@@ -6165,7 +6172,7 @@ metadata:
     app.kubernetes.io/version: "v7.1.1"
     app.kubernetes.io/managed-by: Helm
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: operator
@@ -6185,7 +6192,16 @@ spec:
         runAsGroup: 1000
         runAsNonRoot: true
         runAsUser: 1000
-      # Autopilot-friendly: disable pod anti-affinity to avoid 500m CPU min requirement
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: name
+                operator: In
+                values:
+                - minio-operator
+            topologyKey: kubernetes.io/hostname
       containers:
         - name: operator
           image: "quay.io/minio/operator:v7.1.1"
@@ -6210,3 +6226,4 @@ spec:
             runAsUser: 1000
             seccompProfile:
               type: RuntimeDefault
+
