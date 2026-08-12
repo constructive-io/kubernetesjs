@@ -115,14 +115,14 @@ jobs:
       - name: Install Knative Serving
         if: ${{ inputs.knative_serving }}
         run: |
-          kubectl apply -f https://github.com/knative/serving/releases/download/knative-${KNATIVE_VERSION#v}/serving-crds.yaml
-          kubectl apply -f https://github.com/knative/serving/releases/download/knative-${KNATIVE_VERSION#v}/serving-core.yaml
+          kubectl apply -f https://github.com/knative/serving/releases/download/knative-${KNATIVE_VERSION}/serving-crds.yaml
+          kubectl apply -f https://github.com/knative/serving/releases/download/knative-${KNATIVE_VERSION}/serving-core.yaml
           kubectl wait --for=condition=Available deployment/controller -n knative-serving --timeout=120s || true
 
       - name: Install Tekton Pipelines
         if: ${{ inputs.tekton }}
         run: |
-          kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/previous/${TEKTON_VERSION}/release.yaml
+          kubectl apply -f https://github.com/tektoncd/pipeline/releases/download/${TEKTON_VERSION}/release.yaml
           kubectl wait --for=condition=established --timeout=60s crd/pipelines.tekton.dev
           kubectl wait --for=condition=established --timeout=60s crd/pipelineruns.tekton.dev
           kubectl wait --for=condition=established --timeout=60s crd/tasks.tekton.dev
