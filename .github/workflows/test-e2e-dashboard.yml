@@ -36,7 +36,7 @@ jobs:
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
         with:
-          version: v1.31.3
+          version: v1.34.1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2

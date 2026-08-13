@@ -128,36 +128,21 @@ const OPERATORS: OperatorConfig[] = [
     combineUrls: false,
     sources: [
       {
-        type: 'urls',
-        // Held at v1.15.0 for now. v1.22.1 is what downstream installs and is
-        // where this should land, but bumping it here fails the knative e2e in
-        // a way that does not reproduce locally -- the same manifests, applied
-        // in the same order after cert-manager, install cleanly with the
-        // webhook up in ~14s. That is a client-side apply problem to chase on
-        // its own, not something to hold the pinning work behind.
-        version: 'v1.15.0',
-        urls: [
-          'https://github.com/knative/serving/releases/download/knative-v1.15.0/serving-crds.yaml',
-          'https://github.com/knative/serving/releases/download/knative-v1.15.0/serving-core.yaml',
-          // knative-extensions, not knative: the old path redirects, so both
-          // work and neither is obviously wrong — which is how two consumers
-          // came to name different repos for the same file.
-          'https://github.com/knative-extensions/net-kourier/releases/download/knative-v1.15.0/kourier.yaml',
-        ],
-      },
-      {
-        // Two versions on purpose. This repo's e2e installs v1.15.0; downstream
-        // deploys v1.22.1. Carrying both lets each consumer ask for the one it
-        // runs, which is what `sources` being an array is for.
+        // v1.22.1 is what downstream deploys; this package carries only that,
+        // so the generated client describes the Knative that actually runs.
         //
-        // Safe now that getOperatorResources honours its version argument. It
-        // did not before, and adding a second version silently redirected every
-        // caller at whichever was pulled last.
+        // Knative v1.22+ refuses to start on Kubernetes < 1.34 (its webhook
+        // and controller exit with "Version check failed" and crash-loop), so
+        // installing it requires a v1.34+ cluster — the e2e's kind node image
+        // is pinned accordingly in .github/actions/setup-kind.
         type: 'urls',
         version: 'v1.22.1',
         urls: [
           'https://github.com/knative/serving/releases/download/knative-v1.22.1/serving-crds.yaml',
           'https://github.com/knative/serving/releases/download/knative-v1.22.1/serving-core.yaml',
+          // knative-extensions, not knative: the old path redirects, so both
+          // work and neither is obviously wrong — which is how two consumers
+          // came to name different repos for the same file.
           'https://github.com/knative-extensions/net-kourier/releases/download/knative-v1.22.1/kourier.yaml',
         ],
       },
