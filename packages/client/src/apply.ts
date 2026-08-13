@@ -36,8 +36,13 @@ export class K8sApplier {
       defaultNamespace: opts.defaultNamespace ?? 'default',
       continueOnError: opts.continueOnError ?? true,
       log: opts.log ?? (() => {}),
+      // 60s under E2E: long enough for a cold image pull, short enough that the
+      // suite reports a verdict well inside its own 15-minute budget. It was
+      // 30s (too short for a cold pull) and briefly 180s, which combined with
+      // the apply retries and an outer 3x retry to exceed the jest timeout --
+      // so the run stopped failing and started hanging, which is worse.
       webhookServiceWaitTimeoutMs:
-        opts.webhookServiceWaitTimeoutMs ?? (process.env.E2E_TESTS === 'true' ? 30_000 : 240_000),
+        opts.webhookServiceWaitTimeoutMs ?? (process.env.E2E_TESTS === 'true' ? 60_000 : 240_000),
     };
   }
 
@@ -121,6 +126,17 @@ export class K8sApplier {
 
     // Phase 0: CRDs
     for (const m of parts.crds) await this.apply(m);
+
+    // Establishment is asynchronous. Creating a CRD returns as soon as the
+    // object is accepted, not when the API server is serving that kind — so a
+    // custom resource applied in a later phase can arrive before its own kind
+    // exists, and fails with "no matches for kind".
+    //
+    // Knative is where this shows: serving-core creates Certificates and Images
+    // of kinds serving-crds defines moments earlier.
+    if (parts.crds.length > 0) {
+      await this.waitForCrdsEstablished(parts.crds);
+    }
 
     // Phase 1: Namespaces
     for (const m of parts.namespaces) await this.apply(m);
@@ -492,6 +508,56 @@ export class K8sApplier {
     );
   }
 
+  /**
+   * Block until every applied CRD reports Established.
+   *
+   * Creating a CRD returns as soon as the object is accepted, not when the API
+   * server is serving that kind — so a custom resource applied in a later phase
+   * can arrive before its own kind exists and fail with "no matches for kind".
+   *
+   * Not fatal if one never establishes: it is reported and the apply continues,
+   * so the failure surfaces as the resource that needed it rather than as an
+   * opaque wait.
+   */
+  private async waitForCrdsEstablished(
+    crds: KubernetesResource[],
+    timeoutMs = 120_000,
+    pollMs = 2_000
+  ): Promise<void> {
+    const names = crds
+      .map((c) => (c.metadata && 'name' in c.metadata ? (c.metadata as any).name : undefined))
+      .filter(Boolean) as string[];
+    if (names.length === 0) return;
+
+    this.opts.log(`Waiting for ${names.length} CRD(s) to be established...`);
+    const start = Date.now();
+    const pending = new Set(names);
+
+    while (pending.size > 0 && Date.now() - start < timeoutMs) {
+      for (const name of Array.from(pending)) {
+        try {
+          const crd: any = await (this.client as any).get(
+            `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${name}`
+          );
+          const established = (crd?.status?.conditions || []).some(
+            (c: any) => c.type === 'Established' && c.status === 'True'
+          );
+          if (established) pending.delete(name);
+        } catch {
+          // Not readable yet; try again on the next tick.
+        }
+      }
+      if (pending.size === 0) break;
+      await new Promise((r) => setTimeout(r, pollMs));
+    }
+
+    if (pending.size > 0) {
+      this.opts.log(
+        `CRDs not established after ${Math.round((Date.now() - start) / 1000)}s: ${Array.from(pending).join(', ')}`
+      );
+    }
+  }
+
   private async postWithRetries(path: string, body: any, ref: string, maxAttempts = 6, baseDelayMs = 2_000) {
     let attempt = 0;
     let lastErr: any;
@@ -510,7 +576,7 @@ export class K8sApplier {
     throw lastErr;
   }
 
-  private async putWithRetries(path: string, body: any, ref: string, maxAttempts = 5, baseDelayMs = 2_000) {
+  private async putWithRetries(path: string, body: any, ref: string, maxAttempts = 6, baseDelayMs = 2_000) {
     let attempt = 0;
     let lastErr: any;
     while (attempt < maxAttempts) {

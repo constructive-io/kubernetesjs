@@ -1,0 +1,75 @@
+name: Setup Kind cluster
+description: >
+  Creates a Kind cluster, installing the kind binary with an authenticated
+  download.
+
+  helm/kind-action fetches kind from GitHub releases unauthenticated. Those are
+  rate-limited per IP, and CI runners share egress addresses — so the limit is
+  reached by strangers' traffic, and it arrives as a killed connection
+  (`curl: (56) Connection died`) rather than a clean error. The action retries
+  five times internally and still fails, because retrying against a spent
+  allowance spends more of nothing.
+
+  `gh` authenticates with the token every run already has, which moves the
+  download onto a per-token allowance instead of a shared per-IP one.
+
+inputs:
+  cluster_name:
+    description: Name of the cluster to create
+    required: false
+    default: kind
+  kind_version:
+    description: kind version, without the leading v
+    required: false
+    # What helm/kind-action@v1.12.0 installed, so this changes nothing but the
+    # way it is fetched.
+    default: '0.26.0'
+  kubectl_version:
+    description: kubectl version
+    required: false
+    default: v1.31.3
+  config:
+    description: Optional path to a kind cluster config
+    required: false
+    default: ''
+  wait:
+    description: How long to wait for the control plane
+    required: false
+    default: 300s
+  token:
+    description: Token used to authenticate the download
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install kind
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+      run: |
+        set -euo pipefail
+        if command -v kind >/dev/null && kind version | grep -q "${{ inputs.kind_version }}"; then
+          echo "kind ${{ inputs.kind_version }} already present"
+          exit 0
+        fi
+        gh release download "v${{ inputs.kind_version }}" \
+          --repo kubernetes-sigs/kind \
+          --pattern kind-linux-amd64 --output /tmp/kind
+        sudo install -m 0755 /tmp/kind /usr/local/bin/kind
+        kind version
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: ${{ inputs.kubectl_version }}
+
+    - name: Create cluster
+      shell: bash
+      run: |
+        set -euo pipefail
+        args=(--name "${{ inputs.cluster_name }}" --wait "${{ inputs.wait }}")
+        [ -n "${{ inputs.config }}" ] && args+=(--config "${{ inputs.config }}")
+        kind create cluster "${args[@]}"
+        kubectl cluster-info

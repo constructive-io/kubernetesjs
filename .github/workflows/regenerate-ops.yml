@@ -2,55 +2,23 @@ name: Regenerate Ops Client
 
 on:
   workflow_dispatch:
-    inputs:
-      tekton:
-        description: 'Install Tekton Pipelines'
-        type: boolean
-        default: true
-      traefik:
-        description: 'Install Traefik'
-        type: boolean
-        default: true
-      cert_manager:
-        description: 'Install cert-manager'
-        type: boolean
-        default: true
-      prometheus:
-        description: 'Install Prometheus Operator CRDs'
-        type: boolean
-        default: true
-      knative_serving:
-        description: 'Install Knative Serving'
-        type: boolean
-        default: true
-      cloudnative_pg:
-        description: 'Install CloudNative PG'
-        type: boolean
-        default: true
-      cilium:
-        description: 'Install Cilium (required for CiliumNetworkPolicy types)'
-        type: boolean
-        default: true
 
+# Versions are NOT declared here.
+#
+# They live in packages/manifests/scripts/pull-manifests.ts, and this workflow
+# installs whatever that package vendored. That direction matters: the
+# manifests decide what the cluster runs, the cluster decides what its OpenAPI
+# says, and the OpenAPI decides what the generated client claims exists. A
+# version declared in two places is a version that can disagree with itself,
+# which is exactly what happened when this workflow pinned Knative separately
+# from the package it is supposed to describe.
+#
+# To change a version: edit pull-manifests.ts, run this workflow, review the PR.
 
-# Pinned deliberately, rather than to whatever `latest` resolves to.
-#
-# The generated client describes whatever API the cluster below advertises, so
-# these versions decide what `@kubernetesjs/ops` claims exists. Left on
-# `latest`, the client changes whenever an upstream project cuts a release —
-# silently, and only for whoever regenerates next.
-#
-# Some of these are intentionally not the newest release, because they track
-# the versions a downstream consumer deploys. Bumping one is a coordinated
-# change: pin it here and downstream together, or the client and the cluster it
-# describes drift apart.
 env:
-  CERT_MANAGER_VERSION: 'v1.21.1'
-  PROMETHEUS_OPERATOR_VERSION: 'v0.93.1'
-  KNATIVE_VERSION: 'v1.20.0'
-  TEKTON_VERSION: 'v1.15.0'
-  TRAEFIK_CHART_VERSION: '34.4.1'
-  CNPG_VERSION: '1.25.0'
+  # Cilium alone is pinned here rather than in the manifests package, because it
+  # is the one operator that package cannot vendor -- see the note beside its
+  # absence in pull-manifests.ts.
   CILIUM_VERSION: '1.19.5'
   CILIUM_CLI_VERSION: '0.19.7'
 
@@ -94,81 +62,78 @@ jobs:
         with:
           version: v3.16.0
 
+      # Refresh the vendored manifests from upstream, then regenerate the typed
+      # objects built from them. Both are inputs to everything below, so they
+      # run before the cluster exists rather than alongside it.
+      # Always, and unconditionally. The versions are pinned in
+      # pull-manifests.ts, so this re-downloads the same content rather than
+      # picking up something newer — it is idempotent, and skipping it only
+      # creates a way for the vendored files to lag the config that names them.
+      - name: Pull manifests
+        run: pnpm --filter @kubernetesjs/manifests run pull:all
+
+      - name: Regenerate operator objects
+        run: pnpm --filter @kubernetesjs/manifests run codegen
+
       - name: Create Kind cluster
-        uses: helm/kind-action@v1.12.0
+        uses: ./.github/actions/setup-kind
         with:
           cluster_name: ops-codegen
           kubectl_version: v1.31.3
           wait: 300s
 
-      - name: Install cert-manager
-        if: ${{ inputs.cert_manager }}
+      # Applied from the package, not from URLs. Every operator it vendors is
+      # installed, so the cluster and the manifests cannot describe different
+      # things — and adding an operator to the package is the only step needed
+      # to have its types generated.
+      - name: Install operators from the manifests package
         run: |
-          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/${CERT_MANAGER_VERSION}/cert-manager.yaml
-          kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
+          set -euo pipefail
+          shopt -s nullglob
 
-      - name: Install Prometheus Operator CRDs
-        if: ${{ inputs.prometheus }}
-        run: |
-          kubectl apply --server-side -f https://github.com/prometheus-operator/prometheus-operator/releases/download/${PROMETHEUS_OPERATOR_VERSION}/stripped-down-crds.yaml
+          apply() {
+            # --server-side: several of these carry CRDs large enough to exceed
+            # the annotation limit client-side apply uses.
+            kubectl apply --server-side --force-conflicts -f "$1" \
+              || echo "::warning::$1 did not apply cleanly"
+          }
 
-      - name: Install Knative Serving
-        if: ${{ inputs.knative_serving }}
-        run: |
-          kubectl apply -f https://github.com/knative/serving/releases/download/knative-${KNATIVE_VERSION}/serving-crds.yaml
-          kubectl apply -f https://github.com/knative/serving/releases/download/knative-${KNATIVE_VERSION}/serving-core.yaml
-          kubectl wait --for=condition=Available deployment/controller -n knative-serving --timeout=120s || true
+          for f in packages/manifests/operators/*.yaml; do
+            name=$(basename "$f" .yaml)
+            echo "::group::$name"; apply "$f"; echo "::endgroup::"
+          done
 
-      - name: Install Tekton Pipelines
-        if: ${{ inputs.tekton }}
-        run: |
-          kubectl apply -f https://github.com/tektoncd/pipeline/releases/download/${TEKTON_VERSION}/release.yaml
-          kubectl wait --for=condition=established --timeout=60s crd/pipelines.tekton.dev
-          kubectl wait --for=condition=established --timeout=60s crd/pipelineruns.tekton.dev
-          kubectl wait --for=condition=established --timeout=60s crd/tasks.tekton.dev
-          kubectl wait --for=condition=established --timeout=60s crd/taskruns.tekton.dev
+          # Operators vendored as ordered parts. The numeric prefixes are the
+          # apply order, and it matters: Knative's CRDs must be established
+          # before serving-core creates custom resources of those kinds.
+          for d in packages/manifests/operators/*/*/; do
+            [ -n "$(echo "$d"*.yaml)" ] || continue
+            echo "::group::$(basename "$(dirname "$d")") $(basename "$d")"
+            for f in "$d"*.yaml; do
+              apply "$f"
+              # Establish CRDs before the next part is applied against them.
+              if grep -q "^kind: CustomResourceDefinition" "$f"; then
+                kubectl wait --for=condition=established --timeout=120s \
+                  crd --all >/dev/null 2>&1 || true
+              fi
+            done
+            echo "::endgroup::"
+          done
 
-      - name: Install Traefik CRDs
-        if: ${{ inputs.traefik }}
-        run: |
-          # Install CRDs directly (helm install --wait times out in Kind due to LoadBalancer)
-          helm repo add traefik https://traefik.github.io/charts
-          helm repo update
-          helm template traefik traefik/traefik --version "${TRAEFIK_CHART_VERSION}" | kubectl apply --server-side -f - || true
-          # Ensure Traefik CRDs are also applied from source (covers all CRDs)
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_ingressroutes.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_ingressroutetcps.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_ingressrouteudps.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_middlewares.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_middlewaretcps.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_serverstransports.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_serverstransporttcps.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_tlsoptions.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_tlsstores.yaml
-          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v${TRAEFIK_CHART_VERSION}/traefik/crds/traefik.io_traefikservices.yaml
-          kubectl wait --for=condition=established --timeout=60s crd/ingressroutes.traefik.io
-
-      - name: Install CloudNative PG
-        if: ${{ inputs.cloudnative_pg }}
-        run: |
-          kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/v${CNPG_VERSION}/releases/cnpg-${CNPG_VERSION}.yaml
-          kubectl wait --for=condition=established --timeout=60s crd/clusters.postgresql.cnpg.io || true
-
-
-      # Cilium last: it is the only component here that owns a dataplane, and
-      # this cluster already has one. `cilium install` against a cluster with a
-      # working CNI still registers its CRDs, which is all this job needs.
+      # Cilium is not vendored: its chart mints a CA private key at template
+      # time, and its CRDs are registered by the operator at runtime rather
+      # than shipped in the chart. Installing it here is what makes those CRDs
+      # exist for the client to be generated from.
       - name: Install Cilium
-        if: ${{ inputs.cilium }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download "v${CILIUM_CLI_VERSION}" \
-            --repo cilium/cilium-cli \
+          gh release download "v${CILIUM_CLI_VERSION}" --repo cilium/cilium-cli \
             --pattern cilium-linux-amd64.tar.gz --output /tmp/cilium.tar.gz
           sudo tar xzf /tmp/cilium.tar.gz -C /usr/local/bin
           cilium install --version "${CILIUM_VERSION}" --wait
-          kubectl wait --for=condition=established --timeout=120s crd/ciliumnetworkpolicies.cilium.io
+          kubectl wait --for=condition=established --timeout=120s \
+            crd/ciliumnetworkpolicies.cilium.io
 
       - name: Wait for all CRDs to register
         run: |
@@ -229,19 +194,17 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b feat/regenerate-ops-client
-          git add packages/ops/scripts/swagger.json packages/ops/src/index.ts
-          git commit -m "feat(ops): regenerate client with updated CRD specs"
+          # Everything the chain produced, not only the client: the manifests
+          # are the input the client was generated from, so a PR carrying one
+          # without the other reintroduces the drift this workflow exists to
+          # remove.
+          git add packages/manifests/operators packages/manifests/src/generated \
+                  packages/ops/scripts/swagger.json packages/ops/src/index.ts
+          git commit -m "feat: regenerate manifests and ops client"
           git push --force-with-lease origin feat/regenerate-ops-client
           gh pr create \
             --title "feat(ops): regenerate client with updated CRD specs" \
             --body "Regenerated \`@kubernetesjs/ops\` client from a Kind cluster with:
-          - cert-manager: ${{ inputs.cert_manager }}
-          - Prometheus Operator: ${{ inputs.prometheus }}
-          - Knative Serving: ${{ inputs.knative_serving }}
-          - Tekton Pipelines: ${{ inputs.tekton }}
-          - Traefik: ${{ inputs.traefik }}
-          - CloudNative PG: ${{ inputs.cloudnative_pg }}
-          - Cilium: ${{ inputs.cilium }}
 
           Triggered by workflow_dispatch." \
             --base main \

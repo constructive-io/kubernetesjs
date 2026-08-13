@@ -33,21 +33,15 @@ jobs:
     - name: Build packages
       run: pnpm build
 
-    - name: Install kubectl
+    # Was two curls: kubectl from dl.k8s.io resolved through stable.txt, so the
+    # version moved whenever upstream cut a release, and kind from
+    # kind.sigs.k8s.io/dl — which redirects to GitHub releases, where an
+    # unauthenticated download is rate-limited per IP and dies mid-transfer as
+    # `curl: (56)`. It also pinned kind 0.20.0 while the rest of the repo used
+    # 0.26.0.
+    - name: Write cluster config
       run: |
-        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-        chmod +x kubectl
-        sudo mv kubectl /usr/local/bin/
-    
-    - name: Install Kind
-      run: |
-        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
-        chmod +x ./kind
-        sudo mv ./kind /usr/local/bin/kind
-    
-    - name: Create Kind cluster
-      run: |
-        cat <<EOF > kind-config.yaml
+        cat <<'EOF' > kind-config.yaml
         kind: Cluster
         apiVersion: kind.x-k8s.io/v1alpha4
         nodes:
@@ -57,7 +51,12 @@ jobs:
             hostPort: 30000
             protocol: TCP
         EOF
-        kind create cluster --config kind-config.yaml --wait 5m
+
+    - name: Create Kind cluster
+      uses: ./.github/actions/setup-kind
+      with:
+        config: kind-config.yaml
+        wait: 5m
     
     - name: Wait for cluster to be ready
       run: |

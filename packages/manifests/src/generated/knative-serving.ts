@@ -1,6 +1,6 @@
 /** Auto-generated typed resources for operator: knative-serving*/
-import type { KubernetesResource, AdmissionregistrationK8sIoV1MutatingWebhookConfiguration, AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration, ApiextensionsK8sIoV1CustomResourceDefinition, AppsV1Deployment, AutoscalingV2HorizontalPodAutoscaler, CachingInternalKnativeDevV1alpha1Image, ConfigMap, Namespace, NetworkingInternalKnativeDevV1alpha1Certificate, PolicyV1PodDisruptionBudget, RbacAuthorizationK8sIoV1ClusterRole, RbacAuthorizationK8sIoV1ClusterRoleBinding, RbacAuthorizationK8sIoV1Role, RbacAuthorizationK8sIoV1RoleBinding, Secret, Service, ServiceAccount } from "@kubernetesjs/ops";
-export const CustomResourceDefinition_CertificatesNetworkingInternalKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+import type { KubernetesResource } from "@kubernetesjs/ops";
+export const CustomResourceDefinition_CertificatesNetworkingInternalKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -171,7 +171,7 @@ export const CustomResourceDefinition_CertificatesNetworkingInternalKnativeDev: 
     }]
   }
 };
-export const CustomResourceDefinition_ConfigurationsServingKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_ConfigurationsServingKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -1488,7 +1488,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Apiextens
     }]
   }
 };
-export const CustomResourceDefinition_ClusterdomainclaimsNetworkingInternalKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_ClusterdomainclaimsNetworkingInternalKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -1550,7 +1550,7 @@ export const CustomResourceDefinition_ClusterdomainclaimsNetworkingInternalKnati
     }]
   }
 };
-export const CustomResourceDefinition_DomainmappingsServingKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_DomainmappingsServingKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -1740,7 +1740,7 @@ export const CustomResourceDefinition_DomainmappingsServingKnativeDev: Apiextens
     }]
   }
 };
-export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -2059,7 +2059,7 @@ export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: Api
     }]
   }
 };
-export const CustomResourceDefinition_MetricsAutoscalingInternalKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_MetricsAutoscalingInternalKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -2191,7 +2191,7 @@ export const CustomResourceDefinition_MetricsAutoscalingInternalKnativeDev: Apie
     }]
   }
 };
-export const CustomResourceDefinition_PodautoscalersAutoscalingInternalKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_PodautoscalersAutoscalingInternalKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -2369,7 +2369,7 @@ export const CustomResourceDefinition_PodautoscalersAutoscalingInternalKnativeDe
     }]
   }
 };
-export const CustomResourceDefinition_RevisionsServingKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -3689,7 +3689,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: ApiextensionsK
     }]
   }
 };
-export const CustomResourceDefinition_RoutesServingKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_RoutesServingKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -3907,7 +3907,7 @@ export const CustomResourceDefinition_RoutesServingKnativeDev: ApiextensionsK8sI
     }]
   }
 };
-export const CustomResourceDefinition_ServerlessservicesNetworkingInternalKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_ServerlessservicesNetworkingInternalKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -4099,7 +4099,7 @@ export const CustomResourceDefinition_ServerlessservicesNetworkingInternalKnativ
     }]
   }
 };
-export const CustomResourceDefinition_ServicesServingKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -5516,7 +5516,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: ApiextensionsK8
     }]
   }
 };
-export const CustomResourceDefinition_ImagesCachingInternalKnativeDev: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_ImagesCachingInternalKnativeDev: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -5653,7 +5653,7 @@ export const CustomResourceDefinition_ImagesCachingInternalKnativeDev: Apiextens
     }]
   }
 };
-export const Namespace_KnativeServing: Namespace = {
+export const Namespace_KnativeServing: KubernetesResource = {
   apiVersion: "v1",
   kind: "Namespace",
   metadata: {
@@ -5664,7 +5664,7 @@ export const Namespace_KnativeServing: Namespace = {
     name: "knative-serving"
   }
 };
-export const Role_KnativeServingActivator: RbacAuthorizationK8sIoV1Role = {
+export const Role_KnativeServingActivator: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "Role",
   metadata: {
@@ -5687,7 +5687,7 @@ export const Role_KnativeServingActivator: RbacAuthorizationK8sIoV1Role = {
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_KnativeServingActivatorCluster: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_KnativeServingActivatorCluster: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -5708,7 +5708,7 @@ export const ClusterRole_KnativeServingActivatorCluster: RbacAuthorizationK8sIoV
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_KnativeServingAggregatedAddressableResolver: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_KnativeServingAggregatedAddressableResolver: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -5726,7 +5726,7 @@ export const ClusterRole_KnativeServingAggregatedAddressableResolver: RbacAuthor
     }]
   }
 };
-export const ClusterRole_KnativeServingAddressableResolver: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_KnativeServingAddressableResolver: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -5743,7 +5743,7 @@ export const ClusterRole_KnativeServingAddressableResolver: RbacAuthorizationK8s
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_KnativeServingNamespacedAdmin: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_KnativeServingNamespacedAdmin: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -5764,7 +5764,7 @@ export const ClusterRole_KnativeServingNamespacedAdmin: RbacAuthorizationK8sIoV1
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_KnativeServingNamespacedEdit: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_KnativeServingNamespacedEdit: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -5785,7 +5785,7 @@ export const ClusterRole_KnativeServingNamespacedEdit: RbacAuthorizationK8sIoV1C
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_KnativeServingNamespacedView: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_KnativeServingNamespacedView: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -5802,7 +5802,7 @@ export const ClusterRole_KnativeServingNamespacedView: RbacAuthorizationK8sIoV1C
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_KnativeServingCore: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_KnativeServingCore: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -5868,7 +5868,7 @@ export const ClusterRole_KnativeServingCore: RbacAuthorizationK8sIoV1ClusterRole
     verbs: ["delete"]
   }]
 };
-export const ClusterRole_KnativeServingPodspecableBinding: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_KnativeServingPodspecableBinding: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -5885,7 +5885,7 @@ export const ClusterRole_KnativeServingPodspecableBinding: RbacAuthorizationK8sI
     verbs: ["list", "watch", "patch"]
   }]
 };
-export const ServiceAccount_Controller: ServiceAccount = {
+export const ServiceAccount_Controller: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -5898,7 +5898,7 @@ export const ServiceAccount_Controller: ServiceAccount = {
     namespace: "knative-serving"
   }
 };
-export const ClusterRole_KnativeServingAdmin: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_KnativeServingAdmin: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -5916,7 +5916,7 @@ export const ClusterRole_KnativeServingAdmin: RbacAuthorizationK8sIoV1ClusterRol
     }]
   }
 };
-export const ClusterRoleBinding_KnativeServingControllerAdmin: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_KnativeServingControllerAdmin: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -5938,7 +5938,7 @@ export const ClusterRoleBinding_KnativeServingControllerAdmin: RbacAuthorization
     namespace: "knative-serving"
   }]
 };
-export const ClusterRoleBinding_KnativeServingControllerAddressableResolver: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_KnativeServingControllerAddressableResolver: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -5960,7 +5960,7 @@ export const ClusterRoleBinding_KnativeServingControllerAddressableResolver: Rba
     namespace: "knative-serving"
   }]
 };
-export const ServiceAccount_Activator: ServiceAccount = {
+export const ServiceAccount_Activator: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -5973,7 +5973,7 @@ export const ServiceAccount_Activator: ServiceAccount = {
     namespace: "knative-serving"
   }
 };
-export const RoleBinding_KnativeServingActivator: RbacAuthorizationK8sIoV1RoleBinding = {
+export const RoleBinding_KnativeServingActivator: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "RoleBinding",
   metadata: {
@@ -5996,7 +5996,7 @@ export const RoleBinding_KnativeServingActivator: RbacAuthorizationK8sIoV1RoleBi
     namespace: "knative-serving"
   }]
 };
-export const ClusterRoleBinding_KnativeServingActivatorCluster: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_KnativeServingActivatorCluster: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -6018,7 +6018,7 @@ export const ClusterRoleBinding_KnativeServingActivatorCluster: RbacAuthorizatio
     namespace: "knative-serving"
   }]
 };
-export const Certificate_RoutingServingCerts: NetworkingInternalKnativeDevV1alpha1Certificate = {
+export const Certificate_RoutingServingCerts: KubernetesResource = {
   apiVersion: "networking.internal.knative.dev/v1alpha1",
   kind: "Certificate",
   metadata: {
@@ -6036,7 +6036,7 @@ export const Certificate_RoutingServingCerts: NetworkingInternalKnativeDevV1alph
     secretName: "routing-serving-certs"
   }
 };
-export const Image_QueueProxy: CachingInternalKnativeDevV1alpha1Image = {
+export const Image_QueueProxy: KubernetesResource = {
   apiVersion: "caching.internal.knative.dev/v1alpha1",
   kind: "Image",
   metadata: {
@@ -6052,7 +6052,7 @@ export const Image_QueueProxy: CachingInternalKnativeDevV1alpha1Image = {
     image: "gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:d313c823f25a09326a7c3c2ec9833c5e005791bc3acb4036ebf33735cbb62bee"
   }
 };
-export const ConfigMap_ConfigAutoscaler: ConfigMap = {
+export const ConfigMap_ConfigAutoscaler: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6071,7 +6071,7 @@ export const ConfigMap_ConfigAutoscaler: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# The Revision ContainerConcurrency field specifies the maximum number\n# of requests the Container can handle at once. Container concurrency\n# target percentage is how much of that maximum to use in a stable\n# state. E.g. if a Revision specifies ContainerConcurrency of 10, then\n# the Autoscaler will try to maintain 7 concurrent connections per pod\n# on average.\n# Note: this limit will be applied to container concurrency set at every\n# level (ConfigMap, Revision Spec or Annotation).\n# For legacy and backwards compatibility reasons, this value also accepts\n# fractional values in (0, 1] interval (i.e. 0.7 ⇒ 70%).\n# Thus minimal percentage value must be greater than 1.0, or it will be\n# treated as a fraction.\n# NOTE: that this value does not affect actual number of concurrent requests\n#       the user container may receive, but only the average number of requests\n#       that the revision pods will receive.\ncontainer-concurrency-target-percentage: \"70\"\n\n# The container concurrency target default is what the Autoscaler will\n# try to maintain when concurrency is used as the scaling metric for the\n# Revision and the Revision specifies unlimited concurrency.\n# When revision explicitly specifies container concurrency, that value\n# will be used as a scaling target for autoscaler.\n# When specifying unlimited concurrency, the autoscaler will\n# horizontally scale the application based on this target concurrency.\n# This is what we call \"soft limit\" in the documentation, i.e. it only\n# affects number of pods and does not affect the number of requests\n# individual pod processes.\n# The value must be a positive number such that the value multiplied\n# by container-concurrency-target-percentage is greater than 0.01.\n# NOTE: that this value will be adjusted by application of\n#       container-concurrency-target-percentage, i.e. by default\n#       the system will target on average 70 concurrent requests\n#       per revision pod.\n# NOTE: Only one metric can be used for autoscaling a Revision.\ncontainer-concurrency-target-default: \"100\"\n\n# The requests per second (RPS) target default is what the Autoscaler will\n# try to maintain when RPS is used as the scaling metric for a Revision and\n# the Revision specifies unlimited RPS. Even when specifying unlimited RPS,\n# the autoscaler will horizontally scale the application based on this\n# target RPS.\n# Must be greater than 1.0.\n# NOTE: Only one metric can be used for autoscaling a Revision.\nrequests-per-second-target-default: \"200\"\n\n# The target burst capacity specifies the size of burst in concurrent\n# requests that the system operator expects the system will receive.\n# Autoscaler will try to protect the system from queueing by introducing\n# Activator in the request path if the current spare capacity of the\n# service is less than this setting.\n# If this setting is 0, then Activator will be in the request path only\n# when the revision is scaled to 0.\n# If this setting is > 0 and container-concurrency-target-percentage is\n# 100% or 1.0, then activator will always be in the request path.\n# -1 denotes unlimited target-burst-capacity and activator will always\n# be in the request path.\n# Other negative values are invalid.\ntarget-burst-capacity: \"211\"\n\n# When operating in a stable mode, the autoscaler operates on the\n# average concurrency over the stable window.\n# Stable window must be in whole seconds.\nstable-window: \"60s\"\n\n# When observed average concurrency during the panic window reaches\n# panic-threshold-percentage the target concurrency, the autoscaler\n# enters panic mode. When operating in panic mode, the autoscaler\n# scales on the average concurrency over the panic window which is\n# panic-window-percentage of the stable-window.\n# Must be in the [1, 100] range.\n# When computing the panic window it will be rounded to the closest\n# whole second, at least 1s.\npanic-window-percentage: \"10.0\"\n\n# The percentage of the container concurrency target at which to\n# enter panic mode when reached within the panic window.\npanic-threshold-percentage: \"200.0\"\n\n# Max scale up rate limits the rate at which the autoscaler will\n# increase pod count. It is the maximum ratio of desired pods versus\n# observed pods.\n# Cannot be less or equal to 1.\n# I.e with value of 2.0 the number of pods can at most go N to 2N\n# over single Autoscaler period (2s), but at least N to\n# N+1, if Autoscaler needs to scale up.\nmax-scale-up-rate: \"1000.0\"\n\n# Max scale down rate limits the rate at which the autoscaler will\n# decrease pod count. It is the maximum ratio of observed pods versus\n# desired pods.\n# Cannot be less or equal to 1.\n# I.e. with value of 2.0 the number of pods can at most go N to N/2\n# over single Autoscaler evaluation period (2s), but at\n# least N to N-1, if Autoscaler needs to scale down.\nmax-scale-down-rate: \"2.0\"\n\n# Scale to zero feature flag.\nenable-scale-to-zero: \"true\"\n\n# Scale to zero grace period is the time an inactive revision is left\n# running before it is scaled to zero (must be positive, but recommended\n# at least a few seconds if running with mesh networking).\n# This is the upper limit and is provided not to enforce timeout after\n# the revision stopped receiving requests for stable window, but to\n# ensure network reprogramming to put activator in the path has completed.\n# If the system determines that a shorter period is satisfactory,\n# then the system will only wait that amount of time before scaling to 0.\n# NOTE: this period might actually be 0, if activator has been\n# in the request path sufficiently long.\n# If there is necessity for the last pod to linger longer use\n# scale-to-zero-pod-retention-period flag.\nscale-to-zero-grace-period: \"30s\"\n\n# Scale to zero pod retention period defines the minimum amount\n# of time the last pod will remain after Autoscaler has decided to\n# scale to zero.\n# This flag is for the situations where the pod startup is very expensive\n# and the traffic is bursty (requiring smaller windows for fast action),\n# but patchy.\n# The larger of this flag and `scale-to-zero-grace-period` will effectively\n# determine how the last pod will hang around.\nscale-to-zero-pod-retention-period: \"0s\"\n\n# pod-autoscaler-class specifies the default pod autoscaler class\n# that should be used if none is specified. If omitted,\n# the Knative Pod Autoscaler (KPA) is used by default.\npod-autoscaler-class: \"kpa.autoscaling.knative.dev\"\n\n# The capacity of a single activator task.\n# The `unit` is one concurrent request proxied by the activator.\n# activator-capacity must be at least 1.\n# This value is used for computation of the Activator subset size.\n# See the algorithm here: http://bit.ly/38XiCZ3.\n# TODO(vagababov): tune after actual benchmarking.\nactivator-capacity: \"100.0\"\n\n# initial-scale is the cluster-wide default value for the initial target\n# scale of a revision after creation, unless overridden by the\n# \"autoscaling.knative.dev/initialScale\" annotation.\n# This value must be greater than 0 unless allow-zero-initial-scale is true.\ninitial-scale: \"1\"\n\n# allow-zero-initial-scale controls whether either the cluster-wide initial-scale flag,\n# or the \"autoscaling.knative.dev/initialScale\" annotation, can be set to 0.\nallow-zero-initial-scale: \"false\"\n\n# min-scale is the cluster-wide default value for the min scale of a revision,\n# unless overridden by the \"autoscaling.knative.dev/minScale\" annotation.\nmin-scale: \"0\"\n\n# max-scale is the cluster-wide default value for the max scale of a revision,\n# unless overridden by the \"autoscaling.knative.dev/maxScale\" annotation.\n# If set to 0, the revision has no maximum scale.\nmax-scale: \"0\"\n\n# scale-down-delay is the amount of time that must pass at reduced\n# concurrency before a scale down decision is applied. This can be useful,\n# for example, to maintain replica count and avoid a cold start penalty if\n# more requests come in within the scale down delay period.\n# The default, 0s, imposes no delay at all.\nscale-down-delay: \"0s\"\n\n# max-scale-limit sets the maximum permitted value for the max scale of a revision.\n# When this is set to a positive value, a revision with a maxScale above that value\n# (including a maxScale of \"0\" = unlimited) is disallowed.\n# A value of zero (the default) allows any limit, including unlimited.\nmax-scale-limit: \"0\"\n"
   }
 };
-export const ConfigMap_ConfigCertmanager: ConfigMap = {
+export const ConfigMap_ConfigCertmanager: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6091,7 +6091,7 @@ export const ConfigMap_ConfigCertmanager: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this block and unindented to actually change the configuration.\n\n# issuerRef is a reference to the issuer for external-domain certificates used for ingress.\n# IssuerRef should be either `ClusterIssuer` or `Issuer`.\n# Please refer `IssuerRef` in https://cert-manager.io/docs/concepts/issuer/\n# for more details about IssuerRef configuration.\n# If the issuerRef is not specified, the self-signed `knative-selfsigned-issuer` ClusterIssuer is used.\nissuerRef: |\n  kind: ClusterIssuer\n  name: letsencrypt-issuer\n\n# clusterLocalIssuerRef is a reference to the issuer for cluster-local-domain certificates used for ingress.\n# clusterLocalIssuerRef should be either `ClusterIssuer` or `Issuer`.\n# Please refer `IssuerRef` in https://cert-manager.io/docs/concepts/issuer/\n# for more details about ClusterInternalIssuerRef configuration.\n# If the clusterLocalIssuerRef is not specified, the self-signed `knative-selfsigned-issuer` ClusterIssuer is used.\nclusterLocalIssuerRef: |\n  kind: ClusterIssuer\n  name: your-company-issuer\n\n# systemInternalIssuerRef is a reference to the issuer for certificates for system-internal-tls certificates used by Knative internal components.\n# systemInternalIssuerRef should be either `ClusterIssuer` or `Issuer`.\n# Please refer `IssuerRef` in https://cert-manager.io/docs/concepts/issuer/\n# for more details about ClusterInternalIssuerRef configuration.\n# If the systemInternalIssuerRef is not specified, the self-signed `knative-selfsigned-issuer` ClusterIssuer is used.\nsystemInternalIssuerRef: |\n  kind: ClusterIssuer\n  name: knative-selfsigned-issuer\n"
   }
 };
-export const ConfigMap_ConfigDefaults: ConfigMap = {
+export const ConfigMap_ConfigDefaults: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6110,7 +6110,7 @@ export const ConfigMap_ConfigDefaults: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# revision-timeout-seconds contains the default number of\n# seconds to use for the revision's per-request timeout, if\n# none is specified.\nrevision-timeout-seconds: \"300\"  # 5 minutes\n\n# max-revision-timeout-seconds contains the maximum number of\n# seconds that can be used for revision-timeout-seconds.\n# This value must be greater than or equal to revision-timeout-seconds.\n# If omitted, the system default is used (600 seconds).\n#\n# If this value is increased, the activator's terminationGracePeriodSeconds\n# should also be increased to prevent in-flight requests being disrupted.\nmax-revision-timeout-seconds: \"600\"  # 10 minutes\n\n# revision-response-start-timeout-seconds contains the default number of\n# seconds a request will be allowed to stay open while waiting to\n# receive any bytes from the user's application, if none is specified.\n#\n# This defaults to 'revision-timeout-seconds'\nrevision-response-start-timeout-seconds: \"300\"\n\n# revision-idle-timeout-seconds contains the default number of\n# seconds a request will be allowed to stay open while not receiving any\n# bytes from the user's application, if none is specified.\nrevision-idle-timeout-seconds: \"0\"  # infinite\n\n# revision-cpu-request contains the cpu allocation to assign\n# to revisions by default.  If omitted, no value is specified\n# and the system default is used.\n# Below is an example of setting revision-cpu-request.\n# By default, it is not set by Knative.\nrevision-cpu-request: \"400m\"  # 0.4 of a CPU (aka 400 milli-CPU)\n\n# revision-memory-request contains the memory allocation to assign\n# to revisions by default.  If omitted, no value is specified\n# and the system default is used.\n# Below is an example of setting revision-memory-request.\n# By default, it is not set by Knative.\nrevision-memory-request: \"100M\"  # 100 megabytes of memory\n\n# revision-ephemeral-storage-request contains the ephemeral storage\n# allocation to assign to revisions by default.  If omitted, no value is\n# specified and the system default is used.\nrevision-ephemeral-storage-request: \"500M\"  # 500 megabytes of storage\n\n# revision-cpu-limit contains the cpu allocation to limit\n# revisions to by default.  If omitted, no value is specified\n# and the system default is used.\n# Below is an example of setting revision-cpu-limit.\n# By default, it is not set by Knative.\nrevision-cpu-limit: \"1000m\"  # 1 CPU (aka 1000 milli-CPU)\n\n# revision-memory-limit contains the memory allocation to limit\n# revisions to by default.  If omitted, no value is specified\n# and the system default is used.\n# Below is an example of setting revision-memory-limit.\n# By default, it is not set by Knative.\nrevision-memory-limit: \"200M\"  # 200 megabytes of memory\n\n# revision-ephemeral-storage-limit contains the ephemeral storage\n# allocation to limit revisions to by default.  If omitted, no value is\n# specified and the system default is used.\nrevision-ephemeral-storage-limit: \"750M\"  # 750 megabytes of storage\n\n# container-name-template contains a template for the default\n# container name, if none is specified.  This field supports\n# Go templating and is supplied with the ObjectMeta of the\n# enclosing Service or Configuration, so values such as\n# {{.Name}} are also valid.\ncontainer-name-template: \"user-container\"\n\n# init-container-name-template contains a template for the default\n# init container name, if none is specified.  This field supports\n# Go templating and is supplied with the ObjectMeta of the\n# enclosing Service or Configuration, so values such as\n# {{.Name}} are also valid.\ninit-container-name-template: \"init-container\"\n\n# container-concurrency specifies the maximum number\n# of requests the Container can handle at once, and requests\n# above this threshold are queued.  Setting a value of zero\n# disables this throttling and lets through as many requests as\n# the pod receives.\ncontainer-concurrency: \"0\"\n\n# The container concurrency max limit is an operator setting ensuring that\n# the individual revisions cannot have arbitrary large concurrency\n# values, or autoscaling targets. `container-concurrency` default setting\n# must be at or below this value.\n#\n# Must be greater than 1.\n#\n# Note: even with this set, a user can choose a containerConcurrency\n# of 0 (i.e. unbounded) unless allow-container-concurrency-zero is\n# set to \"false\".\ncontainer-concurrency-max-limit: \"1000\"\n\n# allow-container-concurrency-zero controls whether users can\n# specify 0 (i.e. unbounded) for containerConcurrency.\nallow-container-concurrency-zero: \"true\"\n\n# enable-service-links specifies the default value used for the\n# enableServiceLinks field of the PodSpec, when it is omitted by the user.\n# See: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service\n#\n# This is a tri-state flag with possible values of (true|false|default).\n#\n# In environments with large number of services it is suggested\n# to set this value to `false`.\n# See https://github.com/knative/serving/issues/8498.\nenable-service-links: \"false\"\n"
   }
 };
-export const ConfigMap_ConfigDeployment: ConfigMap = {
+export const ConfigMap_ConfigDeployment: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6130,7 +6130,7 @@ export const ConfigMap_ConfigDeployment: ConfigMap = {
     "queue-sidecar-image": "gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:d313c823f25a09326a7c3c2ec9833c5e005791bc3acb4036ebf33735cbb62bee"
   }
 };
-export const ConfigMap_ConfigDomain: ConfigMap = {
+export const ConfigMap_ConfigDomain: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6149,7 +6149,7 @@ export const ConfigMap_ConfigDomain: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# Default value for domain.\n# Routes having the cluster domain suffix (by default 'svc.cluster.local')\n# will not be exposed through Ingress. You can define your own label\n# selector to assign that domain suffix to your Route here, or you can set\n# the label\n#    \"networking.knative.dev/visibility=cluster-local\"\n# to achieve the same effect.  This shows how to make routes having\n# the label app=secret only exposed to the local cluster.\nsvc.cluster.local: |\n  selector:\n    app: secret\n\n# These are example settings of domain.\n# example.com will be used for all routes, but it is the least-specific rule so it\n# will only be used if no other domain matches.\nexample.com: |\n\n# example.org will be used for routes having app=nonprofit.\nexample.org: |\n  selector:\n    app: nonprofit\n"
   }
 };
-export const ConfigMap_ConfigFeatures: ConfigMap = {
+export const ConfigMap_ConfigFeatures: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6168,7 +6168,7 @@ export const ConfigMap_ConfigFeatures: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# Default SecurityContext settings to secure-by-default values\n# if unset.\n#\n# This value will default to \"enabled\" in a future release,\n# probably Knative 1.10\nsecure-pod-defaults: \"disabled\"\n\n# Indicates whether multi container support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/configuration/feature-flags/#multiple-containers\nmulti-container: \"enabled\"\n\n# Indicates whether multi container probing is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/configuration/feature-flags/#multiple-container-probing\nmulti-container-probing: \"disabled\"\n\n# Indicates whether Kubernetes affinity support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-node-affinity\nkubernetes.podspec-affinity: \"disabled\"\n\n# Indicates whether Kubernetes topologySpreadConstraints support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-topology-spread-constraints\nkubernetes.podspec-topologyspreadconstraints: \"disabled\"\n\n# Indicates whether Kubernetes hostAliases support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-host-aliases\nkubernetes.podspec-hostaliases: \"disabled\"\n\n# Indicates whether Kubernetes nodeSelector support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-node-selector\nkubernetes.podspec-nodeselector: \"disabled\"\n\n# Indicates whether Kubernetes tolerations support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-toleration\nkubernetes.podspec-tolerations: \"disabled\"\n\n# Indicates whether Kubernetes FieldRef support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref\nkubernetes.podspec-fieldref: \"disabled\"\n\n# Indicates whether Kubernetes RuntimeClassName support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-runtime-class\nkubernetes.podspec-runtimeclassname: \"disabled\"\n\n# Indicates whether Kubernetes DNSPolicy support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-dnspolicy\nkubernetes.podspec-dnspolicy: \"disabled\"\n\n# Indicates whether Kubernetes DNSConfig support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-dnsconfig\nkubernetes.podspec-dnsconfig: \"disabled\"\n\n# This feature allows end-users to set a subset of fields on the Pod's SecurityContext\n#\n# When set to \"enabled\" or \"allowed\" it allows the following\n# PodSecurityContext properties:\n# - FSGroup\n# - RunAsGroup\n# - RunAsNonRoot\n# - SupplementalGroups\n# - RunAsUser\n# - SeccompProfile\n#\n# This feature flag should be used with caution as the PodSecurityContext\n# properties may have a side-effect on non-user sidecar containers that come\n# from Knative or your service mesh\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-security-context\nkubernetes.podspec-securitycontext: \"disabled\"\n\n# Indicated whether sharing the process namespace via ShareProcessNamespace pod spec is allowed.\n# This can be especially useful for sharing data from images directly between sidecars\n#\n# See: https://knative.dev/docs/serving/configuration/feature-flags/#kubernetes-share-process-namespace\nkubernetes.podspec-shareprocessnamespace: \"disabled\"\n\n# Indicates whether Kubernetes PriorityClassName support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-priority-class-name\nkubernetes.podspec-priorityclassname: \"disabled\"\n\n# Indicates whether Kubernetes SchedulerName support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-scheduler-name\nkubernetes.podspec-schedulername: \"disabled\"\n\n# This feature flag allows end-users to add a subset of capabilities on the Pod's SecurityContext.\n#\n# When set to \"enabled\" or \"allowed\" it allows capabilities to be added to the container.\n# For a list of possible capabilities, see https://man7.org/linux/man-pages/man7/capabilities.7.html\nkubernetes.containerspec-addcapabilities: \"disabled\"\n\n# This feature validates PodSpecs from the validating webhook\n# against the K8s API Server.\n#\n# When \"enabled\", the server will always run the extra validation.\n# When \"allowed\", the server will not run the dry-run validation by default.\n#   However, clients may enable the behavior on an individual Service by\n#   attaching the following metadata annotation: \"features.knative.dev/podspec-dryrun\":\"enabled\".\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-dry-run\nkubernetes.podspec-dryrun: \"allowed\"\n\n# Controls whether tag header based routing feature are enabled or not.\n# 1. Enabled: enabling tag header based routing\n# 2. Disabled: disabling tag header based routing\n# See: https://knative.dev/docs/serving/feature-flags/#tag-header-based-routing\ntag-header-based-routing: \"disabled\"\n\n# Controls whether http2 auto-detection should be enabled or not.\n# 1. Enabled: http2 connection will be attempted via upgrade.\n# 2. Disabled: http2 connection will only be attempted when port name is set to \"h2c\".\nautodetect-http2: \"disabled\"\n\n# Controls whether volume support for EmptyDir is enabled or not.\n# 1. Enabled: enabling EmptyDir volume support\n# 2. Disabled: disabling EmptyDir volume support\nkubernetes.podspec-volumes-emptydir: \"enabled\"\n\n# Controls whether init containers support is enabled or not.\n# 1. Enabled: enabling init containers support\n# 2. Disabled: disabling init containers support\nkubernetes.podspec-init-containers: \"disabled\"\n\n# Controls whether persistent volume claim support is enabled or not.\n# 1. Enabled: enabling persistent volume claim support\n# 2. Disabled: disabling persistent volume claim support\nkubernetes.podspec-persistent-volume-claim: \"disabled\"\n\n# Controls whether write access for persistent volumes is enabled or not.\n# 1. Enabled: enabling write access for persistent volumes\n# 2. Disabled: disabling write access for persistent volumes\nkubernetes.podspec-persistent-volume-write: \"disabled\"\n\n# Controls if the queue proxy podInfo feature is enabled, allowed or disabled\n#\n# This feature should be enabled/allowed when using queue proxy Options (Extensions)\n# Enabling will mount a podInfo volume to the queue proxy container.\n# The volume will contains an 'annotations' file (from the pod's annotation field).\n# The annotations in this file include the Service annotations set by the client creating the service.\n# If mounted, the annotations can be accessed by queue proxy extensions at /etc/podinfo/annnotations\n#\n# 1. \"enabled\": always mount a podInfo volume\n# 2. \"disabled\": never mount a podInfo volume\n# 3. \"allowed\": by default, do not mount a podInfo volume\n#   However, a client may mount the podInfo volume on an individual Service by attaching\n#   the following metadata annotation to the Service: \"features.knative.dev/queueproxy-podinfo\":\"enabled\".\n#\n# NOTE THAT THIS IS AN EXPERIMENTAL / ALPHA FEATURE\nqueueproxy.mount-podinfo: \"disabled\"\n\n# Default queue proxy resource requests and limits to good values for most cases if set.\nqueueproxy.resource-defaults: \"disabled\""
   }
 };
-export const ConfigMap_ConfigGc: ConfigMap = {
+export const ConfigMap_ConfigGc: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6187,7 +6187,7 @@ export const ConfigMap_ConfigGc: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# ---------------------------------------\n# Garbage Collector Settings\n# ---------------------------------------\n#\n# Active\n#   * Revisions which are referenced by a Route are considered active.\n#   * Individual revisions may be marked with the annotation\n#      \"serving.knative.dev/no-gc\":\"true\" to be permanently considered active.\n#   * Active revisions are not considered for GC.\n# Retention\n#   * Revisions are retained if they are any of the following:\n#       1. Active\n#       2. Were created within \"retain-since-create-time\"\n#       3. Were last referenced by a route within\n#           \"retain-since-last-active-time\"\n#       4. There are fewer than \"min-non-active-revisions\"\n#     If none of these conditions are met, or if the count of revisions exceed\n#      \"max-non-active-revisions\", they will be deleted by GC.\n#     The special value \"disabled\" may be used to turn off these limits.\n#\n# Example config to immediately collect any inactive revision:\n#    min-non-active-revisions: \"0\"\n#    max-non-active-revisions: \"0\"\n#    retain-since-create-time: \"disabled\"\n#    retain-since-last-active-time: \"disabled\"\n#\n# Example config to always keep around the last ten non-active revisions:\n#     retain-since-create-time: \"disabled\"\n#     retain-since-last-active-time: \"disabled\"\n#     max-non-active-revisions: \"10\"\n#\n# Example config to disable all garbage collection:\n#     retain-since-create-time: \"disabled\"\n#     retain-since-last-active-time: \"disabled\"\n#     max-non-active-revisions: \"disabled\"\n#\n# Example config to keep recently deployed or active revisions,\n# always maintain the last two in case of rollback, and prevent\n# burst activity from exploding the count of old revisions:\n#      retain-since-create-time: \"48h\"\n#      retain-since-last-active-time: \"15h\"\n#      min-non-active-revisions: \"2\"\n#      max-non-active-revisions: \"1000\"\n\n# Duration since creation before considering a revision for GC or \"disabled\".\nretain-since-create-time: \"48h\"\n\n# Duration since active before considering a revision for GC or \"disabled\".\nretain-since-last-active-time: \"15h\"\n\n# Minimum number of non-active revisions to retain.\nmin-non-active-revisions: \"20\"\n\n# Maximum number of non-active revisions to retain\n# or \"disabled\" to disable any maximum limit.\nmax-non-active-revisions: \"1000\"\n"
   }
 };
-export const ConfigMap_ConfigLeaderElection: ConfigMap = {
+export const ConfigMap_ConfigLeaderElection: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6206,7 +6206,7 @@ export const ConfigMap_ConfigLeaderElection: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# lease-duration is how long non-leaders will wait to try to acquire the\n# lock; 15 seconds is the value used by core kubernetes controllers.\nlease-duration: \"60s\"\n\n# renew-deadline is how long a leader will try to renew the lease before\n# giving up; 10 seconds is the value used by core kubernetes controllers.\nrenew-deadline: \"40s\"\n\n# retry-period is how long the leader election client waits between tries of\n# actions; 2 seconds is the value used by core kubernetes controllers.\nretry-period: \"10s\"\n\n# buckets is the number of buckets used to partition key space of each\n# Reconciler. If this number is M and the replica number of the controller\n# is N, the N replicas will compete for the M buckets. The owner of a\n# bucket will take care of the reconciling for the keys partitioned into\n# that bucket.\nbuckets: \"1\"\n"
   }
 };
-export const ConfigMap_ConfigLogging: ConfigMap = {
+export const ConfigMap_ConfigLogging: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6225,7 +6225,7 @@ export const ConfigMap_ConfigLogging: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# Common configuration for all Knative codebase\nzap-logger-config: |\n  {\n    \"level\": \"info\",\n    \"development\": false,\n    \"outputPaths\": [\"stdout\"],\n    \"errorOutputPaths\": [\"stderr\"],\n    \"encoding\": \"json\",\n    \"encoderConfig\": {\n      \"timeKey\": \"timestamp\",\n      \"levelKey\": \"severity\",\n      \"nameKey\": \"logger\",\n      \"callerKey\": \"caller\",\n      \"messageKey\": \"message\",\n      \"stacktraceKey\": \"stacktrace\",\n      \"lineEnding\": \"\",\n      \"levelEncoder\": \"\",\n      \"timeEncoder\": \"iso8601\",\n      \"durationEncoder\": \"\",\n      \"callerEncoder\": \"\"\n    }\n  }\n\n# Log level overrides\n# For all components except the queue proxy,\n# changes are picked up immediately.\n# For queue proxy, changes require recreation of the pods.\nloglevel.controller: \"info\"\nloglevel.autoscaler: \"info\"\nloglevel.queueproxy: \"info\"\nloglevel.webhook: \"info\"\nloglevel.activator: \"info\"\nloglevel.hpaautoscaler: \"info\"\nloglevel.net-istio-controller: \"info\"\nloglevel.net-contour-controller: \"info\"\nloglevel.net-kourier-controller: \"info\"\nloglevel.net-gateway-api-controller: \"info\"\n"
   }
 };
-export const ConfigMap_ConfigNetwork: ConfigMap = {
+export const ConfigMap_ConfigNetwork: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6244,7 +6244,7 @@ export const ConfigMap_ConfigNetwork: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# ingress-class specifies the default ingress class\n# to use when not dictated by Route annotation.\n#\n# If not specified, will use the Istio ingress.\n#\n# Note that changing the Ingress class of an existing Route\n# will result in undefined behavior.  Therefore it is best to only\n# update this value during the setup of Knative, to avoid getting\n# undefined behavior.\ningress-class: \"istio.ingress.networking.knative.dev\"\n\n# certificate-class specifies the default Certificate class\n# to use when not dictated by Route annotation.\n#\n# If not specified, will use the Cert-Manager Certificate.\n#\n# Note that changing the Certificate class of an existing Route\n# will result in undefined behavior.  Therefore it is best to only\n# update this value during the setup of Knative, to avoid getting\n# undefined behavior.\ncertificate-class: \"cert-manager.certificate.networking.knative.dev\"\n\n# namespace-wildcard-cert-selector specifies a LabelSelector which\n# determines which namespaces should have a wildcard certificate\n# provisioned.\n#\n# Use an empty value to disable the feature (this is the default):\n#   namespace-wildcard-cert-selector: \"\"\n#\n# Use an empty object to enable for all namespaces\n#   namespace-wildcard-cert-selector: {}\n#\n# Useful labels include the \"kubernetes.io/metadata.name\" label to\n# avoid provisioning a certificate for the \"kube-system\" namespaces.\n# Use the following selector to match pre-1.0 behavior of using\n# \"networking.knative.dev/disableWildcardCert\" to exclude namespaces:\n#\n# matchExpressions:\n# - key: \"networking.knative.dev/disableWildcardCert\"\n#   operator: \"NotIn\"\n#   values: [\"true\"]\nnamespace-wildcard-cert-selector: \"\"\n\n# domain-template specifies the golang text template string to use\n# when constructing the Knative service's DNS name. The default\n# value is \"{{.Name}}.{{.Namespace}}.{{.Domain}}\".\n#\n# Valid variables defined in the template include Name, Namespace, Domain,\n# Labels, and Annotations. Name will be the result of the tag-template\n# below, if a tag is specified for the route.\n#\n# Changing this value might be necessary when the extra levels in\n# the domain name generated is problematic for wildcard certificates\n# that only support a single level of domain name added to the\n# certificate's domain. In those cases you might consider using a value\n# of \"{{.Name}}-{{.Namespace}}.{{.Domain}}\", or removing the Namespace\n# entirely from the template. When choosing a new value be thoughtful\n# of the potential for conflicts - for example, when users choose to use\n# characters such as `-` in their service, or namespace, names.\n# {{.Annotations}} or {{.Labels}} can be used for any customization in the\n# go template if needed.\n# We strongly recommend keeping namespace part of the template to avoid\n# domain name clashes:\n# eg. '{{.Name}}-{{.Namespace}}.{{ index .Annotations \"sub\"}}.{{.Domain}}'\n# and you have an annotation {\"sub\":\"foo\"}, then the generated template\n# would be {Name}-{Namespace}.foo.{Domain}\ndomain-template: \"{{.Name}}.{{.Namespace}}.{{.Domain}}\"\n\n# tag-template specifies the golang text template string to use\n# when constructing the DNS name for \"tags\" within the traffic blocks\n# of Routes and Configuration.  This is used in conjunction with the\n# domain-template above to determine the full URL for the tag.\ntag-template: \"{{.Tag}}-{{.Name}}\"\n\n# auto-tls is deprecated and replaced by external-domain-tls\nauto-tls: \"Disabled\"\n\n# Controls whether TLS certificates are automatically provisioned and\n# installed in the Knative ingress to terminate TLS connections\n# for cluster external domains (like: app.example.com)\n# - Enabled: enables the TLS certificate provisioning feature for cluster external domains.\n# - Disabled: disables the TLS certificate provisioning feature for cluster external domains.\nexternal-domain-tls: \"Disabled\"\n\n# Controls weather TLS certificates are automatically provisioned and\n# installed in the Knative ingress to terminate TLS connections\n# for cluster local domains (like: app.namespace.svc.<your-cluster-domain>)\n# - Enabled: enables the TLS certificate provisioning feature for cluster cluster-local domains.\n# - Disabled: disables the TLS certificate provisioning feature for cluster cluster local domains.\n# NOTE: This flag is in an alpha state and is mostly here to enable internal testing\n#       for now. Use with caution.\ncluster-local-domain-tls: \"Disabled\"\n\n# internal-encryption is deprecated and replaced by system-internal-tls\ninternal-encryption: \"false\"\n\n# system-internal-tls controls weather TLS encryption is used for connections between\n# the internal components of Knative:\n# - ingress to activator\n# - ingress to queue-proxy\n# - activator to queue-proxy\n#\n# Possible values for this flag are:\n# - Enabled: enables the TLS certificate provisioning feature for cluster cluster-local domains.\n# - Disabled: disables the TLS certificate provisioning feature for cluster cluster local domains.\n# NOTE: This flag is in an alpha state and is mostly here to enable internal testing\n#       for now. Use with caution.\nsystem-internal-tls: \"Disabled\"\n\n# Controls the behavior of the HTTP endpoint for the Knative ingress.\n# It requires auto-tls to be enabled.\n# - Enabled: The Knative ingress will be able to serve HTTP connection.\n# - Redirected: The Knative ingress will send a 301 redirect for all\n# http connections, asking the clients to use HTTPS.\n#\n# \"Disabled\" option is deprecated.\nhttp-protocol: \"Enabled\"\n\n# rollout-duration contains the minimal duration in seconds over which the\n# Configuration traffic targets are rolled out to the newest revision.\nrollout-duration: \"0\"\n\n# autocreate-cluster-domain-claims controls whether ClusterDomainClaims should\n# be automatically created (and deleted) as needed when DomainMappings are\n# reconciled.\n#\n# If this is \"false\" (the default), the cluster administrator is\n# responsible for creating ClusterDomainClaims and delegating them to\n# namespaces via their spec.Namespace field. This setting should be used in\n# multitenant environments which need to control which namespace can use a\n# particular domain name in a domain mapping.\n#\n# If this is \"true\", users are able to associate arbitrary names with their\n# services via the DomainMapping feature.\nautocreate-cluster-domain-claims: \"false\"\n\n# If true, networking plugins can add additional information to deployed\n# applications to make their pods directly accessible via their IPs even if mesh is\n# enabled and thus direct-addressability is usually not possible.\n# Consumers like Knative Serving can use this setting to adjust their behavior\n# accordingly, i.e. to drop fallback solutions for non-pod-addressable systems.\n#\n# NOTE: This flag is in an alpha state and is mostly here to enable internal testing\n#       for now. Use with caution.\nenable-mesh-pod-addressability: \"false\"\n\n# mesh-compatibility-mode indicates whether consumers of network plugins\n# should directly contact Pod IPs (most efficient), or should use the\n# Cluster IP (less efficient, needed when mesh is enabled unless\n# `enable-mesh-pod-addressability`, above, is set).\n# Permitted values are:\n#  - \"auto\" (default): automatically determine which mesh mode to use by trying Pod IP and falling back to Cluster IP as needed.\n#  - \"enabled\": always use Cluster IP and do not attempt to use Pod IPs.\n#  - \"disabled\": always use Pod IPs and do not fall back to Cluster IP on failure.\nmesh-compatibility-mode: \"auto\"\n\n# Defines the scheme used for external URLs if auto-tls is not enabled.\n# This can be used for making Knative report all URLs as \"HTTPS\" for example, if you're\n# fronting Knative with an external loadbalancer that deals with TLS termination and\n# Knative doesn't know about that otherwise.\ndefault-external-scheme: \"http\"\n"
   }
 };
-export const ConfigMap_ConfigObservability: ConfigMap = {
+export const ConfigMap_ConfigObservability: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6263,7 +6263,7 @@ export const ConfigMap_ConfigObservability: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# logging.enable-var-log-collection defaults to false.\n# The fluentd daemon set will be set up to collect /var/log if\n# this flag is true.\nlogging.enable-var-log-collection: \"false\"\n\n# logging.revision-url-template provides a template to use for producing the\n# logging URL that is injected into the status of each Revision.\nlogging.revision-url-template: \"http://logging.example.com/?revisionUID=${REVISION_UID}\"\n\n# If non-empty, this enables queue proxy writing user request logs to stdout, excluding probe\n# requests.\n# NB: after 0.18 release logging.enable-request-log must be explicitly set to true\n# in order for request logging to be enabled.\n#\n# The value determines the shape of the request logs and it must be a valid go text/template.\n# It is important to keep this as a single line. Multiple lines are parsed as separate entities\n# by most collection agents and will split the request logs into multiple records.\n#\n# The following fields and functions are available to the template:\n#\n# Request: An http.Request (see https://golang.org/pkg/net/http/#Request)\n# representing an HTTP request received by the server.\n#\n# Response:\n# struct {\n#   Code    int       // HTTP status code (see https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml)\n#   Size    int       // An int representing the size of the response.\n#   Latency float64   // A float64 representing the latency of the response in seconds.\n# }\n#\n# Revision:\n# struct {\n#   Name          string  // Knative revision name\n#   Namespace     string  // Knative revision namespace\n#   Service       string  // Knative service name\n#   Configuration string  // Knative configuration name\n#   PodName       string  // Name of the pod hosting the revision\n#   PodIP         string  // IP of the pod hosting the revision\n# }\n#\nlogging.request-log-template: '{\"httpRequest\": {\"requestMethod\": \"{{.Request.Method}}\", \"requestUrl\": \"{{js .Request.RequestURI}}\", \"requestSize\": \"{{.Request.ContentLength}}\", \"status\": {{.Response.Code}}, \"responseSize\": \"{{.Response.Size}}\", \"userAgent\": \"{{js .Request.UserAgent}}\", \"remoteIp\": \"{{js .Request.RemoteAddr}}\", \"serverIp\": \"{{.Revision.PodIP}}\", \"referer\": \"{{js .Request.Referer}}\", \"latency\": \"{{.Response.Latency}}s\", \"protocol\": \"{{.Request.Proto}}\"}, \"traceId\": \"{{index .Request.Header \"X-B3-Traceid\"}}\"}'\n\n# If true, the request logging will be enabled.\n# NB: up to and including Knative version 0.18 if logging.request-log-template is non-empty, this value\n# will be ignored.\nlogging.enable-request-log: \"false\"\n\n# If true, this enables queue proxy writing request logs for probe requests to stdout.\n# It uses the same template for user requests, i.e. logging.request-log-template.\nlogging.enable-probe-request-log: \"false\"\n\n# metrics.backend-destination field specifies the system metrics destination.\n# It supports either prometheus (the default) or opencensus.\nmetrics.backend-destination: prometheus\n\n# metrics.reporting-period-seconds specifies the global metrics reporting period for control and data plane components.\n# If a zero or negative value is passed the default reporting period is used (10 secs).\n# If the attribute is not specified a default value is used per metrics backend.\n# For the prometheus backend the default reporting period is 5s while for opencensus it is 60s.\nmetrics.reporting-period-seconds: \"5\"\n\n# metrics.request-metrics-backend-destination specifies the request metrics\n# destination. It enables queue proxy to send request metrics.\n# Currently supported values: prometheus (the default), opencensus.\nmetrics.request-metrics-backend-destination: prometheus\n\n# metrics.request-metrics-reporting-period-seconds specifies the request metrics reporting period in sec at queue proxy.\n# If a zero or negative value is passed the default reporting period is used (10 secs).\n# If the attribute is not specified, it is overridden by the value of metrics.reporting-period-seconds.\nmetrics.request-metrics-reporting-period-seconds: \"5\"\n\n# profiling.enable indicates whether it is allowed to retrieve runtime profiling data from\n# the pods via an HTTP server in the format expected by the pprof visualization tool. When\n# enabled, the Knative Serving pods expose the profiling data on an alternate HTTP port 8008.\n# The HTTP context root for profiling is then /debug/pprof/.\nprofiling.enable: \"false\"\n"
   }
 };
-export const ConfigMap_ConfigTracing: ConfigMap = {
+export const ConfigMap_ConfigTracing: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -6282,7 +6282,7 @@ export const ConfigMap_ConfigTracing: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n#\n# This may be \"zipkin\" or \"none\" (default)\nbackend: \"none\"\n\n# URL to zipkin collector where traces are sent.\n# This must be specified when backend is \"zipkin\"\nzipkin-endpoint: \"http://zipkin.istio-system.svc.cluster.local:9411/api/v2/spans\"\n\n# Enable zipkin debug mode. This allows all spans to be sent to the server\n# bypassing sampling.\ndebug: \"false\"\n\n# Percentage (0-1) of requests to trace\nsample-rate: \"0.1\"\n"
   }
 };
-export const HorizontalPodAutoscaler_Activator: AutoscalingV2HorizontalPodAutoscaler = {
+export const HorizontalPodAutoscaler_Activator: KubernetesResource = {
   apiVersion: "autoscaling/v2",
   kind: "HorizontalPodAutoscaler",
   metadata: {
@@ -6314,7 +6314,7 @@ export const HorizontalPodAutoscaler_Activator: AutoscalingV2HorizontalPodAutosc
     }
   }
 };
-export const PodDisruptionBudget_ActivatorPdb: PolicyV1PodDisruptionBudget = {
+export const PodDisruptionBudget_ActivatorPdb: KubernetesResource = {
   apiVersion: "policy/v1",
   kind: "PodDisruptionBudget",
   metadata: {
@@ -6335,7 +6335,7 @@ export const PodDisruptionBudget_ActivatorPdb: PolicyV1PodDisruptionBudget = {
     }
   }
 };
-export const Deployment_Activator: AppsV1Deployment = {
+export const Deployment_Activator: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -6473,7 +6473,7 @@ export const Deployment_Activator: AppsV1Deployment = {
     }
   }
 };
-export const Service_ActivatorService: Service = {
+export const Service_ActivatorService: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -6514,7 +6514,7 @@ export const Service_ActivatorService: Service = {
     type: "ClusterIP"
   }
 };
-export const Deployment_Autoscaler: AppsV1Deployment = {
+export const Deployment_Autoscaler: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -6646,7 +6646,7 @@ export const Deployment_Autoscaler: AppsV1Deployment = {
     }
   }
 };
-export const Service_Autoscaler: Service = {
+export const Service_Autoscaler: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -6678,7 +6678,7 @@ export const Service_Autoscaler: Service = {
     }
   }
 };
-export const Deployment_Controller: AppsV1Deployment = {
+export const Deployment_Controller: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -6803,7 +6803,7 @@ export const Deployment_Controller: AppsV1Deployment = {
     }
   }
 };
-export const Service_Controller: Service = {
+export const Service_Controller: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -6831,7 +6831,7 @@ export const Service_Controller: Service = {
     }
   }
 };
-export const HorizontalPodAutoscaler_Webhook: AutoscalingV2HorizontalPodAutoscaler = {
+export const HorizontalPodAutoscaler_Webhook: KubernetesResource = {
   apiVersion: "autoscaling/v2",
   kind: "HorizontalPodAutoscaler",
   metadata: {
@@ -6863,7 +6863,7 @@ export const HorizontalPodAutoscaler_Webhook: AutoscalingV2HorizontalPodAutoscal
     }
   }
 };
-export const PodDisruptionBudget_WebhookPdb: PolicyV1PodDisruptionBudget = {
+export const PodDisruptionBudget_WebhookPdb: KubernetesResource = {
   apiVersion: "policy/v1",
   kind: "PodDisruptionBudget",
   metadata: {
@@ -6884,7 +6884,7 @@ export const PodDisruptionBudget_WebhookPdb: PolicyV1PodDisruptionBudget = {
     }
   }
 };
-export const Deployment_Webhook: AppsV1Deployment = {
+export const Deployment_Webhook: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -7016,7 +7016,7 @@ export const Deployment_Webhook: AppsV1Deployment = {
     }
   }
 };
-export const Service_Webhook: Service = {
+export const Service_Webhook: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -7050,7 +7050,7 @@ export const Service_Webhook: Service = {
     }
   }
 };
-export const ValidatingWebhookConfiguration_ConfigWebhookServingKnativeDev: AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration = {
+export const ValidatingWebhookConfiguration_ConfigWebhookServingKnativeDev: KubernetesResource = {
   apiVersion: "admissionregistration.k8s.io/v1",
   kind: "ValidatingWebhookConfiguration",
   metadata: {
@@ -7086,7 +7086,7 @@ export const ValidatingWebhookConfiguration_ConfigWebhookServingKnativeDev: Admi
     timeoutSeconds: 10
   }]
 };
-export const MutatingWebhookConfiguration_WebhookServingKnativeDev: AdmissionregistrationK8sIoV1MutatingWebhookConfiguration = {
+export const MutatingWebhookConfiguration_WebhookServingKnativeDev: KubernetesResource = {
   apiVersion: "admissionregistration.k8s.io/v1",
   kind: "MutatingWebhookConfiguration",
   metadata: {
@@ -7118,7 +7118,7 @@ export const MutatingWebhookConfiguration_WebhookServingKnativeDev: Admissionreg
     timeoutSeconds: 10
   }]
 };
-export const ValidatingWebhookConfiguration_ValidationWebhookServingKnativeDev: AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration = {
+export const ValidatingWebhookConfiguration_ValidationWebhookServingKnativeDev: KubernetesResource = {
   apiVersion: "admissionregistration.k8s.io/v1",
   kind: "ValidatingWebhookConfiguration",
   metadata: {
@@ -7150,7 +7150,7 @@ export const ValidatingWebhookConfiguration_ValidationWebhookServingKnativeDev: 
     timeoutSeconds: 10
   }]
 };
-export const Secret_WebhookCerts: Secret = {
+export const Secret_WebhookCerts: KubernetesResource = {
   apiVersion: "v1",
   kind: "Secret",
   metadata: {
@@ -7163,7 +7163,7 @@ export const Secret_WebhookCerts: Secret = {
     namespace: "knative-serving"
   }
 };
-export const Namespace_KourierSystem: Namespace = {
+export const Namespace_KourierSystem: KubernetesResource = {
   apiVersion: "v1",
   kind: "Namespace",
   metadata: {
@@ -7176,7 +7176,7 @@ export const Namespace_KourierSystem: Namespace = {
     name: "kourier-system"
   }
 };
-export const ConfigMap_KourierBootstrap: ConfigMap = {
+export const ConfigMap_KourierBootstrap: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -7193,7 +7193,7 @@ export const ConfigMap_KourierBootstrap: ConfigMap = {
     "envoy-bootstrap.yaml": "dynamic_resources:\n  ads_config:\n    transport_api_version: V3\n    api_type: GRPC\n    rate_limit_settings: {}\n    grpc_services:\n    - envoy_grpc: {cluster_name: xds_cluster}\n  cds_config:\n    resource_api_version: V3\n    ads: {}\n  lds_config:\n    resource_api_version: V3\n    ads: {}\nnode:\n  cluster: kourier-knative\n  id: 3scale-kourier-gateway\nstatic_resources:\n  listeners:\n    - name: stats_listener\n      address:\n        socket_address:\n          address: 0.0.0.0\n          port_value: 9000\n      filter_chains:\n        - filters:\n            - name: envoy.filters.network.http_connection_manager\n              typed_config:\n                \"@type\": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager\n                stat_prefix: stats_server\n                http_filters:\n                  - name: envoy.filters.http.router\n                    typed_config:\n                      \"@type\": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router\n                route_config:\n                  virtual_hosts:\n                    - name: admin_interface\n                      domains:\n                        - \"*\"\n                      routes:\n                        - match:\n                            safe_regex:\n                              regex: '/(certs|stats(/prometheus)?|server_info|clusters|listeners|ready)?'\n                            headers:\n                              - name: ':method'\n                                string_match:\n                                  exact: GET\n                          route:\n                            cluster: service_stats\n                        - match:\n                            safe_regex:\n                              regex: '/drain_listeners'\n                            headers:\n                              - name: ':method'\n                                string_match:\n                                  exact: POST\n                          route:\n                            cluster: service_stats\n  clusters:\n    - name: service_stats\n      connect_timeout: 0.250s\n      type: static\n      load_assignment:\n        cluster_name: service_stats\n        endpoints:\n          lb_endpoints:\n            endpoint:\n              address:\n                socket_address:\n                  address: 127.0.0.1\n                  port_value: 9901\n    - name: xds_cluster\n      # This keepalive is recommended by envoy docs.\n      # https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol\n      typed_extension_protocol_options:\n        envoy.extensions.upstreams.http.v3.HttpProtocolOptions:\n          \"@type\": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions\n          explicit_http_config:\n            http2_protocol_options:\n              connection_keepalive:\n                interval: 30s\n                timeout: 5s\n      connect_timeout: 1s\n      load_assignment:\n        cluster_name: xds_cluster\n        endpoints:\n          lb_endpoints:\n            endpoint:\n              address:\n                socket_address:\n                  address: \"net-kourier-controller.knative-serving\"\n                  port_value: 18000\n      type: STRICT_DNS\nadmin:\n  access_log:\n  - name: envoy.access_loggers.stdout\n    typed_config:\n      \"@type\": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog\n  address:\n    socket_address:\n      address: 127.0.0.1\n      port_value: 9901\n"
   }
 };
-export const ConfigMap_ConfigKourier: ConfigMap = {
+export const ConfigMap_ConfigKourier: KubernetesResource = {
   apiVersion: "v1",
   kind: "ConfigMap",
   metadata: {
@@ -7210,7 +7210,7 @@ export const ConfigMap_ConfigKourier: ConfigMap = {
     _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# Specifies whether requests reaching the Kourier gateway\n# in the context of services should be logged. Readiness\n# probes etc. must be configured via the bootstrap config.\nenable-service-access-logging: \"true\"\n\n# Specifies whether to use proxy-protocol in order to safely\n# transport connection information such as a client's address\n# across multiple layers of TCP proxies.\n# NOTE THAT THIS IS AN EXPERIMENTAL / ALPHA FEATURE\nenable-proxy-protocol: \"false\"\n\n# The server certificates to serve the internal TLS traffic for Kourier Gateway.\n# It is specified by the secret name in controller namespace, which has\n# the \"tls.crt\" and \"tls.key\" data field.\n# Use an empty value to disable the feature (default).\n#\n# NOTE: This flag is in an alpha state and is mostly here to enable internal testing\n#       for now. Use with caution.\ncluster-cert-secret: \"\"\n\n# Specifies the amount of time that Kourier waits for the incoming requests.\n# The default, 0s, imposes no timeout at all.\nstream-idle-timeout: \"0s\"\n\n# Specifies whether to use CryptoMB private key provider in order to\n# acclerate the TLS handshake.\n# NOTE THAT THIS IS AN EXPERIMENTAL / ALPHA FEATURE.\nenable-cryptomb: \"false\"\n\n# Configures the number of additional ingress proxy hops from the\n# right side of the x-forwarded-for HTTP header to trust.\ntrusted-hops-count: \"0\"\n\n# Specifies the cipher suites for TLS external listener.\n# Use ',' separated values like \"ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-ECDSA-CHACHA20-POLY1305\"\n# The default uses the default cipher suites of the envoy version.\ncipher-suites: \"\"\n"
   }
 };
-export const ServiceAccount_NetKourier: ServiceAccount = {
+export const ServiceAccount_NetKourier: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -7224,7 +7224,7 @@ export const ServiceAccount_NetKourier: ServiceAccount = {
     namespace: "knative-serving"
   }
 };
-export const ClusterRole_NetKourier: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_NetKourier: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -7262,7 +7262,7 @@ export const ClusterRole_NetKourier: RbacAuthorizationK8sIoV1ClusterRole = {
     verbs: ["update"]
   }]
 };
-export const ClusterRoleBinding_NetKourier: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_NetKourier: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -7285,7 +7285,7 @@ export const ClusterRoleBinding_NetKourier: RbacAuthorizationK8sIoV1ClusterRoleB
     namespace: "knative-serving"
   }]
 };
-export const Deployment_NetKourierController: AppsV1Deployment = {
+export const Deployment_NetKourierController: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -7407,7 +7407,7 @@ export const Deployment_NetKourierController: AppsV1Deployment = {
     }
   }
 };
-export const Service_NetKourierController: Service = {
+export const Service_NetKourierController: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -7438,7 +7438,7 @@ export const Service_NetKourierController: Service = {
     type: "ClusterIP"
   }
 };
-export const Deployment_3scaleKourierGateway: AppsV1Deployment = {
+export const Deployment_3scaleKourierGateway: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -7586,7 +7586,7 @@ export const Deployment_3scaleKourierGateway: AppsV1Deployment = {
     }
   }
 };
-export const Service_Kourier: Service = {
+export const Service_Kourier: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -7617,7 +7617,7 @@ export const Service_Kourier: Service = {
     type: "LoadBalancer"
   }
 };
-export const Service_KourierInternal: Service = {
+export const Service_KourierInternal: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -7648,7 +7648,7 @@ export const Service_KourierInternal: Service = {
     type: "ClusterIP"
   }
 };
-export const HorizontalPodAutoscaler_3scaleKourierGateway: AutoscalingV2HorizontalPodAutoscaler = {
+export const HorizontalPodAutoscaler_3scaleKourierGateway: KubernetesResource = {
   apiVersion: "autoscaling/v2",
   kind: "HorizontalPodAutoscaler",
   metadata: {
@@ -7681,7 +7681,7 @@ export const HorizontalPodAutoscaler_3scaleKourierGateway: AutoscalingV2Horizont
     }
   }
 };
-export const PodDisruptionBudget_3scaleKourierGatewayPdb: PolicyV1PodDisruptionBudget = {
+export const PodDisruptionBudget_3scaleKourierGatewayPdb: KubernetesResource = {
   apiVersion: "policy/v1",
   kind: "PodDisruptionBudget",
   metadata: {

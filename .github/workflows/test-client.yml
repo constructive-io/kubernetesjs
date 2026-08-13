@@ -42,7 +42,7 @@ jobs:
 
     - name: Setup Kind cluster
       if: ${{ inputs.kubeconfig == '' }}
-      uses: helm/kind-action@v1.12.0
+      uses: ./.github/actions/setup-kind
       with:
         cluster_name: kind
         kubectl_version: v1.31.3

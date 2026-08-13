@@ -9269,7 +9269,7 @@ metadata:
     app.kubernetes.io/version: "1.15.0"
 # The data is populated at install time.
 ---
-# Source: https://github.com/knative/net-kourier/releases/download/knative-v1.15.0/kourier.yaml
+# Source: https://github.com/knative-extensions/net-kourier/releases/download/knative-v1.15.0/kourier.yaml
 ---
 # Copyright 2020 The Knative Authors
 #

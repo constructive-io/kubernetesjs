@@ -1,6 +1,6 @@
 /** Auto-generated typed resources for operator: cert-manager*/
-import type { KubernetesResource, AdmissionregistrationK8sIoV1MutatingWebhookConfiguration, AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration, ApiextensionsK8sIoV1CustomResourceDefinition, AppsV1Deployment, BatchV1Job, Namespace, RbacAuthorizationK8sIoV1ClusterRole, RbacAuthorizationK8sIoV1ClusterRoleBinding, RbacAuthorizationK8sIoV1Role, RbacAuthorizationK8sIoV1RoleBinding, Service, ServiceAccount } from "@kubernetesjs/ops";
-export const Namespace_CertManager: Namespace = {
+import type { KubernetesResource } from "@kubernetesjs/ops";
+export const Namespace_CertManager: KubernetesResource = {
   apiVersion: "v1",
   kind: "Namespace",
   metadata: {
@@ -10,7 +10,7 @@ export const Namespace_CertManager: Namespace = {
     name: "cert-manager"
   }
 };
-export const ServiceAccount_CertManagerCainjector: ServiceAccount = {
+export const ServiceAccount_CertManagerCainjector: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -28,7 +28,7 @@ export const ServiceAccount_CertManagerCainjector: ServiceAccount = {
   },
   automountServiceAccountToken: true
 };
-export const ServiceAccount_CertManager: ServiceAccount = {
+export const ServiceAccount_CertManager: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -46,7 +46,7 @@ export const ServiceAccount_CertManager: ServiceAccount = {
   },
   automountServiceAccountToken: true
 };
-export const ServiceAccount_CertManagerWebhook: ServiceAccount = {
+export const ServiceAccount_CertManagerWebhook: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -64,7 +64,7 @@ export const ServiceAccount_CertManagerWebhook: ServiceAccount = {
   },
   automountServiceAccountToken: true
 };
-export const CustomResourceDefinition_CertificaterequestsCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_CertificaterequestsCertManagerIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -282,7 +282,7 @@ export const CustomResourceDefinition_CertificaterequestsCertManagerIo: Apiexten
     }]
   }
 };
-export const CustomResourceDefinition_CertificatesCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_CertificatesCertManagerIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -832,7 +832,7 @@ export const CustomResourceDefinition_CertificatesCertManagerIo: ApiextensionsK8
     }]
   }
 };
-export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -3299,7 +3299,7 @@ export const CustomResourceDefinition_ChallengesAcmeCertManagerIo: Apiextensions
     }]
   }
 };
-export const CustomResourceDefinition_ClusterissuersCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_ClusterissuersCertManagerIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -6153,7 +6153,7 @@ export const CustomResourceDefinition_ClusterissuersCertManagerIo: Apiextensions
     }]
   }
 };
-export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_IssuersCertManagerIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -9008,7 +9008,7 @@ export const CustomResourceDefinition_IssuersCertManagerIo: ApiextensionsK8sIoV1
     }]
   }
 };
-export const CustomResourceDefinition_OrdersAcmeCertManagerIo: ApiextensionsK8sIoV1CustomResourceDefinition = {
+export const CustomResourceDefinition_OrdersAcmeCertManagerIo: KubernetesResource = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
@@ -9221,7 +9221,7 @@ export const CustomResourceDefinition_OrdersAcmeCertManagerIo: ApiextensionsK8sI
     }]
   }
 };
-export const ClusterRole_CertManagerCainjector: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerCainjector: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9262,7 +9262,7 @@ export const ClusterRole_CertManagerCainjector: RbacAuthorizationK8sIoV1ClusterR
     verbs: ["get", "list", "watch", "update", "patch"]
   }]
 };
-export const ClusterRole_CertManagerControllerIssuers: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerIssuers: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9295,7 +9295,7 @@ export const ClusterRole_CertManagerControllerIssuers: RbacAuthorizationK8sIoV1C
     verbs: ["create", "patch"]
   }]
 };
-export const ClusterRole_CertManagerControllerClusterissuers: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerClusterissuers: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9328,7 +9328,7 @@ export const ClusterRole_CertManagerControllerClusterissuers: RbacAuthorizationK
     verbs: ["create", "patch"]
   }]
 };
-export const ClusterRole_CertManagerControllerCertificates: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerCertificates: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9369,7 +9369,7 @@ export const ClusterRole_CertManagerControllerCertificates: RbacAuthorizationK8s
     verbs: ["create", "patch"]
   }]
 };
-export const ClusterRole_CertManagerControllerOrders: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerOrders: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9414,7 +9414,7 @@ export const ClusterRole_CertManagerControllerOrders: RbacAuthorizationK8sIoV1Cl
     verbs: ["create", "patch"]
   }]
 };
-export const ClusterRole_CertManagerControllerChallenges: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerChallenges: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9475,7 +9475,7 @@ export const ClusterRole_CertManagerControllerChallenges: RbacAuthorizationK8sIo
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_CertManagerControllerIngressShim: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerIngressShim: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9520,7 +9520,7 @@ export const ClusterRole_CertManagerControllerIngressShim: RbacAuthorizationK8sI
     verbs: ["create", "patch"]
   }]
 };
-export const ClusterRole_CertManagerClusterView: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerClusterView: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9542,7 +9542,7 @@ export const ClusterRole_CertManagerClusterView: RbacAuthorizationK8sIoV1Cluster
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_CertManagerView: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerView: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9571,7 +9571,7 @@ export const ClusterRole_CertManagerView: RbacAuthorizationK8sIoV1ClusterRole = 
     verbs: ["get", "list", "watch"]
   }]
 };
-export const ClusterRole_CertManagerEdit: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerEdit: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9602,7 +9602,7 @@ export const ClusterRole_CertManagerEdit: RbacAuthorizationK8sIoV1ClusterRole = 
     verbs: ["create", "delete", "deletecollection", "patch", "update"]
   }]
 };
-export const ClusterRole_CertManagerControllerApproveCertManagerIo: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerApproveCertManagerIo: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9624,7 +9624,7 @@ export const ClusterRole_CertManagerControllerApproveCertManagerIo: RbacAuthoriz
     verbs: ["approve"]
   }]
 };
-export const ClusterRole_CertManagerControllerCertificatesigningrequests: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerControllerCertificatesigningrequests: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9658,7 +9658,7 @@ export const ClusterRole_CertManagerControllerCertificatesigningrequests: RbacAu
     verbs: ["create"]
   }]
 };
-export const ClusterRole_CertManagerWebhookSubjectaccessreviews: RbacAuthorizationK8sIoV1ClusterRole = {
+export const ClusterRole_CertManagerWebhookSubjectaccessreviews: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRole",
   metadata: {
@@ -9679,7 +9679,7 @@ export const ClusterRole_CertManagerWebhookSubjectaccessreviews: RbacAuthorizati
     verbs: ["create"]
   }]
 };
-export const ClusterRoleBinding_CertManagerCainjector: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerCainjector: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9705,7 +9705,7 @@ export const ClusterRoleBinding_CertManagerCainjector: RbacAuthorizationK8sIoV1C
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerIssuers: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerIssuers: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9731,7 +9731,7 @@ export const ClusterRoleBinding_CertManagerControllerIssuers: RbacAuthorizationK
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerClusterissuers: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerClusterissuers: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9757,7 +9757,7 @@ export const ClusterRoleBinding_CertManagerControllerClusterissuers: RbacAuthori
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerCertificates: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerCertificates: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9783,7 +9783,7 @@ export const ClusterRoleBinding_CertManagerControllerCertificates: RbacAuthoriza
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerOrders: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerOrders: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9809,7 +9809,7 @@ export const ClusterRoleBinding_CertManagerControllerOrders: RbacAuthorizationK8
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerChallenges: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerChallenges: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9835,7 +9835,7 @@ export const ClusterRoleBinding_CertManagerControllerChallenges: RbacAuthorizati
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerIngressShim: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerIngressShim: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9861,7 +9861,7 @@ export const ClusterRoleBinding_CertManagerControllerIngressShim: RbacAuthorizat
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerApproveCertManagerIo: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerApproveCertManagerIo: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9887,7 +9887,7 @@ export const ClusterRoleBinding_CertManagerControllerApproveCertManagerIo: RbacA
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerControllerCertificatesigningrequests: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerControllerCertificatesigningrequests: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9913,7 +9913,7 @@ export const ClusterRoleBinding_CertManagerControllerCertificatesigningrequests:
     namespace: "cert-manager"
   }]
 };
-export const ClusterRoleBinding_CertManagerWebhookSubjectaccessreviews: RbacAuthorizationK8sIoV1ClusterRoleBinding = {
+export const ClusterRoleBinding_CertManagerWebhookSubjectaccessreviews: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "ClusterRoleBinding",
   metadata: {
@@ -9939,7 +9939,7 @@ export const ClusterRoleBinding_CertManagerWebhookSubjectaccessreviews: RbacAuth
     namespace: "cert-manager"
   }]
 };
-export const Role_CertManagerCainjectorLeaderelection: RbacAuthorizationK8sIoV1Role = {
+export const Role_CertManagerCainjectorLeaderelection: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "Role",
   metadata: {
@@ -9966,7 +9966,7 @@ export const Role_CertManagerCainjectorLeaderelection: RbacAuthorizationK8sIoV1R
     verbs: ["create"]
   }]
 };
-export const Role_CertManagerLeaderelection: RbacAuthorizationK8sIoV1Role = {
+export const Role_CertManagerLeaderelection: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "Role",
   metadata: {
@@ -9993,7 +9993,7 @@ export const Role_CertManagerLeaderelection: RbacAuthorizationK8sIoV1Role = {
     verbs: ["create"]
   }]
 };
-export const Role_CertManagerTokenrequest: RbacAuthorizationK8sIoV1Role = {
+export const Role_CertManagerTokenrequest: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "Role",
   metadata: {
@@ -10016,7 +10016,7 @@ export const Role_CertManagerTokenrequest: RbacAuthorizationK8sIoV1Role = {
     verbs: ["create"]
   }]
 };
-export const Role_CertManagerWebhookDynamicServing: RbacAuthorizationK8sIoV1Role = {
+export const Role_CertManagerWebhookDynamicServing: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "Role",
   metadata: {
@@ -10043,7 +10043,7 @@ export const Role_CertManagerWebhookDynamicServing: RbacAuthorizationK8sIoV1Role
     verbs: ["create"]
   }]
 };
-export const RoleBinding_CertManagerCainjectorLeaderelection: RbacAuthorizationK8sIoV1RoleBinding = {
+export const RoleBinding_CertManagerCainjectorLeaderelection: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "RoleBinding",
   metadata: {
@@ -10070,7 +10070,7 @@ export const RoleBinding_CertManagerCainjectorLeaderelection: RbacAuthorizationK
     namespace: "cert-manager"
   }]
 };
-export const RoleBinding_CertManagerLeaderelection: RbacAuthorizationK8sIoV1RoleBinding = {
+export const RoleBinding_CertManagerLeaderelection: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "RoleBinding",
   metadata: {
@@ -10097,7 +10097,7 @@ export const RoleBinding_CertManagerLeaderelection: RbacAuthorizationK8sIoV1Role
     namespace: "cert-manager"
   }]
 };
-export const RoleBinding_CertManagerCertManagerTokenrequest: RbacAuthorizationK8sIoV1RoleBinding = {
+export const RoleBinding_CertManagerCertManagerTokenrequest: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "RoleBinding",
   metadata: {
@@ -10124,7 +10124,7 @@ export const RoleBinding_CertManagerCertManagerTokenrequest: RbacAuthorizationK8
     namespace: "cert-manager"
   }]
 };
-export const RoleBinding_CertManagerWebhookDynamicServing: RbacAuthorizationK8sIoV1RoleBinding = {
+export const RoleBinding_CertManagerWebhookDynamicServing: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "RoleBinding",
   metadata: {
@@ -10151,7 +10151,7 @@ export const RoleBinding_CertManagerWebhookDynamicServing: RbacAuthorizationK8sI
     namespace: "cert-manager"
   }]
 };
-export const Service_CertManagerCainjector: Service = {
+export const Service_CertManagerCainjector: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -10181,7 +10181,7 @@ export const Service_CertManagerCainjector: Service = {
     type: "ClusterIP"
   }
 };
-export const Service_CertManager: Service = {
+export const Service_CertManager: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -10212,7 +10212,7 @@ export const Service_CertManager: Service = {
     type: "ClusterIP"
   }
 };
-export const Service_CertManagerWebhook: Service = {
+export const Service_CertManagerWebhook: KubernetesResource = {
   apiVersion: "v1",
   kind: "Service",
   metadata: {
@@ -10248,7 +10248,7 @@ export const Service_CertManagerWebhook: Service = {
     type: "ClusterIP"
   }
 };
-export const Deployment_CertManagerCainjector: AppsV1Deployment = {
+export const Deployment_CertManagerCainjector: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -10332,7 +10332,7 @@ export const Deployment_CertManagerCainjector: AppsV1Deployment = {
     }
   }
 };
-export const Deployment_CertManager: AppsV1Deployment = {
+export const Deployment_CertManager: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -10432,7 +10432,7 @@ export const Deployment_CertManager: AppsV1Deployment = {
     }
   }
 };
-export const Deployment_CertManagerWebhook: AppsV1Deployment = {
+export const Deployment_CertManagerWebhook: KubernetesResource = {
   apiVersion: "apps/v1",
   kind: "Deployment",
   metadata: {
@@ -10548,7 +10548,7 @@ export const Deployment_CertManagerWebhook: AppsV1Deployment = {
     }
   }
 };
-export const MutatingWebhookConfiguration_CertManagerWebhook: AdmissionregistrationK8sIoV1MutatingWebhookConfiguration = {
+export const MutatingWebhookConfiguration_CertManagerWebhook: KubernetesResource = {
   apiVersion: "admissionregistration.k8s.io/v1",
   kind: "MutatingWebhookConfiguration",
   metadata: {
@@ -10588,7 +10588,7 @@ export const MutatingWebhookConfiguration_CertManagerWebhook: Admissionregistrat
     timeoutSeconds: 30
   }]
 };
-export const ValidatingWebhookConfiguration_CertManagerWebhook: AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration = {
+export const ValidatingWebhookConfiguration_CertManagerWebhook: KubernetesResource = {
   apiVersion: "admissionregistration.k8s.io/v1",
   kind: "ValidatingWebhookConfiguration",
   metadata: {
@@ -10635,7 +10635,7 @@ export const ValidatingWebhookConfiguration_CertManagerWebhook: Admissionregistr
     timeoutSeconds: 30
   }]
 };
-export const ServiceAccount_CertManagerStartupapicheck: ServiceAccount = {
+export const ServiceAccount_CertManagerStartupapicheck: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
   metadata: {
@@ -10658,7 +10658,7 @@ export const ServiceAccount_CertManagerStartupapicheck: ServiceAccount = {
   },
   automountServiceAccountToken: true
 };
-export const Role_CertManagerStartupapicheckCreateCert: RbacAuthorizationK8sIoV1Role = {
+export const Role_CertManagerStartupapicheckCreateCert: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "Role",
   metadata: {
@@ -10685,7 +10685,7 @@ export const Role_CertManagerStartupapicheckCreateCert: RbacAuthorizationK8sIoV1
     verbs: ["create"]
   }]
 };
-export const RoleBinding_CertManagerStartupapicheckCreateCert: RbacAuthorizationK8sIoV1RoleBinding = {
+export const RoleBinding_CertManagerStartupapicheckCreateCert: KubernetesResource = {
   apiVersion: "rbac.authorization.k8s.io/v1",
   kind: "RoleBinding",
   metadata: {
@@ -10717,7 +10717,7 @@ export const RoleBinding_CertManagerStartupapicheckCreateCert: RbacAuthorization
     namespace: "cert-manager"
   }]
 };
-export const Job_CertManagerStartupapicheck: BatchV1Job = {
+export const Job_CertManagerStartupapicheck: KubernetesResource = {
   apiVersion: "batch/v1",
   kind: "Job",
   metadata: {
