@@ -114,6 +114,19 @@ const OPERATORS: OperatorConfig[] = [
           'https://github.com/knative-extensions/net-kourier/releases/download/knative-v1.15.0/kourier.yaml',
         ],
       },
+      {
+        // Both versions ship. v1.15.0 is what this repo's own e2e installs;
+        // v1.22.1 is what downstream deploys. Carrying both lets each consumer
+        // ask for the one it runs instead of one of them being wrong — which is
+        // what `sources` being an array was always for.
+        type: 'urls',
+        version: 'v1.22.1',
+        urls: [
+          'https://github.com/knative/serving/releases/download/knative-v1.22.1/serving-crds.yaml',
+          'https://github.com/knative/serving/releases/download/knative-v1.22.1/serving-core.yaml',
+          'https://github.com/knative-extensions/net-kourier/releases/download/knative-v1.22.1/kourier.yaml',
+        ],
+      },
     ],
   },
   {
