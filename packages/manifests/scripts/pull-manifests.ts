@@ -122,16 +122,6 @@ const OPERATORS: OperatorConfig[] = [
     ],
   },
   {
-    // Only one version, deliberately. The package is built to carry several --
-    // `sources` is an array -- but getOperatorResources ignores its version
-    // argument and returns whatever codegen emitted as the default, which is
-    // the last version pulled. So adding a second version silently redirects
-    // every consumer of getOperatorResources at it, including this repo's own
-    // e2e, which then reports the version it asked for while applying a
-    // different one.
-    //
-    // Adding v1.22.1 for downstream is worth doing and needs that accessor
-    // fixed first: per-version resources in codegen, not one set per operator.
     name: 'knative-serving',
     // Applied in three ordered parts, never merged: the CRDs have to be
     // established before serving-core's custom resources of those kinds exist.
@@ -153,6 +143,22 @@ const OPERATORS: OperatorConfig[] = [
           // work and neither is obviously wrong — which is how two consumers
           // came to name different repos for the same file.
           'https://github.com/knative-extensions/net-kourier/releases/download/knative-v1.15.0/kourier.yaml',
+        ],
+      },
+      {
+        // Two versions on purpose. This repo's e2e installs v1.15.0; downstream
+        // deploys v1.22.1. Carrying both lets each consumer ask for the one it
+        // runs, which is what `sources` being an array is for.
+        //
+        // Safe now that getOperatorResources honours its version argument. It
+        // did not before, and adding a second version silently redirected every
+        // caller at whichever was pulled last.
+        type: 'urls',
+        version: 'v1.22.1',
+        urls: [
+          'https://github.com/knative/serving/releases/download/knative-v1.22.1/serving-crds.yaml',
+          'https://github.com/knative/serving/releases/download/knative-v1.22.1/serving-core.yaml',
+          'https://github.com/knative-extensions/net-kourier/releases/download/knative-v1.22.1/kourier.yaml',
         ],
       },
 
