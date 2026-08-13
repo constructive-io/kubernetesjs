@@ -38,14 +38,14 @@ jobs:
     - name: Setup kubectl
       uses: azure/setup-kubectl@v3
       with:
-        version: v1.31.3
+        version: v1.34.1
 
     - name: Setup Kind cluster
       if: ${{ inputs.kubeconfig == '' }}
       uses: ./.github/actions/setup-kind
       with:
         cluster_name: kind
-        kubectl_version: v1.31.3
+        kubectl_version: v1.34.1
         wait: 300s
 
     - name: Setup pnpm

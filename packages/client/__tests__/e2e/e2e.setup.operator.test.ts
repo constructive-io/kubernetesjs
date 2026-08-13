@@ -23,14 +23,7 @@ const K8S_API = process.env.K8S_API || "http://127.0.0.1:8001";
 // default for a test: adding a version downstream would silently change what
 // this suite installs, and a suite whose subject moves without anyone choosing
 // it is not testing what its name says.
-//
-// knative-serving is pinned to v1.15.0 because v1.22.1 fails this suite in a
-// way that does not reproduce by hand — see constructive-planning#1630. That is
-// an apply-path problem to fix on its own, not a reason to hold the package
-// back from carrying the version downstream needs.
-const PINNED_VERSIONS: Record<string, string> = {
-  'knative-serving': 'v1.15.0',
-};
+const PINNED_VERSIONS: Record<string, string> = {};
 
 function versionFor(name: string): string {
   const versions = getOperatorVersions(name);

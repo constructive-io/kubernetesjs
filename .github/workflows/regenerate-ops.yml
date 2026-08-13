@@ -55,7 +55,7 @@ jobs:
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
         with:
-          version: v1.31.3
+          version: v1.34.1
 
       - name: Setup Helm
         uses: azure/setup-helm@v4
@@ -79,7 +79,7 @@ jobs:
         uses: ./.github/actions/setup-kind
         with:
           cluster_name: ops-codegen
-          kubectl_version: v1.31.3
+          kubectl_version: v1.34.1
           wait: 300s
 
       # Applied from the package, not from URLs. Every operator it vendors is
