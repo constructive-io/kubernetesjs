@@ -36,8 +36,17 @@ export class K8sApplier {
       defaultNamespace: opts.defaultNamespace ?? 'default',
       continueOnError: opts.continueOnError ?? true,
       log: opts.log ?? (() => {}),
+      // E2E used to get 30s here, presumably to fail fast. That is shorter than
+      // a cold image pull: Knative's webhook rolls out in about fourteen
+      // seconds on a warm machine and comfortably longer on a CI runner
+      // fetching the image for the first time — so the wait expired, the
+      // Certificate that needs the webhook was applied anyway, and the failure
+      // read as a webhook problem rather than as a timeout.
+      //
+      // Still shorter than the default, so a genuinely stuck webhook does not
+      // hold a suite for four minutes.
       webhookServiceWaitTimeoutMs:
-        opts.webhookServiceWaitTimeoutMs ?? (process.env.E2E_TESTS === 'true' ? 30_000 : 240_000),
+        opts.webhookServiceWaitTimeoutMs ?? (process.env.E2E_TESTS === 'true' ? 180_000 : 240_000),
     };
   }
 
