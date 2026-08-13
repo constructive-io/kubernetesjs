@@ -23,7 +23,7 @@ export const OPERATOR_IDS: ReadonlyArray<string> = ["cert-manager", "cloudnative
 export const OPERATOR_VERSIONS = {
   "cert-manager": ["v1.17.0"],
   "cloudnative-pg": ["1.25.2"],
-  "knative-serving": ["v1.15.0", "v1.22.1"],
+  "knative-serving": ["v1.15.0"],
   "kube-prometheus-stack": ["77.5.0"],
   "minio-operator": ["7.1.1"],
   "tekton-pipelines": ["v1.15.0"],
@@ -42,7 +42,7 @@ export const OPERATOR_MAP: Record<string, {
     resources: CloudnativePg.resources
   },
   "knative-serving": {
-    versions: ["v1.15.0", "v1.22.1"],
+    versions: ["v1.15.0"],
     resources: KnativeServing.resources
   },
   "kube-prometheus-stack": {
