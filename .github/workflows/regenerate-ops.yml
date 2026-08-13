@@ -201,6 +201,16 @@ jobs:
           git add packages/manifests/operators packages/manifests/src/generated \
                   packages/ops/scripts/swagger.json packages/ops/src/index.ts
           git commit -m "feat: regenerate manifests and ops client"
+          # --force-with-lease needs a local ref for the remote branch to
+          # compare against. actions/checkout does not fetch this one, so the
+          # lease has nothing to check and git refuses with "stale info" —
+          # every run after the first fails at the last step, having already
+          # done all the work.
+          #
+          # Fetching it first makes the lease meaningful: the push still
+          # refuses if someone else moved the branch, which is the protection
+          # worth keeping on a branch a human may have pushed a fix to.
+          git fetch origin feat/regenerate-ops-client || true
           git push --force-with-lease origin feat/regenerate-ops-client
           gh pr create \
             --title "feat(ops): regenerate client with updated CRD specs" \
