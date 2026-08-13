@@ -58692,86 +58692,6 @@ export const Deployment_KubePrometheusStackOperator: KubernetesResource = {
     }
   }
 };
-export const MutatingWebhookConfiguration_KubePrometheusStackAdmission: KubernetesResource = {
-  apiVersion: "admissionregistration.k8s.io/v1",
-  kind: "MutatingWebhookConfiguration",
-  metadata: {
-    annotations: null,
-    labels: {
-      app: "kube-prometheus-stack-admission",
-      "app.kubernetes.io/component": "prometheus-operator-webhook",
-      "app.kubernetes.io/instance": "kube-prometheus-stack",
-      "app.kubernetes.io/managed-by": "Helm",
-      "app.kubernetes.io/name": "kube-prometheus-stack-prometheus-operator",
-      "app.kubernetes.io/part-of": "kube-prometheus-stack",
-      "app.kubernetes.io/version": "77.5.0",
-      chart: "kube-prometheus-stack-77.5.0",
-      heritage: "Helm",
-      release: "kube-prometheus-stack"
-    },
-    name: "kube-prometheus-stack-admission"
-  },
-  webhooks: [{
-    admissionReviewVersions: ["v1", "v1beta1"],
-    clientConfig: {
-      service: {
-        name: "kube-prometheus-stack-operator",
-        namespace: "monitoring",
-        path: "/admission-prometheusrules/mutate"
-      }
-    },
-    failurePolicy: "Ignore",
-    name: "prometheusrulemutate.monitoring.coreos.com",
-    rules: [{
-      apiGroups: ["monitoring.coreos.com"],
-      apiVersions: ["*"],
-      operations: ["CREATE", "UPDATE"],
-      resources: ["prometheusrules"]
-    }],
-    sideEffects: "None",
-    timeoutSeconds: 10
-  }]
-};
-export const ValidatingWebhookConfiguration_KubePrometheusStackAdmission: KubernetesResource = {
-  apiVersion: "admissionregistration.k8s.io/v1",
-  kind: "ValidatingWebhookConfiguration",
-  metadata: {
-    annotations: null,
-    labels: {
-      app: "kube-prometheus-stack-admission",
-      "app.kubernetes.io/component": "prometheus-operator-webhook",
-      "app.kubernetes.io/instance": "kube-prometheus-stack",
-      "app.kubernetes.io/managed-by": "Helm",
-      "app.kubernetes.io/name": "kube-prometheus-stack-prometheus-operator",
-      "app.kubernetes.io/part-of": "kube-prometheus-stack",
-      "app.kubernetes.io/version": "77.5.0",
-      chart: "kube-prometheus-stack-77.5.0",
-      heritage: "Helm",
-      release: "kube-prometheus-stack"
-    },
-    name: "kube-prometheus-stack-admission"
-  },
-  webhooks: [{
-    admissionReviewVersions: ["v1", "v1beta1"],
-    clientConfig: {
-      service: {
-        name: "kube-prometheus-stack-operator",
-        namespace: "monitoring",
-        path: "/admission-prometheusrules/validate"
-      }
-    },
-    failurePolicy: "Ignore",
-    name: "prometheusrulemutate.monitoring.coreos.com",
-    rules: [{
-      apiGroups: ["monitoring.coreos.com"],
-      apiVersions: ["*"],
-      operations: ["CREATE", "UPDATE"],
-      resources: ["prometheusrules"]
-    }],
-    sideEffects: "None",
-    timeoutSeconds: 10
-  }]
-};
 export const Alertmanager_KubePrometheusStackAlertmanager: KubernetesResource = {
   apiVersion: "monitoring.coreos.com/v1",
   kind: "Alertmanager",
@@ -58837,6 +58757,46 @@ export const Alertmanager_KubePrometheusStackAlertmanager: KubernetesResource = 
     serviceAccountName: "kube-prometheus-stack-alertmanager",
     version: "v0.28.1"
   }
+};
+export const MutatingWebhookConfiguration_KubePrometheusStackAdmission: KubernetesResource = {
+  apiVersion: "admissionregistration.k8s.io/v1",
+  kind: "MutatingWebhookConfiguration",
+  metadata: {
+    annotations: null,
+    labels: {
+      app: "kube-prometheus-stack-admission",
+      "app.kubernetes.io/component": "prometheus-operator-webhook",
+      "app.kubernetes.io/instance": "kube-prometheus-stack",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "kube-prometheus-stack-prometheus-operator",
+      "app.kubernetes.io/part-of": "kube-prometheus-stack",
+      "app.kubernetes.io/version": "77.5.0",
+      chart: "kube-prometheus-stack-77.5.0",
+      heritage: "Helm",
+      release: "kube-prometheus-stack"
+    },
+    name: "kube-prometheus-stack-admission"
+  },
+  webhooks: [{
+    admissionReviewVersions: ["v1", "v1beta1"],
+    clientConfig: {
+      service: {
+        name: "kube-prometheus-stack-operator",
+        namespace: "monitoring",
+        path: "/admission-prometheusrules/mutate"
+      }
+    },
+    failurePolicy: "Ignore",
+    name: "prometheusrulemutate.monitoring.coreos.com",
+    rules: [{
+      apiGroups: ["monitoring.coreos.com"],
+      apiVersions: ["*"],
+      operations: ["CREATE", "UPDATE"],
+      resources: ["prometheusrules"]
+    }],
+    sideEffects: "None",
+    timeoutSeconds: 10
+  }]
 };
 export const Prometheus_KubePrometheusStackPrometheus: KubernetesResource = {
   apiVersion: "monitoring.coreos.com/v1",
@@ -62536,6 +62496,46 @@ export const ServiceMonitor_KubePrometheusStackPrometheus: KubernetesResource = 
     }
   }
 };
+export const ValidatingWebhookConfiguration_KubePrometheusStackAdmission: KubernetesResource = {
+  apiVersion: "admissionregistration.k8s.io/v1",
+  kind: "ValidatingWebhookConfiguration",
+  metadata: {
+    annotations: null,
+    labels: {
+      app: "kube-prometheus-stack-admission",
+      "app.kubernetes.io/component": "prometheus-operator-webhook",
+      "app.kubernetes.io/instance": "kube-prometheus-stack",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "kube-prometheus-stack-prometheus-operator",
+      "app.kubernetes.io/part-of": "kube-prometheus-stack",
+      "app.kubernetes.io/version": "77.5.0",
+      chart: "kube-prometheus-stack-77.5.0",
+      heritage: "Helm",
+      release: "kube-prometheus-stack"
+    },
+    name: "kube-prometheus-stack-admission"
+  },
+  webhooks: [{
+    admissionReviewVersions: ["v1", "v1beta1"],
+    clientConfig: {
+      service: {
+        name: "kube-prometheus-stack-operator",
+        namespace: "monitoring",
+        path: "/admission-prometheusrules/validate"
+      }
+    },
+    failurePolicy: "Ignore",
+    name: "prometheusrulemutate.monitoring.coreos.com",
+    rules: [{
+      apiGroups: ["monitoring.coreos.com"],
+      apiVersions: ["*"],
+      operations: ["CREATE", "UPDATE"],
+      resources: ["prometheusrules"]
+    }],
+    sideEffects: "None",
+    timeoutSeconds: 10
+  }]
+};
 export const ServiceAccount_KubePrometheusStackGrafanaTest: KubernetesResource = {
   apiVersion: "v1",
   kind: "ServiceAccount",
@@ -62903,7 +62903,7 @@ export const Job_KubePrometheusStackAdmissionPatch: KubernetesResource = {
     ttlSecondsAfterFinished: 60
   }
 };
-export const resources: ReadonlyArray<KubernetesResource> = [Namespace_Monitoring, CustomResourceDefinition_AlertmanagerconfigsMonitoringCoreosCom, CustomResourceDefinition_AlertmanagersMonitoringCoreosCom, CustomResourceDefinition_PodmonitorsMonitoringCoreosCom, CustomResourceDefinition_ProbesMonitoringCoreosCom, CustomResourceDefinition_PrometheusagentsMonitoringCoreosCom, CustomResourceDefinition_PrometheusesMonitoringCoreosCom, CustomResourceDefinition_PrometheusrulesMonitoringCoreosCom, CustomResourceDefinition_ScrapeconfigsMonitoringCoreosCom, CustomResourceDefinition_ServicemonitorsMonitoringCoreosCom, CustomResourceDefinition_ThanosrulersMonitoringCoreosCom, ServiceAccount_KubePrometheusStackGrafana, ServiceAccount_KubePrometheusStackKubeStateMetrics, ServiceAccount_KubePrometheusStackPrometheusNodeExporter, ServiceAccount_KubePrometheusStackAlertmanager, ServiceAccount_KubePrometheusStackOperator, ServiceAccount_KubePrometheusStackPrometheus, Secret_KubePrometheusStackGrafana, Secret_AlertmanagerKubePrometheusStackAlertmanager, ConfigMap_KubePrometheusStackGrafanaConfigDashboards, ConfigMap_KubePrometheusStackGrafana, ConfigMap_KubePrometheusStackGrafanaDatasource, ConfigMap_KubePrometheusStackAlertmanagerOverview, ConfigMap_KubePrometheusStackApiserver, ConfigMap_KubePrometheusStackClusterTotal, ConfigMap_KubePrometheusStackControllerManager, ConfigMap_KubePrometheusStackEtcd, ConfigMap_KubePrometheusStackGrafanaOverview, ConfigMap_KubePrometheusStackK8sCoredns, ConfigMap_KubePrometheusStackK8sResourcesCluster, ConfigMap_KubePrometheusStackK8sResourcesMulticluster, ConfigMap_KubePrometheusStackK8sResourcesNamespace, ConfigMap_KubePrometheusStackK8sResourcesNode, ConfigMap_KubePrometheusStackK8sResourcesPod, ConfigMap_KubePrometheusStackK8sResourcesWorkload, ConfigMap_KubePrometheusStackK8sResourcesWorkloadsNamespace, ConfigMap_KubePrometheusStackKubelet, ConfigMap_KubePrometheusStackNamespaceByPod, ConfigMap_KubePrometheusStackNamespaceByWorkload, ConfigMap_KubePrometheusStackNodeClusterRsrcUse, ConfigMap_KubePrometheusStackNodeRsrcUse, ConfigMap_KubePrometheusStackNodesAix, ConfigMap_KubePrometheusStackNodesDarwin, ConfigMap_KubePrometheusStackNodes, ConfigMap_KubePrometheusStackPersistentvolumesusage, ConfigMap_KubePrometheusStackPodTotal, ConfigMap_KubePrometheusStackPrometheus, ConfigMap_KubePrometheusStackProxy, ConfigMap_KubePrometheusStackScheduler, ConfigMap_KubePrometheusStackWorkloadTotal, PersistentVolumeClaim_KubePrometheusStackGrafana, ClusterRole_KubePrometheusStackGrafanaClusterrole, ClusterRole_KubePrometheusStackKubeStateMetrics, ClusterRole_KubePrometheusStackOperator, ClusterRole_KubePrometheusStackPrometheus, ClusterRoleBinding_KubePrometheusStackGrafanaClusterrolebinding, ClusterRoleBinding_KubePrometheusStackKubeStateMetrics, ClusterRoleBinding_KubePrometheusStackOperator, ClusterRoleBinding_KubePrometheusStackPrometheus, Role_KubePrometheusStackGrafana, RoleBinding_KubePrometheusStackGrafana, Service_KubePrometheusStackGrafana, Service_KubePrometheusStackKubeStateMetrics, Service_KubePrometheusStackPrometheusNodeExporter, Service_KubePrometheusStackAlertmanager, Service_KubePrometheusStackCoredns, Service_KubePrometheusStackKubeControllerManager, Service_KubePrometheusStackKubeEtcd, Service_KubePrometheusStackKubeProxy, Service_KubePrometheusStackKubeScheduler, Service_KubePrometheusStackOperator, Service_KubePrometheusStackPrometheus, DaemonSet_KubePrometheusStackPrometheusNodeExporter, Deployment_KubePrometheusStackGrafana, Deployment_KubePrometheusStackKubeStateMetrics, Deployment_KubePrometheusStackOperator, MutatingWebhookConfiguration_KubePrometheusStackAdmission, ValidatingWebhookConfiguration_KubePrometheusStackAdmission, Alertmanager_KubePrometheusStackAlertmanager, Prometheus_KubePrometheusStackPrometheus, PrometheusRule_KubePrometheusStackAlertmanagerRules, PrometheusRule_KubePrometheusStackConfigReloaders, PrometheusRule_KubePrometheusStackEtcd, PrometheusRule_KubePrometheusStackGeneralRules, PrometheusRule_KubePrometheusStackK8sRulesContainerCpuUsageSecondsTot, PrometheusRule_KubePrometheusStackK8sRulesContainerMemoryCache, PrometheusRule_KubePrometheusStackK8sRulesContainerMemoryRss, PrometheusRule_KubePrometheusStackK8sRulesContainerMemorySwap, PrometheusRule_KubePrometheusStackK8sRulesContainerMemoryWorkingSetBy, PrometheusRule_KubePrometheusStackK8sRulesContainerResource, PrometheusRule_KubePrometheusStackK8sRulesPodOwner, PrometheusRule_KubePrometheusStackKubeApiserverAvailabilityRules, PrometheusRule_KubePrometheusStackKubeApiserverBurnrateRules, PrometheusRule_KubePrometheusStackKubeApiserverHistogramRules, PrometheusRule_KubePrometheusStackKubeApiserverSlos, PrometheusRule_KubePrometheusStackKubePrometheusGeneralRules, PrometheusRule_KubePrometheusStackKubePrometheusNodeRecordingRules, PrometheusRule_KubePrometheusStackKubeSchedulerRules, PrometheusRule_KubePrometheusStackKubeStateMetrics, PrometheusRule_KubePrometheusStackKubeletRules, PrometheusRule_KubePrometheusStackKubernetesApps, PrometheusRule_KubePrometheusStackKubernetesResources, PrometheusRule_KubePrometheusStackKubernetesStorage, PrometheusRule_KubePrometheusStackKubernetesSystemApiserver, PrometheusRule_KubePrometheusStackKubernetesSystemControllerManager, PrometheusRule_KubePrometheusStackKubernetesSystemKubeProxy, PrometheusRule_KubePrometheusStackKubernetesSystemKubelet, PrometheusRule_KubePrometheusStackKubernetesSystemScheduler, PrometheusRule_KubePrometheusStackKubernetesSystem, PrometheusRule_KubePrometheusStackNodeExporterRules, PrometheusRule_KubePrometheusStackNodeExporter, PrometheusRule_KubePrometheusStackNodeNetwork, PrometheusRule_KubePrometheusStackNodeRules, PrometheusRule_KubePrometheusStackPrometheusOperator, PrometheusRule_KubePrometheusStackPrometheus, ServiceMonitor_KubePrometheusStackGrafana, ServiceMonitor_KubePrometheusStackKubeStateMetrics, ServiceMonitor_KubePrometheusStackPrometheusNodeExporter, ServiceMonitor_KubePrometheusStackAlertmanager, ServiceMonitor_KubePrometheusStackCoredns, ServiceMonitor_KubePrometheusStackApiserver, ServiceMonitor_KubePrometheusStackKubeControllerManager, ServiceMonitor_KubePrometheusStackKubeEtcd, ServiceMonitor_KubePrometheusStackKubeProxy, ServiceMonitor_KubePrometheusStackKubeScheduler, ServiceMonitor_KubePrometheusStackKubelet, ServiceMonitor_KubePrometheusStackOperator, ServiceMonitor_KubePrometheusStackPrometheus, ServiceAccount_KubePrometheusStackGrafanaTest, ServiceAccount_KubePrometheusStackAdmission, ConfigMap_KubePrometheusStackGrafanaTest, ClusterRole_KubePrometheusStackAdmission, ClusterRoleBinding_KubePrometheusStackAdmission, Role_KubePrometheusStackAdmission, RoleBinding_KubePrometheusStackAdmission, Pod_KubePrometheusStackGrafanaTest, Job_KubePrometheusStackAdmissionCreate, Job_KubePrometheusStackAdmissionPatch];
+export const resources: ReadonlyArray<KubernetesResource> = [Namespace_Monitoring, CustomResourceDefinition_AlertmanagerconfigsMonitoringCoreosCom, CustomResourceDefinition_AlertmanagersMonitoringCoreosCom, CustomResourceDefinition_PodmonitorsMonitoringCoreosCom, CustomResourceDefinition_ProbesMonitoringCoreosCom, CustomResourceDefinition_PrometheusagentsMonitoringCoreosCom, CustomResourceDefinition_PrometheusesMonitoringCoreosCom, CustomResourceDefinition_PrometheusrulesMonitoringCoreosCom, CustomResourceDefinition_ScrapeconfigsMonitoringCoreosCom, CustomResourceDefinition_ServicemonitorsMonitoringCoreosCom, CustomResourceDefinition_ThanosrulersMonitoringCoreosCom, ServiceAccount_KubePrometheusStackGrafana, ServiceAccount_KubePrometheusStackKubeStateMetrics, ServiceAccount_KubePrometheusStackPrometheusNodeExporter, ServiceAccount_KubePrometheusStackAlertmanager, ServiceAccount_KubePrometheusStackOperator, ServiceAccount_KubePrometheusStackPrometheus, Secret_KubePrometheusStackGrafana, Secret_AlertmanagerKubePrometheusStackAlertmanager, ConfigMap_KubePrometheusStackGrafanaConfigDashboards, ConfigMap_KubePrometheusStackGrafana, ConfigMap_KubePrometheusStackGrafanaDatasource, ConfigMap_KubePrometheusStackAlertmanagerOverview, ConfigMap_KubePrometheusStackApiserver, ConfigMap_KubePrometheusStackClusterTotal, ConfigMap_KubePrometheusStackControllerManager, ConfigMap_KubePrometheusStackEtcd, ConfigMap_KubePrometheusStackGrafanaOverview, ConfigMap_KubePrometheusStackK8sCoredns, ConfigMap_KubePrometheusStackK8sResourcesCluster, ConfigMap_KubePrometheusStackK8sResourcesMulticluster, ConfigMap_KubePrometheusStackK8sResourcesNamespace, ConfigMap_KubePrometheusStackK8sResourcesNode, ConfigMap_KubePrometheusStackK8sResourcesPod, ConfigMap_KubePrometheusStackK8sResourcesWorkload, ConfigMap_KubePrometheusStackK8sResourcesWorkloadsNamespace, ConfigMap_KubePrometheusStackKubelet, ConfigMap_KubePrometheusStackNamespaceByPod, ConfigMap_KubePrometheusStackNamespaceByWorkload, ConfigMap_KubePrometheusStackNodeClusterRsrcUse, ConfigMap_KubePrometheusStackNodeRsrcUse, ConfigMap_KubePrometheusStackNodesAix, ConfigMap_KubePrometheusStackNodesDarwin, ConfigMap_KubePrometheusStackNodes, ConfigMap_KubePrometheusStackPersistentvolumesusage, ConfigMap_KubePrometheusStackPodTotal, ConfigMap_KubePrometheusStackPrometheus, ConfigMap_KubePrometheusStackProxy, ConfigMap_KubePrometheusStackScheduler, ConfigMap_KubePrometheusStackWorkloadTotal, PersistentVolumeClaim_KubePrometheusStackGrafana, ClusterRole_KubePrometheusStackGrafanaClusterrole, ClusterRole_KubePrometheusStackKubeStateMetrics, ClusterRole_KubePrometheusStackOperator, ClusterRole_KubePrometheusStackPrometheus, ClusterRoleBinding_KubePrometheusStackGrafanaClusterrolebinding, ClusterRoleBinding_KubePrometheusStackKubeStateMetrics, ClusterRoleBinding_KubePrometheusStackOperator, ClusterRoleBinding_KubePrometheusStackPrometheus, Role_KubePrometheusStackGrafana, RoleBinding_KubePrometheusStackGrafana, Service_KubePrometheusStackGrafana, Service_KubePrometheusStackKubeStateMetrics, Service_KubePrometheusStackPrometheusNodeExporter, Service_KubePrometheusStackAlertmanager, Service_KubePrometheusStackCoredns, Service_KubePrometheusStackKubeControllerManager, Service_KubePrometheusStackKubeEtcd, Service_KubePrometheusStackKubeProxy, Service_KubePrometheusStackKubeScheduler, Service_KubePrometheusStackOperator, Service_KubePrometheusStackPrometheus, DaemonSet_KubePrometheusStackPrometheusNodeExporter, Deployment_KubePrometheusStackGrafana, Deployment_KubePrometheusStackKubeStateMetrics, Deployment_KubePrometheusStackOperator, Alertmanager_KubePrometheusStackAlertmanager, MutatingWebhookConfiguration_KubePrometheusStackAdmission, Prometheus_KubePrometheusStackPrometheus, PrometheusRule_KubePrometheusStackAlertmanagerRules, PrometheusRule_KubePrometheusStackConfigReloaders, PrometheusRule_KubePrometheusStackEtcd, PrometheusRule_KubePrometheusStackGeneralRules, PrometheusRule_KubePrometheusStackK8sRulesContainerCpuUsageSecondsTot, PrometheusRule_KubePrometheusStackK8sRulesContainerMemoryCache, PrometheusRule_KubePrometheusStackK8sRulesContainerMemoryRss, PrometheusRule_KubePrometheusStackK8sRulesContainerMemorySwap, PrometheusRule_KubePrometheusStackK8sRulesContainerMemoryWorkingSetBy, PrometheusRule_KubePrometheusStackK8sRulesContainerResource, PrometheusRule_KubePrometheusStackK8sRulesPodOwner, PrometheusRule_KubePrometheusStackKubeApiserverAvailabilityRules, PrometheusRule_KubePrometheusStackKubeApiserverBurnrateRules, PrometheusRule_KubePrometheusStackKubeApiserverHistogramRules, PrometheusRule_KubePrometheusStackKubeApiserverSlos, PrometheusRule_KubePrometheusStackKubePrometheusGeneralRules, PrometheusRule_KubePrometheusStackKubePrometheusNodeRecordingRules, PrometheusRule_KubePrometheusStackKubeSchedulerRules, PrometheusRule_KubePrometheusStackKubeStateMetrics, PrometheusRule_KubePrometheusStackKubeletRules, PrometheusRule_KubePrometheusStackKubernetesApps, PrometheusRule_KubePrometheusStackKubernetesResources, PrometheusRule_KubePrometheusStackKubernetesStorage, PrometheusRule_KubePrometheusStackKubernetesSystemApiserver, PrometheusRule_KubePrometheusStackKubernetesSystemControllerManager, PrometheusRule_KubePrometheusStackKubernetesSystemKubeProxy, PrometheusRule_KubePrometheusStackKubernetesSystemKubelet, PrometheusRule_KubePrometheusStackKubernetesSystemScheduler, PrometheusRule_KubePrometheusStackKubernetesSystem, PrometheusRule_KubePrometheusStackNodeExporterRules, PrometheusRule_KubePrometheusStackNodeExporter, PrometheusRule_KubePrometheusStackNodeNetwork, PrometheusRule_KubePrometheusStackNodeRules, PrometheusRule_KubePrometheusStackPrometheusOperator, PrometheusRule_KubePrometheusStackPrometheus, ServiceMonitor_KubePrometheusStackGrafana, ServiceMonitor_KubePrometheusStackKubeStateMetrics, ServiceMonitor_KubePrometheusStackPrometheusNodeExporter, ServiceMonitor_KubePrometheusStackAlertmanager, ServiceMonitor_KubePrometheusStackCoredns, ServiceMonitor_KubePrometheusStackApiserver, ServiceMonitor_KubePrometheusStackKubeControllerManager, ServiceMonitor_KubePrometheusStackKubeEtcd, ServiceMonitor_KubePrometheusStackKubeProxy, ServiceMonitor_KubePrometheusStackKubeScheduler, ServiceMonitor_KubePrometheusStackKubelet, ServiceMonitor_KubePrometheusStackOperator, ServiceMonitor_KubePrometheusStackPrometheus, ValidatingWebhookConfiguration_KubePrometheusStackAdmission, ServiceAccount_KubePrometheusStackGrafanaTest, ServiceAccount_KubePrometheusStackAdmission, ConfigMap_KubePrometheusStackGrafanaTest, ClusterRole_KubePrometheusStackAdmission, ClusterRoleBinding_KubePrometheusStackAdmission, Role_KubePrometheusStackAdmission, RoleBinding_KubePrometheusStackAdmission, Pod_KubePrometheusStackGrafanaTest, Job_KubePrometheusStackAdmissionCreate, Job_KubePrometheusStackAdmissionPatch];
 export default {
   resources: resources
 };
