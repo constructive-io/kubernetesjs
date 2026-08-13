@@ -36,17 +36,13 @@ export class K8sApplier {
       defaultNamespace: opts.defaultNamespace ?? 'default',
       continueOnError: opts.continueOnError ?? true,
       log: opts.log ?? (() => {}),
-      // E2E used to get 30s here, presumably to fail fast. That is shorter than
-      // a cold image pull: Knative's webhook rolls out in about fourteen
-      // seconds on a warm machine and comfortably longer on a CI runner
-      // fetching the image for the first time — so the wait expired, the
-      // Certificate that needs the webhook was applied anyway, and the failure
-      // read as a webhook problem rather than as a timeout.
-      //
-      // Still shorter than the default, so a genuinely stuck webhook does not
-      // hold a suite for four minutes.
+      // 60s under E2E: long enough for a cold image pull, short enough that the
+      // suite reports a verdict well inside its own 15-minute budget. It was
+      // 30s (too short for a cold pull) and briefly 180s, which combined with
+      // the apply retries and an outer 3x retry to exceed the jest timeout --
+      // so the run stopped failing and started hanging, which is worse.
       webhookServiceWaitTimeoutMs:
-        opts.webhookServiceWaitTimeoutMs ?? (process.env.E2E_TESTS === 'true' ? 180_000 : 240_000),
+        opts.webhookServiceWaitTimeoutMs ?? (process.env.E2E_TESTS === 'true' ? 60_000 : 240_000),
     };
   }
 
@@ -512,24 +508,16 @@ export class K8sApplier {
     );
   }
 
-  // The webhook being waited on is usually created by this same apply — a
-  // manifest set that contains both an admission webhook and resources it must
-  // admit. So the wait is not "a rolling webhook briefly unavailable", it is
-  // "a Deployment scheduling, pulling an image and passing its readiness
-  // probe", which on a cold cluster is minutes rather than seconds.
-  //
-  // The previous budget (6 attempts capped at 10s ≈ 34s) was sized for the
-  // former and timed out on the latter: Knative v1.22 ships Certificates in
-  // serving-core.yaml that its own webhook must admit, and the apply failed
-  // before the webhook pod was ready.
   /**
    * Block until every applied CRD reports Established.
    *
-   * Polls rather than watches, to stay consistent with the other readiness
-   * helpers here and to avoid holding a connection open across a phase
-   * boundary. A CRD that never establishes is not fatal: it is reported and the
-   * apply continues, so the failure surfaces as the resource that needed it
-   * rather than as an opaque wait.
+   * Creating a CRD returns as soon as the object is accepted, not when the API
+   * server is serving that kind — so a custom resource applied in a later phase
+   * can arrive before its own kind exists and fail with "no matches for kind".
+   *
+   * Not fatal if one never establishes: it is reported and the apply continues,
+   * so the failure surfaces as the resource that needed it rather than as an
+   * opaque wait.
    */
   private async waitForCrdsEstablished(
     crds: KubernetesResource[],
@@ -570,7 +558,7 @@ export class K8sApplier {
     }
   }
 
-  private async postWithRetries(path: string, body: any, ref: string, maxAttempts = 12, baseDelayMs = 2_000) {
+  private async postWithRetries(path: string, body: any, ref: string, maxAttempts = 6, baseDelayMs = 2_000) {
     let attempt = 0;
     let lastErr: any;
     while (attempt < maxAttempts) {
@@ -579,7 +567,7 @@ export class K8sApplier {
       } catch (err: any) {
         lastErr = err;
         if (!this.isAdmissionWebhookTransient(err)) throw err;
-        const delay = Math.min(baseDelayMs * Math.pow(2, attempt), 15_000);
+        const delay = Math.min(baseDelayMs * Math.pow(2, attempt), 10_000);
         this.opts.log(`Retrying ${ref} due to webhook readiness (attempt ${attempt + 1}/${maxAttempts}) in ${delay}ms...`);
         await new Promise((r) => setTimeout(r, delay));
         attempt++;
@@ -588,7 +576,7 @@ export class K8sApplier {
     throw lastErr;
   }
 
-  private async putWithRetries(path: string, body: any, ref: string, maxAttempts = 12, baseDelayMs = 2_000) {
+  private async putWithRetries(path: string, body: any, ref: string, maxAttempts = 6, baseDelayMs = 2_000) {
     let attempt = 0;
     let lastErr: any;
     while (attempt < maxAttempts) {
@@ -597,7 +585,7 @@ export class K8sApplier {
       } catch (err: any) {
         lastErr = err;
         if (!this.isAdmissionWebhookTransient(err)) throw err;
-        const delay = Math.min(baseDelayMs * Math.pow(2, attempt), 15_000);
+        const delay = Math.min(baseDelayMs * Math.pow(2, attempt), 10_000);
         this.opts.log(`Retrying update for ${ref} due to webhook readiness (attempt ${attempt + 1}/${maxAttempts}) in ${delay}ms...`);
         await new Promise((r) => setTimeout(r, delay));
         attempt++;
