@@ -16,9 +16,35 @@ const K8S_API = process.env.K8S_API || "http://127.0.0.1:8001";
 // for them to disagree, and it already had: this fixture pinned cert-manager
 // v1.17.0 and knative v1.15.0 long after the package had moved on, so the e2e
 // suite was installing versions the package no longer shipped.
-function latestVersion(name: string): string {
+// Operators the suite pins rather than taking the newest of.
+//
+// The manifests package may carry several versions of an operator so different
+// consumers can each install the one they run. "Newest" is then the wrong
+// default for a test: adding a version downstream would silently change what
+// this suite installs, and a suite whose subject moves without anyone choosing
+// it is not testing what its name says.
+//
+// knative-serving is pinned to v1.15.0 because v1.22.1 fails this suite in a
+// way that does not reproduce by hand — see constructive-planning#1630. That is
+// an apply-path problem to fix on its own, not a reason to hold the package
+// back from carrying the version downstream needs.
+const PINNED_VERSIONS: Record<string, string> = {
+  'knative-serving': 'v1.15.0',
+};
+
+function versionFor(name: string): string {
   const versions = getOperatorVersions(name);
   if (!versions.length) throw new Error(`Unknown operator '${name}'`);
+
+  const pinned = PINNED_VERSIONS[name];
+  if (pinned) {
+    if (!versions.includes(pinned)) {
+      throw new Error(
+        `${name} is pinned to ${pinned}, which the manifests package no longer carries (has: ${versions.join(', ')})`
+      );
+    }
+    return pinned;
+  }
   return versions[versions.length - 1];
 }
 
@@ -38,7 +64,7 @@ const OPERATOR_DEPENDENCIES: Record<string, string[]> = {
 };
 
 function buildOperator(name: string): OperatorConfig {
-  const version = latestVersion(name);
+  const version = versionFor(name);
   const namespace = DEFAULT_NAMESPACES[name] || name;
   return { name, enabled: true, version, namespace } as OperatorConfig;
 }
