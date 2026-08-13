@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/manifests@1.3.0...@kubernetesjs/manifests@1.4.0) (2026-08-13)
+
+### Features
+
+- **manifests:** honour the version argument, carry two Knative versions ([a010180](https://github.com/constructive-io/kubernetesjs/commit/a010180ec7629b381a125904c985113f8cfd1720))
+
 # [1.3.0](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/manifests@1.2.0...@kubernetesjs/manifests@1.3.0) (2026-08-13)
 
 ### Bug Fixes
