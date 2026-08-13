@@ -22,7 +22,7 @@
   "scripts": {
     "clean": "makage clean",
     "prepack": "npm run build",
-    "build": "makage build",
+    "build": "makage clean && makage build && mkdir -p dist/operators && find operators -mindepth 1 -maxdepth 1 -type d -exec cp -R {} dist/operators/ \\;",
     "build:dev": "makage build --dev",
     "lint": "eslint . --fix",
     "pull": "ts-node scripts/pull-manifests.ts",

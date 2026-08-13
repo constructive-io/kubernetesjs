@@ -44,6 +44,37 @@ type OperatorConfig = {
 
 // Configure supported operators and versions.
 // Keep explicit URLs for reliability and reproducibility.
+/**
+ * Remove vendored output that no configuration asks for any more.
+ *
+ * Without this, dropping an operator or superseding a version leaves its files
+ * on disk, codegen picks them up, and they reappear in OPERATOR_VERSIONS as
+ * though they were still supported. That is how cert-manager came to advertise
+ * both v1.17.0 and v1.21.1 after a single-version bump, and how ingress-nginx
+ * regenerated itself after being deleted.
+ */
+function pruneStale(operatorsDir: string, configured: OperatorConfig[]): void {
+  if (!fs.existsSync(operatorsDir)) return;
+  const wanted = new Map(configured.map((o) => [o.name, new Set(o.sources.map((s) => s.version))]));
+
+  for (const entry of fs.readdirSync(operatorsDir, { withFileTypes: true })) {
+    const base = entry.name.replace(/\.yaml$/i, '');
+    const versions = wanted.get(base);
+    if (!versions) {
+      fs.rmSync(path.join(operatorsDir, entry.name), { recursive: true, force: true });
+      console.log(`Pruned ${entry.name} (no longer configured)`);
+      continue;
+    }
+    if (!entry.isDirectory()) continue;
+    for (const v of fs.readdirSync(path.join(operatorsDir, entry.name))) {
+      const version = v.replace(/\.yaml$/i, '');
+      if (versions.has(version)) continue;
+      fs.rmSync(path.join(operatorsDir, entry.name, v), { recursive: true, force: true });
+      console.log(`Pruned ${entry.name}/${v} (version no longer configured)`);
+    }
+  }
+}
+
 const OPERATORS: OperatorConfig[] = [
   {
     name: 'minio-operator',
@@ -91,6 +122,16 @@ const OPERATORS: OperatorConfig[] = [
     ],
   },
   {
+    // Only one version, deliberately. The package is built to carry several --
+    // `sources` is an array -- but getOperatorResources ignores its version
+    // argument and returns whatever codegen emitted as the default, which is
+    // the last version pulled. So adding a second version silently redirects
+    // every consumer of getOperatorResources at it, including this repo's own
+    // e2e, which then reports the version it asked for while applying a
+    // different one.
+    //
+    // Adding v1.22.1 for downstream is worth doing and needs that accessor
+    // fixed first: per-version resources in codegen, not one set per operator.
     name: 'knative-serving',
     // Applied in three ordered parts, never merged: the CRDs have to be
     // established before serving-core's custom resources of those kinds exist.
@@ -114,6 +155,7 @@ const OPERATORS: OperatorConfig[] = [
           'https://github.com/knative-extensions/net-kourier/releases/download/knative-v1.15.0/kourier.yaml',
         ],
       },
+
     ],
   },
   {
@@ -491,6 +533,10 @@ async function main() {
   ensureDir(outDir);
 
   if (all) {
+    // Prune before pulling, so a full run leaves exactly what the config asks
+    // for. Only on --all: a single-operator pull knows nothing about the others
+    // and must not delete them.
+    pruneStale(outDir, OPERATORS);
     for (const op of OPERATORS) {
       await pullOperator(op, undefined, outDir);
     }
