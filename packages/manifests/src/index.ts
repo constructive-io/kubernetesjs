@@ -65,11 +65,27 @@ export function getOperatorVersions(operatorId: string): string[] {
 }
 
 export function getOperatorResources(operatorId: string, version?: string): KubernetesResource[] {
-  // `version` is accepted but not yet honoured: the generated objects carry one
-  // resource set per operator, not one per version. Callers that need a
-  // specific version should use getOperatorManifestPaths, which reads the
-  // vendored files and does respect it.
-  return OPERATOR_MAP[operatorId].resources as KubernetesResource[];
+  // Without a version, the generated objects: typed, already in memory, and
+  // what every existing caller expects.
+  if (!version) return OPERATOR_MAP[operatorId].resources as KubernetesResource[];
+
+  // With one, parse that version's vendored YAML rather than returning the
+  // generated default and hoping they match. They did not: the generated set is
+  // whatever codegen emitted last, so an operator carrying two versions served
+  // the same resources for both — a caller asking for one version quietly got
+  // the other, while every log line still named the version it had asked for.
+  //
+  // Read rather than embedded because embedding every version's docs would
+  // multiply the generated output by the number of versions, and the YAML is
+  // already shipped for getOperatorManifestPaths.
+  const docs: KubernetesResource[] = [];
+  for (const file of getOperatorManifestPaths(operatorId, version)) {
+    const parsed = yaml.loadAll(fs.readFileSync(file, 'utf-8'));
+    for (const doc of parsed) {
+      if (doc && typeof doc === 'object') docs.push(doc as KubernetesResource);
+    }
+  }
+  return docs;
 }
 
 /**

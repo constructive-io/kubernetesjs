@@ -7,7 +7,7 @@ export const CustomResourceDefinition_CertificatesNetworkingInternalKnativeDev: 
     labels: {
       "app.kubernetes.io/component": "networking",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "knative.dev/crd-install": "true"
     },
     name: "certificates.networking.internal.knative.dev"
@@ -177,7 +177,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "duck.knative.dev/podspecable": "true",
       "knative.dev/crd-install": "true"
     },
@@ -290,14 +290,16 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               command: {
                                 description: "Entrypoint array. Not executed within a shell.\nThe container image's ENTRYPOINT is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced\nto a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will\nproduce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless\nof whether the variable exists or not. Cannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell",
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               env: {
                                 description: "List of environment variables to set in the container.\nCannot be updated.",
@@ -305,7 +307,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                   description: "EnvVar represents an environment variable present in a Container.",
                                   properties: {
                                     name: {
-                                      description: "Name of the environment variable. Must be a C_IDENTIFIER.",
+                                      description: "Name of the environment variable.\nMay consist of any printable ASCII characters except '='.",
                                       type: "string"
                                     },
                                     value: {
@@ -323,7 +325,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                               type: "string"
                                             },
                                             name: {
-                                              description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                              default: "",
+                                              description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                               type: "string"
                                             },
                                             optional: {
@@ -355,7 +358,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                               type: "string"
                                             },
                                             name: {
-                                              description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                              default: "",
+                                              description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                               type: "string"
                                             },
                                             optional: {
@@ -374,18 +378,21 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                   required: ["name"],
                                   type: "object"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-map-keys": ["name"],
+                                "x-kubernetes-list-type": "map"
                               },
                               envFrom: {
-                                description: "List of sources to populate environment variables in the container.\nThe keys defined within a source must be a C_IDENTIFIER. All invalid keys\nwill be reported as an event when the container is starting. When a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.",
+                                description: "List of sources to populate environment variables in the container.\nThe keys defined within a source may consist of any printable ASCII characters except '='.\nWhen a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.",
                                 items: {
-                                  description: "EnvFromSource represents the source of a set of ConfigMaps",
+                                  description: "EnvFromSource represents the source of a set of ConfigMaps or Secrets",
                                   properties: {
                                     configMapRef: {
                                       description: "The ConfigMap to select from",
                                       properties: {
                                         name: {
-                                          description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                          default: "",
+                                          description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                           type: "string"
                                         },
                                         optional: {
@@ -397,14 +404,15 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                       "x-kubernetes-map-type": "atomic"
                                     },
                                     prefix: {
-                                      description: "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+                                      description: "Optional text to prepend to the name of each environment variable.\nMay consist of any printable ASCII characters except '='.",
                                       type: "string"
                                     },
                                     secretRef: {
                                       description: "The Secret to select from",
                                       properties: {
                                         name: {
-                                          description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                          default: "",
+                                          description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                           type: "string"
                                         },
                                         optional: {
@@ -418,7 +426,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                   },
                                   type: "object"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               image: {
                                 description: "Container image name.\nMore info: https://kubernetes.io/docs/concepts/containers/images\nThis field is optional to allow higher level config management to default or override\ncontainer images in workload controllers like Deployments and StatefulSets.",
@@ -432,14 +441,15 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                 description: "Periodic probe of container liveness.\nContainer will be restarted if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
                                 properties: {
                                   exec: {
-                                    description: "Exec specifies the action to take.",
+                                    description: "Exec specifies a command to execute in the container.",
                                     properties: {
                                       command: {
                                         description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
                                         items: {
                                           type: "string"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       }
                                     },
                                     type: "object"
@@ -450,7 +460,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                     type: "integer"
                                   },
                                   grpc: {
-                                    description: "GRPC specifies an action involving a GRPC port.",
+                                    description: "GRPC specifies a GRPC HealthCheckRequest.",
                                     properties: {
                                       port: {
                                         description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -458,15 +468,15 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                         type: "integer"
                                       },
                                       service: {
-                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\n\nIf this is not specified, the default behavior is defined by gRPC.",
+                                        default: "",
+                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\nIf this is not specified, the default behavior is defined by gRPC.",
                                         type: "string"
                                       }
                                     },
-                                    required: ["port"],
                                     type: "object"
                                   },
                                   httpGet: {
-                                    description: "HTTPGet specifies the http request to perform.",
+                                    description: "HTTPGet specifies an HTTP GET request to perform.",
                                     properties: {
                                       host: {
                                         description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
@@ -489,7 +499,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                           required: ["name", "value"],
                                           type: "object"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       },
                                       path: {
                                         description: "Path to access on the HTTP server.",
@@ -527,7 +538,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                     type: "integer"
                                   },
                                   tcpSocket: {
-                                    description: "TCPSocket specifies an action involving a TCP port.",
+                                    description: "TCPSocket specifies a connection to a TCP port.",
                                     properties: {
                                       host: {
                                         description: "Optional: Host name to connect to, defaults to the pod IP.",
@@ -577,25 +588,23 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                       type: "string"
                                     }
                                   },
-                                  required: ["containerPort"],
                                   type: "object"
                                 },
-                                type: "array",
-                                "x-kubernetes-list-map-keys": ["containerPort", "protocol"],
-                                "x-kubernetes-list-type": "map"
+                                type: "array"
                               },
                               readinessProbe: {
                                 description: "Periodic probe of container service readiness.\nContainer will be removed from service endpoints if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
                                 properties: {
                                   exec: {
-                                    description: "Exec specifies the action to take.",
+                                    description: "Exec specifies a command to execute in the container.",
                                     properties: {
                                       command: {
                                         description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
                                         items: {
                                           type: "string"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       }
                                     },
                                     type: "object"
@@ -606,7 +615,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                     type: "integer"
                                   },
                                   grpc: {
-                                    description: "GRPC specifies an action involving a GRPC port.",
+                                    description: "GRPC specifies a GRPC HealthCheckRequest.",
                                     properties: {
                                       port: {
                                         description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -614,15 +623,15 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                         type: "integer"
                                       },
                                       service: {
-                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\n\nIf this is not specified, the default behavior is defined by gRPC.",
+                                        default: "",
+                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\nIf this is not specified, the default behavior is defined by gRPC.",
                                         type: "string"
                                       }
                                     },
-                                    required: ["port"],
                                     type: "object"
                                   },
                                   httpGet: {
-                                    description: "HTTPGet specifies the http request to perform.",
+                                    description: "HTTPGet specifies an HTTP GET request to perform.",
                                     properties: {
                                       host: {
                                         description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
@@ -645,7 +654,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                           required: ["name", "value"],
                                           type: "object"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       },
                                       path: {
                                         description: "Path to access on the HTTP server.",
@@ -683,7 +693,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                     type: "integer"
                                   },
                                   tcpSocket: {
-                                    description: "TCPSocket specifies an action involving a TCP port.",
+                                    description: "TCPSocket specifies a connection to a TCP port.",
                                     properties: {
                                       host: {
                                         description: "Optional: Host name to connect to, defaults to the pod IP.",
@@ -712,23 +722,6 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                               resources: {
                                 description: "Compute Resources required by this container.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
                                 properties: {
-                                  claims: {
-                                    description: "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\n\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\n\n\nThis field is immutable. It can only be set for containers.",
-                                    items: {
-                                      description: "ResourceClaim references one entry in PodSpec.ResourceClaims.",
-                                      properties: {
-                                        name: {
-                                          description: "Name must match the name of one entry in pod.spec.resourceClaims of\nthe Pod where this field is used. It makes that resource available\ninside a container.",
-                                          type: "string"
-                                        }
-                                      },
-                                      required: ["name"],
-                                      type: "object"
-                                    },
-                                    type: "array",
-                                    "x-kubernetes-list-map-keys": ["name"],
-                                    "x-kubernetes-list-type": "map"
-                                  },
                                   limits: {
                                     additionalProperties: {
                                       anyOf: [{
@@ -774,7 +767,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                           description: "Capability represent POSIX capabilities type",
                                           type: "string"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       },
                                       drop: {
                                         description: "Removed capabilities",
@@ -782,10 +776,15 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                           description: "Capability represent POSIX capabilities type",
                                           type: "string"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       }
                                     },
                                     type: "object"
+                                  },
+                                  privileged: {
+                                    description: "Run container in privileged mode. This can only be set to explicitly to 'false'",
+                                    type: "boolean"
                                   },
                                   readOnlyRootFilesystem: {
                                     description: "Whether this container has a read-only root filesystem.\nDefault is false.\nNote that this field cannot be set when spec.os.name is windows.",
@@ -813,7 +812,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                         type: "string"
                                       },
                                       type: {
-                                        description: "type indicates which kind of seccomp profile will be applied.\nValid options are:\n\n\nLocalhost - a profile defined in a file on the node should be used.\nRuntimeDefault - the container runtime default profile should be used.\nUnconfined - no profile should be applied.",
+                                        description: "type indicates which kind of seccomp profile will be applied.\nValid options are:\n\nLocalhost - a profile defined in a file on the node should be used.\nRuntimeDefault - the container runtime default profile should be used.\nUnconfined - no profile should be applied.",
                                         type: "string"
                                       }
                                     },
@@ -827,14 +826,15 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                 description: "StartupProbe indicates that the Pod has successfully initialized.\nIf specified, no other probes are executed until this completes successfully.\nIf this probe fails, the Pod will be restarted, just as if the livenessProbe failed.\nThis can be used to provide different probe parameters at the beginning of a Pod's lifecycle,\nwhen it might take a long time to load data or warm a cache, than during steady-state operation.\nThis cannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
                                 properties: {
                                   exec: {
-                                    description: "Exec specifies the action to take.",
+                                    description: "Exec specifies a command to execute in the container.",
                                     properties: {
                                       command: {
                                         description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
                                         items: {
                                           type: "string"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       }
                                     },
                                     type: "object"
@@ -845,7 +845,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                     type: "integer"
                                   },
                                   grpc: {
-                                    description: "GRPC specifies an action involving a GRPC port.",
+                                    description: "GRPC specifies a GRPC HealthCheckRequest.",
                                     properties: {
                                       port: {
                                         description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -853,15 +853,15 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                         type: "integer"
                                       },
                                       service: {
-                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\n\nIf this is not specified, the default behavior is defined by gRPC.",
+                                        default: "",
+                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\nIf this is not specified, the default behavior is defined by gRPC.",
                                         type: "string"
                                       }
                                     },
-                                    required: ["port"],
                                     type: "object"
                                   },
                                   httpGet: {
-                                    description: "HTTPGet specifies the http request to perform.",
+                                    description: "HTTPGet specifies an HTTP GET request to perform.",
                                     properties: {
                                       host: {
                                         description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
@@ -884,7 +884,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                           required: ["name", "value"],
                                           type: "object"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       },
                                       path: {
                                         description: "Path to access on the HTTP server.",
@@ -922,7 +923,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                     type: "integer"
                                   },
                                   tcpSocket: {
-                                    description: "TCPSocket specifies an action involving a TCP port.",
+                                    description: "TCPSocket specifies a connection to a TCP port.",
                                     properties: {
                                       host: {
                                         description: "Optional: Host name to connect to, defaults to the pod IP.",
@@ -965,6 +966,10 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                       description: "Path within the container at which the volume should be mounted.  Must\nnot contain ':'.",
                                       type: "string"
                                     },
+                                    mountPropagation: {
+                                      description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-mount-propagation",
+                                      type: "string"
+                                    },
                                     name: {
                                       description: "This must match the Name of a Volume.",
                                       type: "string"
@@ -981,7 +986,9 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                   required: ["mountPath", "name"],
                                   type: "object"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-map-keys": ["mountPath"],
+                                "x-kubernetes-list-type": "map"
                               },
                               workingDir: {
                                 description: "Container's working directory.\nIf not specified, the container runtime's default will be used, which\nmight be configured in the container image.\nCannot be updated.",
@@ -1002,7 +1009,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                           type: "string"
                         },
                         enableServiceLinks: {
-                          description: "EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, matching the syntax of Docker links. Optional: Knative defaults this to false.",
+                          description: "EnableServiceLinks indicates whether information aboutservices should be injected into pod's environment variables, matching the syntax of Docker links. Optional: Knative defaults this to false.",
                           type: "boolean"
                         },
                         hostAliases: {
@@ -1013,6 +1020,18 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                             "x-kubernetes-preserve-unknown-fields": true
                           },
                           type: "array"
+                        },
+                        hostIPC: {
+                          description: "This is accessible behind a feature flag - kubernetes.podspec-hostipc",
+                          type: "boolean"
+                        },
+                        hostNetwork: {
+                          description: "This is accessible behind a feature flag - kubernetes.podspec-hostnetwork",
+                          type: "boolean"
+                        },
+                        hostPID: {
+                          description: "This is accessible behind a feature flag - kubernetes.podspec-hostpid",
+                          type: "boolean"
                         },
                         idleTimeoutSeconds: {
                           description: "IdleTimeoutSeconds is the maximum duration in seconds a request will be allowed\nto stay open while not receiving any bytes from the user's application. If\nunspecified, a system default will be provided.",
@@ -1025,17 +1044,20 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                             description: "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
                             properties: {
                               name: {
-                                description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                default: "",
+                                description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                 type: "string"
                               }
                             },
                             type: "object",
                             "x-kubernetes-map-type": "atomic"
                           },
-                          type: "array"
+                          type: "array",
+                          "x-kubernetes-list-map-keys": ["name"],
+                          "x-kubernetes-list-type": "map"
                         },
                         initContainers: {
-                          description: "List of initialization containers belonging to the pod.\nInit containers are executed in order prior to containers being started. If any\ninit container fails, the pod is considered to have failed and is handled according\nto its restartPolicy. The name for an init container or normal container must be\nunique among all containers.\nInit containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes.\nThe resourceRequirements of an init container are taken into account during scheduling\nby finding the highest request/limit for each resource type, and then using the max of\nof that value or the sum of the normal containers. Limits are applied to init containers\nin a similar fashion.\nInit containers cannot currently be added or removed.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/",
+                          description: "This is accessible behind a feature flag - kubernetes.podspec-init-containers",
                           items: {
                             description: "This is accessible behind a feature flag - kubernetes.podspec-init-containers",
                             type: "object",
@@ -1044,15 +1066,16 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                           type: "array"
                         },
                         nodeSelector: {
+                          additionalProperties: {
+                            type: "string"
+                          },
                           description: "This is accessible behind a feature flag - kubernetes.podspec-nodeselector",
                           type: "object",
-                          "x-kubernetes-map-type": "atomic",
-                          "x-kubernetes-preserve-unknown-fields": true
+                          "x-kubernetes-map-type": "atomic"
                         },
                         priorityClassName: {
                           description: "This is accessible behind a feature flag - kubernetes.podspec-priorityclassname",
-                          type: "string",
-                          "x-kubernetes-preserve-unknown-fields": true
+                          type: "string"
                         },
                         responseStartTimeoutSeconds: {
                           description: "ResponseStartTimeoutSeconds is the maximum duration in seconds that the request\nrouting layer will wait for a request delivered to a container to begin\nsending any network traffic.",
@@ -1061,13 +1084,11 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                         },
                         runtimeClassName: {
                           description: "This is accessible behind a feature flag - kubernetes.podspec-runtimeclassname",
-                          type: "string",
-                          "x-kubernetes-preserve-unknown-fields": true
+                          type: "string"
                         },
                         schedulerName: {
                           description: "This is accessible behind a feature flag - kubernetes.podspec-schedulername",
-                          type: "string",
-                          "x-kubernetes-preserve-unknown-fields": true
+                          type: "string"
                         },
                         securityContext: {
                           description: "This is accessible behind a feature flag - kubernetes.podspec-securitycontext",
@@ -1079,9 +1100,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                           type: "string"
                         },
                         shareProcessNamespace: {
-                          description: "This is accessible behind a feature flag - kubernetes.podspec-shareproccessnamespace",
-                          type: "boolean",
-                          "x-kubernetes-preserve-unknown-fields": true
+                          description: "This is accessible behind a feature flag - kubernetes.podspec-shareprocessnamespace",
+                          type: "boolean"
                         },
                         timeoutSeconds: {
                           description: "TimeoutSeconds is the maximum duration in seconds that the request instance\nis allowed to respond to a request. If unspecified, a system default will\nbe provided.",
@@ -1141,10 +1161,12 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                       required: ["key", "path"],
                                       type: "object"
                                     },
-                                    type: "array"
+                                    type: "array",
+                                    "x-kubernetes-list-type": "atomic"
                                   },
                                   name: {
-                                    description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                    default: "",
+                                    description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                     type: "string"
                                   },
                                   optional: {
@@ -1155,8 +1177,23 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                 type: "object",
                                 "x-kubernetes-map-type": "atomic"
                               },
+                              csi: {
+                                description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-csi",
+                                type: "object",
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
                               emptyDir: {
-                                description: "This is accessible behind a feature flag - kubernetes.podspec-emptydir",
+                                description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-emptydir",
+                                type: "object",
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              hostPath: {
+                                description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-hostpath",
+                                type: "object",
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              image: {
+                                description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-image",
                                 type: "object",
                                 "x-kubernetes-preserve-unknown-fields": true
                               },
@@ -1178,9 +1215,9 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                     type: "integer"
                                   },
                                   sources: {
-                                    description: "sources is the list of volume projections",
+                                    description: "sources is the list of volume projections. Each entry in this list\nhandles one source.",
                                     items: {
-                                      description: "Projection that may be projected along with other supported volume types",
+                                      description: "Projection that may be projected along with other supported volume types.\nExactly one of these fields must be set.",
                                       properties: {
                                         configMap: {
                                           description: "configMap information about the configMap data to project",
@@ -1207,10 +1244,12 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                                 required: ["key", "path"],
                                                 type: "object"
                                               },
-                                              type: "array"
+                                              type: "array",
+                                              "x-kubernetes-list-type": "atomic"
                                             },
                                             name: {
-                                              description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                              default: "",
+                                              description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                               type: "string"
                                             },
                                             optional: {
@@ -1230,7 +1269,7 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                                 description: "DownwardAPIVolumeFile represents information to create the file containing the pod field",
                                                 properties: {
                                                   fieldRef: {
-                                                    description: "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported.",
+                                                    description: "Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported.",
                                                     properties: {
                                                       apiVersion: {
                                                         description: "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".",
@@ -1284,7 +1323,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                                 required: ["path"],
                                                 type: "object"
                                               },
-                                              type: "array"
+                                              type: "array",
+                                              "x-kubernetes-list-type": "atomic"
                                             }
                                           },
                                           type: "object"
@@ -1314,10 +1354,12 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                                 required: ["key", "path"],
                                                 type: "object"
                                               },
-                                              type: "array"
+                                              type: "array",
+                                              "x-kubernetes-list-type": "atomic"
                                             },
                                             name: {
-                                              description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                              default: "",
+                                              description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                               type: "string"
                                             },
                                             optional: {
@@ -1351,7 +1393,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                       },
                                       type: "object"
                                     },
-                                    type: "array"
+                                    type: "array",
+                                    "x-kubernetes-list-type": "atomic"
                                   }
                                 },
                                 type: "object"
@@ -1386,7 +1429,8 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                                       required: ["key", "path"],
                                       type: "object"
                                     },
-                                    type: "array"
+                                    type: "array",
+                                    "x-kubernetes-list-type": "atomic"
                                   },
                                   optional: {
                                     description: "optional field specify whether the Secret or its keys must be defined",
@@ -1403,7 +1447,9 @@ export const CustomResourceDefinition_ConfigurationsServingKnativeDev: Kubernete
                             required: ["name"],
                             type: "object"
                           },
-                          type: "array"
+                          type: "array",
+                          "x-kubernetes-list-map-keys": ["name"],
+                          "x-kubernetes-list-type": "map"
                         }
                       },
                       required: ["containers"],
@@ -1495,7 +1541,7 @@ export const CustomResourceDefinition_ClusterdomainclaimsNetworkingInternalKnati
     labels: {
       "app.kubernetes.io/component": "networking",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "knative.dev/crd-install": "true"
     },
     name: "clusterdomainclaims.networking.internal.knative.dev"
@@ -1556,7 +1602,7 @@ export const CustomResourceDefinition_DomainmappingsServingKnativeDev: Kubernete
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "knative.dev/crd-install": "true"
     },
     name: "domainmappings.serving.knative.dev"
@@ -1605,7 +1651,7 @@ export const CustomResourceDefinition_DomainmappingsServingKnativeDev: Kubernete
               description: "Spec is the desired state of the DomainMapping.\nMore info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
               properties: {
                 ref: {
-                  description: "Ref specifies the target of the Domain Mapping.\n\n\nThe object identified by the Ref must be an Addressable with a URL of the\nform `{name}.{namespace}.{domain}` where `{domain}` is the cluster domain,\nand `{name}` and `{namespace}` are the name and namespace of a Kubernetes\nService.\n\n\nThis contract is satisfied by Knative types such as Knative Services and\nKnative Routes, and by Kubernetes Services.",
+                  description: "Ref specifies the target of the Domain Mapping.\n\nThe object identified by the Ref must be an Addressable with a URL of the\nform `{name}.{namespace}.{domain}` where `{domain}` is the cluster domain,\nand `{name}` and `{namespace}` are the name and namespace of a Kubernetes\nService.\n\nThis contract is satisfied by Knative types such as Knative Services and\nKnative Routes, and by Kubernetes Services.",
                   properties: {
                     address: {
                       description: "Address points to a specific Address Name.",
@@ -1747,7 +1793,7 @@ export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: Kub
     labels: {
       "app.kubernetes.io/component": "networking",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "knative.dev/crd-install": "true"
     },
     name: "ingresses.networking.internal.knative.dev"
@@ -1775,7 +1821,7 @@ export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: Kub
       name: "v1alpha1",
       schema: {
         openAPIV3Schema: {
-          description: "Ingress is a collection of rules that allow inbound connections to reach the endpoints defined\nby a backend. An Ingress can be configured to give services externally-reachable URLs, load\nbalance traffic, offer name based virtual hosting, etc.\n\n\nThis is heavily based on K8s Ingress https://godoc.org/k8s.io/api/networking/v1beta1#Ingress\nwhich some highlighted modifications.",
+          description: "Ingress is a collection of rules that allow inbound connections to reach the endpoints defined\nby a backend. An Ingress can be configured to give services externally-reachable URLs, load\nbalance traffic, offer name based virtual hosting, etc.\n\nThis is heavily based on K8s Ingress https://godoc.org/k8s.io/api/networking/v1beta1#Ingress\nwhich some highlighted modifications.",
           properties: {
             apiVersion: {
               description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
@@ -1811,7 +1857,7 @@ export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: Kub
                         description: "HTTP represents a rule to apply against incoming requests. If the\nrule is satisfied, the request is routed to the specified backend.",
                         properties: {
                           paths: {
-                            description: "A collection of paths that map requests to backends.\n\n\nIf they are multiple matching paths, the first match takes precedence.",
+                            description: "A collection of paths that map requests to backends.\n\nIf they are multiple matching paths, the first match takes precedence.",
                             items: {
                               description: "HTTPIngressPath associates a path regex with a backend. Incoming URLs matching\nthe path are forwarded to the backend.",
                               properties: {
@@ -1819,7 +1865,7 @@ export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: Kub
                                   additionalProperties: {
                                     type: "string"
                                   },
-                                  description: "AppendHeaders allow specifying additional HTTP headers to add\nbefore forwarding a request to the destination service.\n\n\nNOTE: This differs from K8s Ingress which doesn't allow header appending.",
+                                  description: "AppendHeaders allow specifying additional HTTP headers to add\nbefore forwarding a request to the destination service.\n\nNOTE: This differs from K8s Ingress which doesn't allow header appending.",
                                   type: "object"
                                 },
                                 headers: {
@@ -1841,7 +1887,7 @@ export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: Kub
                                   type: "string"
                                 },
                                 rewriteHost: {
-                                  description: "RewriteHost rewrites the incoming request's host header.\n\n\nThis field is currently experimental and not supported by all Ingress\nimplementations.",
+                                  description: "RewriteHost rewrites the incoming request's host header.\n\nThis field is currently experimental and not supported by all Ingress\nimplementations.",
                                   type: "string"
                                 },
                                 splits: {
@@ -1853,11 +1899,11 @@ export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: Kub
                                         additionalProperties: {
                                           type: "string"
                                         },
-                                        description: "AppendHeaders allow specifying additional HTTP headers to add\nbefore forwarding a request to the destination service.\n\n\nNOTE: This differs from K8s Ingress which doesn't allow header appending.",
+                                        description: "AppendHeaders allow specifying additional HTTP headers to add\nbefore forwarding a request to the destination service.\n\nNOTE: This differs from K8s Ingress which doesn't allow header appending.",
                                         type: "object"
                                       },
                                       percent: {
-                                        description: "Specifies the split percentage, a number between 0 and 100.  If\nonly one split is specified, we default to 100.\n\n\nNOTE: This differs from K8s Ingress to allow percentage split.",
+                                        description: "Specifies the split percentage, a number between 0 and 100.  If\nonly one split is specified, we default to 100.\n\nNOTE: This differs from K8s Ingress to allow percentage split.",
                                         type: "integer"
                                       },
                                       serviceName: {
@@ -1865,7 +1911,7 @@ export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: Kub
                                         type: "string"
                                       },
                                       serviceNamespace: {
-                                        description: "Specifies the namespace of the referenced service.\n\n\nNOTE: This differs from K8s Ingress to allow routing to different namespaces.",
+                                        description: "Specifies the namespace of the referenced service.\n\nNOTE: This differs from K8s Ingress to allow routing to different namespaces.",
                                         type: "string"
                                       },
                                       servicePort: {
@@ -1993,7 +2039,7 @@ export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: Kub
                             type: "string"
                           },
                           domainInternal: {
-                            description: "DomainInternal is set if there is a cluster-local DNS name to access the Ingress.\n\n\nNOTE: This differs from K8s Ingress, since we also desire to have a cluster-local\n      DNS name to allow routing in case of not having a mesh.",
+                            description: "DomainInternal is set if there is a cluster-local DNS name to access the Ingress.\n\nNOTE: This differs from K8s Ingress, since we also desire to have a cluster-local\n      DNS name to allow routing in case of not having a mesh.",
                             type: "string"
                           },
                           ip: {
@@ -2025,7 +2071,7 @@ export const CustomResourceDefinition_IngressesNetworkingInternalKnativeDev: Kub
                             type: "string"
                           },
                           domainInternal: {
-                            description: "DomainInternal is set if there is a cluster-local DNS name to access the Ingress.\n\n\nNOTE: This differs from K8s Ingress, since we also desire to have a cluster-local\n      DNS name to allow routing in case of not having a mesh.",
+                            description: "DomainInternal is set if there is a cluster-local DNS name to access the Ingress.\n\nNOTE: This differs from K8s Ingress, since we also desire to have a cluster-local\n      DNS name to allow routing in case of not having a mesh.",
                             type: "string"
                           },
                           ip: {
@@ -2065,7 +2111,7 @@ export const CustomResourceDefinition_MetricsAutoscalingInternalKnativeDev: Kube
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "knative.dev/crd-install": "true"
     },
     name: "metrics.autoscaling.internal.knative.dev"
@@ -2197,7 +2243,7 @@ export const CustomResourceDefinition_PodautoscalersAutoscalingInternalKnativeDe
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "knative.dev/crd-install": "true"
     },
     name: "podautoscalers.autoscaling.internal.knative.dev"
@@ -2375,7 +2421,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "knative.dev/crd-install": "true"
     },
     name: "revisions.serving.knative.dev"
@@ -2419,7 +2465,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
       name: "v1",
       schema: {
         openAPIV3Schema: {
-          description: "Revision is an immutable snapshot of code and configuration.  A revision\nreferences a container image. Revisions are created by updates to a\nConfiguration.\n\n\nSee also: https://github.com/knative/serving/blob/main/docs/spec/overview.md#revision",
+          description: "Revision is an immutable snapshot of code and configuration.  A revision\nreferences a container image. Revisions are created by updates to a\nConfiguration.\n\nSee also: https://github.com/knative/serving/blob/main/docs/spec/overview.md#revision",
           properties: {
             apiVersion: {
               description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
@@ -2459,14 +2505,16 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                         items: {
                           type: "string"
                         },
-                        type: "array"
+                        type: "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       command: {
                         description: "Entrypoint array. Not executed within a shell.\nThe container image's ENTRYPOINT is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced\nto a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will\nproduce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless\nof whether the variable exists or not. Cannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell",
                         items: {
                           type: "string"
                         },
-                        type: "array"
+                        type: "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       env: {
                         description: "List of environment variables to set in the container.\nCannot be updated.",
@@ -2474,7 +2522,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                           description: "EnvVar represents an environment variable present in a Container.",
                           properties: {
                             name: {
-                              description: "Name of the environment variable. Must be a C_IDENTIFIER.",
+                              description: "Name of the environment variable.\nMay consist of any printable ASCII characters except '='.",
                               type: "string"
                             },
                             value: {
@@ -2492,7 +2540,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                       type: "string"
                                     },
                                     name: {
-                                      description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                      default: "",
+                                      description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                       type: "string"
                                     },
                                     optional: {
@@ -2524,7 +2573,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                       type: "string"
                                     },
                                     name: {
-                                      description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                      default: "",
+                                      description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                       type: "string"
                                     },
                                     optional: {
@@ -2543,18 +2593,21 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                           required: ["name"],
                           type: "object"
                         },
-                        type: "array"
+                        type: "array",
+                        "x-kubernetes-list-map-keys": ["name"],
+                        "x-kubernetes-list-type": "map"
                       },
                       envFrom: {
-                        description: "List of sources to populate environment variables in the container.\nThe keys defined within a source must be a C_IDENTIFIER. All invalid keys\nwill be reported as an event when the container is starting. When a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.",
+                        description: "List of sources to populate environment variables in the container.\nThe keys defined within a source may consist of any printable ASCII characters except '='.\nWhen a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.",
                         items: {
-                          description: "EnvFromSource represents the source of a set of ConfigMaps",
+                          description: "EnvFromSource represents the source of a set of ConfigMaps or Secrets",
                           properties: {
                             configMapRef: {
                               description: "The ConfigMap to select from",
                               properties: {
                                 name: {
-                                  description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                  default: "",
+                                  description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                   type: "string"
                                 },
                                 optional: {
@@ -2566,14 +2619,15 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                               "x-kubernetes-map-type": "atomic"
                             },
                             prefix: {
-                              description: "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+                              description: "Optional text to prepend to the name of each environment variable.\nMay consist of any printable ASCII characters except '='.",
                               type: "string"
                             },
                             secretRef: {
                               description: "The Secret to select from",
                               properties: {
                                 name: {
-                                  description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                  default: "",
+                                  description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                   type: "string"
                                 },
                                 optional: {
@@ -2587,7 +2641,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                           },
                           type: "object"
                         },
-                        type: "array"
+                        type: "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       image: {
                         description: "Container image name.\nMore info: https://kubernetes.io/docs/concepts/containers/images\nThis field is optional to allow higher level config management to default or override\ncontainer images in workload controllers like Deployments and StatefulSets.",
@@ -2601,14 +2656,15 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                         description: "Periodic probe of container liveness.\nContainer will be restarted if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
                         properties: {
                           exec: {
-                            description: "Exec specifies the action to take.",
+                            description: "Exec specifies a command to execute in the container.",
                             properties: {
                               command: {
                                 description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               }
                             },
                             type: "object"
@@ -2619,7 +2675,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                             type: "integer"
                           },
                           grpc: {
-                            description: "GRPC specifies an action involving a GRPC port.",
+                            description: "GRPC specifies a GRPC HealthCheckRequest.",
                             properties: {
                               port: {
                                 description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -2627,15 +2683,15 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                 type: "integer"
                               },
                               service: {
-                                description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\n\nIf this is not specified, the default behavior is defined by gRPC.",
+                                default: "",
+                                description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\nIf this is not specified, the default behavior is defined by gRPC.",
                                 type: "string"
                               }
                             },
-                            required: ["port"],
                             type: "object"
                           },
                           httpGet: {
-                            description: "HTTPGet specifies the http request to perform.",
+                            description: "HTTPGet specifies an HTTP GET request to perform.",
                             properties: {
                               host: {
                                 description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
@@ -2658,7 +2714,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                   required: ["name", "value"],
                                   type: "object"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               path: {
                                 description: "Path to access on the HTTP server.",
@@ -2696,7 +2753,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                             type: "integer"
                           },
                           tcpSocket: {
-                            description: "TCPSocket specifies an action involving a TCP port.",
+                            description: "TCPSocket specifies a connection to a TCP port.",
                             properties: {
                               host: {
                                 description: "Optional: Host name to connect to, defaults to the pod IP.",
@@ -2746,25 +2803,23 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                               type: "string"
                             }
                           },
-                          required: ["containerPort"],
                           type: "object"
                         },
-                        type: "array",
-                        "x-kubernetes-list-map-keys": ["containerPort", "protocol"],
-                        "x-kubernetes-list-type": "map"
+                        type: "array"
                       },
                       readinessProbe: {
                         description: "Periodic probe of container service readiness.\nContainer will be removed from service endpoints if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
                         properties: {
                           exec: {
-                            description: "Exec specifies the action to take.",
+                            description: "Exec specifies a command to execute in the container.",
                             properties: {
                               command: {
                                 description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               }
                             },
                             type: "object"
@@ -2775,7 +2830,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                             type: "integer"
                           },
                           grpc: {
-                            description: "GRPC specifies an action involving a GRPC port.",
+                            description: "GRPC specifies a GRPC HealthCheckRequest.",
                             properties: {
                               port: {
                                 description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -2783,15 +2838,15 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                 type: "integer"
                               },
                               service: {
-                                description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\n\nIf this is not specified, the default behavior is defined by gRPC.",
+                                default: "",
+                                description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\nIf this is not specified, the default behavior is defined by gRPC.",
                                 type: "string"
                               }
                             },
-                            required: ["port"],
                             type: "object"
                           },
                           httpGet: {
-                            description: "HTTPGet specifies the http request to perform.",
+                            description: "HTTPGet specifies an HTTP GET request to perform.",
                             properties: {
                               host: {
                                 description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
@@ -2814,7 +2869,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                   required: ["name", "value"],
                                   type: "object"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               path: {
                                 description: "Path to access on the HTTP server.",
@@ -2852,7 +2908,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                             type: "integer"
                           },
                           tcpSocket: {
-                            description: "TCPSocket specifies an action involving a TCP port.",
+                            description: "TCPSocket specifies a connection to a TCP port.",
                             properties: {
                               host: {
                                 description: "Optional: Host name to connect to, defaults to the pod IP.",
@@ -2881,23 +2937,6 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                       resources: {
                         description: "Compute Resources required by this container.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
                         properties: {
-                          claims: {
-                            description: "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\n\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\n\n\nThis field is immutable. It can only be set for containers.",
-                            items: {
-                              description: "ResourceClaim references one entry in PodSpec.ResourceClaims.",
-                              properties: {
-                                name: {
-                                  description: "Name must match the name of one entry in pod.spec.resourceClaims of\nthe Pod where this field is used. It makes that resource available\ninside a container.",
-                                  type: "string"
-                                }
-                              },
-                              required: ["name"],
-                              type: "object"
-                            },
-                            type: "array",
-                            "x-kubernetes-list-map-keys": ["name"],
-                            "x-kubernetes-list-type": "map"
-                          },
                           limits: {
                             additionalProperties: {
                               anyOf: [{
@@ -2943,7 +2982,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                   description: "Capability represent POSIX capabilities type",
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               drop: {
                                 description: "Removed capabilities",
@@ -2951,10 +2991,15 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                   description: "Capability represent POSIX capabilities type",
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               }
                             },
                             type: "object"
+                          },
+                          privileged: {
+                            description: "Run container in privileged mode. This can only be set to explicitly to 'false'",
+                            type: "boolean"
                           },
                           readOnlyRootFilesystem: {
                             description: "Whether this container has a read-only root filesystem.\nDefault is false.\nNote that this field cannot be set when spec.os.name is windows.",
@@ -2982,7 +3027,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                 type: "string"
                               },
                               type: {
-                                description: "type indicates which kind of seccomp profile will be applied.\nValid options are:\n\n\nLocalhost - a profile defined in a file on the node should be used.\nRuntimeDefault - the container runtime default profile should be used.\nUnconfined - no profile should be applied.",
+                                description: "type indicates which kind of seccomp profile will be applied.\nValid options are:\n\nLocalhost - a profile defined in a file on the node should be used.\nRuntimeDefault - the container runtime default profile should be used.\nUnconfined - no profile should be applied.",
                                 type: "string"
                               }
                             },
@@ -2996,14 +3041,15 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                         description: "StartupProbe indicates that the Pod has successfully initialized.\nIf specified, no other probes are executed until this completes successfully.\nIf this probe fails, the Pod will be restarted, just as if the livenessProbe failed.\nThis can be used to provide different probe parameters at the beginning of a Pod's lifecycle,\nwhen it might take a long time to load data or warm a cache, than during steady-state operation.\nThis cannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
                         properties: {
                           exec: {
-                            description: "Exec specifies the action to take.",
+                            description: "Exec specifies a command to execute in the container.",
                             properties: {
                               command: {
                                 description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               }
                             },
                             type: "object"
@@ -3014,7 +3060,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                             type: "integer"
                           },
                           grpc: {
-                            description: "GRPC specifies an action involving a GRPC port.",
+                            description: "GRPC specifies a GRPC HealthCheckRequest.",
                             properties: {
                               port: {
                                 description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -3022,15 +3068,15 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                 type: "integer"
                               },
                               service: {
-                                description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\n\nIf this is not specified, the default behavior is defined by gRPC.",
+                                default: "",
+                                description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\nIf this is not specified, the default behavior is defined by gRPC.",
                                 type: "string"
                               }
                             },
-                            required: ["port"],
                             type: "object"
                           },
                           httpGet: {
-                            description: "HTTPGet specifies the http request to perform.",
+                            description: "HTTPGet specifies an HTTP GET request to perform.",
                             properties: {
                               host: {
                                 description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
@@ -3053,7 +3099,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                   required: ["name", "value"],
                                   type: "object"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               path: {
                                 description: "Path to access on the HTTP server.",
@@ -3091,7 +3138,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                             type: "integer"
                           },
                           tcpSocket: {
-                            description: "TCPSocket specifies an action involving a TCP port.",
+                            description: "TCPSocket specifies a connection to a TCP port.",
                             properties: {
                               host: {
                                 description: "Optional: Host name to connect to, defaults to the pod IP.",
@@ -3134,6 +3181,10 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                               description: "Path within the container at which the volume should be mounted.  Must\nnot contain ':'.",
                               type: "string"
                             },
+                            mountPropagation: {
+                              description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-mount-propagation",
+                              type: "string"
+                            },
                             name: {
                               description: "This must match the Name of a Volume.",
                               type: "string"
@@ -3150,7 +3201,9 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                           required: ["mountPath", "name"],
                           type: "object"
                         },
-                        type: "array"
+                        type: "array",
+                        "x-kubernetes-list-map-keys": ["mountPath"],
+                        "x-kubernetes-list-type": "map"
                       },
                       workingDir: {
                         description: "Container's working directory.\nIf not specified, the container runtime's default will be used, which\nmight be configured in the container image.\nCannot be updated.",
@@ -3171,7 +3224,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                   type: "string"
                 },
                 enableServiceLinks: {
-                  description: "EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, matching the syntax of Docker links. Optional: Knative defaults this to false.",
+                  description: "EnableServiceLinks indicates whether information aboutservices should be injected into pod's environment variables, matching the syntax of Docker links. Optional: Knative defaults this to false.",
                   type: "boolean"
                 },
                 hostAliases: {
@@ -3182,6 +3235,18 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                     "x-kubernetes-preserve-unknown-fields": true
                   },
                   type: "array"
+                },
+                hostIPC: {
+                  description: "This is accessible behind a feature flag - kubernetes.podspec-hostipc",
+                  type: "boolean"
+                },
+                hostNetwork: {
+                  description: "This is accessible behind a feature flag - kubernetes.podspec-hostnetwork",
+                  type: "boolean"
+                },
+                hostPID: {
+                  description: "This is accessible behind a feature flag - kubernetes.podspec-hostpid",
+                  type: "boolean"
                 },
                 idleTimeoutSeconds: {
                   description: "IdleTimeoutSeconds is the maximum duration in seconds a request will be allowed\nto stay open while not receiving any bytes from the user's application. If\nunspecified, a system default will be provided.",
@@ -3194,17 +3259,20 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                     description: "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
                     properties: {
                       name: {
-                        description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                        default: "",
+                        description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                         type: "string"
                       }
                     },
                     type: "object",
                     "x-kubernetes-map-type": "atomic"
                   },
-                  type: "array"
+                  type: "array",
+                  "x-kubernetes-list-map-keys": ["name"],
+                  "x-kubernetes-list-type": "map"
                 },
                 initContainers: {
-                  description: "List of initialization containers belonging to the pod.\nInit containers are executed in order prior to containers being started. If any\ninit container fails, the pod is considered to have failed and is handled according\nto its restartPolicy. The name for an init container or normal container must be\nunique among all containers.\nInit containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes.\nThe resourceRequirements of an init container are taken into account during scheduling\nby finding the highest request/limit for each resource type, and then using the max of\nof that value or the sum of the normal containers. Limits are applied to init containers\nin a similar fashion.\nInit containers cannot currently be added or removed.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/",
+                  description: "This is accessible behind a feature flag - kubernetes.podspec-init-containers",
                   items: {
                     description: "This is accessible behind a feature flag - kubernetes.podspec-init-containers",
                     type: "object",
@@ -3213,15 +3281,16 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                   type: "array"
                 },
                 nodeSelector: {
+                  additionalProperties: {
+                    type: "string"
+                  },
                   description: "This is accessible behind a feature flag - kubernetes.podspec-nodeselector",
                   type: "object",
-                  "x-kubernetes-map-type": "atomic",
-                  "x-kubernetes-preserve-unknown-fields": true
+                  "x-kubernetes-map-type": "atomic"
                 },
                 priorityClassName: {
                   description: "This is accessible behind a feature flag - kubernetes.podspec-priorityclassname",
-                  type: "string",
-                  "x-kubernetes-preserve-unknown-fields": true
+                  type: "string"
                 },
                 responseStartTimeoutSeconds: {
                   description: "ResponseStartTimeoutSeconds is the maximum duration in seconds that the request\nrouting layer will wait for a request delivered to a container to begin\nsending any network traffic.",
@@ -3230,13 +3299,11 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                 },
                 runtimeClassName: {
                   description: "This is accessible behind a feature flag - kubernetes.podspec-runtimeclassname",
-                  type: "string",
-                  "x-kubernetes-preserve-unknown-fields": true
+                  type: "string"
                 },
                 schedulerName: {
                   description: "This is accessible behind a feature flag - kubernetes.podspec-schedulername",
-                  type: "string",
-                  "x-kubernetes-preserve-unknown-fields": true
+                  type: "string"
                 },
                 securityContext: {
                   description: "This is accessible behind a feature flag - kubernetes.podspec-securitycontext",
@@ -3248,9 +3315,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                   type: "string"
                 },
                 shareProcessNamespace: {
-                  description: "This is accessible behind a feature flag - kubernetes.podspec-shareproccessnamespace",
-                  type: "boolean",
-                  "x-kubernetes-preserve-unknown-fields": true
+                  description: "This is accessible behind a feature flag - kubernetes.podspec-shareprocessnamespace",
+                  type: "boolean"
                 },
                 timeoutSeconds: {
                   description: "TimeoutSeconds is the maximum duration in seconds that the request instance\nis allowed to respond to a request. If unspecified, a system default will\nbe provided.",
@@ -3310,10 +3376,12 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                               required: ["key", "path"],
                               type: "object"
                             },
-                            type: "array"
+                            type: "array",
+                            "x-kubernetes-list-type": "atomic"
                           },
                           name: {
-                            description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                            default: "",
+                            description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                             type: "string"
                           },
                           optional: {
@@ -3324,8 +3392,23 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                         type: "object",
                         "x-kubernetes-map-type": "atomic"
                       },
+                      csi: {
+                        description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-csi",
+                        type: "object",
+                        "x-kubernetes-preserve-unknown-fields": true
+                      },
                       emptyDir: {
-                        description: "This is accessible behind a feature flag - kubernetes.podspec-emptydir",
+                        description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-emptydir",
+                        type: "object",
+                        "x-kubernetes-preserve-unknown-fields": true
+                      },
+                      hostPath: {
+                        description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-hostpath",
+                        type: "object",
+                        "x-kubernetes-preserve-unknown-fields": true
+                      },
+                      image: {
+                        description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-image",
                         type: "object",
                         "x-kubernetes-preserve-unknown-fields": true
                       },
@@ -3347,9 +3430,9 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                             type: "integer"
                           },
                           sources: {
-                            description: "sources is the list of volume projections",
+                            description: "sources is the list of volume projections. Each entry in this list\nhandles one source.",
                             items: {
-                              description: "Projection that may be projected along with other supported volume types",
+                              description: "Projection that may be projected along with other supported volume types.\nExactly one of these fields must be set.",
                               properties: {
                                 configMap: {
                                   description: "configMap information about the configMap data to project",
@@ -3376,10 +3459,12 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                         required: ["key", "path"],
                                         type: "object"
                                       },
-                                      type: "array"
+                                      type: "array",
+                                      "x-kubernetes-list-type": "atomic"
                                     },
                                     name: {
-                                      description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                      default: "",
+                                      description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                       type: "string"
                                     },
                                     optional: {
@@ -3399,7 +3484,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                         description: "DownwardAPIVolumeFile represents information to create the file containing the pod field",
                                         properties: {
                                           fieldRef: {
-                                            description: "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported.",
+                                            description: "Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported.",
                                             properties: {
                                               apiVersion: {
                                                 description: "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".",
@@ -3453,7 +3538,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                         required: ["path"],
                                         type: "object"
                                       },
-                                      type: "array"
+                                      type: "array",
+                                      "x-kubernetes-list-type": "atomic"
                                     }
                                   },
                                   type: "object"
@@ -3483,10 +3569,12 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                                         required: ["key", "path"],
                                         type: "object"
                                       },
-                                      type: "array"
+                                      type: "array",
+                                      "x-kubernetes-list-type": "atomic"
                                     },
                                     name: {
-                                      description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                      default: "",
+                                      description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                       type: "string"
                                     },
                                     optional: {
@@ -3520,7 +3608,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                               },
                               type: "object"
                             },
-                            type: "array"
+                            type: "array",
+                            "x-kubernetes-list-type": "atomic"
                           }
                         },
                         type: "object"
@@ -3555,7 +3644,8 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                               required: ["key", "path"],
                               type: "object"
                             },
-                            type: "array"
+                            type: "array",
+                            "x-kubernetes-list-type": "atomic"
                           },
                           optional: {
                             description: "optional field specify whether the Secret or its keys must be defined",
@@ -3572,7 +3662,9 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                     required: ["name"],
                     type: "object"
                   },
-                  type: "array"
+                  type: "array",
+                  "x-kubernetes-list-map-keys": ["name"],
+                  "x-kubernetes-list-type": "map"
                 }
               },
               required: ["containers"],
@@ -3629,7 +3721,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                   type: "array"
                 },
                 containerStatuses: {
-                  description: "ContainerStatuses is a slice of images present in .Spec.Container[*].Image\nto their respective digests and their container name.\nThe digests are resolved during the creation of Revision.\nContainerStatuses holds the container name and image digests\nfor both serving and non serving containers.\nref: http://bit.ly/image-digests",
+                  description: "ContainerStatuses is a slice of images present in .Spec.Container[*].Image\nto their respective digests and their container name.\nThe digests are resolved during the creation of Revision.\nContainerStatuses holds the container name and image digests\nfor both serving and non serving containers.\nref: https://bit.ly/image-digests",
                   items: {
                     description: "ContainerStatus holds the information of container name and image digest value",
                     properties: {
@@ -3650,7 +3742,7 @@ export const CustomResourceDefinition_RevisionsServingKnativeDev: KubernetesReso
                   type: "integer"
                 },
                 initContainerStatuses: {
-                  description: "InitContainerStatuses is a slice of images present in .Spec.InitContainer[*].Image\nto their respective digests and their container name.\nThe digests are resolved during the creation of Revision.\nContainerStatuses holds the container name and image digests\nfor both serving and non serving containers.\nref: http://bit.ly/image-digests",
+                  description: "InitContainerStatuses is a slice of images present in .Spec.InitContainer[*].Image\nto their respective digests and their container name.\nThe digests are resolved during the creation of Revision.\nContainerStatuses holds the container name and image digests\nfor both serving and non serving containers.\nref: https://bit.ly/image-digests",
                   items: {
                     description: "ContainerStatus holds the information of container name and image digest value",
                     properties: {
@@ -3695,7 +3787,7 @@ export const CustomResourceDefinition_RoutesServingKnativeDev: KubernetesResourc
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "duck.knative.dev/addressable": "true",
       "knative.dev/crd-install": "true"
     },
@@ -3914,7 +4006,7 @@ export const CustomResourceDefinition_ServerlessservicesNetworkingInternalKnativ
     labels: {
       "app.kubernetes.io/component": "networking",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "knative.dev/crd-install": "true"
     },
     name: "serverlessservices.networking.internal.knative.dev"
@@ -3991,7 +4083,7 @@ export const CustomResourceDefinition_ServerlessservicesNetworkingInternalKnativ
                       type: "string"
                     },
                     fieldPath: {
-                      description: "If referring to a piece of an object instead of an entire object, this string\nshould contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].\nFor example, if the object reference is to a container within a pod, this would take on a value like:\n\"spec.containers{name}\" (where \"name\" refers to the name of the container that triggered\nthe event) or if no container name is specified \"spec.containers[2]\" (container with\nindex 2 in this pod). This syntax is chosen only to have some well-defined way of\nreferencing a part of an object.\nTODO: this design is not final and this field is subject to change in the future.",
+                      description: "If referring to a piece of an object instead of an entire object, this string\nshould contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].\nFor example, if the object reference is to a container within a pod, this would take on a value like:\n\"spec.containers{name}\" (where \"name\" refers to the name of the container that triggered\nthe event) or if no container name is specified \"spec.containers[2]\" (container with\nindex 2 in this pod). This syntax is chosen only to have some well-defined way of\nreferencing a part of an object.",
                       type: "string"
                     },
                     kind: {
@@ -4105,7 +4197,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "duck.knative.dev/addressable": "true",
       "duck.knative.dev/podspecable": "true",
       "knative.dev/crd-install": "true"
@@ -4147,7 +4239,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
       name: "v1",
       schema: {
         openAPIV3Schema: {
-          description: "Service acts as a top-level container that manages a Route and Configuration\nwhich implement a network service. Service exists to provide a singular\nabstraction which can be access controlled, reasoned about, and which\nencapsulates software lifecycle decisions such as rollout policy and\nteam resource ownership. Service acts only as an orchestrator of the\nunderlying Routes and Configurations (much as a kubernetes Deployment\norchestrates ReplicaSets), and its usage is optional but recommended.\n\n\nThe Service's controller will track the statuses of its owned Configuration\nand Route, reflecting their statuses and conditions as its own.\n\n\nSee also: https://github.com/knative/serving/blob/main/docs/spec/overview.md#service",
+          description: "Service acts as a top-level container that manages a Route and Configuration\nwhich implement a network service. Service exists to provide a singular\nabstraction which can be access controlled, reasoned about, and which\nencapsulates software lifecycle decisions such as rollout policy and\nteam resource ownership. Service acts only as an orchestrator of the\nunderlying Routes and Configurations (much as a kubernetes Deployment\norchestrates ReplicaSets), and its usage is optional but recommended.\n\nThe Service's controller will track the statuses of its owned Configuration\nand Route, reflecting their statuses and conditions as its own.\n\nSee also: https://github.com/knative/serving/blob/main/docs/spec/overview.md#service",
           properties: {
             apiVersion: {
               description: "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
@@ -4223,14 +4315,16 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               command: {
                                 description: "Entrypoint array. Not executed within a shell.\nThe container image's ENTRYPOINT is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced\nto a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will\nproduce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless\nof whether the variable exists or not. Cannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell",
                                 items: {
                                   type: "string"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               env: {
                                 description: "List of environment variables to set in the container.\nCannot be updated.",
@@ -4238,7 +4332,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                   description: "EnvVar represents an environment variable present in a Container.",
                                   properties: {
                                     name: {
-                                      description: "Name of the environment variable. Must be a C_IDENTIFIER.",
+                                      description: "Name of the environment variable.\nMay consist of any printable ASCII characters except '='.",
                                       type: "string"
                                     },
                                     value: {
@@ -4256,7 +4350,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                               type: "string"
                                             },
                                             name: {
-                                              description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                              default: "",
+                                              description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                               type: "string"
                                             },
                                             optional: {
@@ -4288,7 +4383,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                               type: "string"
                                             },
                                             name: {
-                                              description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                              default: "",
+                                              description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                               type: "string"
                                             },
                                             optional: {
@@ -4307,18 +4403,21 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                   required: ["name"],
                                   type: "object"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-map-keys": ["name"],
+                                "x-kubernetes-list-type": "map"
                               },
                               envFrom: {
-                                description: "List of sources to populate environment variables in the container.\nThe keys defined within a source must be a C_IDENTIFIER. All invalid keys\nwill be reported as an event when the container is starting. When a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.",
+                                description: "List of sources to populate environment variables in the container.\nThe keys defined within a source may consist of any printable ASCII characters except '='.\nWhen a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.",
                                 items: {
-                                  description: "EnvFromSource represents the source of a set of ConfigMaps",
+                                  description: "EnvFromSource represents the source of a set of ConfigMaps or Secrets",
                                   properties: {
                                     configMapRef: {
                                       description: "The ConfigMap to select from",
                                       properties: {
                                         name: {
-                                          description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                          default: "",
+                                          description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                           type: "string"
                                         },
                                         optional: {
@@ -4330,14 +4429,15 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                       "x-kubernetes-map-type": "atomic"
                                     },
                                     prefix: {
-                                      description: "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+                                      description: "Optional text to prepend to the name of each environment variable.\nMay consist of any printable ASCII characters except '='.",
                                       type: "string"
                                     },
                                     secretRef: {
                                       description: "The Secret to select from",
                                       properties: {
                                         name: {
-                                          description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                          default: "",
+                                          description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                           type: "string"
                                         },
                                         optional: {
@@ -4351,7 +4451,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                   },
                                   type: "object"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               image: {
                                 description: "Container image name.\nMore info: https://kubernetes.io/docs/concepts/containers/images\nThis field is optional to allow higher level config management to default or override\ncontainer images in workload controllers like Deployments and StatefulSets.",
@@ -4365,14 +4466,15 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                 description: "Periodic probe of container liveness.\nContainer will be restarted if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
                                 properties: {
                                   exec: {
-                                    description: "Exec specifies the action to take.",
+                                    description: "Exec specifies a command to execute in the container.",
                                     properties: {
                                       command: {
                                         description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
                                         items: {
                                           type: "string"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       }
                                     },
                                     type: "object"
@@ -4383,7 +4485,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                     type: "integer"
                                   },
                                   grpc: {
-                                    description: "GRPC specifies an action involving a GRPC port.",
+                                    description: "GRPC specifies a GRPC HealthCheckRequest.",
                                     properties: {
                                       port: {
                                         description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -4391,15 +4493,15 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                         type: "integer"
                                       },
                                       service: {
-                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\n\nIf this is not specified, the default behavior is defined by gRPC.",
+                                        default: "",
+                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\nIf this is not specified, the default behavior is defined by gRPC.",
                                         type: "string"
                                       }
                                     },
-                                    required: ["port"],
                                     type: "object"
                                   },
                                   httpGet: {
-                                    description: "HTTPGet specifies the http request to perform.",
+                                    description: "HTTPGet specifies an HTTP GET request to perform.",
                                     properties: {
                                       host: {
                                         description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
@@ -4422,7 +4524,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                           required: ["name", "value"],
                                           type: "object"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       },
                                       path: {
                                         description: "Path to access on the HTTP server.",
@@ -4460,7 +4563,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                     type: "integer"
                                   },
                                   tcpSocket: {
-                                    description: "TCPSocket specifies an action involving a TCP port.",
+                                    description: "TCPSocket specifies a connection to a TCP port.",
                                     properties: {
                                       host: {
                                         description: "Optional: Host name to connect to, defaults to the pod IP.",
@@ -4510,25 +4613,23 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                       type: "string"
                                     }
                                   },
-                                  required: ["containerPort"],
                                   type: "object"
                                 },
-                                type: "array",
-                                "x-kubernetes-list-map-keys": ["containerPort", "protocol"],
-                                "x-kubernetes-list-type": "map"
+                                type: "array"
                               },
                               readinessProbe: {
                                 description: "Periodic probe of container service readiness.\nContainer will be removed from service endpoints if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
                                 properties: {
                                   exec: {
-                                    description: "Exec specifies the action to take.",
+                                    description: "Exec specifies a command to execute in the container.",
                                     properties: {
                                       command: {
                                         description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
                                         items: {
                                           type: "string"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       }
                                     },
                                     type: "object"
@@ -4539,7 +4640,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                     type: "integer"
                                   },
                                   grpc: {
-                                    description: "GRPC specifies an action involving a GRPC port.",
+                                    description: "GRPC specifies a GRPC HealthCheckRequest.",
                                     properties: {
                                       port: {
                                         description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -4547,15 +4648,15 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                         type: "integer"
                                       },
                                       service: {
-                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\n\nIf this is not specified, the default behavior is defined by gRPC.",
+                                        default: "",
+                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\nIf this is not specified, the default behavior is defined by gRPC.",
                                         type: "string"
                                       }
                                     },
-                                    required: ["port"],
                                     type: "object"
                                   },
                                   httpGet: {
-                                    description: "HTTPGet specifies the http request to perform.",
+                                    description: "HTTPGet specifies an HTTP GET request to perform.",
                                     properties: {
                                       host: {
                                         description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
@@ -4578,7 +4679,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                           required: ["name", "value"],
                                           type: "object"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       },
                                       path: {
                                         description: "Path to access on the HTTP server.",
@@ -4616,7 +4718,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                     type: "integer"
                                   },
                                   tcpSocket: {
-                                    description: "TCPSocket specifies an action involving a TCP port.",
+                                    description: "TCPSocket specifies a connection to a TCP port.",
                                     properties: {
                                       host: {
                                         description: "Optional: Host name to connect to, defaults to the pod IP.",
@@ -4645,23 +4747,6 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                               resources: {
                                 description: "Compute Resources required by this container.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
                                 properties: {
-                                  claims: {
-                                    description: "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\n\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\n\n\nThis field is immutable. It can only be set for containers.",
-                                    items: {
-                                      description: "ResourceClaim references one entry in PodSpec.ResourceClaims.",
-                                      properties: {
-                                        name: {
-                                          description: "Name must match the name of one entry in pod.spec.resourceClaims of\nthe Pod where this field is used. It makes that resource available\ninside a container.",
-                                          type: "string"
-                                        }
-                                      },
-                                      required: ["name"],
-                                      type: "object"
-                                    },
-                                    type: "array",
-                                    "x-kubernetes-list-map-keys": ["name"],
-                                    "x-kubernetes-list-type": "map"
-                                  },
                                   limits: {
                                     additionalProperties: {
                                       anyOf: [{
@@ -4707,7 +4792,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                           description: "Capability represent POSIX capabilities type",
                                           type: "string"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       },
                                       drop: {
                                         description: "Removed capabilities",
@@ -4715,10 +4801,15 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                           description: "Capability represent POSIX capabilities type",
                                           type: "string"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       }
                                     },
                                     type: "object"
+                                  },
+                                  privileged: {
+                                    description: "Run container in privileged mode. This can only be set to explicitly to 'false'",
+                                    type: "boolean"
                                   },
                                   readOnlyRootFilesystem: {
                                     description: "Whether this container has a read-only root filesystem.\nDefault is false.\nNote that this field cannot be set when spec.os.name is windows.",
@@ -4746,7 +4837,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                         type: "string"
                                       },
                                       type: {
-                                        description: "type indicates which kind of seccomp profile will be applied.\nValid options are:\n\n\nLocalhost - a profile defined in a file on the node should be used.\nRuntimeDefault - the container runtime default profile should be used.\nUnconfined - no profile should be applied.",
+                                        description: "type indicates which kind of seccomp profile will be applied.\nValid options are:\n\nLocalhost - a profile defined in a file on the node should be used.\nRuntimeDefault - the container runtime default profile should be used.\nUnconfined - no profile should be applied.",
                                         type: "string"
                                       }
                                     },
@@ -4760,14 +4851,15 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                 description: "StartupProbe indicates that the Pod has successfully initialized.\nIf specified, no other probes are executed until this completes successfully.\nIf this probe fails, the Pod will be restarted, just as if the livenessProbe failed.\nThis can be used to provide different probe parameters at the beginning of a Pod's lifecycle,\nwhen it might take a long time to load data or warm a cache, than during steady-state operation.\nThis cannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
                                 properties: {
                                   exec: {
-                                    description: "Exec specifies the action to take.",
+                                    description: "Exec specifies a command to execute in the container.",
                                     properties: {
                                       command: {
                                         description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
                                         items: {
                                           type: "string"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       }
                                     },
                                     type: "object"
@@ -4778,7 +4870,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                     type: "integer"
                                   },
                                   grpc: {
-                                    description: "GRPC specifies an action involving a GRPC port.",
+                                    description: "GRPC specifies a GRPC HealthCheckRequest.",
                                     properties: {
                                       port: {
                                         description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
@@ -4786,15 +4878,15 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                         type: "integer"
                                       },
                                       service: {
-                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\n\nIf this is not specified, the default behavior is defined by gRPC.",
+                                        default: "",
+                                        description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\nIf this is not specified, the default behavior is defined by gRPC.",
                                         type: "string"
                                       }
                                     },
-                                    required: ["port"],
                                     type: "object"
                                   },
                                   httpGet: {
-                                    description: "HTTPGet specifies the http request to perform.",
+                                    description: "HTTPGet specifies an HTTP GET request to perform.",
                                     properties: {
                                       host: {
                                         description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
@@ -4817,7 +4909,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                           required: ["name", "value"],
                                           type: "object"
                                         },
-                                        type: "array"
+                                        type: "array",
+                                        "x-kubernetes-list-type": "atomic"
                                       },
                                       path: {
                                         description: "Path to access on the HTTP server.",
@@ -4855,7 +4948,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                     type: "integer"
                                   },
                                   tcpSocket: {
-                                    description: "TCPSocket specifies an action involving a TCP port.",
+                                    description: "TCPSocket specifies a connection to a TCP port.",
                                     properties: {
                                       host: {
                                         description: "Optional: Host name to connect to, defaults to the pod IP.",
@@ -4898,6 +4991,10 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                       description: "Path within the container at which the volume should be mounted.  Must\nnot contain ':'.",
                                       type: "string"
                                     },
+                                    mountPropagation: {
+                                      description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-mount-propagation",
+                                      type: "string"
+                                    },
                                     name: {
                                       description: "This must match the Name of a Volume.",
                                       type: "string"
@@ -4914,7 +5011,9 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                   required: ["mountPath", "name"],
                                   type: "object"
                                 },
-                                type: "array"
+                                type: "array",
+                                "x-kubernetes-list-map-keys": ["mountPath"],
+                                "x-kubernetes-list-type": "map"
                               },
                               workingDir: {
                                 description: "Container's working directory.\nIf not specified, the container runtime's default will be used, which\nmight be configured in the container image.\nCannot be updated.",
@@ -4935,7 +5034,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                           type: "string"
                         },
                         enableServiceLinks: {
-                          description: "EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, matching the syntax of Docker links. Optional: Knative defaults this to false.",
+                          description: "EnableServiceLinks indicates whether information aboutservices should be injected into pod's environment variables, matching the syntax of Docker links. Optional: Knative defaults this to false.",
                           type: "boolean"
                         },
                         hostAliases: {
@@ -4946,6 +5045,18 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                             "x-kubernetes-preserve-unknown-fields": true
                           },
                           type: "array"
+                        },
+                        hostIPC: {
+                          description: "This is accessible behind a feature flag - kubernetes.podspec-hostipc",
+                          type: "boolean"
+                        },
+                        hostNetwork: {
+                          description: "This is accessible behind a feature flag - kubernetes.podspec-hostnetwork",
+                          type: "boolean"
+                        },
+                        hostPID: {
+                          description: "This is accessible behind a feature flag - kubernetes.podspec-hostpid",
+                          type: "boolean"
                         },
                         idleTimeoutSeconds: {
                           description: "IdleTimeoutSeconds is the maximum duration in seconds a request will be allowed\nto stay open while not receiving any bytes from the user's application. If\nunspecified, a system default will be provided.",
@@ -4958,17 +5069,20 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                             description: "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
                             properties: {
                               name: {
-                                description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                default: "",
+                                description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                 type: "string"
                               }
                             },
                             type: "object",
                             "x-kubernetes-map-type": "atomic"
                           },
-                          type: "array"
+                          type: "array",
+                          "x-kubernetes-list-map-keys": ["name"],
+                          "x-kubernetes-list-type": "map"
                         },
                         initContainers: {
-                          description: "List of initialization containers belonging to the pod.\nInit containers are executed in order prior to containers being started. If any\ninit container fails, the pod is considered to have failed and is handled according\nto its restartPolicy. The name for an init container or normal container must be\nunique among all containers.\nInit containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes.\nThe resourceRequirements of an init container are taken into account during scheduling\nby finding the highest request/limit for each resource type, and then using the max of\nof that value or the sum of the normal containers. Limits are applied to init containers\nin a similar fashion.\nInit containers cannot currently be added or removed.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/",
+                          description: "This is accessible behind a feature flag - kubernetes.podspec-init-containers",
                           items: {
                             description: "This is accessible behind a feature flag - kubernetes.podspec-init-containers",
                             type: "object",
@@ -4977,15 +5091,16 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                           type: "array"
                         },
                         nodeSelector: {
+                          additionalProperties: {
+                            type: "string"
+                          },
                           description: "This is accessible behind a feature flag - kubernetes.podspec-nodeselector",
                           type: "object",
-                          "x-kubernetes-map-type": "atomic",
-                          "x-kubernetes-preserve-unknown-fields": true
+                          "x-kubernetes-map-type": "atomic"
                         },
                         priorityClassName: {
                           description: "This is accessible behind a feature flag - kubernetes.podspec-priorityclassname",
-                          type: "string",
-                          "x-kubernetes-preserve-unknown-fields": true
+                          type: "string"
                         },
                         responseStartTimeoutSeconds: {
                           description: "ResponseStartTimeoutSeconds is the maximum duration in seconds that the request\nrouting layer will wait for a request delivered to a container to begin\nsending any network traffic.",
@@ -4994,13 +5109,11 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                         },
                         runtimeClassName: {
                           description: "This is accessible behind a feature flag - kubernetes.podspec-runtimeclassname",
-                          type: "string",
-                          "x-kubernetes-preserve-unknown-fields": true
+                          type: "string"
                         },
                         schedulerName: {
                           description: "This is accessible behind a feature flag - kubernetes.podspec-schedulername",
-                          type: "string",
-                          "x-kubernetes-preserve-unknown-fields": true
+                          type: "string"
                         },
                         securityContext: {
                           description: "This is accessible behind a feature flag - kubernetes.podspec-securitycontext",
@@ -5012,9 +5125,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                           type: "string"
                         },
                         shareProcessNamespace: {
-                          description: "This is accessible behind a feature flag - kubernetes.podspec-shareproccessnamespace",
-                          type: "boolean",
-                          "x-kubernetes-preserve-unknown-fields": true
+                          description: "This is accessible behind a feature flag - kubernetes.podspec-shareprocessnamespace",
+                          type: "boolean"
                         },
                         timeoutSeconds: {
                           description: "TimeoutSeconds is the maximum duration in seconds that the request instance\nis allowed to respond to a request. If unspecified, a system default will\nbe provided.",
@@ -5074,10 +5186,12 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                       required: ["key", "path"],
                                       type: "object"
                                     },
-                                    type: "array"
+                                    type: "array",
+                                    "x-kubernetes-list-type": "atomic"
                                   },
                                   name: {
-                                    description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                    default: "",
+                                    description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                     type: "string"
                                   },
                                   optional: {
@@ -5088,8 +5202,23 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                 type: "object",
                                 "x-kubernetes-map-type": "atomic"
                               },
+                              csi: {
+                                description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-csi",
+                                type: "object",
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
                               emptyDir: {
-                                description: "This is accessible behind a feature flag - kubernetes.podspec-emptydir",
+                                description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-emptydir",
+                                type: "object",
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              hostPath: {
+                                description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-hostpath",
+                                type: "object",
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              image: {
+                                description: "This is accessible behind a feature flag - kubernetes.podspec-volumes-image",
                                 type: "object",
                                 "x-kubernetes-preserve-unknown-fields": true
                               },
@@ -5111,9 +5240,9 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                     type: "integer"
                                   },
                                   sources: {
-                                    description: "sources is the list of volume projections",
+                                    description: "sources is the list of volume projections. Each entry in this list\nhandles one source.",
                                     items: {
-                                      description: "Projection that may be projected along with other supported volume types",
+                                      description: "Projection that may be projected along with other supported volume types.\nExactly one of these fields must be set.",
                                       properties: {
                                         configMap: {
                                           description: "configMap information about the configMap data to project",
@@ -5140,10 +5269,12 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                                 required: ["key", "path"],
                                                 type: "object"
                                               },
-                                              type: "array"
+                                              type: "array",
+                                              "x-kubernetes-list-type": "atomic"
                                             },
                                             name: {
-                                              description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                              default: "",
+                                              description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                               type: "string"
                                             },
                                             optional: {
@@ -5163,7 +5294,7 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                                 description: "DownwardAPIVolumeFile represents information to create the file containing the pod field",
                                                 properties: {
                                                   fieldRef: {
-                                                    description: "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported.",
+                                                    description: "Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported.",
                                                     properties: {
                                                       apiVersion: {
                                                         description: "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".",
@@ -5217,7 +5348,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                                 required: ["path"],
                                                 type: "object"
                                               },
-                                              type: "array"
+                                              type: "array",
+                                              "x-kubernetes-list-type": "atomic"
                                             }
                                           },
                                           type: "object"
@@ -5247,10 +5379,12 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                                 required: ["key", "path"],
                                                 type: "object"
                                               },
-                                              type: "array"
+                                              type: "array",
+                                              "x-kubernetes-list-type": "atomic"
                                             },
                                             name: {
-                                              description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                                              default: "",
+                                              description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                                               type: "string"
                                             },
                                             optional: {
@@ -5284,7 +5418,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                       },
                                       type: "object"
                                     },
-                                    type: "array"
+                                    type: "array",
+                                    "x-kubernetes-list-type": "atomic"
                                   }
                                 },
                                 type: "object"
@@ -5319,7 +5454,8 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                                       required: ["key", "path"],
                                       type: "object"
                                     },
-                                    type: "array"
+                                    type: "array",
+                                    "x-kubernetes-list-type": "atomic"
                                   },
                                   optional: {
                                     description: "optional field specify whether the Secret or its keys must be defined",
@@ -5336,7 +5472,9 @@ export const CustomResourceDefinition_ServicesServingKnativeDev: KubernetesResou
                             required: ["name"],
                             type: "object"
                           },
-                          type: "array"
+                          type: "array",
+                          "x-kubernetes-list-map-keys": ["name"],
+                          "x-kubernetes-list-type": "map"
                         }
                       },
                       required: ["containers"],
@@ -5522,7 +5660,7 @@ export const CustomResourceDefinition_ImagesCachingInternalKnativeDev: Kubernete
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "knative.dev/crd-install": "true"
     },
     name: "images.caching.internal.knative.dev"
@@ -5571,7 +5709,8 @@ export const CustomResourceDefinition_ImagesCachingInternalKnativeDev: Kubernete
                     description: "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
                     properties: {
                       name: {
-                        description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+                        default: "",
+                        description: "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
                         type: "string"
                       }
                     },
@@ -5659,7 +5798,7 @@ export const Namespace_KnativeServing: KubernetesResource = {
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "knative-serving"
   }
@@ -5670,7 +5809,7 @@ export const Role_KnativeServingActivator: KubernetesResource = {
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "serving.knative.dev/controller": "true"
     },
     name: "knative-serving-activator",
@@ -5693,7 +5832,7 @@ export const ClusterRole_KnativeServingActivatorCluster: KubernetesResource = {
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "serving.knative.dev/controller": "true"
     },
     name: "knative-serving-activator-cluster"
@@ -5714,7 +5853,7 @@ export const ClusterRole_KnativeServingAggregatedAddressableResolver: Kubernetes
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "knative-serving-aggregated-addressable-resolver"
   },
@@ -5732,7 +5871,7 @@ export const ClusterRole_KnativeServingAddressableResolver: KubernetesResource =
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "duck.knative.dev/addressable": "true"
     },
     name: "knative-serving-addressable-resolver"
@@ -5749,7 +5888,7 @@ export const ClusterRole_KnativeServingNamespacedAdmin: KubernetesResource = {
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "rbac.authorization.k8s.io/aggregate-to-admin": "true"
     },
     name: "knative-serving-namespaced-admin"
@@ -5770,7 +5909,7 @@ export const ClusterRole_KnativeServingNamespacedEdit: KubernetesResource = {
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "rbac.authorization.k8s.io/aggregate-to-edit": "true"
     },
     name: "knative-serving-namespaced-edit"
@@ -5791,7 +5930,7 @@ export const ClusterRole_KnativeServingNamespacedView: KubernetesResource = {
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "rbac.authorization.k8s.io/aggregate-to-view": "true"
     },
     name: "knative-serving-namespaced-view"
@@ -5808,7 +5947,7 @@ export const ClusterRole_KnativeServingCore: KubernetesResource = {
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "serving.knative.dev/controller": "true"
     },
     name: "knative-serving-core"
@@ -5822,9 +5961,17 @@ export const ClusterRole_KnativeServingCore: KubernetesResource = {
     resources: ["endpoints/restricted"],
     verbs: ["create"]
   }, {
+    apiGroups: ["discovery.k8s.io"],
+    resources: ["endpointslices/restricted"],
+    verbs: ["create"]
+  }, {
     apiGroups: [""],
     resources: ["namespaces/finalizers"],
     verbs: ["update"]
+  }, {
+    apiGroups: ["discovery.k8s.io"],
+    resources: ["endpointslices"],
+    verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]
   }, {
     apiGroups: ["apps"],
     resources: ["deployments", "deployments/finalizers"],
@@ -5866,6 +6013,10 @@ export const ClusterRole_KnativeServingCore: KubernetesResource = {
     resourceNames: ["knative-serving-certmanager"],
     resources: ["clusterroles"],
     verbs: ["delete"]
+  }, {
+    apiGroups: ["*"],
+    resources: ["*/scale"],
+    verbs: ["patch"]
   }]
 };
 export const ClusterRole_KnativeServingPodspecableBinding: KubernetesResource = {
@@ -5874,7 +6025,7 @@ export const ClusterRole_KnativeServingPodspecableBinding: KubernetesResource = 
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "duck.knative.dev/podspecable": "true"
     },
     name: "knative-serving-podspecable-binding"
@@ -5892,7 +6043,7 @@ export const ServiceAccount_Controller: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "controller",
     namespace: "knative-serving"
@@ -5904,7 +6055,7 @@ export const ClusterRole_KnativeServingAdmin: KubernetesResource = {
   metadata: {
     labels: {
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "knative-serving-admin"
   },
@@ -5923,7 +6074,7 @@ export const ClusterRoleBinding_KnativeServingControllerAdmin: KubernetesResourc
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "knative-serving-controller-admin"
   },
@@ -5945,7 +6096,7 @@ export const ClusterRoleBinding_KnativeServingControllerAddressableResolver: Kub
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "knative-serving-controller-addressable-resolver"
   },
@@ -5967,7 +6118,7 @@ export const ServiceAccount_Activator: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "activator",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "activator",
     namespace: "knative-serving"
@@ -5980,7 +6131,7 @@ export const RoleBinding_KnativeServingActivator: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "activator",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "knative-serving-activator",
     namespace: "knative-serving"
@@ -6003,7 +6154,7 @@ export const ClusterRoleBinding_KnativeServingActivatorCluster: KubernetesResour
     labels: {
       "app.kubernetes.io/component": "activator",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "knative-serving-activator-cluster"
   },
@@ -6043,13 +6194,13 @@ export const Image_QueueProxy: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "queue-proxy",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "queue-proxy",
     namespace: "knative-serving"
   },
   spec: {
-    image: "gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:d313c823f25a09326a7c3c2ec9833c5e005791bc3acb4036ebf33735cbb62bee"
+    image: "gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:b1af8bda6c1d32b1cf5fbf8f1f6068c5007a5cebf091039fdea83b88b1fd87f4"
   }
 };
 export const ConfigMap_ConfigAutoscaler: KubernetesResource = {
@@ -6057,18 +6208,18 @@ export const ConfigMap_ConfigAutoscaler: KubernetesResource = {
   kind: "ConfigMap",
   metadata: {
     annotations: {
-      "knative.dev/example-checksum": "47c2487f"
+      "knative.dev/example-checksum": "c727b3e8"
     },
     labels: {
       "app.kubernetes.io/component": "autoscaler",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-autoscaler",
     namespace: "knative-serving"
   },
   data: {
-    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# The Revision ContainerConcurrency field specifies the maximum number\n# of requests the Container can handle at once. Container concurrency\n# target percentage is how much of that maximum to use in a stable\n# state. E.g. if a Revision specifies ContainerConcurrency of 10, then\n# the Autoscaler will try to maintain 7 concurrent connections per pod\n# on average.\n# Note: this limit will be applied to container concurrency set at every\n# level (ConfigMap, Revision Spec or Annotation).\n# For legacy and backwards compatibility reasons, this value also accepts\n# fractional values in (0, 1] interval (i.e. 0.7 ⇒ 70%).\n# Thus minimal percentage value must be greater than 1.0, or it will be\n# treated as a fraction.\n# NOTE: that this value does not affect actual number of concurrent requests\n#       the user container may receive, but only the average number of requests\n#       that the revision pods will receive.\ncontainer-concurrency-target-percentage: \"70\"\n\n# The container concurrency target default is what the Autoscaler will\n# try to maintain when concurrency is used as the scaling metric for the\n# Revision and the Revision specifies unlimited concurrency.\n# When revision explicitly specifies container concurrency, that value\n# will be used as a scaling target for autoscaler.\n# When specifying unlimited concurrency, the autoscaler will\n# horizontally scale the application based on this target concurrency.\n# This is what we call \"soft limit\" in the documentation, i.e. it only\n# affects number of pods and does not affect the number of requests\n# individual pod processes.\n# The value must be a positive number such that the value multiplied\n# by container-concurrency-target-percentage is greater than 0.01.\n# NOTE: that this value will be adjusted by application of\n#       container-concurrency-target-percentage, i.e. by default\n#       the system will target on average 70 concurrent requests\n#       per revision pod.\n# NOTE: Only one metric can be used for autoscaling a Revision.\ncontainer-concurrency-target-default: \"100\"\n\n# The requests per second (RPS) target default is what the Autoscaler will\n# try to maintain when RPS is used as the scaling metric for a Revision and\n# the Revision specifies unlimited RPS. Even when specifying unlimited RPS,\n# the autoscaler will horizontally scale the application based on this\n# target RPS.\n# Must be greater than 1.0.\n# NOTE: Only one metric can be used for autoscaling a Revision.\nrequests-per-second-target-default: \"200\"\n\n# The target burst capacity specifies the size of burst in concurrent\n# requests that the system operator expects the system will receive.\n# Autoscaler will try to protect the system from queueing by introducing\n# Activator in the request path if the current spare capacity of the\n# service is less than this setting.\n# If this setting is 0, then Activator will be in the request path only\n# when the revision is scaled to 0.\n# If this setting is > 0 and container-concurrency-target-percentage is\n# 100% or 1.0, then activator will always be in the request path.\n# -1 denotes unlimited target-burst-capacity and activator will always\n# be in the request path.\n# Other negative values are invalid.\ntarget-burst-capacity: \"211\"\n\n# When operating in a stable mode, the autoscaler operates on the\n# average concurrency over the stable window.\n# Stable window must be in whole seconds.\nstable-window: \"60s\"\n\n# When observed average concurrency during the panic window reaches\n# panic-threshold-percentage the target concurrency, the autoscaler\n# enters panic mode. When operating in panic mode, the autoscaler\n# scales on the average concurrency over the panic window which is\n# panic-window-percentage of the stable-window.\n# Must be in the [1, 100] range.\n# When computing the panic window it will be rounded to the closest\n# whole second, at least 1s.\npanic-window-percentage: \"10.0\"\n\n# The percentage of the container concurrency target at which to\n# enter panic mode when reached within the panic window.\npanic-threshold-percentage: \"200.0\"\n\n# Max scale up rate limits the rate at which the autoscaler will\n# increase pod count. It is the maximum ratio of desired pods versus\n# observed pods.\n# Cannot be less or equal to 1.\n# I.e with value of 2.0 the number of pods can at most go N to 2N\n# over single Autoscaler period (2s), but at least N to\n# N+1, if Autoscaler needs to scale up.\nmax-scale-up-rate: \"1000.0\"\n\n# Max scale down rate limits the rate at which the autoscaler will\n# decrease pod count. It is the maximum ratio of observed pods versus\n# desired pods.\n# Cannot be less or equal to 1.\n# I.e. with value of 2.0 the number of pods can at most go N to N/2\n# over single Autoscaler evaluation period (2s), but at\n# least N to N-1, if Autoscaler needs to scale down.\nmax-scale-down-rate: \"2.0\"\n\n# Scale to zero feature flag.\nenable-scale-to-zero: \"true\"\n\n# Scale to zero grace period is the time an inactive revision is left\n# running before it is scaled to zero (must be positive, but recommended\n# at least a few seconds if running with mesh networking).\n# This is the upper limit and is provided not to enforce timeout after\n# the revision stopped receiving requests for stable window, but to\n# ensure network reprogramming to put activator in the path has completed.\n# If the system determines that a shorter period is satisfactory,\n# then the system will only wait that amount of time before scaling to 0.\n# NOTE: this period might actually be 0, if activator has been\n# in the request path sufficiently long.\n# If there is necessity for the last pod to linger longer use\n# scale-to-zero-pod-retention-period flag.\nscale-to-zero-grace-period: \"30s\"\n\n# Scale to zero pod retention period defines the minimum amount\n# of time the last pod will remain after Autoscaler has decided to\n# scale to zero.\n# This flag is for the situations where the pod startup is very expensive\n# and the traffic is bursty (requiring smaller windows for fast action),\n# but patchy.\n# The larger of this flag and `scale-to-zero-grace-period` will effectively\n# determine how the last pod will hang around.\nscale-to-zero-pod-retention-period: \"0s\"\n\n# pod-autoscaler-class specifies the default pod autoscaler class\n# that should be used if none is specified. If omitted,\n# the Knative Pod Autoscaler (KPA) is used by default.\npod-autoscaler-class: \"kpa.autoscaling.knative.dev\"\n\n# The capacity of a single activator task.\n# The `unit` is one concurrent request proxied by the activator.\n# activator-capacity must be at least 1.\n# This value is used for computation of the Activator subset size.\n# See the algorithm here: http://bit.ly/38XiCZ3.\n# TODO(vagababov): tune after actual benchmarking.\nactivator-capacity: \"100.0\"\n\n# initial-scale is the cluster-wide default value for the initial target\n# scale of a revision after creation, unless overridden by the\n# \"autoscaling.knative.dev/initialScale\" annotation.\n# This value must be greater than 0 unless allow-zero-initial-scale is true.\ninitial-scale: \"1\"\n\n# allow-zero-initial-scale controls whether either the cluster-wide initial-scale flag,\n# or the \"autoscaling.knative.dev/initialScale\" annotation, can be set to 0.\nallow-zero-initial-scale: \"false\"\n\n# min-scale is the cluster-wide default value for the min scale of a revision,\n# unless overridden by the \"autoscaling.knative.dev/minScale\" annotation.\nmin-scale: \"0\"\n\n# max-scale is the cluster-wide default value for the max scale of a revision,\n# unless overridden by the \"autoscaling.knative.dev/maxScale\" annotation.\n# If set to 0, the revision has no maximum scale.\nmax-scale: \"0\"\n\n# scale-down-delay is the amount of time that must pass at reduced\n# concurrency before a scale down decision is applied. This can be useful,\n# for example, to maintain replica count and avoid a cold start penalty if\n# more requests come in within the scale down delay period.\n# The default, 0s, imposes no delay at all.\nscale-down-delay: \"0s\"\n\n# max-scale-limit sets the maximum permitted value for the max scale of a revision.\n# When this is set to a positive value, a revision with a maxScale above that value\n# (including a maxScale of \"0\" = unlimited) is disallowed.\n# A value of zero (the default) allows any limit, including unlimited.\nmax-scale-limit: \"0\"\n"
+    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# The Revision ContainerConcurrency field specifies the maximum number\n# of requests the Container can handle at once. Container concurrency\n# target percentage is how much of that maximum to use in a stable\n# state. E.g. if a Revision specifies ContainerConcurrency of 10, then\n# the Autoscaler will try to maintain 7 concurrent connections per pod\n# on average.\n# Note: this limit will be applied to container concurrency set at every\n# level (ConfigMap, Revision Spec or Annotation).\n# For legacy and backwards compatibility reasons, this value also accepts\n# fractional values in (0, 1] interval (i.e. 0.7 ⇒ 70%).\n# Thus minimal percentage value must be greater than 1.0, or it will be\n# treated as a fraction.\n# NOTE: that this value does not affect actual number of concurrent requests\n#       the user container may receive, but only the average number of requests\n#       that the revision pods will receive.\ncontainer-concurrency-target-percentage: \"70\"\n\n# The container concurrency target default is what the Autoscaler will\n# try to maintain when concurrency is used as the scaling metric for the\n# Revision and the Revision specifies unlimited concurrency.\n# When revision explicitly specifies container concurrency, that value\n# will be used as a scaling target for autoscaler.\n# When specifying unlimited concurrency, the autoscaler will\n# horizontally scale the application based on this target concurrency.\n# This is what we call \"soft limit\" in the documentation, i.e. it only\n# affects number of pods and does not affect the number of requests\n# individual pod processes.\n# The value must be a positive number such that the value multiplied\n# by container-concurrency-target-percentage is greater than 0.01.\n# NOTE: that this value will be adjusted by application of\n#       container-concurrency-target-percentage, i.e. by default\n#       the system will target on average 70 concurrent requests\n#       per revision pod.\n# NOTE: Only one metric can be used for autoscaling a Revision.\ncontainer-concurrency-target-default: \"100\"\n\n# The requests per second (RPS) target default is what the Autoscaler will\n# try to maintain when RPS is used as the scaling metric for a Revision and\n# the Revision specifies unlimited RPS. Even when specifying unlimited RPS,\n# the autoscaler will horizontally scale the application based on this\n# target RPS.\n# Must be greater than 1.0.\n# NOTE: Only one metric can be used for autoscaling a Revision.\nrequests-per-second-target-default: \"200\"\n\n# The target burst capacity specifies the size of burst in concurrent\n# requests that the system operator expects the system will receive.\n# Autoscaler will try to protect the system from queueing by introducing\n# Activator in the request path if the current spare capacity of the\n# service is less than this setting.\n# If this setting is 0, then Activator will be in the request path only\n# when the revision is scaled to 0.\n# If this setting is > 0 and container-concurrency-target-percentage is\n# 100% or 1.0, then activator will always be in the request path.\n# -1 denotes unlimited target-burst-capacity and activator will always\n# be in the request path.\n# Other negative values are invalid.\ntarget-burst-capacity: \"211\"\n\n# When operating in a stable mode, the autoscaler operates on the\n# average concurrency over the stable window.\n# Stable window must be in whole seconds.\nstable-window: \"60s\"\n\n# When observed average concurrency during the panic window reaches\n# panic-threshold-percentage the target concurrency, the autoscaler\n# enters panic mode. When operating in panic mode, the autoscaler\n# scales on the average concurrency over the panic window which is\n# panic-window-percentage of the stable-window.\n# Must be in the [1, 100] range.\n# When computing the panic window it will be rounded to the closest\n# whole second, at least 1s.\npanic-window-percentage: \"10.0\"\n\n# The percentage of the container concurrency target at which to\n# enter panic mode when reached within the panic window.\npanic-threshold-percentage: \"200.0\"\n\n# Max scale up rate limits the rate at which the autoscaler will\n# increase pod count. It is the maximum ratio of desired pods versus\n# observed pods.\n# Cannot be less or equal to 1.\n# I.e with value of 2.0 the number of pods can at most go N to 2N\n# over single Autoscaler period (2s), but at least N to\n# N+1, if Autoscaler needs to scale up.\nmax-scale-up-rate: \"1000.0\"\n\n# Max scale down rate limits the rate at which the autoscaler will\n# decrease pod count. It is the maximum ratio of observed pods versus\n# desired pods.\n# Cannot be less or equal to 1.\n# I.e. with value of 2.0 the number of pods can at most go N to N/2\n# over single Autoscaler evaluation period (2s), but at\n# least N to N-1, if Autoscaler needs to scale down.\nmax-scale-down-rate: \"2.0\"\n\n# Scale to zero feature flag.\nenable-scale-to-zero: \"true\"\n\n# Scale to zero grace period is the time an inactive revision is left\n# running before it is scaled to zero (must be positive, but recommended\n# at least a few seconds if running with mesh networking).\n# This is the upper limit and is provided not to enforce timeout after\n# the revision stopped receiving requests for stable window, but to\n# ensure network reprogramming to put activator in the path has completed.\n# If the system determines that a shorter period is satisfactory,\n# then the system will only wait that amount of time before scaling to 0.\n# NOTE: this period might actually be 0, if activator has been\n# in the request path sufficiently long.\n# If there is necessity for the last pod to linger longer use\n# scale-to-zero-pod-retention-period flag.\nscale-to-zero-grace-period: \"30s\"\n\n# Scale to zero pod retention period defines the minimum amount\n# of time the last pod will remain after Autoscaler has decided to\n# scale to zero.\n# This flag is for the situations where the pod startup is very expensive\n# and the traffic is bursty (requiring smaller windows for fast action),\n# but patchy.\n# The larger of this flag and `scale-to-zero-grace-period` will effectively\n# determine how the last pod will hang around.\nscale-to-zero-pod-retention-period: \"0s\"\n\n# pod-autoscaler-class specifies the default pod autoscaler class\n# that should be used if none is specified. If omitted,\n# the Knative Pod Autoscaler (KPA) is used by default.\npod-autoscaler-class: \"kpa.autoscaling.knative.dev\"\n\n# The capacity of a single activator task.\n# The `unit` is one concurrent request proxied by the activator.\n# activator-capacity must be at least 1.\n# This value is used for computation of the Activator subset size.\n# See the algorithm here: https://bit.ly/38XiCZ3.\n# TODO(vagababov): tune after actual benchmarking.\nactivator-capacity: \"100.0\"\n\n# initial-scale is the cluster-wide default value for the initial target\n# scale of a revision after creation, unless overridden by the\n# \"autoscaling.knative.dev/initialScale\" annotation.\n# This value must be greater than 0 unless allow-zero-initial-scale is true.\ninitial-scale: \"1\"\n\n# allow-zero-initial-scale controls whether either the cluster-wide initial-scale flag,\n# or the \"autoscaling.knative.dev/initialScale\" annotation, can be set to 0.\nallow-zero-initial-scale: \"false\"\n\n# min-scale is the cluster-wide default value for the min scale of a revision,\n# unless overridden by the \"autoscaling.knative.dev/minScale\" annotation.\nmin-scale: \"0\"\n\n# max-scale is the cluster-wide default value for the max scale of a revision,\n# unless overridden by the \"autoscaling.knative.dev/maxScale\" annotation.\n# If set to 0, the revision has no maximum scale.\nmax-scale: \"0\"\n\n# scale-down-delay is the amount of time that must pass at reduced\n# concurrency before a scale down decision is applied. This can be useful,\n# for example, to maintain replica count and avoid a cold start penalty if\n# more requests come in within the scale down delay period.\n# The default, 0s, imposes no delay at all.\nscale-down-delay: \"0s\"\n\n# max-scale-limit sets the maximum permitted value for the max scale of a revision.\n# When this is set to a positive value, a revision with a maxScale above that value\n# (including a maxScale of \"0\" = unlimited) is disallowed.\n# A value of zero (the default) allows any limit, including unlimited.\nmax-scale-limit: \"0\"\n"
   }
 };
 export const ConfigMap_ConfigCertmanager: KubernetesResource = {
@@ -6081,7 +6232,7 @@ export const ConfigMap_ConfigCertmanager: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/certificate-provider": "cert-manager"
     },
     name: "config-certmanager",
@@ -6101,7 +6252,7 @@ export const ConfigMap_ConfigDefaults: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-defaults",
     namespace: "knative-serving"
@@ -6115,19 +6266,19 @@ export const ConfigMap_ConfigDeployment: KubernetesResource = {
   kind: "ConfigMap",
   metadata: {
     annotations: {
-      "knative.dev/example-checksum": "720ddb97"
+      "knative.dev/example-checksum": "555b4826"
     },
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-deployment",
     namespace: "knative-serving"
   },
   data: {
-    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# List of repositories for which tag to digest resolving should be skipped\nregistries-skipping-tag-resolving: \"kind.local,ko.local,dev.local\"\n\n# Maximum time allowed for an image's digests to be resolved.\ndigest-resolution-timeout: \"10s\"\n\n# Duration we wait for the deployment to be ready before considering it failed.\nprogress-deadline: \"600s\"\n\n# Sets the queue proxy's CPU request.\n# If omitted, a default value (currently \"25m\"), is used.\nqueue-sidecar-cpu-request: \"25m\"\n\n# Sets the queue proxy's CPU limit.\n# If omitted, a default value (currently \"1000m\"), is used when\n# `queueproxy.resource-defaults` is set to `Enabled`.\nqueue-sidecar-cpu-limit: \"1000m\"\n\n# Sets the queue proxy's memory request.\n# If omitted, a default value (currently \"400Mi\"), is used when\n# `queueproxy.resource-defaults` is set to `Enabled`.\nqueue-sidecar-memory-request: \"400Mi\"\n\n# Sets the queue proxy's memory limit.\n# If omitted, a default value (currently \"800Mi\"), is used when\n# `queueproxy.resource-defaults` is set to `Enabled`.\nqueue-sidecar-memory-limit: \"800Mi\"\n\n# Sets the queue proxy's ephemeral storage request.\n# If omitted, no value is specified and the system default is used.\nqueue-sidecar-ephemeral-storage-request: \"512Mi\"\n\n# Sets the queue proxy's ephemeral storage limit.\n# If omitted, no value is specified and the system default is used.\nqueue-sidecar-ephemeral-storage-limit: \"1024Mi\"\n\n# Sets tokens associated with specific audiences for queue proxy - used by QPOptions\n#\n# For example, to add the `service-x` audience:\n#    queue-sidecar-token-audiences: \"service-x\"\n# Also supports a list of audiences, for example:\n#    queue-sidecar-token-audiences: \"service-x,service-y\"\n# If omitted, or empty, no tokens are created\nqueue-sidecar-token-audiences: \"\"\n\n# Sets rootCA for the queue proxy - used by QPOptions\n# If omitted, or empty, no rootCA is added to the golang rootCAs\nqueue-sidecar-rootca: \"\"\n\n# If set, it automatically configures pod anti-affinity requirements for all Knative services.\n# It employs the `preferredDuringSchedulingIgnoredDuringExecution` weighted pod affinity term,\n# aligning with the Knative revision label. It yields the configuration below in all workloads' deployments:\n# `\n#   affinity:\n#     podAntiAffinity:\n#       preferredDuringSchedulingIgnoredDuringExecution:\n#       - podAffinityTerm:\n#           topologyKey: kubernetes.io/hostname\n#           labelSelector:\n#             matchLabels:\n#               serving.knative.dev/revision: {{revision-name}}\n#         weight: 100\n# `\n# This may be \"none\" or \"prefer-spread-revision-over-nodes\" (default)\n# default-affinity-type: \"prefer-spread-revision-over-nodes\"\n\n# runtime-class-name contains the selector for which runtimeClassName\n# is selected to put in a revision.\n# By default, it is not set by Knative.\n#\n# Example:\n# runtime-class-name: |\n#   \"\":\n#     selector:\n#       use-default-runc: \"yes\"\n#   kata: {}\n#   gvisor:\n#     selector:\n#       use-gvisor: \"please\"\nruntime-class-name: \"\"",
-    "queue-sidecar-image": "gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:d313c823f25a09326a7c3c2ec9833c5e005791bc3acb4036ebf33735cbb62bee"
+    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# List of repositories for which tag to digest resolving should be skipped\nregistries-skipping-tag-resolving: \"kind.local,ko.local,dev.local\"\n\n# Maximum time allowed for an image's digests to be resolved.\ndigest-resolution-timeout: \"10s\"\n\n# Duration we wait for the deployment to be ready before considering it failed.\nprogress-deadline: \"600s\"\n\n# Sets the queue proxy's CPU request.\n# If omitted, a default value (currently \"25m\"), is used.\nqueue-sidecar-cpu-request: \"25m\"\n\n# Sets the queue proxy's CPU limit.\n# If omitted, a default value (currently \"1000m\"), is used when\n# `queueproxy.resource-defaults` is set to `Enabled`.\nqueue-sidecar-cpu-limit: \"1000m\"\n\n# Sets the queue proxy's memory request.\n# If omitted, a default value (currently \"400Mi\"), is used when\n# `queueproxy.resource-defaults` is set to `Enabled`.\nqueue-sidecar-memory-request: \"400Mi\"\n\n# Sets the queue proxy's memory limit.\n# If omitted, a default value (currently \"800Mi\"), is used when\n# `queueproxy.resource-defaults` is set to `Enabled`.\nqueue-sidecar-memory-limit: \"800Mi\"\n\n# Sets the queue proxy's ephemeral storage request.\n# If omitted, no value is specified and the system default is used.\nqueue-sidecar-ephemeral-storage-request: \"512Mi\"\n\n# Sets the queue proxy's ephemeral storage limit.\n# If omitted, no value is specified and the system default is used.\nqueue-sidecar-ephemeral-storage-limit: \"1024Mi\"\n\n# Sets tokens associated with specific audiences for queue proxy - used by QPOptions\n#\n# For example, to add the `service-x` audience:\n#    queue-sidecar-token-audiences: \"service-x\"\n# Also supports a list of audiences, for example:\n#    queue-sidecar-token-audiences: \"service-x,service-y\"\n# If omitted, or empty, no tokens are created\nqueue-sidecar-token-audiences: \"\"\n\n# Sets rootCA for the queue proxy - used by QPOptions\n# If omitted, or empty, no rootCA is added to the golang rootCAs\nqueue-sidecar-rootca: \"\"\n\n# Sets the minimum TLS version for the queue proxy sidecar's TLS server.\n# Accepted values: \"1.2\", \"1.3\". Default is \"1.3\" if not specified.\nqueue-sidecar-tls-min-version: \"\"\n\n# Sets the maximum TLS version for the queue proxy sidecar's TLS server.\n# Accepted values: \"1.2\", \"1.3\". If omitted, the Go default is used.\nqueue-sidecar-tls-max-version: \"\"\n\n# Sets the cipher suites for the queue proxy sidecar's TLS server.\n# Comma-separated list of cipher suite names (e.g. \"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\").\n# If omitted, the Go default cipher suites are used.\n# Note: cipher suites are not configurable in TLS 1.3.\nqueue-sidecar-tls-cipher-suites: \"\"\n\n# Sets the elliptic curve preferences for the queue proxy sidecar's TLS server.\n# Comma-separated list of curve names (e.g. \"X25519,CurveP256\").\n# If omitted, the Go default curves are used.\nqueue-sidecar-tls-curve-preferences: \"\"\n\n# If set, it automatically configures pod anti-affinity requirements for all Knative services.\n# It employs the `preferredDuringSchedulingIgnoredDuringExecution` weighted pod affinity term,\n# aligning with the Knative revision label. It yields the configuration below in all workloads' deployments:\n# `\n#   affinity:\n#     podAntiAffinity:\n#       preferredDuringSchedulingIgnoredDuringExecution:\n#       - podAffinityTerm:\n#           topologyKey: kubernetes.io/hostname\n#           labelSelector:\n#             matchLabels:\n#               serving.knative.dev/revision: {{revision-name}}\n#         weight: 100\n# `\n# This may be \"none\" or \"prefer-spread-revision-over-nodes\" (default)\n# default-affinity-type: \"prefer-spread-revision-over-nodes\"\n\n# runtime-class-name contains the selector for which runtimeClassName\n# is selected to put in a revision.\n# By default, it is not set by Knative.\n#\n# Example:\n# runtime-class-name: |\n#   \"\":\n#     selector:\n#       use-default-runc: \"yes\"\n#   kata: {}\n#   gvisor:\n#     selector:\n#       use-gvisor: \"please\"\nruntime-class-name: \"\"\n\n# pod-is-always-schedulable can be used to define that Pods in the system will always be\n# scheduled, and a Revision should not be marked unschedulable.\n# Setting this to `true` makes sense if you have cluster-autoscaling set up for your cluster\n# where unschedulable Pods trigger the addition of a new Node and are therefore a short and\n# transient state.\n#\n# See https://github.com/knative/serving/issues/14862\npod-is-always-schedulable: \"false\"",
+    "queue-sidecar-image": "gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:b1af8bda6c1d32b1cf5fbf8f1f6068c5007a5cebf091039fdea83b88b1fd87f4"
   }
 };
 export const ConfigMap_ConfigDomain: KubernetesResource = {
@@ -6140,7 +6291,7 @@ export const ConfigMap_ConfigDomain: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-domain",
     namespace: "knative-serving"
@@ -6154,18 +6305,18 @@ export const ConfigMap_ConfigFeatures: KubernetesResource = {
   kind: "ConfigMap",
   metadata: {
     annotations: {
-      "knative.dev/example-checksum": "632d47dd"
+      "knative.dev/example-checksum": "bee75b26"
     },
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-features",
     namespace: "knative-serving"
   },
   data: {
-    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# Default SecurityContext settings to secure-by-default values\n# if unset.\n#\n# This value will default to \"enabled\" in a future release,\n# probably Knative 1.10\nsecure-pod-defaults: \"disabled\"\n\n# Indicates whether multi container support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/configuration/feature-flags/#multiple-containers\nmulti-container: \"enabled\"\n\n# Indicates whether multi container probing is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/configuration/feature-flags/#multiple-container-probing\nmulti-container-probing: \"disabled\"\n\n# Indicates whether Kubernetes affinity support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-node-affinity\nkubernetes.podspec-affinity: \"disabled\"\n\n# Indicates whether Kubernetes topologySpreadConstraints support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-topology-spread-constraints\nkubernetes.podspec-topologyspreadconstraints: \"disabled\"\n\n# Indicates whether Kubernetes hostAliases support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-host-aliases\nkubernetes.podspec-hostaliases: \"disabled\"\n\n# Indicates whether Kubernetes nodeSelector support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-node-selector\nkubernetes.podspec-nodeselector: \"disabled\"\n\n# Indicates whether Kubernetes tolerations support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-toleration\nkubernetes.podspec-tolerations: \"disabled\"\n\n# Indicates whether Kubernetes FieldRef support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref\nkubernetes.podspec-fieldref: \"disabled\"\n\n# Indicates whether Kubernetes RuntimeClassName support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-runtime-class\nkubernetes.podspec-runtimeclassname: \"disabled\"\n\n# Indicates whether Kubernetes DNSPolicy support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-dnspolicy\nkubernetes.podspec-dnspolicy: \"disabled\"\n\n# Indicates whether Kubernetes DNSConfig support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-dnsconfig\nkubernetes.podspec-dnsconfig: \"disabled\"\n\n# This feature allows end-users to set a subset of fields on the Pod's SecurityContext\n#\n# When set to \"enabled\" or \"allowed\" it allows the following\n# PodSecurityContext properties:\n# - FSGroup\n# - RunAsGroup\n# - RunAsNonRoot\n# - SupplementalGroups\n# - RunAsUser\n# - SeccompProfile\n#\n# This feature flag should be used with caution as the PodSecurityContext\n# properties may have a side-effect on non-user sidecar containers that come\n# from Knative or your service mesh\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-security-context\nkubernetes.podspec-securitycontext: \"disabled\"\n\n# Indicated whether sharing the process namespace via ShareProcessNamespace pod spec is allowed.\n# This can be especially useful for sharing data from images directly between sidecars\n#\n# See: https://knative.dev/docs/serving/configuration/feature-flags/#kubernetes-share-process-namespace\nkubernetes.podspec-shareprocessnamespace: \"disabled\"\n\n# Indicates whether Kubernetes PriorityClassName support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-priority-class-name\nkubernetes.podspec-priorityclassname: \"disabled\"\n\n# Indicates whether Kubernetes SchedulerName support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-scheduler-name\nkubernetes.podspec-schedulername: \"disabled\"\n\n# This feature flag allows end-users to add a subset of capabilities on the Pod's SecurityContext.\n#\n# When set to \"enabled\" or \"allowed\" it allows capabilities to be added to the container.\n# For a list of possible capabilities, see https://man7.org/linux/man-pages/man7/capabilities.7.html\nkubernetes.containerspec-addcapabilities: \"disabled\"\n\n# This feature validates PodSpecs from the validating webhook\n# against the K8s API Server.\n#\n# When \"enabled\", the server will always run the extra validation.\n# When \"allowed\", the server will not run the dry-run validation by default.\n#   However, clients may enable the behavior on an individual Service by\n#   attaching the following metadata annotation: \"features.knative.dev/podspec-dryrun\":\"enabled\".\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-dry-run\nkubernetes.podspec-dryrun: \"allowed\"\n\n# Controls whether tag header based routing feature are enabled or not.\n# 1. Enabled: enabling tag header based routing\n# 2. Disabled: disabling tag header based routing\n# See: https://knative.dev/docs/serving/feature-flags/#tag-header-based-routing\ntag-header-based-routing: \"disabled\"\n\n# Controls whether http2 auto-detection should be enabled or not.\n# 1. Enabled: http2 connection will be attempted via upgrade.\n# 2. Disabled: http2 connection will only be attempted when port name is set to \"h2c\".\nautodetect-http2: \"disabled\"\n\n# Controls whether volume support for EmptyDir is enabled or not.\n# 1. Enabled: enabling EmptyDir volume support\n# 2. Disabled: disabling EmptyDir volume support\nkubernetes.podspec-volumes-emptydir: \"enabled\"\n\n# Controls whether init containers support is enabled or not.\n# 1. Enabled: enabling init containers support\n# 2. Disabled: disabling init containers support\nkubernetes.podspec-init-containers: \"disabled\"\n\n# Controls whether persistent volume claim support is enabled or not.\n# 1. Enabled: enabling persistent volume claim support\n# 2. Disabled: disabling persistent volume claim support\nkubernetes.podspec-persistent-volume-claim: \"disabled\"\n\n# Controls whether write access for persistent volumes is enabled or not.\n# 1. Enabled: enabling write access for persistent volumes\n# 2. Disabled: disabling write access for persistent volumes\nkubernetes.podspec-persistent-volume-write: \"disabled\"\n\n# Controls if the queue proxy podInfo feature is enabled, allowed or disabled\n#\n# This feature should be enabled/allowed when using queue proxy Options (Extensions)\n# Enabling will mount a podInfo volume to the queue proxy container.\n# The volume will contains an 'annotations' file (from the pod's annotation field).\n# The annotations in this file include the Service annotations set by the client creating the service.\n# If mounted, the annotations can be accessed by queue proxy extensions at /etc/podinfo/annnotations\n#\n# 1. \"enabled\": always mount a podInfo volume\n# 2. \"disabled\": never mount a podInfo volume\n# 3. \"allowed\": by default, do not mount a podInfo volume\n#   However, a client may mount the podInfo volume on an individual Service by attaching\n#   the following metadata annotation to the Service: \"features.knative.dev/queueproxy-podinfo\":\"enabled\".\n#\n# NOTE THAT THIS IS AN EXPERIMENTAL / ALPHA FEATURE\nqueueproxy.mount-podinfo: \"disabled\"\n\n# Default queue proxy resource requests and limits to good values for most cases if set.\nqueueproxy.resource-defaults: \"disabled\""
+    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# Default SecurityContext settings to secure-by-default values\n# if unset.\n#\n# Disabled - do nothing; no security options are applied\n# AllowRootBounded - Applies secure defaults without enforcing strict policies; sets seccompProfile\n# to RuntimeDefault and drops all capabilities\n# Enabled - Enforces security defaults; sets seccompProfile to RuntimeDefault, drops all capabilities,\n# and sets runAsNonRoot to true if not already specified.\nsecure-pod-defaults: \"disabled\"\n\n# Indicates whether multi container support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/configuration/feature-flags/#multiple-containers\nmulti-container: \"enabled\"\n\n# Indicates whether multi container probing is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/configuration/feature-flags/#multiple-container-probing\nmulti-container-probing: \"disabled\"\n\n# Indicates whether Kubernetes affinity support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-node-affinity\nkubernetes.podspec-affinity: \"disabled\"\n\n# Indicates whether Kubernetes topologySpreadConstraints support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-topology-spread-constraints\nkubernetes.podspec-topologyspreadconstraints: \"disabled\"\n\n# Indicates whether Kubernetes hostAliases support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-host-aliases\nkubernetes.podspec-hostaliases: \"disabled\"\n\n# Indicates whether Kubernetes nodeSelector support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-node-selector\nkubernetes.podspec-nodeselector: \"disabled\"\n\n# Indicates whether Kubernetes tolerations support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-toleration\nkubernetes.podspec-tolerations: \"disabled\"\n\n# Indicates whether Kubernetes FieldRef support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref\nkubernetes.podspec-fieldref: \"disabled\"\n\n# Indicates whether Kubernetes RuntimeClassName support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-runtime-class\nkubernetes.podspec-runtimeclassname: \"disabled\"\n\n# Indicates whether Kubernetes DNSPolicy support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-dnspolicy\nkubernetes.podspec-dnspolicy: \"disabled\"\n\n# Indicates whether Kubernetes DNSConfig support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-dnsconfig\nkubernetes.podspec-dnsconfig: \"disabled\"\n\n# This feature allows end-users to set a subset of fields on the Pod's SecurityContext\n#\n# When set to \"enabled\" or \"allowed\" it allows the following\n# PodSecurityContext properties:\n# - FSGroup\n# - RunAsGroup\n# - RunAsNonRoot\n# - SupplementalGroups\n# - RunAsUser\n# - SeccompProfile\n#\n# This feature flag should be used with caution as the PodSecurityContext\n# properties may have a side-effect on non-user sidecar containers that come\n# from Knative or your service mesh\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-security-context\nkubernetes.podspec-securitycontext: \"disabled\"\n\n# Indicated whether sharing the process namespace via ShareProcessNamespace pod spec is allowed.\n# This can be especially useful for sharing data from images directly between sidecars\n#\n# See: https://knative.dev/docs/serving/configuration/feature-flags/#kubernetes-share-process-namespace\nkubernetes.podspec-shareprocessnamespace: \"disabled\"\n\n# Indicates whether hostIPC support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See https://knative.dev/docs/serving/configuration/feature-flags/#kubernetes-host-ipc\nkubernetes.podspec-hostipc: \"disabled\"\n\n# Indicates whether hostPID support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See https://knative.dev/docs/serving/configuration/feature-flags/#kubernetes-host-pid\nkubernetes.podspec-hostpid: \"disabled\"\n\n# Indicates whether hostNetwork support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See See https://knative.dev/docs/serving/configuration/feature-flags/#kubernetes-host-network\nkubernetes.podspec-hostnetwork: \"disabled\"\n\n# Indicates whether Kubernetes PriorityClassName support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-priority-class-name\nkubernetes.podspec-priorityclassname: \"disabled\"\n\n# Indicates whether Kubernetes SchedulerName support is enabled\n#\n# WARNING: Cannot safely be disabled once enabled.\n# See: https://knative.dev/docs/serving/feature-flags/#kubernetes-scheduler-name\nkubernetes.podspec-schedulername: \"disabled\"\n\n# This feature flag allows end-users to add a subset of capabilities on the Pod's SecurityContext.\n#\n# When set to \"enabled\" or \"allowed\" it allows capabilities to be added to the container.\n# For a list of possible capabilities, see https://man7.org/linux/man-pages/man7/capabilities.7.html\nkubernetes.containerspec-addcapabilities: \"disabled\"\n\n\n# Controls whether tag header based routing feature are enabled or not.\n# 1. Enabled: enabling tag header based routing\n# 2. Disabled: disabling tag header based routing\n# See: https://knative.dev/docs/serving/feature-flags/#tag-header-based-routing\ntag-header-based-routing: \"disabled\"\n\n# Controls whether http2 auto-detection should be enabled or not.\n# 1. Enabled: http2 connection will be attempted via upgrade.\n# 2. Disabled: http2 connection will only be attempted when port name is set to \"h2c\".\nautodetect-http2: \"disabled\"\n\n# Controls whether volume support for EmptyDir is enabled or not.\n# 1. Enabled: enabling EmptyDir volume support\n# 2. Disabled: disabling EmptyDir volume support\nkubernetes.podspec-volumes-emptydir: \"enabled\"\n\n# Controls whether volume support for image is enabled or not.\n# 1. Enabled: enabling image volume support\n# 2. Disabled: disabling image volume support\nkubernetes.podspec-volumes-image: \"disabled\"\n\n# Controls whether volume support for HostPath is enabled or not.\n# WARNING: Cannot safely be disabled once enabled.\n# WARNING: If you can avoid using a hostPath volume, you should.\n# Please read https://kubernetes.io/docs/concepts/storage/volumes/#hostpath before enabling this feature.\n# 1. Enabled: enabling HostPath volume support\n# 2. Disabled: disabling HostPath volume support\nkubernetes.podspec-volumes-hostpath: \"disabled\"\n\n# Controls whether volume support for CSI is enabled or not.\n# 1. Enabled: enabling CSI volume support\n# 2. Disabled: disabling CSI volume support\nkubernetes.podspec-volumes-csi: \"disabled\"\n\n# Controls whether init containers support is enabled or not.\n# 1. Enabled: enabling init containers support\n# 2. Disabled: disabling init containers support\nkubernetes.podspec-init-containers: \"disabled\"\n\n# Controls whether persistent volume claim support is enabled or not.\n# 1. Enabled: enabling persistent volume claim support\n# 2. Disabled: disabling persistent volume claim support\nkubernetes.podspec-persistent-volume-claim: \"disabled\"\n\n# Controls whether write access for persistent volumes is enabled or not.\n# 1. Enabled: enabling write access for persistent volumes\n# 2. Disabled: disabling write access for persistent volumes\nkubernetes.podspec-persistent-volume-write: \"disabled\"\n\n# Controls whether volume mount propagation support is enabled or not.\n# 1. Enabled: enabling volume mount propagation support\n# 2. Disabled: disabling volume mount propagation support\nkubernetes.podspec-volumes-mount-propagation: \"disabled\"\n\n# Controls if the queue proxy podInfo feature is enabled, allowed or disabled\n#\n# This feature should be enabled/allowed when using queue proxy Options (Extensions)\n# Enabling will mount a podInfo volume to the queue proxy container.\n# The volume will contains an 'annotations' file (from the pod's annotation field).\n# The annotations in this file include the Service annotations set by the client creating the service.\n# If mounted, the annotations can be accessed by queue proxy extensions at /etc/podinfo/annotations\n#\n# 1. \"enabled\": always mount a podInfo volume\n# 2. \"disabled\": never mount a podInfo volume\n# 3. \"allowed\": by default, do not mount a podInfo volume\n#   However, a client may mount the podInfo volume on an individual Service by attaching\n#   the following metadata annotation to the Service: \"features.knative.dev/queueproxy-podinfo\":\"enabled\".\n#\n# NOTE THAT THIS IS AN EXPERIMENTAL / ALPHA FEATURE\nqueueproxy.mount-podinfo: \"disabled\"\n\n# Default queue proxy resource requests and limits to good values for most cases if set.\nqueueproxy.resource-defaults: \"disabled\""
   }
 };
 export const ConfigMap_ConfigGc: KubernetesResource = {
@@ -6178,7 +6329,7 @@ export const ConfigMap_ConfigGc: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-gc",
     namespace: "knative-serving"
@@ -6197,7 +6348,7 @@ export const ConfigMap_ConfigLeaderElection: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-leader-election",
     namespace: "knative-serving"
@@ -6216,7 +6367,7 @@ export const ConfigMap_ConfigLogging: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "logging",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-logging",
     namespace: "knative-serving"
@@ -6235,7 +6386,7 @@ export const ConfigMap_ConfigNetwork: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "networking",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-network",
     namespace: "knative-serving"
@@ -6249,18 +6400,18 @@ export const ConfigMap_ConfigObservability: KubernetesResource = {
   kind: "ConfigMap",
   metadata: {
     annotations: {
-      "knative.dev/example-checksum": "54abd711"
+      "knative.dev/example-checksum": "59abacb5"
     },
     labels: {
       "app.kubernetes.io/component": "observability",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-observability",
     namespace: "knative-serving"
   },
   data: {
-    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# logging.enable-var-log-collection defaults to false.\n# The fluentd daemon set will be set up to collect /var/log if\n# this flag is true.\nlogging.enable-var-log-collection: \"false\"\n\n# logging.revision-url-template provides a template to use for producing the\n# logging URL that is injected into the status of each Revision.\nlogging.revision-url-template: \"http://logging.example.com/?revisionUID=${REVISION_UID}\"\n\n# If non-empty, this enables queue proxy writing user request logs to stdout, excluding probe\n# requests.\n# NB: after 0.18 release logging.enable-request-log must be explicitly set to true\n# in order for request logging to be enabled.\n#\n# The value determines the shape of the request logs and it must be a valid go text/template.\n# It is important to keep this as a single line. Multiple lines are parsed as separate entities\n# by most collection agents and will split the request logs into multiple records.\n#\n# The following fields and functions are available to the template:\n#\n# Request: An http.Request (see https://golang.org/pkg/net/http/#Request)\n# representing an HTTP request received by the server.\n#\n# Response:\n# struct {\n#   Code    int       // HTTP status code (see https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml)\n#   Size    int       // An int representing the size of the response.\n#   Latency float64   // A float64 representing the latency of the response in seconds.\n# }\n#\n# Revision:\n# struct {\n#   Name          string  // Knative revision name\n#   Namespace     string  // Knative revision namespace\n#   Service       string  // Knative service name\n#   Configuration string  // Knative configuration name\n#   PodName       string  // Name of the pod hosting the revision\n#   PodIP         string  // IP of the pod hosting the revision\n# }\n#\nlogging.request-log-template: '{\"httpRequest\": {\"requestMethod\": \"{{.Request.Method}}\", \"requestUrl\": \"{{js .Request.RequestURI}}\", \"requestSize\": \"{{.Request.ContentLength}}\", \"status\": {{.Response.Code}}, \"responseSize\": \"{{.Response.Size}}\", \"userAgent\": \"{{js .Request.UserAgent}}\", \"remoteIp\": \"{{js .Request.RemoteAddr}}\", \"serverIp\": \"{{.Revision.PodIP}}\", \"referer\": \"{{js .Request.Referer}}\", \"latency\": \"{{.Response.Latency}}s\", \"protocol\": \"{{.Request.Proto}}\"}, \"traceId\": \"{{index .Request.Header \"X-B3-Traceid\"}}\"}'\n\n# If true, the request logging will be enabled.\n# NB: up to and including Knative version 0.18 if logging.request-log-template is non-empty, this value\n# will be ignored.\nlogging.enable-request-log: \"false\"\n\n# If true, this enables queue proxy writing request logs for probe requests to stdout.\n# It uses the same template for user requests, i.e. logging.request-log-template.\nlogging.enable-probe-request-log: \"false\"\n\n# metrics.backend-destination field specifies the system metrics destination.\n# It supports either prometheus (the default) or opencensus.\nmetrics.backend-destination: prometheus\n\n# metrics.reporting-period-seconds specifies the global metrics reporting period for control and data plane components.\n# If a zero or negative value is passed the default reporting period is used (10 secs).\n# If the attribute is not specified a default value is used per metrics backend.\n# For the prometheus backend the default reporting period is 5s while for opencensus it is 60s.\nmetrics.reporting-period-seconds: \"5\"\n\n# metrics.request-metrics-backend-destination specifies the request metrics\n# destination. It enables queue proxy to send request metrics.\n# Currently supported values: prometheus (the default), opencensus.\nmetrics.request-metrics-backend-destination: prometheus\n\n# metrics.request-metrics-reporting-period-seconds specifies the request metrics reporting period in sec at queue proxy.\n# If a zero or negative value is passed the default reporting period is used (10 secs).\n# If the attribute is not specified, it is overridden by the value of metrics.reporting-period-seconds.\nmetrics.request-metrics-reporting-period-seconds: \"5\"\n\n# profiling.enable indicates whether it is allowed to retrieve runtime profiling data from\n# the pods via an HTTP server in the format expected by the pprof visualization tool. When\n# enabled, the Knative Serving pods expose the profiling data on an alternate HTTP port 8008.\n# The HTTP context root for profiling is then /debug/pprof/.\nprofiling.enable: \"false\"\n"
+    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# logging.enable-var-log-collection defaults to false.\n# The fluentd daemon set will be set up to collect /var/log if\n# this flag is true.\nlogging.enable-var-log-collection: \"false\"\n\n# logging.revision-url-template provides a template to use for producing the\n# logging URL that is injected into the status of each Revision.\nlogging.revision-url-template: \"http://logging.example.com/?revisionUID=${REVISION_UID}\"\n\n# If non-empty, this enables queue proxy writing user request logs to stdout, excluding probe\n# requests.\n# NB: after 0.18 release logging.enable-request-log must be explicitly set to true\n# in order for request logging to be enabled.\n#\n# The value determines the shape of the request logs and it must be a valid go text/template.\n# It is important to keep this as a single line. Multiple lines are parsed as separate entities\n# by most collection agents and will split the request logs into multiple records.\n#\n# The following fields and functions are available to the template:\n#\n# Request: An http.Request (see https://golang.org/pkg/net/http/#Request)\n# representing an HTTP request received by the server.\n#\n# Response:\n# struct {\n#   Code    int       // HTTP status code (see https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml)\n#   Size    int       // An int representing the size of the response.\n#   Latency float64   // A float64 representing the latency of the response in seconds.\n# }\n#\n# Revision:\n# struct {\n#   Name          string  // Knative revision name\n#   Namespace     string  // Knative revision namespace\n#   Service       string  // Knative service name\n#   Configuration string  // Knative configuration name\n#   PodName       string  // Name of the pod hosting the revision\n#   PodIP         string  // IP of the pod hosting the revision\n# }\n#\nlogging.request-log-template: '{\"httpRequest\": {\"requestMethod\": \"{{.Request.Method}}\", \"requestUrl\": \"{{js .Request.RequestURI}}\", \"requestSize\": \"{{.Request.ContentLength}}\", \"status\": {{.Response.Code}}, \"responseSize\": \"{{.Response.Size}}\", \"userAgent\": \"{{js .Request.UserAgent}}\", \"remoteIp\": \"{{js .Request.RemoteAddr}}\", \"serverIp\": \"{{.Revision.PodIP}}\", \"referer\": \"{{js .Request.Referer}}\", \"latency\": \"{{.Response.Latency}}s\", \"protocol\": \"{{.Request.Proto}}\"}, \"traceId\": \"{{.TraceID}}\"}'\n\n# If true, the request logging will be enabled.\nlogging.enable-request-log: \"false\"\n\n# If true, this enables queue proxy writing request logs for probe requests to stdout.\n# It uses the same template for user requests, i.e. logging.request-log-template.\nlogging.enable-probe-request-log: \"false\"\n\n# metrics-protocol field specifies the protocol used when exporting metrics\n# It supports either 'none' (the default), 'prometheus', 'http/protobuf' (OTLP HTTP), 'grpc' (OTLP gRPC)\nmetrics-protocol: http/protobuf\n\n# metrics-endpoint field specifies the destination metrics should be exporter to.\n#\n# The endpoint MUST be set when the protocol is http/protobuf or grpc.\n# The endpoint MUST NOT be set when the protocol is none.\n#\n# When the protocol is prometheus the endpoint can accept a 'host:port' string to customize the\n# listening host interface and port.\nmetrics-endpoint: http://example.com/v1/traces\n\n# metrics-export-interval specifies the global metrics reporting period for control and data plane components.\n# If a zero or negative value is passed the default reporting OTel period is used (60 secs).\nmetrics-export-interval: 60s\n\n# request-metrics-protocol field specifies the protocol used when exporting queue-proxy metrics\n# It supports either 'none' (the default), 'prometheus', 'http/protobuf' (OTLP HTTP), 'grpc' (OTLP gRPC)\nrequest-metrics-protocol: http/protobuf\n\n# request-metrics-endpoint field specifies the destination metrics from the queue proxy should be exporter to.\n#\n# The endpoint MUST be set when the protocol is http/protobuf or grpc.\n# The endpoint MUST NOT be set when the protocol is none.\n#\n# When the protocol is prometheus the endpoint can accept a 'host:port' string to customize the\n# listening host interface and port.\nrequest-metrics-endpoint: http://promstack-kube-prometheus-prometheus.observability:9090/api/v1/otlp/v1/metrics\n\n# request-metrics-export-interval specifies the global metrics reporting period for the queue-proxy.\n#\n# If a zero or negative value is passed the default reporting OTel period is used (60 secs).\nrequest-metrics-export-interval: 60s\n\n# runtime-profiling indicates whether it is allowed to retrieve runtime profiling data from\n# the pods via an HTTP server in the format expected by the pprof visualization tool. When\n# enabled, the Knative Serving pods expose the profiling data on an alternate HTTP port 8008.\n# The HTTP context root for profiling is then /debug/pprof/.\nruntime-profiling: enabled\n\n# tracing-protocol field specifies the protocol used when exporting traces\n# It supports either 'none' (the default), 'http/protobuf' (OTLP HTTP), 'grpc' (OTLP gRPC)\n# or `stdout` for debugging purposes\ntracing-protocol: http/protobuf\n\n# tracing-endpoint field specifies the destination traces should be exporter to.\n#\n# The endpoint MUST be set when the protocol is http/protobuf or grpc.\n# The endpoint MUST NOT be set when the protocol is none.\ntracing-endpoint: http://jaeger-collector.observability:4318/v1/traces\n\n# tracing-sampling-rate allows the user to specify what percentage of all traces should be exported\n# The value should be between 0 (never sample) to 1 (always sample)\ntracing-sampling-rate: \"1\"\n"
   }
 };
 export const ConfigMap_ConfigTracing: KubernetesResource = {
@@ -6268,18 +6419,18 @@ export const ConfigMap_ConfigTracing: KubernetesResource = {
   kind: "ConfigMap",
   metadata: {
     annotations: {
-      "knative.dev/example-checksum": "26614636"
+      "knative.dev/example-checksum": "04c7e9a3"
     },
     labels: {
       "app.kubernetes.io/component": "tracing",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config-tracing",
     namespace: "knative-serving"
   },
   data: {
-    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n#\n# This may be \"zipkin\" or \"none\" (default)\nbackend: \"none\"\n\n# URL to zipkin collector where traces are sent.\n# This must be specified when backend is \"zipkin\"\nzipkin-endpoint: \"http://zipkin.istio-system.svc.cluster.local:9411/api/v2/spans\"\n\n# Enable zipkin debug mode. This allows all spans to be sent to the server\n# bypassing sampling.\ndebug: \"false\"\n\n# Percentage (0-1) of requests to trace\nsample-rate: \"0.1\"\n"
+    _example: "###########################################################\n#                                                         #\n#  This config is deprecated - use config-observability   #\n#                                                         #\n###########################################################\n"
   }
 };
 export const HorizontalPodAutoscaler_Activator: KubernetesResource = {
@@ -6289,7 +6440,7 @@ export const HorizontalPodAutoscaler_Activator: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "activator",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "activator",
     namespace: "knative-serving"
@@ -6321,7 +6472,7 @@ export const PodDisruptionBudget_ActivatorPdb: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "activator",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "activator-pdb",
     namespace: "knative-serving"
@@ -6342,7 +6493,7 @@ export const Deployment_Activator: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "activator",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "activator",
     namespace: "knative-serving"
@@ -6360,7 +6511,7 @@ export const Deployment_Activator: KubernetesResource = {
           app: "activator",
           "app.kubernetes.io/component": "activator",
           "app.kubernetes.io/name": "knative-serving",
-          "app.kubernetes.io/version": "1.15.0",
+          "app.kubernetes.io/version": "1.22.1",
           role: "activator"
         }
       },
@@ -6411,11 +6562,8 @@ export const Deployment_Activator: KubernetesResource = {
           }, {
             name: "CONFIG_OBSERVABILITY_NAME",
             value: "config-observability"
-          }, {
-            name: "METRICS_DOMAIN",
-            value: "knative.dev/internal/serving"
           }],
-          image: "gcr.io/knative-releases/knative.dev/serving/cmd/activator@sha256:b6d7d96edd8942d679757249f6aa07373461411104ce7c93309f23fba2884f8f",
+          image: "gcr.io/knative-releases/knative.dev/serving/cmd/activator@sha256:5deaef961fef8d1417f6d4a4dfae2fc338f2d30d72c4ad58c3ab392b2c04705b",
           livenessProbe: {
             failureThreshold: 12,
             httpGet: {
@@ -6481,7 +6629,7 @@ export const Service_ActivatorService: KubernetesResource = {
       app: "activator",
       "app.kubernetes.io/component": "activator",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "activator-service",
     namespace: "knative-serving"
@@ -6521,7 +6669,7 @@ export const Deployment_Autoscaler: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "autoscaler",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "autoscaler",
     namespace: "knative-serving"
@@ -6545,7 +6693,7 @@ export const Deployment_Autoscaler: KubernetesResource = {
           app: "autoscaler",
           "app.kubernetes.io/component": "autoscaler",
           "app.kubernetes.io/name": "knative-serving",
-          "app.kubernetes.io/version": "1.15.0"
+          "app.kubernetes.io/version": "1.22.1"
         }
       },
       spec: {
@@ -6592,11 +6740,8 @@ export const Deployment_Autoscaler: KubernetesResource = {
           }, {
             name: "CONFIG_OBSERVABILITY_NAME",
             value: "config-observability"
-          }, {
-            name: "METRICS_DOMAIN",
-            value: "knative.dev/serving"
           }],
-          image: "gcr.io/knative-releases/knative.dev/serving/cmd/autoscaler@sha256:119157d871eb3db5a54944464d9920ad378d35292d4c12fd4a765cd016e24f0f",
+          image: "gcr.io/knative-releases/knative.dev/serving/cmd/autoscaler@sha256:5bae38655d87df86b041083fbe51791816473245f752432ba9b85a7b12f73cd5",
           livenessProbe: {
             failureThreshold: 6,
             httpGet: {
@@ -6654,7 +6799,7 @@ export const Service_Autoscaler: KubernetesResource = {
       app: "autoscaler",
       "app.kubernetes.io/component": "autoscaler",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "autoscaler",
     namespace: "knative-serving"
@@ -6685,7 +6830,7 @@ export const Deployment_Controller: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "controller",
     namespace: "knative-serving"
@@ -6702,7 +6847,7 @@ export const Deployment_Controller: KubernetesResource = {
           app: "controller",
           "app.kubernetes.io/component": "controller",
           "app.kubernetes.io/name": "knative-serving",
-          "app.kubernetes.io/version": "1.15.0"
+          "app.kubernetes.io/version": "1.22.1"
         }
       },
       spec: {
@@ -6742,11 +6887,8 @@ export const Deployment_Controller: KubernetesResource = {
           }, {
             name: "CONFIG_OBSERVABILITY_NAME",
             value: "config-observability"
-          }, {
-            name: "METRICS_DOMAIN",
-            value: "knative.dev/internal/serving"
           }],
-          image: "gcr.io/knative-releases/knative.dev/serving/cmd/controller@sha256:80b9865a585900af6cecead24babe03aa79487e9e6306da1444b04148c21c96f",
+          image: "gcr.io/knative-releases/knative.dev/serving/cmd/controller@sha256:94329d85200c2fc31ed1166a26568ca1357376c149c147e71f400cf28be3c816",
           livenessProbe: {
             failureThreshold: 6,
             httpGet: {
@@ -6811,7 +6953,7 @@ export const Service_Controller: KubernetesResource = {
       app: "controller",
       "app.kubernetes.io/component": "controller",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "controller",
     namespace: "knative-serving"
@@ -6838,7 +6980,7 @@ export const HorizontalPodAutoscaler_Webhook: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "webhook",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "webhook",
     namespace: "knative-serving"
@@ -6870,7 +7012,7 @@ export const PodDisruptionBudget_WebhookPdb: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "webhook",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "webhook-pdb",
     namespace: "knative-serving"
@@ -6891,7 +7033,7 @@ export const Deployment_Webhook: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "webhook",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "webhook",
     namespace: "knative-serving"
@@ -6909,7 +7051,7 @@ export const Deployment_Webhook: KubernetesResource = {
           app: "webhook",
           "app.kubernetes.io/component": "webhook",
           "app.kubernetes.io/name": "knative-serving",
-          "app.kubernetes.io/version": "1.15.0",
+          "app.kubernetes.io/version": "1.22.1",
           role: "webhook"
         }
       },
@@ -6956,11 +7098,8 @@ export const Deployment_Webhook: KubernetesResource = {
           }, {
             name: "WEBHOOK_PORT",
             value: "8443"
-          }, {
-            name: "METRICS_DOMAIN",
-            value: "knative.dev/internal/serving"
           }],
-          image: "gcr.io/knative-releases/knative.dev/serving/cmd/webhook@sha256:732d9cdf7f5fa5c6055d26b1aa5aad40e3d74ba9f2cb76a1db0f0e4d072b7cd0",
+          image: "gcr.io/knative-releases/knative.dev/serving/cmd/webhook@sha256:8470456be214e93a84e3c7b79a632aa9978bd8ecda553feaa47878a2c24ab84d",
           livenessProbe: {
             failureThreshold: 6,
             httpGet: {
@@ -7024,7 +7163,7 @@ export const Service_Webhook: KubernetesResource = {
       app: "webhook",
       "app.kubernetes.io/component": "webhook",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       role: "webhook"
     },
     name: "webhook",
@@ -7057,7 +7196,7 @@ export const ValidatingWebhookConfiguration_ConfigWebhookServingKnativeDev: Kube
     labels: {
       "app.kubernetes.io/component": "webhook",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "config.webhook.serving.knative.dev"
   },
@@ -7093,7 +7232,7 @@ export const MutatingWebhookConfiguration_WebhookServingKnativeDev: KubernetesRe
     labels: {
       "app.kubernetes.io/component": "webhook",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "webhook.serving.knative.dev"
   },
@@ -7125,7 +7264,7 @@ export const ValidatingWebhookConfiguration_ValidationWebhookServingKnativeDev: 
     labels: {
       "app.kubernetes.io/component": "webhook",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "validation.webhook.serving.knative.dev"
   },
@@ -7157,7 +7296,7 @@ export const Secret_WebhookCerts: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "webhook",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0"
+      "app.kubernetes.io/version": "1.22.1"
     },
     name: "webhook-certs",
     namespace: "knative-serving"
@@ -7170,7 +7309,7 @@ export const Namespace_KourierSystem: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "kourier-system"
@@ -7183,7 +7322,7 @@ export const ConfigMap_KourierBootstrap: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "kourier-bootstrap",
@@ -7200,14 +7339,14 @@ export const ConfigMap_ConfigKourier: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "config-kourier",
     namespace: "knative-serving"
   },
   data: {
-    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# Specifies whether requests reaching the Kourier gateway\n# in the context of services should be logged. Readiness\n# probes etc. must be configured via the bootstrap config.\nenable-service-access-logging: \"true\"\n\n# Specifies whether to use proxy-protocol in order to safely\n# transport connection information such as a client's address\n# across multiple layers of TCP proxies.\n# NOTE THAT THIS IS AN EXPERIMENTAL / ALPHA FEATURE\nenable-proxy-protocol: \"false\"\n\n# The server certificates to serve the internal TLS traffic for Kourier Gateway.\n# It is specified by the secret name in controller namespace, which has\n# the \"tls.crt\" and \"tls.key\" data field.\n# Use an empty value to disable the feature (default).\n#\n# NOTE: This flag is in an alpha state and is mostly here to enable internal testing\n#       for now. Use with caution.\ncluster-cert-secret: \"\"\n\n# Specifies the amount of time that Kourier waits for the incoming requests.\n# The default, 0s, imposes no timeout at all.\nstream-idle-timeout: \"0s\"\n\n# Specifies whether to use CryptoMB private key provider in order to\n# acclerate the TLS handshake.\n# NOTE THAT THIS IS AN EXPERIMENTAL / ALPHA FEATURE.\nenable-cryptomb: \"false\"\n\n# Configures the number of additional ingress proxy hops from the\n# right side of the x-forwarded-for HTTP header to trust.\ntrusted-hops-count: \"0\"\n\n# Specifies the cipher suites for TLS external listener.\n# Use ',' separated values like \"ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-ECDSA-CHACHA20-POLY1305\"\n# The default uses the default cipher suites of the envoy version.\ncipher-suites: \"\"\n"
+    _example: "################################\n#                              #\n#    EXAMPLE CONFIGURATION     #\n#                              #\n################################\n\n# This block is not actually functional configuration,\n# but serves to illustrate the available configuration\n# options and document them in a way that is accessible\n# to users that `kubectl edit` this config map.\n#\n# These sample configuration options may be copied out of\n# this example block and unindented to be in the data block\n# to actually change the configuration.\n\n# Specifies whether requests reaching the Kourier gateway\n# in the context of services should be logged. Readiness\n# probes etc. must be configured via the bootstrap config.\nenable-service-access-logging: \"true\"\n\n# Specifies the format of the access log used by the Kourier gateway.\n# This template follows the envoy format.\n# see: https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#access-logging\nservice-access-log-template: \"\"\n\n# Specifies whether to use proxy-protocol in order to safely\n# transport connection information such as a client's address\n# across multiple layers of TCP proxies.\n# NOTE THAT THIS IS AN EXPERIMENTAL / ALPHA FEATURE\nenable-proxy-protocol: \"false\"\n\n# The server certificates to serve the internal TLS traffic for Kourier Gateway.\n# It is specified by the secret name in controller namespace, which has\n# the \"tls.crt\" and \"tls.key\" data field.\n# Use an empty value to disable the feature (default).\n#\n# NOTE: This flag is in an alpha state and is mostly here to enable internal testing\n#       for now. Use with caution.\ncluster-cert-secret: \"\"\n\n# Specifies the amount of time that Kourier waits for the incoming requests.\n# The default, 0s, imposes no timeout at all.\nstream-idle-timeout: \"0s\"\n\n# Specifies whether to use CryptoMB private key provider in order to\n# acclerate the TLS handshake.\n# NOTE THAT THIS IS AN EXPERIMENTAL / ALPHA FEATURE.\nenable-cryptomb: \"false\"\n\n# Configures the number of additional ingress proxy hops from the\n# right side of the x-forwarded-for HTTP header to trust.\ntrusted-hops-count: \"0\"\n\n# Configures the connection manager to use the real remote address\n# of the client connection when determining internal versus external origin and manipulating various headers.\nuse-remote-address: \"false\"\n\n# Specifies the cipher suites for TLS external listener.\n# Use ',' separated values like \"ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-ECDSA-CHACHA20-POLY1305\"\n# The default uses the default cipher suites of the envoy version.\ncipher-suites: \"\"\n\n# Disable the Envoy server header injection in the response when response has no such header.\ndisable-envoy-server-header: \"false\"\n\n# The external authorization service and port, my-auth:2222.\n# This value overrides environment variable if defined.\nextauthz-host: \"\"\n\n# The protocol used to query the ext auth service. Can be one of : grpc, http, https. Defaults to grpc\n# This value overrides environment variable if defined.\nextauthz-protocol: \"grpc\"\n\n# Allow traffic to go through if the ext auth service is down. Accepts true/false.\n# This value overrides environment variable if defined.\nextauthz-failure-mode-allow: \"\"\n\n# Max request bytes, if not set, defaults to 8192 Bytes. More info Envoy Docs\n# see: https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/ext_authz/v3/ext_authz.proto.html#extensions-filters-http-ext-authz-v3-buffersettings\n# This value overrides environment variable if defined.\nextauthz-max-request-body-bytes: 8192\n\n# Max time in ms to wait for the ext authz service. Defaults to 2000 ms\n# This value overrides environment variable if defined.\nextauthz-timeout: 2000\n\n# If extauthz-protocol is equal to http or https, path to query the ext auth service.\n# Example : if set to /verify, it will query /verify/ (notice the trailing /). If not set, it will query /\n# This value overrides environment variable if defined.\nextauthz-path-prefix: \"\"\n\n# If extauthz-protocol is equal to grpc, sends the body as raw bytes instead of a UTF-8 string.\n# Accepts only true/false, t/f or 1/0. Attempting to set another value will throw an error.\n# Defaults to false. More info Envoy Docs.\n# see: https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/ext_authz/v3/ext_authz.proto.html#extensions-filters-http-ext-authz-v3-buffersettings\n# This value overrides environment variable if defined.\nextauthz-pack-as-byte: \"false\"\n\n# Specifies the secret that contains the TLS certificate and key pair when using HTTPS communication with Kourier Ingress.\n# This value overrides environment variable if defined.\ncerts-secret-name: \"\"\ncerts-secret-namespace: \"\"\n\n# Specifies the OTLP collector endpoint for distributed tracing.\n# The endpoint format depends on the protocol (see tracing-protocol).\n# Examples:\n# - For HTTP: \"http://otel-collector.observability.svc:4318/v1/traces\"\n# - For gRPC: \"http://otel-collector.observability.svc:4317\"\n# Use an empty value to disable distributed tracing (default).\ntracing-endpoint: \"\"\n\n# Protocol for tracing collector communication.\n# Valid values: http/protobuf, grpc\ntracing-protocol: \"grpc\"\n\n# Tracing sampling rate (0.0 to 1.0)\n# Controls the percentage of requests that are traced.\n# Example: \"1.0\" traces 100% of requests.\ntracing-sampling-rate: \"1.0\"\n\n# Service name for traces\n# This identifies the Kourier gateway in your tracing system.\ntracing-service-name: \"kourier-knative\"\n"
   }
 };
 export const ServiceAccount_NetKourier: KubernetesResource = {
@@ -7217,7 +7356,7 @@ export const ServiceAccount_NetKourier: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "net-kourier",
@@ -7231,7 +7370,7 @@ export const ClusterRole_NetKourier: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "net-kourier"
@@ -7242,11 +7381,15 @@ export const ClusterRole_NetKourier: KubernetesResource = {
     verbs: ["create", "update", "patch"]
   }, {
     apiGroups: [""],
-    resources: ["pods", "endpoints", "services", "secrets"],
+    resources: ["pods", "services", "secrets"],
     verbs: ["get", "list", "watch"]
   }, {
     apiGroups: [""],
     resources: ["configmaps"],
+    verbs: ["get", "list", "watch"]
+  }, {
+    apiGroups: ["discovery.k8s.io"],
+    resources: ["endpointslices"],
     verbs: ["get", "list", "watch"]
   }, {
     apiGroups: ["coordination.k8s.io"],
@@ -7269,7 +7412,7 @@ export const ClusterRoleBinding_NetKourier: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "net-kourier"
@@ -7292,7 +7435,7 @@ export const Deployment_NetKourierController: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "net-kourier-controller",
@@ -7354,7 +7497,7 @@ export const Deployment_NetKourierController: KubernetesResource = {
             name: "KUBE_API_QPS",
             value: "200"
           }],
-          image: "gcr.io/knative-releases/knative.dev/net-kourier/cmd/kourier@sha256:c9016f34165c5118373c75dcc373d1cd802fe37ffa9e1bce65960942a59bc5f1",
+          image: "gcr.io/knative-releases/knative.dev/net-kourier/cmd/kourier@sha256:01abd2070ccf8680885c47990e42c05c09e30bc8595d9246f4dcd37f2220a2a2",
           livenessProbe: {
             failureThreshold: 6,
             grpc: {
@@ -7414,7 +7557,7 @@ export const Service_NetKourierController: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "net-kourier-controller",
@@ -7445,7 +7588,7 @@ export const Deployment_3scaleKourierGateway: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "3scale-kourier-gateway",
@@ -7484,7 +7627,7 @@ export const Deployment_3scaleKourierGateway: KubernetesResource = {
             name: "DRAIN_TIME_SECONDS",
             value: "15"
           }],
-          image: "docker.io/envoyproxy/envoy:v1.26-latest",
+          image: "docker.io/envoyproxy/envoy:v1.37-latest",
           lifecycle: {
             preStop: {
               exec: {
@@ -7504,7 +7647,8 @@ export const Deployment_3scaleKourierGateway: KubernetesResource = {
               scheme: "HTTP"
             },
             initialDelaySeconds: 10,
-            periodSeconds: 5
+            periodSeconds: 5,
+            timeoutSeconds: 3
           },
           name: "kourier-gateway",
           ports: [{
@@ -7544,7 +7688,8 @@ export const Deployment_3scaleKourierGateway: KubernetesResource = {
               scheme: "HTTP"
             },
             initialDelaySeconds: 10,
-            periodSeconds: 5
+            periodSeconds: 5,
+            timeoutSeconds: 3
           },
           resources: {
             limits: {
@@ -7593,7 +7738,7 @@ export const Service_Kourier: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "kourier",
@@ -7624,7 +7769,7 @@ export const Service_KourierInternal: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "kourier-internal",
@@ -7655,7 +7800,7 @@ export const HorizontalPodAutoscaler_3scaleKourierGateway: KubernetesResource = 
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "3scale-kourier-gateway",
@@ -7688,7 +7833,7 @@ export const PodDisruptionBudget_3scaleKourierGatewayPdb: KubernetesResource = {
     labels: {
       "app.kubernetes.io/component": "net-kourier",
       "app.kubernetes.io/name": "knative-serving",
-      "app.kubernetes.io/version": "1.15.0",
+      "app.kubernetes.io/version": "1.22.1",
       "networking.knative.dev/ingress-provider": "kourier"
     },
     name: "3scale-kourier-gateway-pdb",
