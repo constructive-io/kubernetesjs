@@ -1,4 +1,10 @@
 import { APIClient, APIClientRequestOpts, APIClientOptions } from "./client";
+/* com.coreos.monitoring.v1.Alertmanager */
+/* The `Alertmanager` custom resource definition (CRD) defines a desired [Alertmanager](https://prometheus.io/docs/alerting) setup to run in a Kubernetes cluster. It allows to specify many options such as the number of replicas, persistent storage and many more.
+
+For each `Alertmanager` resource, the Operator deploys a `StatefulSet` in the same namespace. When there are two or more configured replicas, the Operator runs the Alertmanager instances in high-availability mode.
+
+The resource defines via label and namespace selectors which `AlertmanagerConfig` objects should be associated to the deployed Alertmanager instances. */
 export interface MonitoringCoreosComV1Alertmanager {
   apiVersion?: string;
   kind?: string;
@@ -207,7 +213,6 @@ export interface MonitoringCoreosComV1Alertmanager {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -319,13 +324,6 @@ export interface MonitoringCoreosComV1Alertmanager {
         jira?: {
           apiURL?: string;
         };
-        mattermost?: {
-          webhookURL?: {
-            key: string;
-            name?: string;
-            optional?: boolean;
-          };
-        };
         opsGenieApiKey?: {
           key: string;
           name?: string;
@@ -369,7 +367,6 @@ export interface MonitoringCoreosComV1Alertmanager {
             optional?: boolean;
           };
           authUsername?: string;
-          forceImplicitTLS?: boolean;
           from?: string;
           hello?: string;
           requireTLS?: boolean;
@@ -553,12 +550,6 @@ export interface MonitoringCoreosComV1Alertmanager {
             apiVersion?: string;
             fieldPath: string;
           };
-          fileKeyRef?: {
-            key: string;
-            optional?: boolean;
-            path: string;
-            volumeName: string;
-          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -714,13 +705,6 @@ export interface MonitoringCoreosComV1Alertmanager {
         };
       };
       restartPolicy?: string;
-      restartPolicyRules?: {
-        action: string;
-        exitCodes?: {
-          operator: string;
-          values?: number[];
-        };
-      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -820,7 +804,6 @@ export interface MonitoringCoreosComV1Alertmanager {
       hostnames: string[];
       ip: string;
     }[];
-    hostNetwork?: boolean;
     hostUsers?: boolean;
     image?: string;
     imagePullPolicy?: "" | "Always" | "Never" | "IfNotPresent";
@@ -842,12 +825,6 @@ export interface MonitoringCoreosComV1Alertmanager {
           fieldRef?: {
             apiVersion?: string;
             fieldPath: string;
-          };
-          fileKeyRef?: {
-            key: string;
-            optional?: boolean;
-            path: string;
-            volumeName: string;
           };
           resourceFieldRef?: {
             containerName?: string;
@@ -1004,13 +981,6 @@ export interface MonitoringCoreosComV1Alertmanager {
         };
       };
       restartPolicy?: string;
-      restartPolicyRules?: {
-        action: string;
-        exitCodes?: {
-          operator: string;
-          values?: number[];
-        };
-      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -1109,7 +1079,6 @@ export interface MonitoringCoreosComV1Alertmanager {
       whenDeleted?: string;
       whenScaled?: string;
     };
-    podManagementPolicy?: "OrderedReady" | "Parallel";
     podMetadata?: {
       annotations?: {
         [key: string]: unknown;
@@ -1136,7 +1105,6 @@ export interface MonitoringCoreosComV1Alertmanager {
     };
     retention?: string;
     routePrefix?: string;
-    schedulerName?: string;
     secrets?: string[];
     securityContext?: {
       appArmorProfile?: {
@@ -1328,12 +1296,6 @@ export interface MonitoringCoreosComV1Alertmanager {
       topologyKey: string;
       whenUnsatisfiable: string;
     }[];
-    updateStrategy?: {
-      rollingUpdate?: {
-        maxUnavailable?: any;
-      };
-      type: "OnDelete" | "RollingUpdate";
-    };
     version?: string;
     volumeMounts?: {
       mountPath: string;
@@ -1589,17 +1551,6 @@ export interface MonitoringCoreosComV1Alertmanager {
               };
             }[];
           };
-          podCertificate?: {
-            certificateChainPath?: string;
-            credentialBundlePath?: string;
-            keyPath?: string;
-            keyType: string;
-            maxExpirationSeconds?: number;
-            signerName: string;
-            userAnnotations?: {
-              [key: string]: unknown;
-            };
-          };
           secret?: {
             items?: {
               key: string;
@@ -1732,7 +1683,7 @@ export interface MonitoringCoreosComV1Alertmanager {
     };
   };
   status?: {
-    availableReplicas?: number;
+    availableReplicas: number;
     conditions?: {
       lastTransitionTime: string;
       message?: string;
@@ -1741,11 +1692,11 @@ export interface MonitoringCoreosComV1Alertmanager {
       status: string;
       type: string;
     }[];
-    paused?: boolean;
-    replicas?: number;
+    paused: boolean;
+    replicas: number;
     selector?: string;
-    unavailableReplicas?: number;
-    updatedReplicas?: number;
+    unavailableReplicas: number;
+    updatedReplicas: number;
   };
 }
 /* com.coreos.monitoring.v1.AlertmanagerList */
@@ -1756,6 +1707,15 @@ export interface MonitoringCoreosComV1AlertmanagerList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* com.coreos.monitoring.v1.PodMonitor */
+/* The `PodMonitor` custom resource definition (CRD) defines how `Prometheus` and `PrometheusAgent` can scrape metrics from a group of pods.
+Among other things, it allows to specify:
+* The pods to scrape via label selectors.
+* The container ports to scrape.
+* Authentication credentials to use.
+* Target and metric relabeling.
+
+`Prometheus` and `PrometheusAgent` objects select `PodMonitor` objects using label and namespace selectors. */
 export interface MonitoringCoreosComV1PodMonitor {
   apiVersion?: string;
   kind?: string;
@@ -1905,7 +1865,7 @@ export interface MonitoringCoreosComV1PodMonitor {
         sourceLabels?: string[];
         targetLabel?: string;
       }[];
-      scheme?: "http" | "https" | "HTTP" | "HTTPS";
+      scheme?: "http" | "https";
       scrapeTimeout?: string;
       targetPort?: any;
       tlsConfig?: {
@@ -1949,7 +1909,6 @@ export interface MonitoringCoreosComV1PodMonitor {
     sampleLimit?: number;
     scrapeClass?: string;
     scrapeClassicHistograms?: boolean;
-    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     selector: {
       matchExpressions?: {
@@ -1964,22 +1923,6 @@ export interface MonitoringCoreosComV1PodMonitor {
     selectorMechanism?: "RelabelConfig" | "RoleSelector";
     targetLimit?: number;
   };
-  status?: {
-    bindings?: {
-      conditions?: {
-        lastTransitionTime: string;
-        message?: string;
-        observedGeneration?: number;
-        reason?: string;
-        status: string;
-        type: "Accepted";
-      }[];
-      group: "monitoring.coreos.com";
-      name: string;
-      namespace: string;
-      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
-    }[];
-  };
 }
 /* com.coreos.monitoring.v1.PodMonitorList */
 /* PodMonitorList is a list of PodMonitor */
@@ -1989,6 +1932,14 @@ export interface MonitoringCoreosComV1PodMonitorList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* com.coreos.monitoring.v1.Probe */
+/* The `Probe` custom resource definition (CRD) defines how to scrape metrics from prober exporters such as the [blackbox exporter](https://github.com/prometheus/blackbox_exporter).
+
+The `Probe` resource needs 2 pieces of information:
+* The list of probed addresses which can be defined statically or by discovering Kubernetes Ingress objects.
+* The prober which exposes the availability of probed endpoints (over various protocols such HTTP, TCP, ICMP, ...) as Prometheus metrics.
+
+`Prometheus` and `PrometheusAgent` objects select `Probe` objects using label and namespace selectors. */
 export interface MonitoringCoreosComV1Probe {
   apiVersion?: string;
   kind?: string;
@@ -2020,9 +1971,7 @@ export interface MonitoringCoreosComV1Probe {
       optional?: boolean;
     };
     convertClassicHistogramsToNHCB?: boolean;
-    enableHttp2?: boolean;
     fallbackScrapeProtocol?: "PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0";
-    followRedirects?: boolean;
     interval?: string;
     jobName?: string;
     keepDroppedTargets?: number;
@@ -2118,13 +2067,12 @@ export interface MonitoringCoreosComV1Probe {
       };
       proxyFromEnvironment?: boolean;
       proxyUrl?: string;
-      scheme?: "http" | "https" | "HTTP" | "HTTPS";
+      scheme?: "http" | "https";
       url: string;
     };
     sampleLimit?: number;
     scrapeClass?: string;
     scrapeClassicHistograms?: boolean;
-    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     scrapeTimeout?: string;
     targetLimit?: number;
@@ -2206,22 +2154,6 @@ export interface MonitoringCoreosComV1Probe {
       serverName?: string;
     };
   };
-  status?: {
-    bindings?: {
-      conditions?: {
-        lastTransitionTime: string;
-        message?: string;
-        observedGeneration?: number;
-        reason?: string;
-        status: string;
-        type: "Accepted";
-      }[];
-      group: "monitoring.coreos.com";
-      name: string;
-      namespace: string;
-      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
-    }[];
-  };
 }
 /* com.coreos.monitoring.v1.ProbeList */
 /* ProbeList is a list of Probe */
@@ -2231,6 +2163,14 @@ export interface MonitoringCoreosComV1ProbeList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* com.coreos.monitoring.v1.Prometheus */
+/* The `Prometheus` custom resource definition (CRD) defines a desired [Prometheus](https://prometheus.io/docs/prometheus) setup to run in a Kubernetes cluster. It allows to specify many options such as the number of replicas, persistent storage, and Alertmanagers where firing alerts should be sent and many more.
+
+For each `Prometheus` resource, the Operator deploys one or several `StatefulSet` objects in the same namespace. The number of StatefulSets is equal to the number of shards which is 1 by default.
+
+The resource defines via label and namespace selectors which `ServiceMonitor`, `PodMonitor`, `Probe` and `PrometheusRule` objects should be associated to the deployed Prometheus instances.
+
+The Operator continuously reconciles the scrape and rules configuration and a sidecar container running in the Prometheus pods triggers a reload of the configuration when needed. */
 export interface MonitoringCoreosComV1Prometheus {
   apiVersion?: string;
   kind?: string;
@@ -2455,14 +2395,13 @@ export interface MonitoringCoreosComV1Prometheus {
           sourceLabels?: string[];
           targetLabel?: string;
         }[];
-        scheme?: "http" | "https" | "HTTP" | "HTTPS";
+        scheme?: string;
         sigv4?: {
           accessKey?: {
             key: string;
             name?: string;
             optional?: boolean;
           };
-          externalId?: string;
           profile?: string;
           region?: string;
           roleArn?: string;
@@ -2471,7 +2410,6 @@ export interface MonitoringCoreosComV1Prometheus {
             name?: string;
             optional?: boolean;
           };
-          useFIPSSTSEndpoint?: boolean;
         };
         timeout?: string;
         tlsConfig?: {
@@ -2607,12 +2545,6 @@ export interface MonitoringCoreosComV1Prometheus {
           fieldRef?: {
             apiVersion?: string;
             fieldPath: string;
-          };
-          fileKeyRef?: {
-            key: string;
-            optional?: boolean;
-            path: string;
-            volumeName: string;
           };
           resourceFieldRef?: {
             containerName?: string;
@@ -2769,13 +2701,6 @@ export interface MonitoringCoreosComV1Prometheus {
         };
       };
       restartPolicy?: string;
-      restartPolicyRules?: {
-        action: string;
-        exitCodes?: {
-          operator: string;
-          values?: number[];
-        };
-      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -2924,12 +2849,6 @@ export interface MonitoringCoreosComV1Prometheus {
             apiVersion?: string;
             fieldPath: string;
           };
-          fileKeyRef?: {
-            key: string;
-            optional?: boolean;
-            path: string;
-            volumeName: string;
-          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -3085,13 +3004,6 @@ export interface MonitoringCoreosComV1Prometheus {
         };
       };
       restartPolicy?: string;
-      restartPolicyRules?: {
-        action: string;
-        exitCodes?: {
-          operator: string;
-          values?: number[];
-        };
-      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -3192,12 +3104,9 @@ export interface MonitoringCoreosComV1Prometheus {
       convertHistogramsToNHCB?: boolean;
       ignoreResourceAttributes?: string[];
       keepIdentifyingResourceAttributes?: boolean;
-      labelNamePreserveMultipleUnderscores?: boolean;
-      labelNameUnderscoreSanitization?: boolean;
       promoteAllResourceAttributes?: boolean;
       promoteResourceAttributes?: string[];
-      promoteScopeMetadata?: boolean;
-      translationStrategy?: "NoUTF8EscapingWithSuffixes" | "UnderscoreEscapingWithSuffixes" | "NoTranslation" | "UnderscoreEscapingWithoutSuffixes";
+      translationStrategy?: "NoUTF8EscapingWithSuffixes" | "UnderscoreEscapingWithSuffixes" | "NoTranslation";
     };
     overrideHonorLabels?: boolean;
     overrideHonorTimestamps?: boolean;
@@ -3206,7 +3115,6 @@ export interface MonitoringCoreosComV1Prometheus {
       whenDeleted?: string;
       whenScaled?: string;
     };
-    podManagementPolicy?: "OrderedReady" | "Parallel";
     podMetadata?: {
       annotations?: {
         [key: string]: unknown;
@@ -3431,7 +3339,7 @@ export interface MonitoringCoreosComV1Prometheus {
       azureAd?: {
         cloud?: "AzureChina" | "AzureGovernment" | "AzurePublic";
         managedIdentity?: {
-          clientId?: string;
+          clientId: string;
         };
         oauth?: {
           clientId: string;
@@ -3442,13 +3350,8 @@ export interface MonitoringCoreosComV1Prometheus {
           };
           tenantId: string;
         };
-        scope?: string;
         sdk?: {
           tenantId?: string;
-        };
-        workloadIdentity?: {
-          clientId: string;
-          tenantId: string;
         };
       };
       basicAuth?: {
@@ -3570,7 +3473,6 @@ export interface MonitoringCoreosComV1Prometheus {
           name?: string;
           optional?: boolean;
         };
-        externalId?: string;
         profile?: string;
         region?: string;
         roleArn?: string;
@@ -3579,7 +3481,6 @@ export interface MonitoringCoreosComV1Prometheus {
           name?: string;
           optional?: boolean;
         };
-        useFIPSSTSEndpoint?: boolean;
       };
       tlsConfig?: {
         ca?: {
@@ -3680,7 +3581,6 @@ export interface MonitoringCoreosComV1Prometheus {
       goGC?: number;
     };
     sampleLimit?: number;
-    schedulerName?: string;
     scrapeClasses?: {
       attachMetadata?: {
         node?: boolean;
@@ -3777,7 +3677,6 @@ export interface MonitoringCoreosComV1Prometheus {
     };
     scrapeFailureLogFile?: string;
     scrapeInterval?: string;
-    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     scrapeTimeout?: string;
     secrets?: string[];
@@ -3844,13 +3743,6 @@ export interface MonitoringCoreosComV1Prometheus {
         retentionPeriod: string;
       };
       whenScaled?: "Retain" | "Delete";
-    };
-    shardingStrategy?: {
-      mode?: "Address" | "Topology";
-      topology?: {
-        externalLabelName?: string;
-        values?: string[];
-      };
     };
     shards?: number;
     storage?: {
@@ -4018,8 +3910,6 @@ export interface MonitoringCoreosComV1Prometheus {
           };
         };
         certFile?: string;
-        cipherSuites?: string[];
-        curves?: string[];
         insecureSkipVerify?: boolean;
         keyFile?: string;
         keySecret?: {
@@ -4103,8 +3993,8 @@ export interface MonitoringCoreosComV1Prometheus {
       whenUnsatisfiable: string;
     }[];
     tracingConfig?: {
-      clientType?: "http" | "grpc" | "HTTP" | "GRPC";
-      compression?: "gzip" | "Gzip";
+      clientType?: "http" | "grpc";
+      compression?: "gzip";
       endpoint: string;
       headers?: {
         [key: string]: unknown;
@@ -4153,13 +4043,6 @@ export interface MonitoringCoreosComV1Prometheus {
     };
     tsdb?: {
       outOfOrderTimeWindow?: string;
-      staleSeriesCompactionThreshold?: any;
-    };
-    updateStrategy?: {
-      rollingUpdate?: {
-        maxUnavailable?: any;
-      };
-      type: "OnDelete" | "RollingUpdate";
     };
     version?: string;
     volumeMounts?: {
@@ -4416,17 +4299,6 @@ export interface MonitoringCoreosComV1Prometheus {
               };
             }[];
           };
-          podCertificate?: {
-            certificateChainPath?: string;
-            credentialBundlePath?: string;
-            keyPath?: string;
-            keyType: string;
-            maxExpirationSeconds?: number;
-            signerName: string;
-            userAnnotations?: {
-              [key: string]: unknown;
-            };
-          };
           secret?: {
             items?: {
               key: string;
@@ -4560,7 +4432,7 @@ export interface MonitoringCoreosComV1Prometheus {
     };
   };
   status?: {
-    availableReplicas?: number;
+    availableReplicas: number;
     conditions?: {
       lastTransitionTime: string;
       message?: string;
@@ -4569,8 +4441,8 @@ export interface MonitoringCoreosComV1Prometheus {
       status: string;
       type: string;
     }[];
-    paused?: boolean;
-    replicas?: number;
+    paused: boolean;
+    replicas: number;
     selector?: string;
     shardStatuses?: {
       availableReplicas: number;
@@ -4580,8 +4452,8 @@ export interface MonitoringCoreosComV1Prometheus {
       updatedReplicas: number;
     }[];
     shards?: number;
-    unavailableReplicas?: number;
-    updatedReplicas?: number;
+    unavailableReplicas: number;
+    updatedReplicas: number;
   };
 }
 /* com.coreos.monitoring.v1.PrometheusList */
@@ -4592,6 +4464,10 @@ export interface MonitoringCoreosComV1PrometheusList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* com.coreos.monitoring.v1.PrometheusRule */
+/* The `PrometheusRule` custom resource definition (CRD) defines [alerting](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) and [recording](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/) rules to be evaluated by `Prometheus` or `ThanosRuler` objects.
+
+`Prometheus` and `ThanosRuler` objects select `PrometheusRule` objects using label and namespace selectors. */
 export interface MonitoringCoreosComV1PrometheusRule {
   apiVersion?: string;
   kind?: string;
@@ -4621,22 +4497,6 @@ export interface MonitoringCoreosComV1PrometheusRule {
       }[];
     }[];
   };
-  status?: {
-    bindings?: {
-      conditions?: {
-        lastTransitionTime: string;
-        message?: string;
-        observedGeneration?: number;
-        reason?: string;
-        status: string;
-        type: "Accepted";
-      }[];
-      group: "monitoring.coreos.com";
-      name: string;
-      namespace: string;
-      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
-    }[];
-  };
 }
 /* com.coreos.monitoring.v1.PrometheusRuleList */
 /* PrometheusRuleList is a list of PrometheusRule */
@@ -4646,6 +4506,15 @@ export interface MonitoringCoreosComV1PrometheusRuleList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* com.coreos.monitoring.v1.ServiceMonitor */
+/* The `ServiceMonitor` custom resource definition (CRD) defines how `Prometheus` and `PrometheusAgent` can scrape metrics from a group of services.
+Among other things, it allows to specify:
+* The services to scrape via label selectors.
+* The container ports to scrape.
+* Authentication credentials to use.
+* Target and metric relabeling.
+
+`Prometheus` and `PrometheusAgent` objects select `ServiceMonitor` objects using label and namespace selectors. */
 export interface MonitoringCoreosComV1ServiceMonitor {
   apiVersion?: string;
   kind?: string;
@@ -4783,7 +4652,7 @@ export interface MonitoringCoreosComV1ServiceMonitor {
         sourceLabels?: string[];
         targetLabel?: string;
       }[];
-      scheme?: "http" | "https" | "HTTP" | "HTTPS";
+      scheme?: "http" | "https";
       scrapeTimeout?: string;
       targetPort?: any;
       tlsConfig?: {
@@ -4842,7 +4711,6 @@ export interface MonitoringCoreosComV1ServiceMonitor {
     sampleLimit?: number;
     scrapeClass?: string;
     scrapeClassicHistograms?: boolean;
-    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     selector: {
       matchExpressions?: {
@@ -4855,7 +4723,6 @@ export interface MonitoringCoreosComV1ServiceMonitor {
       };
     };
     selectorMechanism?: "RelabelConfig" | "RoleSelector";
-    serviceDiscoveryRole?: "Endpoints" | "EndpointSlice";
     targetLabels?: string[];
     targetLimit?: number;
   };
@@ -4872,7 +4739,7 @@ export interface MonitoringCoreosComV1ServiceMonitor {
       group: "monitoring.coreos.com";
       name: string;
       namespace: string;
-      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
+      resource: "prometheuses" | "prometheusagents";
     }[];
   };
 }
@@ -4884,6 +4751,12 @@ export interface MonitoringCoreosComV1ServiceMonitorList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* com.coreos.monitoring.v1.ThanosRuler */
+/* The `ThanosRuler` custom resource definition (CRD) defines a desired [Thanos Ruler](https://github.com/thanos-io/thanos/blob/main/docs/components/rule.md) setup to run in a Kubernetes cluster.
+
+A `ThanosRuler` instance requires at least one compatible Prometheus API endpoint (either Thanos Querier or Prometheus services).
+
+The resource defines via label and namespace selectors which `PrometheusRule` objects should be associated to the deployed Thanos Ruler instances. */
 export interface MonitoringCoreosComV1ThanosRuler {
   apiVersion?: string;
   kind?: string;
@@ -5070,12 +4943,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
             apiVersion?: string;
             fieldPath: string;
           };
-          fileKeyRef?: {
-            key: string;
-            optional?: boolean;
-            path: string;
-            volumeName: string;
-          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -5231,13 +5098,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
         };
       };
       restartPolicy?: string;
-      restartPolicyRules?: {
-        action: string;
-        exitCodes?: {
-          operator: string;
-          values?: number[];
-        };
-      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -5367,8 +5227,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
         };
       };
       certFile?: string;
-      cipherSuites?: string[];
-      curves?: string[];
       insecureSkipVerify?: boolean;
       keyFile?: string;
       keySecret?: {
@@ -5405,12 +5263,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
           fieldRef?: {
             apiVersion?: string;
             fieldPath: string;
-          };
-          fileKeyRef?: {
-            key: string;
-            optional?: boolean;
-            path: string;
-            volumeName: string;
           };
           resourceFieldRef?: {
             containerName?: string;
@@ -5567,13 +5419,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
         };
       };
       restartPolicy?: string;
-      restartPolicyRules?: {
-        action: string;
-        exitCodes?: {
-          operator: string;
-          values?: number[];
-        };
-      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -5673,7 +5518,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
     };
     objectStorageConfigFile?: string;
     paused?: boolean;
-    podManagementPolicy?: "OrderedReady" | "Parallel";
     podMetadata?: {
       annotations?: {
         [key: string]: unknown;
@@ -5708,7 +5552,7 @@ export interface MonitoringCoreosComV1ThanosRuler {
       azureAd?: {
         cloud?: "AzureChina" | "AzureGovernment" | "AzurePublic";
         managedIdentity?: {
-          clientId?: string;
+          clientId: string;
         };
         oauth?: {
           clientId: string;
@@ -5719,13 +5563,8 @@ export interface MonitoringCoreosComV1ThanosRuler {
           };
           tenantId: string;
         };
-        scope?: string;
         sdk?: {
           tenantId?: string;
-        };
-        workloadIdentity?: {
-          clientId: string;
-          tenantId: string;
         };
       };
       basicAuth?: {
@@ -5847,7 +5686,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
           name?: string;
           optional?: boolean;
         };
-        externalId?: string;
         profile?: string;
         region?: string;
         roleArn?: string;
@@ -5856,7 +5694,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
           name?: string;
           optional?: boolean;
         };
-        useFIPSSTSEndpoint?: boolean;
       };
       tlsConfig?: {
         ca?: {
@@ -5947,7 +5784,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
         [key: string]: unknown;
       };
     };
-    schedulerName?: string;
     securityContext?: {
       appArmorProfile?: {
         localhostProfile?: string;
@@ -6142,12 +5978,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
       optional?: boolean;
     };
     tracingConfigFile?: string;
-    updateStrategy?: {
-      rollingUpdate?: {
-        maxUnavailable?: any;
-      };
-      type: "OnDelete" | "RollingUpdate";
-    };
     version?: string;
     volumeMounts?: {
       mountPath: string;
@@ -6403,17 +6233,6 @@ export interface MonitoringCoreosComV1ThanosRuler {
               };
             }[];
           };
-          podCertificate?: {
-            certificateChainPath?: string;
-            credentialBundlePath?: string;
-            keyPath?: string;
-            keyType: string;
-            maxExpirationSeconds?: number;
-            signerName: string;
-            userAnnotations?: {
-              [key: string]: unknown;
-            };
-          };
           secret?: {
             items?: {
               key: string;
@@ -6544,7 +6363,7 @@ export interface MonitoringCoreosComV1ThanosRuler {
     };
   };
   status?: {
-    availableReplicas?: number;
+    availableReplicas: number;
     conditions?: {
       lastTransitionTime: string;
       message?: string;
@@ -6553,10 +6372,10 @@ export interface MonitoringCoreosComV1ThanosRuler {
       status: string;
       type: string;
     }[];
-    paused?: boolean;
-    replicas?: number;
-    unavailableReplicas?: number;
-    updatedReplicas?: number;
+    paused: boolean;
+    replicas: number;
+    unavailableReplicas: number;
+    updatedReplicas: number;
   };
 }
 /* com.coreos.monitoring.v1.ThanosRulerList */
@@ -6567,6 +6386,9 @@ export interface MonitoringCoreosComV1ThanosRulerList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* com.coreos.monitoring.v1alpha1.AlertmanagerConfig */
+/* AlertmanagerConfig configures the Prometheus Alertmanager,
+specifying how alerts should be grouped, inhibited and notified to external systems. */
 export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
   apiVersion?: string;
   kind?: string;
@@ -6638,7 +6460,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -6766,7 +6587,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
           optional?: boolean;
         };
         authUsername?: string;
-        forceImplicitTLS?: boolean;
         from?: string;
         headers?: {
           key: string;
@@ -6778,9 +6598,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
         sendResolved?: boolean;
         smarthost?: string;
         text?: string;
-        threading?: {
-          threadByDate: "Daily" | "None";
-        };
         tlsConfig?: {
           ca?: {
             configMap?: {
@@ -6845,7 +6662,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -6992,7 +6808,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7152,7 +6967,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7268,7 +7082,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
         responders?: {
           id?: string;
           name?: string;
-          type: "team" | "teams" | "user" | "escalation" | "schedule";
+          type: string;
           username?: string;
         }[];
         sendResolved?: boolean;
@@ -7313,7 +7127,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7445,7 +7258,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
         };
         severity?: string;
         source?: string;
-        timeout?: string;
         url?: string;
       }[];
       pushoverConfigs?: {
@@ -7478,7 +7290,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7589,7 +7400,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
           };
         };
         message?: string;
-        monospace?: boolean;
         priority?: string;
         retry?: string;
         sendResolved?: boolean;
@@ -7652,7 +7462,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7838,7 +7647,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -7952,14 +7760,12 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
         iconURL?: string;
         imageURL?: string;
         linkNames?: boolean;
-        messageText?: string;
         mrkdwnIn?: string[];
         pretext?: string;
         sendResolved?: boolean;
         shortFields?: boolean;
         text?: string;
         thumbURL?: string;
-        timeout?: string;
         title?: string;
         titleLink?: string;
         username?: string;
@@ -7995,7 +7801,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8114,7 +7919,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          externalId?: string;
           profile?: string;
           region?: string;
           roleArn?: string;
@@ -8123,7 +7927,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          useFIPSSTSEndpoint?: boolean;
         };
         subject?: string;
         targetARN?: string;
@@ -8165,7 +7968,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8318,7 +8120,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8430,7 +8231,7 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
         };
         messageType?: string;
         monitoringTool?: string;
-        routingKey: string;
+        routingKey?: string;
         sendResolved?: boolean;
         stateMessage?: string;
       }[];
@@ -8462,7 +8263,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8603,7 +8403,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8714,7 +8513,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
           };
         };
         maxAlerts?: number;
-        payload?: string;
         sendResolved?: boolean;
         timeout?: string;
         url?: string;
@@ -8759,7 +8557,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
             name?: string;
             optional?: boolean;
           };
-          enableHttp2?: boolean;
           followRedirects?: boolean;
           noProxy?: string;
           oauth2?: {
@@ -8895,22 +8692,6 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfig {
       routes?: any[];
     };
   };
-  status?: {
-    bindings?: {
-      conditions?: {
-        lastTransitionTime: string;
-        message?: string;
-        observedGeneration?: number;
-        reason?: string;
-        status: string;
-        type: "Accepted";
-      }[];
-      group: "monitoring.coreos.com";
-      name: string;
-      namespace: string;
-      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
-    }[];
-  };
 }
 /* com.coreos.monitoring.v1alpha1.AlertmanagerConfigList */
 /* AlertmanagerConfigList is a list of AlertmanagerConfig */
@@ -8920,6 +8701,10 @@ export interface MonitoringCoreosComV1alpha1AlertmanagerConfigList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* com.coreos.monitoring.v1alpha1.PrometheusAgent */
+/* The `PrometheusAgent` custom resource definition (CRD) defines a desired [Prometheus Agent](https://prometheus.io/blog/2021/11/16/agent/) setup to run in a Kubernetes cluster.
+
+The CRD is very similar to the `Prometheus` CRD except for features which aren't available in agent mode like rule evaluation, persistent storage and Thanos sidecar. */
 export interface MonitoringCoreosComV1alpha1PrometheusAgent {
   apiVersion?: string;
   kind?: string;
@@ -9173,12 +8958,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
             apiVersion?: string;
             fieldPath: string;
           };
-          fileKeyRef?: {
-            key: string;
-            optional?: boolean;
-            path: string;
-            volumeName: string;
-          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -9334,13 +9113,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
         };
       };
       restartPolicy?: string;
-      restartPolicyRules?: {
-        action: string;
-        exitCodes?: {
-          operator: string;
-          values?: number[];
-        };
-      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -9483,12 +9255,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
             apiVersion?: string;
             fieldPath: string;
           };
-          fileKeyRef?: {
-            key: string;
-            optional?: boolean;
-            path: string;
-            volumeName: string;
-          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -9644,13 +9410,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
         };
       };
       restartPolicy?: string;
-      restartPolicyRules?: {
-        action: string;
-        exitCodes?: {
-          operator: string;
-          values?: number[];
-        };
-      }[];
       securityContext?: {
         allowPrivilegeEscalation?: boolean;
         appArmorProfile?: {
@@ -9752,12 +9511,9 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       convertHistogramsToNHCB?: boolean;
       ignoreResourceAttributes?: string[];
       keepIdentifyingResourceAttributes?: boolean;
-      labelNamePreserveMultipleUnderscores?: boolean;
-      labelNameUnderscoreSanitization?: boolean;
       promoteAllResourceAttributes?: boolean;
       promoteResourceAttributes?: string[];
-      promoteScopeMetadata?: boolean;
-      translationStrategy?: "NoUTF8EscapingWithSuffixes" | "UnderscoreEscapingWithSuffixes" | "NoTranslation" | "UnderscoreEscapingWithoutSuffixes";
+      translationStrategy?: "NoUTF8EscapingWithSuffixes" | "UnderscoreEscapingWithSuffixes" | "NoTranslation";
     };
     overrideHonorLabels?: boolean;
     overrideHonorTimestamps?: boolean;
@@ -9766,7 +9522,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       whenDeleted?: string;
       whenScaled?: string;
     };
-    podManagementPolicy?: "OrderedReady" | "Parallel";
     podMetadata?: {
       annotations?: {
         [key: string]: unknown;
@@ -9834,7 +9589,7 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       azureAd?: {
         cloud?: "AzureChina" | "AzureGovernment" | "AzurePublic";
         managedIdentity?: {
-          clientId?: string;
+          clientId: string;
         };
         oauth?: {
           clientId: string;
@@ -9845,13 +9600,8 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
           };
           tenantId: string;
         };
-        scope?: string;
         sdk?: {
           tenantId?: string;
-        };
-        workloadIdentity?: {
-          clientId: string;
-          tenantId: string;
         };
       };
       basicAuth?: {
@@ -9973,7 +9723,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
           name?: string;
           optional?: boolean;
         };
-        externalId?: string;
         profile?: string;
         region?: string;
         roleArn?: string;
@@ -9982,7 +9731,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
           name?: string;
           optional?: boolean;
         };
-        useFIPSSTSEndpoint?: boolean;
       };
       tlsConfig?: {
         ca?: {
@@ -10053,7 +9801,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       goGC?: number;
     };
     sampleLimit?: number;
-    schedulerName?: string;
     scrapeClasses?: {
       attachMetadata?: {
         node?: boolean;
@@ -10150,7 +9897,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
     };
     scrapeFailureLogFile?: string;
     scrapeInterval?: string;
-    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     scrapeTimeout?: string;
     secrets?: string[];
@@ -10211,13 +9957,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       };
     };
     serviceName?: string;
-    shardingStrategy?: {
-      mode?: "Address" | "Topology";
-      topology?: {
-        externalLabelName?: string;
-        values?: string[];
-      };
-    };
     shards?: number;
     storage?: {
       disableMountSubPath?: boolean;
@@ -10374,8 +10113,8 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       whenUnsatisfiable: string;
     }[];
     tracingConfig?: {
-      clientType?: "http" | "grpc" | "HTTP" | "GRPC";
-      compression?: "gzip" | "Gzip";
+      clientType?: "http" | "grpc";
+      compression?: "gzip";
       endpoint: string;
       headers?: {
         [key: string]: unknown;
@@ -10424,13 +10163,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
     };
     tsdb?: {
       outOfOrderTimeWindow?: string;
-      staleSeriesCompactionThreshold?: any;
-    };
-    updateStrategy?: {
-      rollingUpdate?: {
-        maxUnavailable?: any;
-      };
-      type: "OnDelete" | "RollingUpdate";
     };
     version?: string;
     volumeMounts?: {
@@ -10687,17 +10419,6 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
               };
             }[];
           };
-          podCertificate?: {
-            certificateChainPath?: string;
-            credentialBundlePath?: string;
-            keyPath?: string;
-            keyType: string;
-            maxExpirationSeconds?: number;
-            signerName: string;
-            userAnnotations?: {
-              [key: string]: unknown;
-            };
-          };
           secret?: {
             items?: {
               key: string;
@@ -10831,7 +10552,7 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
     };
   };
   status?: {
-    availableReplicas?: number;
+    availableReplicas: number;
     conditions?: {
       lastTransitionTime: string;
       message?: string;
@@ -10840,8 +10561,8 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       status: string;
       type: string;
     }[];
-    paused?: boolean;
-    replicas?: number;
+    paused: boolean;
+    replicas: number;
     selector?: string;
     shardStatuses?: {
       availableReplicas: number;
@@ -10851,8 +10572,8 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgent {
       updatedReplicas: number;
     }[];
     shards?: number;
-    unavailableReplicas?: number;
-    updatedReplicas?: number;
+    unavailableReplicas: number;
+    updatedReplicas: number;
   };
 }
 /* com.coreos.monitoring.v1alpha1.PrometheusAgentList */
@@ -10863,6 +10584,9 @@ export interface MonitoringCoreosComV1alpha1PrometheusAgentList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* com.coreos.monitoring.v1alpha1.ScrapeConfig */
+/* ScrapeConfig defines a namespaced Prometheus scrape_config to be aggregated across
+multiple namespaces into the Prometheus configuration. */
 export interface MonitoringCoreosComV1alpha1ScrapeConfig {
   apiVersion?: string;
   kind?: string;
@@ -10877,7 +10601,7 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       type?: string;
     };
     azureSDConfigs?: {
-      authenticationMethod?: "OAuth" | "ManagedIdentity" | "SDK" | "WorkloadIdentity";
+      authenticationMethod?: "OAuth" | "ManagedIdentity" | "SDK";
       authorization?: {
         credentials?: {
           key: string;
@@ -11031,7 +10755,6 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
         optional?: boolean;
       };
     };
-    bodySizeLimit?: string;
     consulSDConfigs?: {
       allowStale?: boolean;
       authorization?: {
@@ -11058,7 +10781,6 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       enableHTTP2?: boolean;
       filter?: string;
       followRedirects?: boolean;
-      healthFilter?: string;
       namespace?: string;
       noProxy?: string;
       nodeMeta?: {
@@ -11137,7 +10859,7 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       proxyFromEnvironment?: boolean;
       proxyUrl?: string;
       refreshInterval?: string;
-      scheme?: "http" | "https" | "HTTP" | "HTTPS";
+      scheme?: "HTTP" | "HTTPS";
       server: string;
       services?: string[];
       tagSeparator?: string;
@@ -13028,7 +12750,7 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       };
       endpoint?: string;
       refreshInterval?: string;
-      service: "VPS" | "DedicatedServer";
+      service: string;
     }[];
     params?: {
       [key: string]: unknown;
@@ -13242,11 +12964,10 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       };
       zone?: string;
     }[];
-    scheme?: "http" | "https" | "HTTP" | "HTTPS";
+    scheme?: "HTTP" | "HTTPS";
     scrapeClass?: string;
     scrapeClassicHistograms?: boolean;
     scrapeInterval?: string;
-    scrapeNativeHistograms?: boolean;
     scrapeProtocols?: ("PrometheusProto" | "OpenMetricsText0.0.1" | "OpenMetricsText1.0.0" | "PrometheusText0.0.4" | "PrometheusText1.0.0")[];
     scrapeTimeout?: string;
     staticConfigs?: {
@@ -13292,22 +13013,6 @@ export interface MonitoringCoreosComV1alpha1ScrapeConfig {
       serverName?: string;
     };
     trackTimestampsStaleness?: boolean;
-  };
-  status?: {
-    bindings?: {
-      conditions?: {
-        lastTransitionTime: string;
-        message?: string;
-        observedGeneration?: number;
-        reason?: string;
-        status: string;
-        type: "Accepted";
-      }[];
-      group: "monitoring.coreos.com";
-      name: string;
-      namespace: string;
-      resource: "prometheuses" | "prometheusagents" | "thanosrulers" | "alertmanagers";
-    }[];
   };
 }
 /* com.coreos.monitoring.v1alpha1.ScrapeConfigList */
@@ -13501,6 +13206,7 @@ export interface NetworkingInternalKnativeDevV1alpha1ClusterDomainClaimList {
 by a backend. An Ingress can be configured to give services externally-reachable URLs, load
 balance traffic, offer name based virtual hosting, etc.
 
+
 This is heavily based on K8s Ingress https://godoc.org/k8s.io/api/networking/v1beta1#Ingress
 which some highlighted modifications. */
 export interface NetworkingInternalKnativeDevV1alpha1Ingress {
@@ -13684,7 +13390,7 @@ export interface ServingKnativeDevV1Configuration {
             };
             failureThreshold?: number;
             grpc?: {
-              port?: number;
+              port: number;
               service?: string;
             };
             httpGet?: {
@@ -13708,7 +13414,7 @@ export interface ServingKnativeDevV1Configuration {
           };
           name?: string;
           ports?: {
-            containerPort?: number;
+            containerPort: number;
             name?: string;
             protocol?: string;
           }[];
@@ -13718,7 +13424,7 @@ export interface ServingKnativeDevV1Configuration {
             };
             failureThreshold?: number;
             grpc?: {
-              port?: number;
+              port: number;
               service?: string;
             };
             httpGet?: {
@@ -13741,6 +13447,9 @@ export interface ServingKnativeDevV1Configuration {
             timeoutSeconds?: number;
           };
           resources?: {
+            claims?: {
+              name: string;
+            }[];
             limits?: {
               [key: string]: unknown;
             };
@@ -13754,7 +13463,6 @@ export interface ServingKnativeDevV1Configuration {
               add?: string[];
               drop?: string[];
             };
-            privileged?: boolean;
             readOnlyRootFilesystem?: boolean;
             runAsGroup?: number;
             runAsNonRoot?: boolean;
@@ -13770,7 +13478,7 @@ export interface ServingKnativeDevV1Configuration {
             };
             failureThreshold?: number;
             grpc?: {
-              port?: number;
+              port: number;
               service?: string;
             };
             httpGet?: {
@@ -13796,7 +13504,6 @@ export interface ServingKnativeDevV1Configuration {
           terminationMessagePolicy?: string;
           volumeMounts?: {
             mountPath: string;
-            mountPropagation?: string;
             name: string;
             readOnly?: boolean;
             subPath?: string;
@@ -13807,17 +13514,12 @@ export interface ServingKnativeDevV1Configuration {
         dnsPolicy?: string;
         enableServiceLinks?: boolean;
         hostAliases?: any[];
-        hostIPC?: boolean;
-        hostNetwork?: boolean;
-        hostPID?: boolean;
         idleTimeoutSeconds?: number;
         imagePullSecrets?: {
           name?: string;
         }[];
         initContainers?: any[];
-        nodeSelector?: {
-          [key: string]: unknown;
-        };
+        nodeSelector?: any;
         priorityClassName?: string;
         responseStartTimeoutSeconds?: number;
         runtimeClassName?: string;
@@ -13839,10 +13541,7 @@ export interface ServingKnativeDevV1Configuration {
             name?: string;
             optional?: boolean;
           };
-          csi?: any;
           emptyDir?: any;
-          hostPath?: any;
-          image?: any;
           name: string;
           persistentVolumeClaim?: any;
           projected?: {
@@ -13932,6 +13631,7 @@ export interface ServingKnativeDevV1ConfigurationList {
 references a container image. Revisions are created by updates to a
 Configuration.
 
+
 See also: https://github.com/knative/serving/blob/main/docs/spec/overview.md#revision */
 export interface ServingKnativeDevV1Revision {
   apiVersion?: string;
@@ -13981,7 +13681,7 @@ export interface ServingKnativeDevV1Revision {
         };
         failureThreshold?: number;
         grpc?: {
-          port?: number;
+          port: number;
           service?: string;
         };
         httpGet?: {
@@ -14005,7 +13705,7 @@ export interface ServingKnativeDevV1Revision {
       };
       name?: string;
       ports?: {
-        containerPort?: number;
+        containerPort: number;
         name?: string;
         protocol?: string;
       }[];
@@ -14015,7 +13715,7 @@ export interface ServingKnativeDevV1Revision {
         };
         failureThreshold?: number;
         grpc?: {
-          port?: number;
+          port: number;
           service?: string;
         };
         httpGet?: {
@@ -14038,6 +13738,9 @@ export interface ServingKnativeDevV1Revision {
         timeoutSeconds?: number;
       };
       resources?: {
+        claims?: {
+          name: string;
+        }[];
         limits?: {
           [key: string]: unknown;
         };
@@ -14051,7 +13754,6 @@ export interface ServingKnativeDevV1Revision {
           add?: string[];
           drop?: string[];
         };
-        privileged?: boolean;
         readOnlyRootFilesystem?: boolean;
         runAsGroup?: number;
         runAsNonRoot?: boolean;
@@ -14067,7 +13769,7 @@ export interface ServingKnativeDevV1Revision {
         };
         failureThreshold?: number;
         grpc?: {
-          port?: number;
+          port: number;
           service?: string;
         };
         httpGet?: {
@@ -14093,7 +13795,6 @@ export interface ServingKnativeDevV1Revision {
       terminationMessagePolicy?: string;
       volumeMounts?: {
         mountPath: string;
-        mountPropagation?: string;
         name: string;
         readOnly?: boolean;
         subPath?: string;
@@ -14104,17 +13805,12 @@ export interface ServingKnativeDevV1Revision {
     dnsPolicy?: string;
     enableServiceLinks?: boolean;
     hostAliases?: any[];
-    hostIPC?: boolean;
-    hostNetwork?: boolean;
-    hostPID?: boolean;
     idleTimeoutSeconds?: number;
     imagePullSecrets?: {
       name?: string;
     }[];
     initContainers?: any[];
-    nodeSelector?: {
-      [key: string]: unknown;
-    };
+    nodeSelector?: any;
     priorityClassName?: string;
     responseStartTimeoutSeconds?: number;
     runtimeClassName?: string;
@@ -14136,10 +13832,7 @@ export interface ServingKnativeDevV1Revision {
         name?: string;
         optional?: boolean;
       };
-      csi?: any;
       emptyDir?: any;
-      hostPath?: any;
-      image?: any;
       name: string;
       persistentVolumeClaim?: any;
       projected?: {
@@ -14299,8 +13992,10 @@ team resource ownership. Service acts only as an orchestrator of the
 underlying Routes and Configurations (much as a kubernetes Deployment
 orchestrates ReplicaSets), and its usage is optional but recommended.
 
+
 The Service's controller will track the statuses of its owned Configuration
 and Route, reflecting their statuses and conditions as its own.
+
 
 See also: https://github.com/knative/serving/blob/main/docs/spec/overview.md#service */
 export interface ServingKnativeDevV1Service {
@@ -14354,7 +14049,7 @@ export interface ServingKnativeDevV1Service {
             };
             failureThreshold?: number;
             grpc?: {
-              port?: number;
+              port: number;
               service?: string;
             };
             httpGet?: {
@@ -14378,7 +14073,7 @@ export interface ServingKnativeDevV1Service {
           };
           name?: string;
           ports?: {
-            containerPort?: number;
+            containerPort: number;
             name?: string;
             protocol?: string;
           }[];
@@ -14388,7 +14083,7 @@ export interface ServingKnativeDevV1Service {
             };
             failureThreshold?: number;
             grpc?: {
-              port?: number;
+              port: number;
               service?: string;
             };
             httpGet?: {
@@ -14411,6 +14106,9 @@ export interface ServingKnativeDevV1Service {
             timeoutSeconds?: number;
           };
           resources?: {
+            claims?: {
+              name: string;
+            }[];
             limits?: {
               [key: string]: unknown;
             };
@@ -14424,7 +14122,6 @@ export interface ServingKnativeDevV1Service {
               add?: string[];
               drop?: string[];
             };
-            privileged?: boolean;
             readOnlyRootFilesystem?: boolean;
             runAsGroup?: number;
             runAsNonRoot?: boolean;
@@ -14440,7 +14137,7 @@ export interface ServingKnativeDevV1Service {
             };
             failureThreshold?: number;
             grpc?: {
-              port?: number;
+              port: number;
               service?: string;
             };
             httpGet?: {
@@ -14466,7 +14163,6 @@ export interface ServingKnativeDevV1Service {
           terminationMessagePolicy?: string;
           volumeMounts?: {
             mountPath: string;
-            mountPropagation?: string;
             name: string;
             readOnly?: boolean;
             subPath?: string;
@@ -14477,17 +14173,12 @@ export interface ServingKnativeDevV1Service {
         dnsPolicy?: string;
         enableServiceLinks?: boolean;
         hostAliases?: any[];
-        hostIPC?: boolean;
-        hostNetwork?: boolean;
-        hostPID?: boolean;
         idleTimeoutSeconds?: number;
         imagePullSecrets?: {
           name?: string;
         }[];
         initContainers?: any[];
-        nodeSelector?: {
-          [key: string]: unknown;
-        };
+        nodeSelector?: any;
         priorityClassName?: string;
         responseStartTimeoutSeconds?: number;
         runtimeClassName?: string;
@@ -14509,10 +14200,7 @@ export interface ServingKnativeDevV1Service {
             name?: string;
             optional?: boolean;
           };
-          csi?: any;
           emptyDir?: any;
-          hostPath?: any;
-          image?: any;
           name: string;
           persistentVolumeClaim?: any;
           projected?: {
@@ -14978,6 +14666,12 @@ export interface TektonDevV1PipelineRun {
               apiVersion?: string;
               fieldPath: string;
             };
+            fileKeyRef?: {
+              key: string;
+              optional?: boolean;
+              path: string;
+              volumeName: string;
+            };
             resourceFieldRef?: {
               containerName?: string;
               divisor?: any;
@@ -14995,6 +14689,7 @@ export interface TektonDevV1PipelineRun {
           ip: string;
         }[];
         hostNetwork?: boolean;
+        hostUsers?: boolean;
         imagePullSecrets?: {
           name?: string;
         }[];
@@ -15093,6 +14788,12 @@ export interface TektonDevV1PipelineRun {
               apiVersion?: string;
               fieldPath: string;
             };
+            fileKeyRef?: {
+              key: string;
+              optional?: boolean;
+              path: string;
+              volumeName: string;
+            };
             resourceFieldRef?: {
               containerName?: string;
               divisor?: any;
@@ -15110,6 +14811,7 @@ export interface TektonDevV1PipelineRun {
           ip: string;
         }[];
         hostNetwork?: boolean;
+        hostUsers?: boolean;
         imagePullSecrets?: {
           name?: string;
         }[];
@@ -15229,6 +14931,17 @@ export interface TektonDevV1PipelineRun {
               };
             }[];
           };
+          podCertificate?: {
+            certificateChainPath?: string;
+            credentialBundlePath?: string;
+            keyPath?: string;
+            keyType: string;
+            maxExpirationSeconds?: number;
+            signerName: string;
+            userAnnotations?: {
+              [key: string]: unknown;
+            };
+          };
           secret?: {
             items?: {
               key: string;
@@ -15303,6 +15016,8 @@ export interface TektonDevV1PipelineRun {
         enableParamEnum?: boolean;
         enableProvenanceInStatus?: boolean;
         enableStepActions?: boolean;
+        enableTektonOCIBundles?: boolean;
+        enableTerminationMessageCompression?: boolean;
         enableWaitExponentialBackoff?: boolean;
         enforceNonfalsifiability?: string;
         maxResultSize?: number;
@@ -15409,6 +15124,12 @@ export interface TektonDevV1Task {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -15479,6 +15200,7 @@ export interface TektonDevV1Task {
             port: any;
           };
         };
+        stopSignal?: string;
       };
       livenessProbe?: {
         exec?: {
@@ -15662,6 +15384,12 @@ export interface TektonDevV1Task {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -15763,6 +15491,12 @@ export interface TektonDevV1Task {
           fieldRef?: {
             apiVersion?: string;
             fieldPath: string;
+          };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
           };
           resourceFieldRef?: {
             containerName?: string;
@@ -15953,6 +15687,12 @@ export interface TektonDevV1TaskRun {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -15970,6 +15710,7 @@ export interface TektonDevV1TaskRun {
         ip: string;
       }[];
       hostNetwork?: boolean;
+      hostUsers?: boolean;
       imagePullSecrets?: {
         name?: string;
       }[];
@@ -16128,6 +15869,17 @@ export interface TektonDevV1TaskRun {
               };
             }[];
           };
+          podCertificate?: {
+            certificateChainPath?: string;
+            credentialBundlePath?: string;
+            keyPath?: string;
+            keyType: string;
+            maxExpirationSeconds?: number;
+            signerName: string;
+            userAnnotations?: {
+              [key: string]: unknown;
+            };
+          };
           secret?: {
             items?: {
               key: string;
@@ -16210,6 +15962,8 @@ export interface TektonDevV1TaskRun {
         enableParamEnum?: boolean;
         enableProvenanceInStatus?: boolean;
         enableStepActions?: boolean;
+        enableTektonOCIBundles?: boolean;
+        enableTerminationMessageCompression?: boolean;
         enableWaitExponentialBackoff?: boolean;
         enforceNonfalsifiability?: string;
         maxResultSize?: number;
@@ -16299,6 +16053,8 @@ export interface TektonDevV1TaskRun {
           enableParamEnum?: boolean;
           enableProvenanceInStatus?: boolean;
           enableStepActions?: boolean;
+          enableTektonOCIBundles?: boolean;
+          enableTerminationMessageCompression?: boolean;
           enableWaitExponentialBackoff?: boolean;
           enforceNonfalsifiability?: string;
           maxResultSize?: number;
@@ -16391,6 +16147,12 @@ export interface TektonDevV1TaskRun {
               apiVersion?: string;
               fieldPath: string;
             };
+            fileKeyRef?: {
+              key: string;
+              optional?: boolean;
+              path: string;
+              volumeName: string;
+            };
             resourceFieldRef?: {
               containerName?: string;
               divisor?: any;
@@ -16461,6 +16223,7 @@ export interface TektonDevV1TaskRun {
               port: any;
             };
           };
+          stopSignal?: string;
         };
         livenessProbe?: {
           exec?: {
@@ -16644,6 +16407,12 @@ export interface TektonDevV1TaskRun {
               apiVersion?: string;
               fieldPath: string;
             };
+            fileKeyRef?: {
+              key: string;
+              optional?: boolean;
+              path: string;
+              volumeName: string;
+            };
             resourceFieldRef?: {
               containerName?: string;
               divisor?: any;
@@ -16745,6 +16514,12 @@ export interface TektonDevV1TaskRun {
             fieldRef?: {
               apiVersion?: string;
               fieldPath: string;
+            };
+            fileKeyRef?: {
+              key: string;
+              optional?: boolean;
+              path: string;
+              volumeName: string;
             };
             resourceFieldRef?: {
               containerName?: string;
@@ -16901,6 +16676,12 @@ export interface TektonDevV1alpha1StepAction {
         fieldRef?: {
           apiVersion?: string;
           fieldPath: string;
+        };
+        fileKeyRef?: {
+          key: string;
+          optional?: boolean;
+          path: string;
+          volumeName: string;
         };
         resourceFieldRef?: {
           containerName?: string;
@@ -17198,9 +16979,7 @@ export interface TektonDevV1beta1CustomRunList {
   metadata?: ListMeta;
 }
 /* dev.tekton.v1beta1.Pipeline */
-/* Pipeline describes a list of Tasks to execute. It expresses how outputs
-of tasks feed into inputs of subsequent tasks.
-
+/* Pipeline
 Deprecated: Please use v1.Pipeline instead. */
 export interface TektonDevV1beta1Pipeline {
   apiVersion?: string;
@@ -17388,12 +17167,7 @@ export interface TektonDevV1beta1PipelineList {
   metadata?: ListMeta;
 }
 /* dev.tekton.v1beta1.PipelineRun */
-/* PipelineRun represents a single execution of a Pipeline. PipelineRuns are how
-the graph of Tasks declared in a Pipeline are executed; they specify inputs
-to Pipelines such as parameter values and capture operational aspects of the
-Tasks execution such as service account and tolerations. Creating a
-PipelineRun creates TaskRuns for Tasks in the referenced Pipeline.
-
+/* PipelineRun
 Deprecated: Please use v1.PipelineRun instead. */
 export interface TektonDevV1beta1PipelineRun {
   apiVersion?: string;
@@ -17442,6 +17216,12 @@ export interface TektonDevV1beta1PipelineRun {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -17459,6 +17239,7 @@ export interface TektonDevV1beta1PipelineRun {
         ip: string;
       }[];
       hostNetwork?: boolean;
+      hostUsers?: boolean;
       imagePullSecrets?: {
         name?: string;
       }[];
@@ -17597,6 +17378,12 @@ export interface TektonDevV1beta1PipelineRun {
               apiVersion?: string;
               fieldPath: string;
             };
+            fileKeyRef?: {
+              key: string;
+              optional?: boolean;
+              path: string;
+              volumeName: string;
+            };
             resourceFieldRef?: {
               containerName?: string;
               divisor?: any;
@@ -17614,6 +17401,7 @@ export interface TektonDevV1beta1PipelineRun {
           ip: string;
         }[];
         hostNetwork?: boolean;
+        hostUsers?: boolean;
         imagePullSecrets?: {
           name?: string;
         }[];
@@ -17735,6 +17523,17 @@ export interface TektonDevV1beta1PipelineRun {
               };
             }[];
           };
+          podCertificate?: {
+            certificateChainPath?: string;
+            credentialBundlePath?: string;
+            keyPath?: string;
+            keyType: string;
+            maxExpirationSeconds?: number;
+            signerName: string;
+            userAnnotations?: {
+              [key: string]: unknown;
+            };
+          };
           secret?: {
             items?: {
               key: string;
@@ -17820,6 +17619,8 @@ export interface TektonDevV1beta1PipelineRun {
         enableParamEnum?: boolean;
         enableProvenanceInStatus?: boolean;
         enableStepActions?: boolean;
+        enableTektonOCIBundles?: boolean;
+        enableTerminationMessageCompression?: boolean;
         enableWaitExponentialBackoff?: boolean;
         enforceNonfalsifiability?: string;
         maxResultSize?: number;
@@ -17870,8 +17671,7 @@ export interface TektonDevV1beta1PipelineRunList {
   metadata?: ListMeta;
 }
 /* dev.tekton.v1beta1.StepAction */
-/* StepAction represents the actionable components of Step.
-The Step can only reference it from the cluster or using remote resolution. */
+/* StepAction */
 export interface TektonDevV1beta1StepAction {
   apiVersion?: string;
   kind?: string;
@@ -17892,6 +17692,12 @@ export interface TektonDevV1beta1StepAction {
         fieldRef?: {
           apiVersion?: string;
           fieldPath: string;
+        };
+        fileKeyRef?: {
+          key: string;
+          optional?: boolean;
+          path: string;
+          volumeName: string;
         };
         resourceFieldRef?: {
           containerName?: string;
@@ -17979,11 +17785,7 @@ export interface TektonDevV1beta1StepActionList {
   metadata?: ListMeta;
 }
 /* dev.tekton.v1beta1.Task */
-/* Task represents a collection of sequential steps that are run as part of a
-Pipeline using a set of inputs and producing a set of outputs. Tasks execute
-when TaskRuns are created that provide the input parameters and resources and
-output resources the Task requires.
-
+/* Task
 Deprecated: Please use v1.Task instead. */
 export interface TektonDevV1beta1Task {
   apiVersion?: string;
@@ -18042,6 +17844,12 @@ export interface TektonDevV1beta1Task {
           fieldRef?: {
             apiVersion?: string;
             fieldPath: string;
+          };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
           };
           resourceFieldRef?: {
             containerName?: string;
@@ -18113,6 +17921,7 @@ export interface TektonDevV1beta1Task {
             port: any;
           };
         };
+        stopSignal?: string;
       };
       livenessProbe?: {
         exec?: {
@@ -18296,6 +18105,12 @@ export interface TektonDevV1beta1Task {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -18366,6 +18181,7 @@ export interface TektonDevV1beta1Task {
             port: any;
           };
         };
+        stopSignal?: string;
       };
       livenessProbe?: {
         exec?: {
@@ -18396,7 +18212,7 @@ export interface TektonDevV1beta1Task {
         terminationGracePeriodSeconds?: number;
         timeoutSeconds?: number;
       };
-      name: string;
+      name?: string;
       ports?: {
         containerPort: number;
         hostIP?: string;
@@ -18544,6 +18360,12 @@ export interface TektonDevV1beta1Task {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -18614,6 +18436,7 @@ export interface TektonDevV1beta1Task {
             port: any;
           };
         };
+        stopSignal?: string;
       };
       livenessProbe?: {
         exec?: {
@@ -18833,10 +18656,7 @@ export interface TektonDevV1beta1TaskList {
   metadata?: ListMeta;
 }
 /* dev.tekton.v1beta1.TaskRun */
-/* TaskRun represents a single execution of a Task. TaskRuns are how the steps
-specified in a Task are executed; they specify the parameters and resources
-used to run the steps in a Task.
-
+/* TaskRun
 Deprecated: Please use v1.TaskRun instead. */
 export interface TektonDevV1beta1TaskRun {
   apiVersion?: string;
@@ -18892,6 +18712,12 @@ export interface TektonDevV1beta1TaskRun {
             apiVersion?: string;
             fieldPath: string;
           };
+          fileKeyRef?: {
+            key: string;
+            optional?: boolean;
+            path: string;
+            volumeName: string;
+          };
           resourceFieldRef?: {
             containerName?: string;
             divisor?: any;
@@ -18909,6 +18735,7 @@ export interface TektonDevV1beta1TaskRun {
         ip: string;
       }[];
       hostNetwork?: boolean;
+      hostUsers?: boolean;
       imagePullSecrets?: {
         name?: string;
       }[];
@@ -19112,6 +18939,17 @@ export interface TektonDevV1beta1TaskRun {
               };
             }[];
           };
+          podCertificate?: {
+            certificateChainPath?: string;
+            credentialBundlePath?: string;
+            keyPath?: string;
+            keyType: string;
+            maxExpirationSeconds?: number;
+            signerName: string;
+            userAnnotations?: {
+              [key: string]: unknown;
+            };
+          };
           secret?: {
             items?: {
               key: string;
@@ -19188,6 +19026,8 @@ export interface TektonDevV1beta1TaskRun {
         enableParamEnum?: boolean;
         enableProvenanceInStatus?: boolean;
         enableStepActions?: boolean;
+        enableTektonOCIBundles?: boolean;
+        enableTerminationMessageCompression?: boolean;
         enableWaitExponentialBackoff?: boolean;
         enforceNonfalsifiability?: string;
         maxResultSize?: number;
@@ -19285,6 +19125,8 @@ export interface TektonDevV1beta1TaskRun {
           enableParamEnum?: boolean;
           enableProvenanceInStatus?: boolean;
           enableStepActions?: boolean;
+          enableTektonOCIBundles?: boolean;
+          enableTerminationMessageCompression?: boolean;
           enableWaitExponentialBackoff?: boolean;
           enforceNonfalsifiability?: string;
           maxResultSize?: number;
@@ -19397,7 +19239,6 @@ export interface AcmeCertManagerIoV1Challenge {
           resourceGroupName: string;
           subscriptionID: string;
           tenantID?: string;
-          zoneType?: "AzurePublicZone" | "AzurePrivateZone";
         };
         cloudDNS?: {
           hostedZoneName?: string;
@@ -19427,7 +19268,6 @@ export interface AcmeCertManagerIoV1Challenge {
         };
         rfc2136?: {
           nameserver: string;
-          protocol?: "TCP" | "UDP";
           tsigAlgorithm?: string;
           tsigKeyName?: string;
           tsigSecretSecretRef?: {
@@ -19640,14 +19480,6 @@ export interface AcmeCertManagerIoV1Challenge {
                 [key: string]: unknown;
               };
               priorityClassName?: string;
-              resources?: {
-                limits?: {
-                  [key: string]: unknown;
-                };
-                requests?: {
-                  [key: string]: unknown;
-                };
-              };
               securityContext?: {
                 fsGroup?: number;
                 fsGroupChangePolicy?: string;
@@ -19860,14 +19692,6 @@ export interface AcmeCertManagerIoV1Challenge {
                 [key: string]: unknown;
               };
               priorityClassName?: string;
-              resources?: {
-                limits?: {
-                  [key: string]: unknown;
-                };
-                requests?: {
-                  [key: string]: unknown;
-                };
-              };
               securityContext?: {
                 fsGroup?: number;
                 fsGroupChangePolicy?: string;
@@ -19947,7 +19771,6 @@ export interface AcmeCertManagerIoV1Order {
       kind?: string;
       name: string;
     };
-    profile?: string;
     request: string;
   };
   status?: {
@@ -20061,7 +19884,6 @@ export interface CertManagerIoV1Certificate {
         [key: string]: unknown;
       };
     };
-    signatureAlgorithm?: "SHA256WithRSA" | "SHA384WithRSA" | "SHA512WithRSA" | "ECDSAWithSHA256" | "ECDSAWithSHA384" | "ECDSAWithSHA512" | "PureEd25519";
     subject?: {
       countries?: string[];
       localities?: string[];
@@ -20182,7 +20004,6 @@ export interface CertManagerIoV1ClusterIssuer {
         key?: string;
         name: string;
       };
-      profile?: string;
       server: string;
       skipTLSVerify?: boolean;
       solvers?: {
@@ -20225,7 +20046,6 @@ export interface CertManagerIoV1ClusterIssuer {
             resourceGroupName: string;
             subscriptionID: string;
             tenantID?: string;
-            zoneType?: "AzurePublicZone" | "AzurePrivateZone";
           };
           cloudDNS?: {
             hostedZoneName?: string;
@@ -20255,7 +20075,6 @@ export interface CertManagerIoV1ClusterIssuer {
           };
           rfc2136?: {
             nameserver: string;
-            protocol?: "TCP" | "UDP";
             tsigAlgorithm?: string;
             tsigKeyName?: string;
             tsigSecretSecretRef?: {
@@ -20468,14 +20287,6 @@ export interface CertManagerIoV1ClusterIssuer {
                   [key: string]: unknown;
                 };
                 priorityClassName?: string;
-                resources?: {
-                  limits?: {
-                    [key: string]: unknown;
-                  };
-                  requests?: {
-                    [key: string]: unknown;
-                  };
-                };
                 securityContext?: {
                   fsGroup?: number;
                   fsGroupChangePolicy?: string;
@@ -20688,14 +20499,6 @@ export interface CertManagerIoV1ClusterIssuer {
                   [key: string]: unknown;
                 };
                 priorityClassName?: string;
-                resources?: {
-                  limits?: {
-                    [key: string]: unknown;
-                  };
-                  requests?: {
-                    [key: string]: unknown;
-                  };
-                };
                 securityContext?: {
                   fsGroup?: number;
                   fsGroupChangePolicy?: string;
@@ -20797,7 +20600,6 @@ export interface CertManagerIoV1ClusterIssuer {
       namespace?: string;
       path: string;
       server: string;
-      serverName?: string;
     };
     venafi?: {
       cloud?: {
@@ -20873,7 +20675,6 @@ export interface CertManagerIoV1Issuer {
         key?: string;
         name: string;
       };
-      profile?: string;
       server: string;
       skipTLSVerify?: boolean;
       solvers?: {
@@ -20916,7 +20717,6 @@ export interface CertManagerIoV1Issuer {
             resourceGroupName: string;
             subscriptionID: string;
             tenantID?: string;
-            zoneType?: "AzurePublicZone" | "AzurePrivateZone";
           };
           cloudDNS?: {
             hostedZoneName?: string;
@@ -20946,7 +20746,6 @@ export interface CertManagerIoV1Issuer {
           };
           rfc2136?: {
             nameserver: string;
-            protocol?: "TCP" | "UDP";
             tsigAlgorithm?: string;
             tsigKeyName?: string;
             tsigSecretSecretRef?: {
@@ -21159,14 +20958,6 @@ export interface CertManagerIoV1Issuer {
                   [key: string]: unknown;
                 };
                 priorityClassName?: string;
-                resources?: {
-                  limits?: {
-                    [key: string]: unknown;
-                  };
-                  requests?: {
-                    [key: string]: unknown;
-                  };
-                };
                 securityContext?: {
                   fsGroup?: number;
                   fsGroupChangePolicy?: string;
@@ -21379,14 +21170,6 @@ export interface CertManagerIoV1Issuer {
                   [key: string]: unknown;
                 };
                 priorityClassName?: string;
-                resources?: {
-                  limits?: {
-                    [key: string]: unknown;
-                  };
-                  requests?: {
-                    [key: string]: unknown;
-                  };
-                };
                 securityContext?: {
                   fsGroup?: number;
                   fsGroupChangePolicy?: string;
@@ -21488,7 +21271,6 @@ export interface CertManagerIoV1Issuer {
       namespace?: string;
       path: string;
       server: string;
-      serverName?: string;
     };
     venafi?: {
       cloud?: {
@@ -21536,8 +21318,2517 @@ export interface CertManagerIoV1IssuerList {
   kind?: string;
   metadata?: ListMeta;
 }
+/* io.cilium.v2.CiliumCIDRGroup */
+/* CiliumCIDRGroup is a list of external CIDRs (i.e: CIDRs selecting peers
+outside the clusters) that can be referenced as a single entity from
+CiliumNetworkPolicies. */
+export interface CiliumIoV2CiliumCIDRGroup {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    externalCIDRs: string[];
+  };
+}
+/* io.cilium.v2.CiliumCIDRGroupList */
+/* CiliumCIDRGroupList is a list of CiliumCIDRGroup */
+export interface CiliumIoV2CiliumCIDRGroupList {
+  apiVersion?: string;
+  items: CiliumIoV2CiliumCIDRGroup[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2.CiliumClusterwideNetworkPolicy */
+/* CiliumClusterwideNetworkPolicy is a Kubernetes third-party resource with an
+modified version of CiliumNetworkPolicy which is cluster scoped rather than
+namespace scoped. */
+export interface CiliumIoV2CiliumClusterwideNetworkPolicy {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec?: {
+    description?: string;
+    egress?: {
+      authentication?: {
+        mode: "disabled" | "required" | "test-always-fail";
+      };
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toCIDR?: string[];
+      toCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      toEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      toFQDNs?: {
+        matchName?: string;
+        matchPattern?: string;
+      }[];
+      toGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      toNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toPorts?: {
+        listener?: {
+          envoyConfig: {
+            kind?: "CiliumEnvoyConfig" | "CiliumClusterwideEnvoyConfig";
+            name: string;
+          };
+          name: string;
+          priority?: number;
+        };
+        originatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+        rules?: {
+          dns?: {
+            matchName?: string;
+            matchPattern?: string;
+          }[];
+          http?: {
+            headerMatches?: {
+              mismatch?: "LOG" | "ADD" | "DELETE" | "REPLACE";
+              name: string;
+              secret?: {
+                name: string;
+                namespace?: string;
+              };
+              value?: string;
+            }[];
+            headers?: string[];
+            host?: string;
+            method?: string;
+            path?: string;
+          }[];
+          kafka?: {
+            apiKey?: string;
+            apiVersion?: string;
+            clientID?: string;
+            role?: "produce" | "consume";
+            topic?: string;
+          }[];
+          l7?: {
+            [key: string]: unknown;
+          }[];
+          l7proto?: string;
+        };
+        serverNames?: string[];
+        terminatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+      }[];
+      toRequires?: string[];
+      toServices?: {
+        k8sService?: {
+          namespace?: string;
+          serviceName?: string;
+        };
+        k8sServiceSelector?: {
+          namespace?: string;
+          selector: {
+            matchExpressions?: {
+              key: string;
+              operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      }[];
+    }[];
+    egressDeny?: {
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toCIDR?: string[];
+      toCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      toEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      toGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      toNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toPorts?: {
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+      }[];
+      toRequires?: string[];
+      toServices?: {
+        k8sService?: {
+          namespace?: string;
+          serviceName?: string;
+        };
+        k8sServiceSelector?: {
+          namespace?: string;
+          selector: {
+            matchExpressions?: {
+              key: string;
+              operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      }[];
+    }[];
+    enableDefaultDeny?: {
+      egress?: boolean;
+      ingress?: boolean;
+    };
+    endpointSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    ingress?: {
+      authentication?: {
+        mode: "disabled" | "required" | "test-always-fail";
+      };
+      fromCIDR?: string[];
+      fromCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      fromEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      fromGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      fromNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromRequires?: string[];
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toPorts?: {
+        listener?: {
+          envoyConfig: {
+            kind?: "CiliumEnvoyConfig" | "CiliumClusterwideEnvoyConfig";
+            name: string;
+          };
+          name: string;
+          priority?: number;
+        };
+        originatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+        rules?: {
+          dns?: {
+            matchName?: string;
+            matchPattern?: string;
+          }[];
+          http?: {
+            headerMatches?: {
+              mismatch?: "LOG" | "ADD" | "DELETE" | "REPLACE";
+              name: string;
+              secret?: {
+                name: string;
+                namespace?: string;
+              };
+              value?: string;
+            }[];
+            headers?: string[];
+            host?: string;
+            method?: string;
+            path?: string;
+          }[];
+          kafka?: {
+            apiKey?: string;
+            apiVersion?: string;
+            clientID?: string;
+            role?: "produce" | "consume";
+            topic?: string;
+          }[];
+          l7?: {
+            [key: string]: unknown;
+          }[];
+          l7proto?: string;
+        };
+        serverNames?: string[];
+        terminatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+      }[];
+    }[];
+    ingressDeny?: {
+      fromCIDR?: string[];
+      fromCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      fromEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      fromGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      fromNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromRequires?: string[];
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toPorts?: {
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+      }[];
+    }[];
+    labels?: {
+      key: string;
+      source?: string;
+      value?: string;
+    }[];
+    log?: {
+      value?: string;
+    };
+    nodeSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+  };
+  specs?: {
+    description?: string;
+    egress?: {
+      authentication?: {
+        mode: "disabled" | "required" | "test-always-fail";
+      };
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toCIDR?: string[];
+      toCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      toEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      toFQDNs?: {
+        matchName?: string;
+        matchPattern?: string;
+      }[];
+      toGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      toNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toPorts?: {
+        listener?: {
+          envoyConfig: {
+            kind?: "CiliumEnvoyConfig" | "CiliumClusterwideEnvoyConfig";
+            name: string;
+          };
+          name: string;
+          priority?: number;
+        };
+        originatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+        rules?: {
+          dns?: {
+            matchName?: string;
+            matchPattern?: string;
+          }[];
+          http?: {
+            headerMatches?: {
+              mismatch?: "LOG" | "ADD" | "DELETE" | "REPLACE";
+              name: string;
+              secret?: {
+                name: string;
+                namespace?: string;
+              };
+              value?: string;
+            }[];
+            headers?: string[];
+            host?: string;
+            method?: string;
+            path?: string;
+          }[];
+          kafka?: {
+            apiKey?: string;
+            apiVersion?: string;
+            clientID?: string;
+            role?: "produce" | "consume";
+            topic?: string;
+          }[];
+          l7?: {
+            [key: string]: unknown;
+          }[];
+          l7proto?: string;
+        };
+        serverNames?: string[];
+        terminatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+      }[];
+      toRequires?: string[];
+      toServices?: {
+        k8sService?: {
+          namespace?: string;
+          serviceName?: string;
+        };
+        k8sServiceSelector?: {
+          namespace?: string;
+          selector: {
+            matchExpressions?: {
+              key: string;
+              operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      }[];
+    }[];
+    egressDeny?: {
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toCIDR?: string[];
+      toCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      toEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      toGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      toNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toPorts?: {
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+      }[];
+      toRequires?: string[];
+      toServices?: {
+        k8sService?: {
+          namespace?: string;
+          serviceName?: string;
+        };
+        k8sServiceSelector?: {
+          namespace?: string;
+          selector: {
+            matchExpressions?: {
+              key: string;
+              operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      }[];
+    }[];
+    enableDefaultDeny?: {
+      egress?: boolean;
+      ingress?: boolean;
+    };
+    endpointSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    ingress?: {
+      authentication?: {
+        mode: "disabled" | "required" | "test-always-fail";
+      };
+      fromCIDR?: string[];
+      fromCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      fromEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      fromGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      fromNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromRequires?: string[];
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toPorts?: {
+        listener?: {
+          envoyConfig: {
+            kind?: "CiliumEnvoyConfig" | "CiliumClusterwideEnvoyConfig";
+            name: string;
+          };
+          name: string;
+          priority?: number;
+        };
+        originatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+        rules?: {
+          dns?: {
+            matchName?: string;
+            matchPattern?: string;
+          }[];
+          http?: {
+            headerMatches?: {
+              mismatch?: "LOG" | "ADD" | "DELETE" | "REPLACE";
+              name: string;
+              secret?: {
+                name: string;
+                namespace?: string;
+              };
+              value?: string;
+            }[];
+            headers?: string[];
+            host?: string;
+            method?: string;
+            path?: string;
+          }[];
+          kafka?: {
+            apiKey?: string;
+            apiVersion?: string;
+            clientID?: string;
+            role?: "produce" | "consume";
+            topic?: string;
+          }[];
+          l7?: {
+            [key: string]: unknown;
+          }[];
+          l7proto?: string;
+        };
+        serverNames?: string[];
+        terminatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+      }[];
+    }[];
+    ingressDeny?: {
+      fromCIDR?: string[];
+      fromCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      fromEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      fromGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      fromNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromRequires?: string[];
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toPorts?: {
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+      }[];
+    }[];
+    labels?: {
+      key: string;
+      source?: string;
+      value?: string;
+    }[];
+    log?: {
+      value?: string;
+    };
+    nodeSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+  }[];
+  status?: {
+    conditions?: {
+      lastTransitionTime?: string;
+      message?: string;
+      reason?: string;
+      status: string;
+      type: string;
+    }[];
+    derivativePolicies?: {
+      [key: string]: unknown;
+    };
+  };
+}
+/* io.cilium.v2.CiliumClusterwideNetworkPolicyList */
+/* CiliumClusterwideNetworkPolicyList is a list of CiliumClusterwideNetworkPolicy */
+export interface CiliumIoV2CiliumClusterwideNetworkPolicyList {
+  apiVersion?: string;
+  items: CiliumIoV2CiliumClusterwideNetworkPolicy[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2.CiliumEndpoint */
+/* CiliumEndpoint is the status of a Cilium policy rule. */
+export interface CiliumIoV2CiliumEndpoint {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  status?: {
+    controllers?: {
+      configuration?: {
+        "error-retry"?: boolean;
+        "error-retry-base"?: number;
+        interval?: number;
+      };
+      name?: string;
+      status?: {
+        "consecutive-failure-count"?: number;
+        "failure-count"?: number;
+        "last-failure-msg"?: string;
+        "last-failure-timestamp"?: string;
+        "last-success-timestamp"?: string;
+        "success-count"?: number;
+      };
+      uuid?: string;
+    }[];
+    encryption?: {
+      key?: number;
+    };
+    "external-identifiers"?: {
+      "cni-attachment-id"?: string;
+      "container-id"?: string;
+      "container-name"?: string;
+      "docker-endpoint-id"?: string;
+      "docker-network-id"?: string;
+      "k8s-namespace"?: string;
+      "k8s-pod-name"?: string;
+      "pod-name"?: string;
+    };
+    health?: {
+      bpf?: string;
+      connected?: boolean;
+      overallHealth?: string;
+      policy?: string;
+    };
+    id?: number;
+    identity?: {
+      id?: number;
+      labels?: string[];
+    };
+    log?: {
+      code?: string;
+      message?: string;
+      state?: string;
+      timestamp?: string;
+    }[];
+    "named-ports"?: {
+      name?: string;
+      port?: number;
+      protocol?: string;
+    }[];
+    networking?: {
+      addressing: {
+        ipv4?: string;
+        ipv6?: string;
+      }[];
+      node?: string;
+    };
+    policy?: {
+      egress?: {
+        adding?: {
+          "dest-port"?: number;
+          identity?: number;
+          "identity-labels"?: {
+            [key: string]: unknown;
+          };
+          protocol?: number;
+        }[];
+        allowed?: {
+          "dest-port"?: number;
+          identity?: number;
+          "identity-labels"?: {
+            [key: string]: unknown;
+          };
+          protocol?: number;
+        }[];
+        denied?: {
+          "dest-port"?: number;
+          identity?: number;
+          "identity-labels"?: {
+            [key: string]: unknown;
+          };
+          protocol?: number;
+        }[];
+        enforcing: boolean;
+        removing?: {
+          "dest-port"?: number;
+          identity?: number;
+          "identity-labels"?: {
+            [key: string]: unknown;
+          };
+          protocol?: number;
+        }[];
+        state?: string;
+      };
+      ingress?: {
+        adding?: {
+          "dest-port"?: number;
+          identity?: number;
+          "identity-labels"?: {
+            [key: string]: unknown;
+          };
+          protocol?: number;
+        }[];
+        allowed?: {
+          "dest-port"?: number;
+          identity?: number;
+          "identity-labels"?: {
+            [key: string]: unknown;
+          };
+          protocol?: number;
+        }[];
+        denied?: {
+          "dest-port"?: number;
+          identity?: number;
+          "identity-labels"?: {
+            [key: string]: unknown;
+          };
+          protocol?: number;
+        }[];
+        enforcing: boolean;
+        removing?: {
+          "dest-port"?: number;
+          identity?: number;
+          "identity-labels"?: {
+            [key: string]: unknown;
+          };
+          protocol?: number;
+        }[];
+        state?: string;
+      };
+    };
+    "service-account"?: string;
+    state?: "creating" | "waiting-for-identity" | "not-ready" | "waiting-to-regenerate" | "regenerating" | "restoring" | "ready" | "disconnecting" | "disconnected" | "invalid";
+  };
+}
+/* io.cilium.v2.CiliumEndpointList */
+/* CiliumEndpointList is a list of CiliumEndpoint */
+export interface CiliumIoV2CiliumEndpointList {
+  apiVersion?: string;
+  items: CiliumIoV2CiliumEndpoint[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2.CiliumIdentity */
+/* CiliumIdentity is a CRD that represents an identity managed by Cilium.
+It is intended as a backing store for identity allocation, acting as the
+global coordination backend, and can be used in place of a KVStore (such as
+etcd).
+The name of the CRD is the numeric identity and the labels on the CRD object
+are the kubernetes sourced labels seen by cilium. This is currently the
+only label source possible when running under kubernetes. Non-kubernetes
+labels are filtered but all labels, from all sources, are places in the
+SecurityLabels field. These also include the source and are used to define
+the identity.
+The labels under metav1.ObjectMeta can be used when searching for
+CiliumIdentity instances that include particular labels. This can be done
+with invocations such as:
+
+	kubectl get ciliumid -l 'foo=bar' */
+export interface CiliumIoV2CiliumIdentity {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  "security-labels": {
+    [key: string]: unknown;
+  };
+}
+/* io.cilium.v2.CiliumIdentityList */
+/* CiliumIdentityList is a list of CiliumIdentity */
+export interface CiliumIoV2CiliumIdentityList {
+  apiVersion?: string;
+  items: CiliumIoV2CiliumIdentity[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2.CiliumLoadBalancerIPPool */
+/* CiliumLoadBalancerIPPool is a Kubernetes third-party resource which
+is used to defined pools of IPs which the operator can use to to allocate
+and advertise IPs for Services of type LoadBalancer. */
+export interface CiliumIoV2CiliumLoadBalancerIPPool {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    allowFirstLastIPs?: "Yes" | "No";
+    blocks?: {
+      cidr?: string;
+      start?: string;
+      stop?: string;
+    }[];
+    disabled?: boolean;
+    serviceSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+  };
+}
+/* io.cilium.v2.CiliumLoadBalancerIPPoolList */
+/* CiliumLoadBalancerIPPoolList is a list of CiliumLoadBalancerIPPool */
+export interface CiliumIoV2CiliumLoadBalancerIPPoolList {
+  apiVersion?: string;
+  items: CiliumIoV2CiliumLoadBalancerIPPool[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2.CiliumNetworkPolicy */
+/* CiliumNetworkPolicy is a Kubernetes third-party resource with an extended
+version of NetworkPolicy. */
+export interface CiliumIoV2CiliumNetworkPolicy {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec?: {
+    description?: string;
+    egress?: {
+      authentication?: {
+        mode: "disabled" | "required" | "test-always-fail";
+      };
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toCIDR?: string[];
+      toCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      toEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      toFQDNs?: {
+        matchName?: string;
+        matchPattern?: string;
+      }[];
+      toGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      toNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toPorts?: {
+        listener?: {
+          envoyConfig: {
+            kind?: "CiliumEnvoyConfig" | "CiliumClusterwideEnvoyConfig";
+            name: string;
+          };
+          name: string;
+          priority?: number;
+        };
+        originatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+        rules?: {
+          dns?: {
+            matchName?: string;
+            matchPattern?: string;
+          }[];
+          http?: {
+            headerMatches?: {
+              mismatch?: "LOG" | "ADD" | "DELETE" | "REPLACE";
+              name: string;
+              secret?: {
+                name: string;
+                namespace?: string;
+              };
+              value?: string;
+            }[];
+            headers?: string[];
+            host?: string;
+            method?: string;
+            path?: string;
+          }[];
+          kafka?: {
+            apiKey?: string;
+            apiVersion?: string;
+            clientID?: string;
+            role?: "produce" | "consume";
+            topic?: string;
+          }[];
+          l7?: {
+            [key: string]: unknown;
+          }[];
+          l7proto?: string;
+        };
+        serverNames?: string[];
+        terminatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+      }[];
+      toRequires?: string[];
+      toServices?: {
+        k8sService?: {
+          namespace?: string;
+          serviceName?: string;
+        };
+        k8sServiceSelector?: {
+          namespace?: string;
+          selector: {
+            matchExpressions?: {
+              key: string;
+              operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      }[];
+    }[];
+    egressDeny?: {
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toCIDR?: string[];
+      toCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      toEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      toGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      toNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toPorts?: {
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+      }[];
+      toRequires?: string[];
+      toServices?: {
+        k8sService?: {
+          namespace?: string;
+          serviceName?: string;
+        };
+        k8sServiceSelector?: {
+          namespace?: string;
+          selector: {
+            matchExpressions?: {
+              key: string;
+              operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      }[];
+    }[];
+    enableDefaultDeny?: {
+      egress?: boolean;
+      ingress?: boolean;
+    };
+    endpointSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    ingress?: {
+      authentication?: {
+        mode: "disabled" | "required" | "test-always-fail";
+      };
+      fromCIDR?: string[];
+      fromCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      fromEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      fromGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      fromNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromRequires?: string[];
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toPorts?: {
+        listener?: {
+          envoyConfig: {
+            kind?: "CiliumEnvoyConfig" | "CiliumClusterwideEnvoyConfig";
+            name: string;
+          };
+          name: string;
+          priority?: number;
+        };
+        originatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+        rules?: {
+          dns?: {
+            matchName?: string;
+            matchPattern?: string;
+          }[];
+          http?: {
+            headerMatches?: {
+              mismatch?: "LOG" | "ADD" | "DELETE" | "REPLACE";
+              name: string;
+              secret?: {
+                name: string;
+                namespace?: string;
+              };
+              value?: string;
+            }[];
+            headers?: string[];
+            host?: string;
+            method?: string;
+            path?: string;
+          }[];
+          kafka?: {
+            apiKey?: string;
+            apiVersion?: string;
+            clientID?: string;
+            role?: "produce" | "consume";
+            topic?: string;
+          }[];
+          l7?: {
+            [key: string]: unknown;
+          }[];
+          l7proto?: string;
+        };
+        serverNames?: string[];
+        terminatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+      }[];
+    }[];
+    ingressDeny?: {
+      fromCIDR?: string[];
+      fromCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      fromEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      fromGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      fromNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromRequires?: string[];
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toPorts?: {
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+      }[];
+    }[];
+    labels?: {
+      key: string;
+      source?: string;
+      value?: string;
+    }[];
+    log?: {
+      value?: string;
+    };
+    nodeSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+  };
+  specs?: {
+    description?: string;
+    egress?: {
+      authentication?: {
+        mode: "disabled" | "required" | "test-always-fail";
+      };
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toCIDR?: string[];
+      toCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      toEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      toFQDNs?: {
+        matchName?: string;
+        matchPattern?: string;
+      }[];
+      toGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      toNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toPorts?: {
+        listener?: {
+          envoyConfig: {
+            kind?: "CiliumEnvoyConfig" | "CiliumClusterwideEnvoyConfig";
+            name: string;
+          };
+          name: string;
+          priority?: number;
+        };
+        originatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+        rules?: {
+          dns?: {
+            matchName?: string;
+            matchPattern?: string;
+          }[];
+          http?: {
+            headerMatches?: {
+              mismatch?: "LOG" | "ADD" | "DELETE" | "REPLACE";
+              name: string;
+              secret?: {
+                name: string;
+                namespace?: string;
+              };
+              value?: string;
+            }[];
+            headers?: string[];
+            host?: string;
+            method?: string;
+            path?: string;
+          }[];
+          kafka?: {
+            apiKey?: string;
+            apiVersion?: string;
+            clientID?: string;
+            role?: "produce" | "consume";
+            topic?: string;
+          }[];
+          l7?: {
+            [key: string]: unknown;
+          }[];
+          l7proto?: string;
+        };
+        serverNames?: string[];
+        terminatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+      }[];
+      toRequires?: string[];
+      toServices?: {
+        k8sService?: {
+          namespace?: string;
+          serviceName?: string;
+        };
+        k8sServiceSelector?: {
+          namespace?: string;
+          selector: {
+            matchExpressions?: {
+              key: string;
+              operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      }[];
+    }[];
+    egressDeny?: {
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toCIDR?: string[];
+      toCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      toEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      toGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      toNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      toPorts?: {
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+      }[];
+      toRequires?: string[];
+      toServices?: {
+        k8sService?: {
+          namespace?: string;
+          serviceName?: string;
+        };
+        k8sServiceSelector?: {
+          namespace?: string;
+          selector: {
+            matchExpressions?: {
+              key: string;
+              operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      }[];
+    }[];
+    enableDefaultDeny?: {
+      egress?: boolean;
+      ingress?: boolean;
+    };
+    endpointSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    ingress?: {
+      authentication?: {
+        mode: "disabled" | "required" | "test-always-fail";
+      };
+      fromCIDR?: string[];
+      fromCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      fromEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      fromGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      fromNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromRequires?: string[];
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toPorts?: {
+        listener?: {
+          envoyConfig: {
+            kind?: "CiliumEnvoyConfig" | "CiliumClusterwideEnvoyConfig";
+            name: string;
+          };
+          name: string;
+          priority?: number;
+        };
+        originatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+        rules?: {
+          dns?: {
+            matchName?: string;
+            matchPattern?: string;
+          }[];
+          http?: {
+            headerMatches?: {
+              mismatch?: "LOG" | "ADD" | "DELETE" | "REPLACE";
+              name: string;
+              secret?: {
+                name: string;
+                namespace?: string;
+              };
+              value?: string;
+            }[];
+            headers?: string[];
+            host?: string;
+            method?: string;
+            path?: string;
+          }[];
+          kafka?: {
+            apiKey?: string;
+            apiVersion?: string;
+            clientID?: string;
+            role?: "produce" | "consume";
+            topic?: string;
+          }[];
+          l7?: {
+            [key: string]: unknown;
+          }[];
+          l7proto?: string;
+        };
+        serverNames?: string[];
+        terminatingTLS?: {
+          certificate?: string;
+          privateKey?: string;
+          secret: {
+            name: string;
+            namespace?: string;
+          };
+          trustedCA?: string;
+        };
+      }[];
+    }[];
+    ingressDeny?: {
+      fromCIDR?: string[];
+      fromCIDRSet?: {
+        cidr?: string;
+        cidrGroupRef?: string;
+        cidrGroupSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        except?: string[];
+      }[];
+      fromEndpoints?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromEntities?: ("all" | "world" | "cluster" | "host" | "init" | "ingress" | "unmanaged" | "remote-node" | "health" | "none" | "kube-apiserver")[];
+      fromGroups?: {
+        aws?: {
+          labels?: {
+            [key: string]: unknown;
+          };
+          region?: string;
+          securityGroupsIds?: string[];
+          securityGroupsNames?: string[];
+        };
+      }[];
+      fromNodes?: {
+        matchExpressions?: {
+          key: string;
+          operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+          values?: string[];
+        }[];
+        matchLabels?: {
+          [key: string]: unknown;
+        };
+      }[];
+      fromRequires?: string[];
+      icmps?: {
+        fields?: {
+          family?: "IPv4" | "IPv6";
+          type: any;
+        }[];
+      }[];
+      toPorts?: {
+        ports?: {
+          endPort?: number;
+          port?: string;
+          protocol?: "TCP" | "UDP" | "SCTP" | "VRRP" | "IGMP" | "ANY";
+        }[];
+      }[];
+    }[];
+    labels?: {
+      key: string;
+      source?: string;
+      value?: string;
+    }[];
+    log?: {
+      value?: string;
+    };
+    nodeSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+  }[];
+  status?: {
+    conditions?: {
+      lastTransitionTime?: string;
+      message?: string;
+      reason?: string;
+      status: string;
+      type: string;
+    }[];
+    derivativePolicies?: {
+      [key: string]: unknown;
+    };
+  };
+}
+/* io.cilium.v2.CiliumNetworkPolicyList */
+/* CiliumNetworkPolicyList is a list of CiliumNetworkPolicy */
+export interface CiliumIoV2CiliumNetworkPolicyList {
+  apiVersion?: string;
+  items: CiliumIoV2CiliumNetworkPolicy[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2.CiliumNode */
+/* CiliumNode represents a node managed by Cilium. It contains a specification
+to control various node specific configuration aspects and a status section
+to represent the status of the node. */
+export interface CiliumIoV2CiliumNode {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    addresses?: {
+      ip?: string;
+      type?: string;
+    }[];
+    "alibaba-cloud"?: {
+      "availability-zone"?: string;
+      "cidr-block"?: string;
+      "instance-type"?: string;
+      "security-group-tags"?: {
+        [key: string]: unknown;
+      };
+      "security-groups"?: string[];
+      "vpc-id"?: string;
+      "vswitch-tags"?: {
+        [key: string]: unknown;
+      };
+      vswitches?: string[];
+    };
+    azure?: {
+      "interface-name"?: string;
+    };
+    bootid?: string;
+    encryption?: {
+      key?: number;
+    };
+    eni?: {
+      "availability-zone"?: string;
+      "delete-on-termination"?: boolean;
+      "disable-prefix-delegation"?: boolean;
+      "exclude-interface-tags"?: {
+        [key: string]: unknown;
+      };
+      "first-interface-index"?: number;
+      "instance-id"?: string;
+      "instance-type"?: string;
+      "max-above-watermark"?: number;
+      "min-allocate"?: number;
+      "node-subnet-id"?: string;
+      "pre-allocate"?: number;
+      "security-group-tags"?: {
+        [key: string]: unknown;
+      };
+      "security-groups"?: string[];
+      "subnet-ids"?: string[];
+      "subnet-tags"?: {
+        [key: string]: unknown;
+      };
+      "use-primary-address"?: boolean;
+      "vpc-id"?: string;
+    };
+    health?: {
+      ipv4?: string;
+      ipv6?: string;
+    };
+    ingress?: {
+      ipv4?: string;
+      ipv6?: string;
+    };
+    "instance-id"?: string;
+    ipam?: {
+      "ipv6-pool"?: {
+        [key: string]: unknown;
+      };
+      "max-above-watermark"?: number;
+      "max-allocate"?: number;
+      "min-allocate"?: number;
+      podCIDRs?: string[];
+      pool?: {
+        [key: string]: unknown;
+      };
+      pools?: {
+        allocated?: {
+          cidrs?: string[];
+          pool: string;
+        }[];
+        requested?: {
+          needed?: {
+            "ipv4-addrs"?: number;
+            "ipv6-addrs"?: number;
+          };
+          pool: string;
+        }[];
+      };
+      "pre-allocate"?: number;
+      "static-ip-tags"?: {
+        [key: string]: unknown;
+      };
+    };
+    nodeidentity?: number;
+  };
+  status?: {
+    "alibaba-cloud"?: {
+      enis?: {
+        [key: string]: unknown;
+      };
+    };
+    azure?: {
+      interfaces?: {
+        GatewayIP?: string;
+        addresses?: {
+          ip?: string;
+          state?: string;
+          subnet?: string;
+        }[];
+        cidr?: string;
+        gateway?: string;
+        id?: string;
+        mac?: string;
+        name?: string;
+        "security-group"?: string;
+        state?: string;
+      }[];
+    };
+    eni?: {
+      enis?: {
+        [key: string]: unknown;
+      };
+    };
+    ipam?: {
+      "assigned-static-ip"?: string;
+      "ipv6-used"?: {
+        [key: string]: unknown;
+      };
+      "operator-status"?: {
+        error?: string;
+      };
+      "pod-cidrs"?: {
+        [key: string]: unknown;
+      };
+      "release-ips"?: {
+        [key: string]: unknown;
+      };
+      "release-ipv6s"?: {
+        [key: string]: unknown;
+      };
+      used?: {
+        [key: string]: unknown;
+      };
+    };
+  };
+}
+/* io.cilium.v2.CiliumNodeConfig */
+/* CiliumNodeConfig is a list of configuration key-value pairs. It is applied to
+nodes indicated by a label selector.
+
+If multiple overrides apply to the same node, they will be ordered by name
+with later Overrides overwriting any conflicting keys. */
+export interface CiliumIoV2CiliumNodeConfig {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    defaults: {
+      [key: string]: unknown;
+    };
+    nodeSelector: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+  };
+}
+/* io.cilium.v2.CiliumNodeConfigList */
+/* CiliumNodeConfigList is a list of CiliumNodeConfig */
+export interface CiliumIoV2CiliumNodeConfigList {
+  apiVersion?: string;
+  items: CiliumIoV2CiliumNodeConfig[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2.CiliumNodeList */
+/* CiliumNodeList is a list of CiliumNode */
+export interface CiliumIoV2CiliumNodeList {
+  apiVersion?: string;
+  items: CiliumIoV2CiliumNode[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2alpha1.CiliumCIDRGroup */
+/* CiliumCIDRGroup is a list of external CIDRs (i.e: CIDRs selecting peers
+outside the clusters) that can be referenced as a single entity from
+CiliumNetworkPolicies. */
+export interface CiliumIoV2alpha1CiliumCIDRGroup {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    externalCIDRs: string[];
+  };
+}
+/* io.cilium.v2alpha1.CiliumCIDRGroupList */
+/* CiliumCIDRGroupList is a list of CiliumCIDRGroup */
+export interface CiliumIoV2alpha1CiliumCIDRGroupList {
+  apiVersion?: string;
+  items: CiliumIoV2alpha1CiliumCIDRGroup[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2alpha1.CiliumL2AnnouncementPolicy */
+/* CiliumL2AnnouncementPolicy is a Kubernetes third-party resource which
+is used to defined which nodes should announce what services on the
+L2 network. */
+export interface CiliumIoV2alpha1CiliumL2AnnouncementPolicy {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec?: {
+    externalIPs?: boolean;
+    interfaces?: string[];
+    loadBalancerIPs?: boolean;
+    nodeSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    serviceSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+  };
+}
+/* io.cilium.v2alpha1.CiliumL2AnnouncementPolicyList */
+/* CiliumL2AnnouncementPolicyList is a list of CiliumL2AnnouncementPolicy */
+export interface CiliumIoV2alpha1CiliumL2AnnouncementPolicyList {
+  apiVersion?: string;
+  items: CiliumIoV2alpha1CiliumL2AnnouncementPolicy[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2alpha1.CiliumLoadBalancerIPPool */
+/* CiliumLoadBalancerIPPool is a Kubernetes third-party resource which
+is used to defined pools of IPs which the operator can use to to allocate
+and advertise IPs for Services of type LoadBalancer. */
+export interface CiliumIoV2alpha1CiliumLoadBalancerIPPool {
+  apiVersion?: string;
+  kind?: string;
+  metadata: ObjectMeta;
+  spec: {
+    allowFirstLastIPs?: "Yes" | "No";
+    blocks?: {
+      cidr?: string;
+      start?: string;
+      stop?: string;
+    }[];
+    disabled?: boolean;
+    serviceSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+  };
+}
+/* io.cilium.v2alpha1.CiliumLoadBalancerIPPoolList */
+/* CiliumLoadBalancerIPPoolList is a list of CiliumLoadBalancerIPPool */
+export interface CiliumIoV2alpha1CiliumLoadBalancerIPPoolList {
+  apiVersion?: string;
+  items: CiliumIoV2alpha1CiliumLoadBalancerIPPool[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2alpha1.CiliumNodeConfig */
+/* CiliumNodeConfig is a list of configuration key-value pairs. It is applied to
+nodes indicated by a label selector.
+
+If multiple overrides apply to the same node, they will be ordered by name
+with later Overrides overwriting any conflicting keys. */
+export interface CiliumIoV2alpha1CiliumNodeConfig {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    defaults: {
+      [key: string]: unknown;
+    };
+    nodeSelector: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+  };
+}
+/* io.cilium.v2alpha1.CiliumNodeConfigList */
+/* CiliumNodeConfigList is a list of CiliumNodeConfig */
+export interface CiliumIoV2alpha1CiliumNodeConfigList {
+  apiVersion?: string;
+  items: CiliumIoV2alpha1CiliumNodeConfig[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.cilium.v2alpha1.CiliumPodIPPool */
+/* CiliumPodIPPool defines an IP pool that can be used for pooled IPAM (i.e. the multi-pool IPAM
+mode). */
+export interface CiliumIoV2alpha1CiliumPodIPPool {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    ipv4?: {
+      cidrs: string[];
+      maskSize: number;
+    };
+    ipv6?: {
+      cidrs: string[];
+      maskSize: number;
+    };
+    namespaceSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    podSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: "In" | "NotIn" | "Exists" | "DoesNotExist";
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+  };
+}
+/* io.cilium.v2alpha1.CiliumPodIPPoolList */
+/* CiliumPodIPPoolList is a list of CiliumPodIPPool */
+export interface CiliumIoV2alpha1CiliumPodIPPoolList {
+  apiVersion?: string;
+  items: CiliumIoV2alpha1CiliumPodIPPool[];
+  kind?: string;
+  metadata?: ListMeta;
+}
 /* io.cnpg.postgresql.v1.Backup */
-/* Backup is the Schema for the backups API */
+/* A Backup resource is a request for a PostgreSQL backup by the user. */
 export interface PostgresqlCnpgIoV1Backup {
   apiVersion?: string;
   kind?: string;
@@ -21844,7 +24135,7 @@ export interface PostgresqlCnpgIoV1Cluster {
         };
         data?: {
           additionalCommandArgs?: string[];
-          compression?: "gzip" | "bzip2" | "snappy";
+          compression?: "bzip2" | "gzip" | "snappy";
           encryption?: "AES256" | "aws:kms";
           immediateCheckpoint?: boolean;
           jobs?: number;
@@ -21890,7 +24181,7 @@ export interface PostgresqlCnpgIoV1Cluster {
         };
         wal?: {
           archiveAdditionalCommandArgs?: string[];
-          compression?: "gzip" | "bzip2" | "snappy";
+          compression?: "bzip2" | "gzip" | "lz4" | "snappy" | "xz" | "zstd";
           encryption?: "AES256" | "aws:kms";
           maxParallel?: number;
           restoreAdditionalCommandArgs?: string[];
@@ -22147,7 +24438,7 @@ export interface PostgresqlCnpgIoV1Cluster {
         };
         data?: {
           additionalCommandArgs?: string[];
-          compression?: "gzip" | "bzip2" | "snappy";
+          compression?: "bzip2" | "gzip" | "snappy";
           encryption?: "AES256" | "aws:kms";
           immediateCheckpoint?: boolean;
           jobs?: number;
@@ -22193,7 +24484,7 @@ export interface PostgresqlCnpgIoV1Cluster {
         };
         wal?: {
           archiveAdditionalCommandArgs?: string[];
-          compression?: "gzip" | "bzip2" | "snappy";
+          compression?: "bzip2" | "gzip" | "lz4" | "snappy" | "xz" | "zstd";
           encryption?: "AES256" | "aws:kms";
           maxParallel?: number;
           restoreAdditionalCommandArgs?: string[];
@@ -22210,6 +24501,7 @@ export interface PostgresqlCnpgIoV1Cluster {
       };
       plugin?: {
         enabled?: boolean;
+        isWALArchiver?: boolean;
         name: string;
         parameters?: {
           [key: string]: unknown;
@@ -22369,6 +24661,7 @@ export interface PostgresqlCnpgIoV1Cluster {
     };
     plugins?: {
       enabled?: boolean;
+      isWALArchiver?: boolean;
       name: string;
       parameters?: {
         [key: string]: unknown;
@@ -24402,7 +26695,7 @@ export interface PostgresqlCnpgIoV1Pooler {
         }[];
       };
     };
-    type?: "rw" | "ro";
+    type?: "rw" | "ro" | "r";
   };
   status?: {
     instances?: number;
@@ -29001,6 +31294,3861 @@ export interface IoK8sKubeAggregatorPkgApisApiregistrationV1ServiceReference {
   namespace?: string;
   port?: number;
 }
+/* io.k8s.networking.gateway.v1.GRPCRoute */
+/* GRPCRoute provides a way to route gRPC requests. This includes the capability
+to match requests by hostname, gRPC service, gRPC method, or HTTP/2 header.
+Filters can be used to specify additional processing steps. Backends specify
+where matching requests will be routed.
+
+GRPCRoute falls under extended support within the Gateway API. Within the
+following specification, the word "MUST" indicates that an implementation
+supporting GRPCRoute must conform to the indicated requirement, but an
+implementation not supporting this route type need not follow the requirement
+unless explicitly indicated.
+
+Implementations supporting `GRPCRoute` with the `HTTPS` `ProtocolType` MUST
+accept HTTP/2 connections without an initial upgrade from HTTP/1.1, i.e. via
+ALPN. If the implementation does not support this, then it MUST set the
+"Accepted" condition to "False" for the affected listener with a reason of
+"UnsupportedProtocol".  Implementations MAY also accept HTTP/2 connections
+with an upgrade from HTTP/1.
+
+Implementations supporting `GRPCRoute` with the `HTTP` `ProtocolType` MUST
+support HTTP/2 over cleartext TCP (h2c,
+https://www.rfc-editor.org/rfc/rfc7540#section-3.1) without an initial
+upgrade from HTTP/1.1, i.e. with prior knowledge
+(https://www.rfc-editor.org/rfc/rfc7540#section-3.4). If the implementation
+does not support this, then it MUST set the "Accepted" condition to "False"
+for the affected listener with a reason of "UnsupportedProtocol".
+Implementations MAY also accept HTTP/2 connections with an upgrade from
+HTTP/1, i.e. without prior knowledge. */
+export interface GatewayNetworkingK8sIoV1GRPCRoute {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    hostnames?: string[];
+    parentRefs?: {
+      group?: string;
+      kind?: string;
+      name: string;
+      namespace?: string;
+      port?: number;
+      sectionName?: string;
+    }[];
+    rules?: {
+      backendRefs?: {
+        filters?: {
+          extensionRef?: {
+            group: string;
+            kind: string;
+            name: string;
+          };
+          requestHeaderModifier?: {
+            add?: {
+              name: string;
+              value: string;
+            }[];
+            remove?: string[];
+            set?: {
+              name: string;
+              value: string;
+            }[];
+          };
+          requestMirror?: {
+            backendRef: {
+              group?: string;
+              kind?: string;
+              name: string;
+              namespace?: string;
+              port?: number;
+            };
+          };
+          responseHeaderModifier?: {
+            add?: {
+              name: string;
+              value: string;
+            }[];
+            remove?: string[];
+            set?: {
+              name: string;
+              value: string;
+            }[];
+          };
+          type: "ResponseHeaderModifier" | "RequestHeaderModifier" | "RequestMirror" | "ExtensionRef";
+        }[];
+        group?: string;
+        kind?: string;
+        name: string;
+        namespace?: string;
+        port?: number;
+        weight?: number;
+      }[];
+      filters?: {
+        extensionRef?: {
+          group: string;
+          kind: string;
+          name: string;
+        };
+        requestHeaderModifier?: {
+          add?: {
+            name: string;
+            value: string;
+          }[];
+          remove?: string[];
+          set?: {
+            name: string;
+            value: string;
+          }[];
+        };
+        requestMirror?: {
+          backendRef: {
+            group?: string;
+            kind?: string;
+            name: string;
+            namespace?: string;
+            port?: number;
+          };
+        };
+        responseHeaderModifier?: {
+          add?: {
+            name: string;
+            value: string;
+          }[];
+          remove?: string[];
+          set?: {
+            name: string;
+            value: string;
+          }[];
+        };
+        type: "ResponseHeaderModifier" | "RequestHeaderModifier" | "RequestMirror" | "ExtensionRef";
+      }[];
+      matches?: {
+        headers?: {
+          name: string;
+          type?: "Exact" | "RegularExpression";
+          value: string;
+        }[];
+        method?: {
+          method?: string;
+          service?: string;
+          type?: "Exact" | "RegularExpression";
+        };
+      }[];
+    }[];
+  };
+  status?: {
+    parents: {
+      conditions?: {
+        lastTransitionTime: string;
+        message: string;
+        observedGeneration?: number;
+        reason: string;
+        status: "True" | "False" | "Unknown";
+        type: string;
+      }[];
+      controllerName: string;
+      parentRef: {
+        group?: string;
+        kind?: string;
+        name: string;
+        namespace?: string;
+        port?: number;
+        sectionName?: string;
+      };
+    }[];
+  };
+}
+/* io.k8s.networking.gateway.v1.GRPCRouteList */
+/* GRPCRouteList is a list of GRPCRoute */
+export interface GatewayNetworkingK8sIoV1GRPCRouteList {
+  apiVersion?: string;
+  items: GatewayNetworkingK8sIoV1GRPCRoute[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.k8s.networking.gateway.v1.Gateway */
+/* Gateway represents an instance of a service-traffic handling infrastructure
+by binding Listeners to a set of IP addresses. */
+export interface GatewayNetworkingK8sIoV1Gateway {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    addresses?: {
+      type?: string;
+      value: string;
+    }[];
+    gatewayClassName: string;
+    infrastructure?: {
+      annotations?: {
+        [key: string]: unknown;
+      };
+      labels?: {
+        [key: string]: unknown;
+      };
+      parametersRef?: {
+        group: string;
+        kind: string;
+        name: string;
+      };
+    };
+    listeners: {
+      allowedRoutes?: {
+        kinds?: {
+          group?: string;
+          kind: string;
+        }[];
+        namespaces?: {
+          from?: "All" | "Selector" | "Same";
+          selector?: {
+            matchExpressions?: {
+              key: string;
+              operator: string;
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      };
+      hostname?: string;
+      name: string;
+      port: number;
+      protocol: string;
+      tls?: {
+        certificateRefs?: {
+          group?: string;
+          kind?: string;
+          name: string;
+          namespace?: string;
+        }[];
+        mode?: "Terminate" | "Passthrough";
+        options?: {
+          [key: string]: unknown;
+        };
+      };
+    }[];
+  };
+  status?: {
+    addresses?: {
+      type?: string;
+      value: string;
+    }[];
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    listeners?: {
+      attachedRoutes: number;
+      conditions: {
+        lastTransitionTime: string;
+        message: string;
+        observedGeneration?: number;
+        reason: string;
+        status: "True" | "False" | "Unknown";
+        type: string;
+      }[];
+      name: string;
+      supportedKinds: {
+        group?: string;
+        kind: string;
+      }[];
+    }[];
+  };
+}
+/* io.k8s.networking.gateway.v1.GatewayClass */
+/* GatewayClass describes a class of Gateways available to the user for creating
+Gateway resources.
+
+It is recommended that this resource be used as a template for Gateways. This
+means that a Gateway is based on the state of the GatewayClass at the time it
+was created and changes to the GatewayClass or associated parameters are not
+propagated down to existing Gateways. This recommendation is intended to
+limit the blast radius of changes to GatewayClass or associated parameters.
+If implementations choose to propagate GatewayClass changes to existing
+Gateways, that MUST be clearly documented by the implementation.
+
+Whenever one or more Gateways are using a GatewayClass, implementations SHOULD
+add the `gateway-exists-finalizer.gateway.networking.k8s.io` finalizer on the
+associated GatewayClass. This ensures that a GatewayClass associated with a
+Gateway is not deleted while in use.
+
+GatewayClass is a Cluster level resource. */
+export interface GatewayNetworkingK8sIoV1GatewayClass {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    controllerName: string;
+    description?: string;
+    parametersRef?: {
+      group: string;
+      kind: string;
+      name: string;
+      namespace?: string;
+    };
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+  };
+}
+/* io.k8s.networking.gateway.v1.GatewayClassList */
+/* GatewayClassList is a list of GatewayClass */
+export interface GatewayNetworkingK8sIoV1GatewayClassList {
+  apiVersion?: string;
+  items: GatewayNetworkingK8sIoV1GatewayClass[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.k8s.networking.gateway.v1.GatewayList */
+/* GatewayList is a list of Gateway */
+export interface GatewayNetworkingK8sIoV1GatewayList {
+  apiVersion?: string;
+  items: GatewayNetworkingK8sIoV1Gateway[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.k8s.networking.gateway.v1.HTTPRoute */
+/* HTTPRoute provides a way to route HTTP requests. This includes the capability
+to match requests by hostname, path, header, or query param. Filters can be
+used to specify additional processing steps. Backends specify where matching
+requests should be routed. */
+export interface GatewayNetworkingK8sIoV1HTTPRoute {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    hostnames?: string[];
+    parentRefs?: {
+      group?: string;
+      kind?: string;
+      name: string;
+      namespace?: string;
+      port?: number;
+      sectionName?: string;
+    }[];
+    rules?: {
+      backendRefs?: {
+        filters?: {
+          extensionRef?: {
+            group: string;
+            kind: string;
+            name: string;
+          };
+          requestHeaderModifier?: {
+            add?: {
+              name: string;
+              value: string;
+            }[];
+            remove?: string[];
+            set?: {
+              name: string;
+              value: string;
+            }[];
+          };
+          requestMirror?: {
+            backendRef: {
+              group?: string;
+              kind?: string;
+              name: string;
+              namespace?: string;
+              port?: number;
+            };
+          };
+          requestRedirect?: {
+            hostname?: string;
+            path?: {
+              replaceFullPath?: string;
+              replacePrefixMatch?: string;
+              type: "ReplaceFullPath" | "ReplacePrefixMatch";
+            };
+            port?: number;
+            scheme?: "http" | "https";
+            statusCode?: 301 | 302;
+          };
+          responseHeaderModifier?: {
+            add?: {
+              name: string;
+              value: string;
+            }[];
+            remove?: string[];
+            set?: {
+              name: string;
+              value: string;
+            }[];
+          };
+          type: "RequestHeaderModifier" | "ResponseHeaderModifier" | "RequestMirror" | "RequestRedirect" | "URLRewrite" | "ExtensionRef";
+          urlRewrite?: {
+            hostname?: string;
+            path?: {
+              replaceFullPath?: string;
+              replacePrefixMatch?: string;
+              type: "ReplaceFullPath" | "ReplacePrefixMatch";
+            };
+          };
+        }[];
+        group?: string;
+        kind?: string;
+        name: string;
+        namespace?: string;
+        port?: number;
+        weight?: number;
+      }[];
+      filters?: {
+        extensionRef?: {
+          group: string;
+          kind: string;
+          name: string;
+        };
+        requestHeaderModifier?: {
+          add?: {
+            name: string;
+            value: string;
+          }[];
+          remove?: string[];
+          set?: {
+            name: string;
+            value: string;
+          }[];
+        };
+        requestMirror?: {
+          backendRef: {
+            group?: string;
+            kind?: string;
+            name: string;
+            namespace?: string;
+            port?: number;
+          };
+        };
+        requestRedirect?: {
+          hostname?: string;
+          path?: {
+            replaceFullPath?: string;
+            replacePrefixMatch?: string;
+            type: "ReplaceFullPath" | "ReplacePrefixMatch";
+          };
+          port?: number;
+          scheme?: "http" | "https";
+          statusCode?: 301 | 302;
+        };
+        responseHeaderModifier?: {
+          add?: {
+            name: string;
+            value: string;
+          }[];
+          remove?: string[];
+          set?: {
+            name: string;
+            value: string;
+          }[];
+        };
+        type: "RequestHeaderModifier" | "ResponseHeaderModifier" | "RequestMirror" | "RequestRedirect" | "URLRewrite" | "ExtensionRef";
+        urlRewrite?: {
+          hostname?: string;
+          path?: {
+            replaceFullPath?: string;
+            replacePrefixMatch?: string;
+            type: "ReplaceFullPath" | "ReplacePrefixMatch";
+          };
+        };
+      }[];
+      matches?: {
+        headers?: {
+          name: string;
+          type?: "Exact" | "RegularExpression";
+          value: string;
+        }[];
+        method?: "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "PATCH";
+        path?: {
+          type?: "Exact" | "PathPrefix" | "RegularExpression";
+          value?: string;
+        };
+        queryParams?: {
+          name: string;
+          type?: "Exact" | "RegularExpression";
+          value: string;
+        }[];
+      }[];
+      timeouts?: {
+        backendRequest?: string;
+        request?: string;
+      };
+    }[];
+  };
+  status?: {
+    parents: {
+      conditions?: {
+        lastTransitionTime: string;
+        message: string;
+        observedGeneration?: number;
+        reason: string;
+        status: "True" | "False" | "Unknown";
+        type: string;
+      }[];
+      controllerName: string;
+      parentRef: {
+        group?: string;
+        kind?: string;
+        name: string;
+        namespace?: string;
+        port?: number;
+        sectionName?: string;
+      };
+    }[];
+  };
+}
+/* io.k8s.networking.gateway.v1.HTTPRouteList */
+/* HTTPRouteList is a list of HTTPRoute */
+export interface GatewayNetworkingK8sIoV1HTTPRouteList {
+  apiVersion?: string;
+  items: GatewayNetworkingK8sIoV1HTTPRoute[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.k8s.networking.gateway.v1beta1.Gateway */
+/* Gateway represents an instance of a service-traffic handling infrastructure
+by binding Listeners to a set of IP addresses. */
+export interface GatewayNetworkingK8sIoV1beta1Gateway {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    addresses?: {
+      type?: string;
+      value: string;
+    }[];
+    gatewayClassName: string;
+    infrastructure?: {
+      annotations?: {
+        [key: string]: unknown;
+      };
+      labels?: {
+        [key: string]: unknown;
+      };
+      parametersRef?: {
+        group: string;
+        kind: string;
+        name: string;
+      };
+    };
+    listeners: {
+      allowedRoutes?: {
+        kinds?: {
+          group?: string;
+          kind: string;
+        }[];
+        namespaces?: {
+          from?: "All" | "Selector" | "Same";
+          selector?: {
+            matchExpressions?: {
+              key: string;
+              operator: string;
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+        };
+      };
+      hostname?: string;
+      name: string;
+      port: number;
+      protocol: string;
+      tls?: {
+        certificateRefs?: {
+          group?: string;
+          kind?: string;
+          name: string;
+          namespace?: string;
+        }[];
+        mode?: "Terminate" | "Passthrough";
+        options?: {
+          [key: string]: unknown;
+        };
+      };
+    }[];
+  };
+  status?: {
+    addresses?: {
+      type?: string;
+      value: string;
+    }[];
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+    listeners?: {
+      attachedRoutes: number;
+      conditions: {
+        lastTransitionTime: string;
+        message: string;
+        observedGeneration?: number;
+        reason: string;
+        status: "True" | "False" | "Unknown";
+        type: string;
+      }[];
+      name: string;
+      supportedKinds: {
+        group?: string;
+        kind: string;
+      }[];
+    }[];
+  };
+}
+/* io.k8s.networking.gateway.v1beta1.GatewayClass */
+/* GatewayClass describes a class of Gateways available to the user for creating
+Gateway resources.
+
+It is recommended that this resource be used as a template for Gateways. This
+means that a Gateway is based on the state of the GatewayClass at the time it
+was created and changes to the GatewayClass or associated parameters are not
+propagated down to existing Gateways. This recommendation is intended to
+limit the blast radius of changes to GatewayClass or associated parameters.
+If implementations choose to propagate GatewayClass changes to existing
+Gateways, that MUST be clearly documented by the implementation.
+
+Whenever one or more Gateways are using a GatewayClass, implementations SHOULD
+add the `gateway-exists-finalizer.gateway.networking.k8s.io` finalizer on the
+associated GatewayClass. This ensures that a GatewayClass associated with a
+Gateway is not deleted while in use.
+
+GatewayClass is a Cluster level resource. */
+export interface GatewayNetworkingK8sIoV1beta1GatewayClass {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    controllerName: string;
+    description?: string;
+    parametersRef?: {
+      group: string;
+      kind: string;
+      name: string;
+      namespace?: string;
+    };
+  };
+  status?: {
+    conditions?: {
+      lastTransitionTime: string;
+      message: string;
+      observedGeneration?: number;
+      reason: string;
+      status: "True" | "False" | "Unknown";
+      type: string;
+    }[];
+  };
+}
+/* io.k8s.networking.gateway.v1beta1.GatewayClassList */
+/* GatewayClassList is a list of GatewayClass */
+export interface GatewayNetworkingK8sIoV1beta1GatewayClassList {
+  apiVersion?: string;
+  items: GatewayNetworkingK8sIoV1beta1GatewayClass[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.k8s.networking.gateway.v1beta1.GatewayList */
+/* GatewayList is a list of Gateway */
+export interface GatewayNetworkingK8sIoV1beta1GatewayList {
+  apiVersion?: string;
+  items: GatewayNetworkingK8sIoV1beta1Gateway[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.k8s.networking.gateway.v1beta1.HTTPRoute */
+/* HTTPRoute provides a way to route HTTP requests. This includes the capability
+to match requests by hostname, path, header, or query param. Filters can be
+used to specify additional processing steps. Backends specify where matching
+requests should be routed. */
+export interface GatewayNetworkingK8sIoV1beta1HTTPRoute {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec: {
+    hostnames?: string[];
+    parentRefs?: {
+      group?: string;
+      kind?: string;
+      name: string;
+      namespace?: string;
+      port?: number;
+      sectionName?: string;
+    }[];
+    rules?: {
+      backendRefs?: {
+        filters?: {
+          extensionRef?: {
+            group: string;
+            kind: string;
+            name: string;
+          };
+          requestHeaderModifier?: {
+            add?: {
+              name: string;
+              value: string;
+            }[];
+            remove?: string[];
+            set?: {
+              name: string;
+              value: string;
+            }[];
+          };
+          requestMirror?: {
+            backendRef: {
+              group?: string;
+              kind?: string;
+              name: string;
+              namespace?: string;
+              port?: number;
+            };
+          };
+          requestRedirect?: {
+            hostname?: string;
+            path?: {
+              replaceFullPath?: string;
+              replacePrefixMatch?: string;
+              type: "ReplaceFullPath" | "ReplacePrefixMatch";
+            };
+            port?: number;
+            scheme?: "http" | "https";
+            statusCode?: 301 | 302;
+          };
+          responseHeaderModifier?: {
+            add?: {
+              name: string;
+              value: string;
+            }[];
+            remove?: string[];
+            set?: {
+              name: string;
+              value: string;
+            }[];
+          };
+          type: "RequestHeaderModifier" | "ResponseHeaderModifier" | "RequestMirror" | "RequestRedirect" | "URLRewrite" | "ExtensionRef";
+          urlRewrite?: {
+            hostname?: string;
+            path?: {
+              replaceFullPath?: string;
+              replacePrefixMatch?: string;
+              type: "ReplaceFullPath" | "ReplacePrefixMatch";
+            };
+          };
+        }[];
+        group?: string;
+        kind?: string;
+        name: string;
+        namespace?: string;
+        port?: number;
+        weight?: number;
+      }[];
+      filters?: {
+        extensionRef?: {
+          group: string;
+          kind: string;
+          name: string;
+        };
+        requestHeaderModifier?: {
+          add?: {
+            name: string;
+            value: string;
+          }[];
+          remove?: string[];
+          set?: {
+            name: string;
+            value: string;
+          }[];
+        };
+        requestMirror?: {
+          backendRef: {
+            group?: string;
+            kind?: string;
+            name: string;
+            namespace?: string;
+            port?: number;
+          };
+        };
+        requestRedirect?: {
+          hostname?: string;
+          path?: {
+            replaceFullPath?: string;
+            replacePrefixMatch?: string;
+            type: "ReplaceFullPath" | "ReplacePrefixMatch";
+          };
+          port?: number;
+          scheme?: "http" | "https";
+          statusCode?: 301 | 302;
+        };
+        responseHeaderModifier?: {
+          add?: {
+            name: string;
+            value: string;
+          }[];
+          remove?: string[];
+          set?: {
+            name: string;
+            value: string;
+          }[];
+        };
+        type: "RequestHeaderModifier" | "ResponseHeaderModifier" | "RequestMirror" | "RequestRedirect" | "URLRewrite" | "ExtensionRef";
+        urlRewrite?: {
+          hostname?: string;
+          path?: {
+            replaceFullPath?: string;
+            replacePrefixMatch?: string;
+            type: "ReplaceFullPath" | "ReplacePrefixMatch";
+          };
+        };
+      }[];
+      matches?: {
+        headers?: {
+          name: string;
+          type?: "Exact" | "RegularExpression";
+          value: string;
+        }[];
+        method?: "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "PATCH";
+        path?: {
+          type?: "Exact" | "PathPrefix" | "RegularExpression";
+          value?: string;
+        };
+        queryParams?: {
+          name: string;
+          type?: "Exact" | "RegularExpression";
+          value: string;
+        }[];
+      }[];
+      timeouts?: {
+        backendRequest?: string;
+        request?: string;
+      };
+    }[];
+  };
+  status?: {
+    parents: {
+      conditions?: {
+        lastTransitionTime: string;
+        message: string;
+        observedGeneration?: number;
+        reason: string;
+        status: "True" | "False" | "Unknown";
+        type: string;
+      }[];
+      controllerName: string;
+      parentRef: {
+        group?: string;
+        kind?: string;
+        name: string;
+        namespace?: string;
+        port?: number;
+        sectionName?: string;
+      };
+    }[];
+  };
+}
+/* io.k8s.networking.gateway.v1beta1.HTTPRouteList */
+/* HTTPRouteList is a list of HTTPRoute */
+export interface GatewayNetworkingK8sIoV1beta1HTTPRouteList {
+  apiVersion?: string;
+  items: GatewayNetworkingK8sIoV1beta1HTTPRoute[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.k8s.networking.gateway.v1beta1.ReferenceGrant */
+/* ReferenceGrant identifies kinds of resources in other namespaces that are
+trusted to reference the specified kinds of resources in the same namespace
+as the policy.
+
+Each ReferenceGrant can be used to represent a unique trust relationship.
+Additional Reference Grants can be used to add to the set of trusted
+sources of inbound references for the namespace they are defined within.
+
+All cross-namespace references in Gateway API (with the exception of cross-namespace
+Gateway-route attachment) require a ReferenceGrant.
+
+ReferenceGrant is a form of runtime verification allowing users to assert
+which cross-namespace object references are permitted. Implementations that
+support ReferenceGrant MUST NOT permit cross-namespace references which have
+no grant, and MUST respond to the removal of a grant by revoking the access
+that the grant allowed. */
+export interface GatewayNetworkingK8sIoV1beta1ReferenceGrant {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    from: {
+      group: string;
+      kind: string;
+      namespace: string;
+    }[];
+    to: {
+      group: string;
+      kind: string;
+      name?: string;
+    }[];
+  };
+}
+/* io.k8s.networking.gateway.v1beta1.ReferenceGrantList */
+/* ReferenceGrantList is a list of ReferenceGrant */
+export interface GatewayNetworkingK8sIoV1beta1ReferenceGrantList {
+  apiVersion?: string;
+  items: GatewayNetworkingK8sIoV1beta1ReferenceGrant[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+export interface MinioMinIoV2Tenant {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  scheduler?: {
+    name: string;
+  };
+  spec: {
+    additionalVolumeMounts?: {
+      mountPath: string;
+      mountPropagation?: string;
+      name: string;
+      readOnly?: boolean;
+      recursiveReadOnly?: string;
+      subPath?: string;
+      subPathExpr?: string;
+    }[];
+    additionalVolumes?: {
+      awsElasticBlockStore?: {
+        fsType?: string;
+        partition?: number;
+        readOnly?: boolean;
+        volumeID: string;
+      };
+      azureDisk?: {
+        cachingMode?: string;
+        diskName: string;
+        diskURI: string;
+        fsType?: string;
+        kind?: string;
+        readOnly?: boolean;
+      };
+      azureFile?: {
+        readOnly?: boolean;
+        secretName: string;
+        shareName: string;
+      };
+      cephfs?: {
+        monitors: string[];
+        path?: string;
+        readOnly?: boolean;
+        secretFile?: string;
+        secretRef?: {
+          name?: string;
+        };
+        user?: string;
+      };
+      cinder?: {
+        fsType?: string;
+        readOnly?: boolean;
+        secretRef?: {
+          name?: string;
+        };
+        volumeID: string;
+      };
+      configMap?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        name?: string;
+        optional?: boolean;
+      };
+      csi?: {
+        driver: string;
+        fsType?: string;
+        nodePublishSecretRef?: {
+          name?: string;
+        };
+        readOnly?: boolean;
+        volumeAttributes?: {
+          [key: string]: unknown;
+        };
+      };
+      downwardAPI?: {
+        defaultMode?: number;
+        items?: {
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          mode?: number;
+          path: string;
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+        }[];
+      };
+      emptyDir?: {
+        medium?: string;
+        sizeLimit?: any;
+      };
+      ephemeral?: {
+        volumeClaimTemplate?: {
+          metadata?: {
+            annotations?: {
+              [key: string]: unknown;
+            };
+            finalizers?: string[];
+            labels?: {
+              [key: string]: unknown;
+            };
+            name?: string;
+            namespace?: string;
+          };
+          spec: {
+            accessModes?: string[];
+            dataSource?: {
+              apiGroup?: string;
+              kind: string;
+              name: string;
+            };
+            dataSourceRef?: {
+              apiGroup?: string;
+              kind: string;
+              name: string;
+              namespace?: string;
+            };
+            resources?: {
+              limits?: {
+                [key: string]: unknown;
+              };
+              requests?: {
+                [key: string]: unknown;
+              };
+            };
+            selector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            storageClassName?: string;
+            volumeAttributesClassName?: string;
+            volumeMode?: string;
+            volumeName?: string;
+          };
+        };
+      };
+      fc?: {
+        fsType?: string;
+        lun?: number;
+        readOnly?: boolean;
+        targetWWNs?: string[];
+        wwids?: string[];
+      };
+      flexVolume?: {
+        driver: string;
+        fsType?: string;
+        options?: {
+          [key: string]: unknown;
+        };
+        readOnly?: boolean;
+        secretRef?: {
+          name?: string;
+        };
+      };
+      flocker?: {
+        datasetName?: string;
+        datasetUUID?: string;
+      };
+      gcePersistentDisk?: {
+        fsType?: string;
+        partition?: number;
+        pdName: string;
+        readOnly?: boolean;
+      };
+      gitRepo?: {
+        directory?: string;
+        repository: string;
+        revision?: string;
+      };
+      glusterfs?: {
+        endpoints: string;
+        path: string;
+        readOnly?: boolean;
+      };
+      hostPath?: {
+        path: string;
+        type?: string;
+      };
+      image?: {
+        pullPolicy?: string;
+        reference?: string;
+      };
+      iscsi?: {
+        chapAuthDiscovery?: boolean;
+        chapAuthSession?: boolean;
+        fsType?: string;
+        initiatorName?: string;
+        iqn: string;
+        iscsiInterface?: string;
+        lun: number;
+        portals?: string[];
+        readOnly?: boolean;
+        secretRef?: {
+          name?: string;
+        };
+        targetPortal: string;
+      };
+      name: string;
+      nfs?: {
+        path: string;
+        readOnly?: boolean;
+        server: string;
+      };
+      persistentVolumeClaim?: {
+        claimName: string;
+        readOnly?: boolean;
+      };
+      photonPersistentDisk?: {
+        fsType?: string;
+        pdID: string;
+      };
+      portworxVolume?: {
+        fsType?: string;
+        readOnly?: boolean;
+        volumeID: string;
+      };
+      projected?: {
+        defaultMode?: number;
+        sources?: {
+          clusterTrustBundle?: {
+            labelSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            name?: string;
+            optional?: boolean;
+            path: string;
+            signerName?: string;
+          };
+          configMap?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          downwardAPI?: {
+            items?: {
+              fieldRef?: {
+                apiVersion?: string;
+                fieldPath: string;
+              };
+              mode?: number;
+              path: string;
+              resourceFieldRef?: {
+                containerName?: string;
+                divisor?: any;
+                resource: string;
+              };
+            }[];
+          };
+          secret?: {
+            items?: {
+              key: string;
+              mode?: number;
+              path: string;
+            }[];
+            name?: string;
+            optional?: boolean;
+          };
+          serviceAccountToken?: {
+            audience?: string;
+            expirationSeconds?: number;
+            path: string;
+          };
+        }[];
+      };
+      quobyte?: {
+        group?: string;
+        readOnly?: boolean;
+        registry: string;
+        tenant?: string;
+        user?: string;
+        volume: string;
+      };
+      rbd?: {
+        fsType?: string;
+        image: string;
+        keyring?: string;
+        monitors: string[];
+        pool?: string;
+        readOnly?: boolean;
+        secretRef?: {
+          name?: string;
+        };
+        user?: string;
+      };
+      scaleIO?: {
+        fsType?: string;
+        gateway: string;
+        protectionDomain?: string;
+        readOnly?: boolean;
+        secretRef: {
+          name?: string;
+        };
+        sslEnabled?: boolean;
+        storageMode?: string;
+        storagePool?: string;
+        system: string;
+        volumeName?: string;
+      };
+      secret?: {
+        defaultMode?: number;
+        items?: {
+          key: string;
+          mode?: number;
+          path: string;
+        }[];
+        optional?: boolean;
+        secretName?: string;
+      };
+      storageos?: {
+        fsType?: string;
+        readOnly?: boolean;
+        secretRef?: {
+          name?: string;
+        };
+        volumeName?: string;
+        volumeNamespace?: string;
+      };
+      vsphereVolume?: {
+        fsType?: string;
+        storagePolicyID?: string;
+        storagePolicyName?: string;
+        volumePath: string;
+      };
+    }[];
+    buckets?: {
+      name?: string;
+      objectLock?: boolean;
+      region?: string;
+    }[];
+    certConfig?: {
+      commonName?: string;
+      dnsNames?: string[];
+      organizationName?: string[];
+    };
+    certExpiryAlertThreshold?: number;
+    configuration?: {
+      name?: string;
+    };
+    env?: {
+      name: string;
+      value?: string;
+      valueFrom?: {
+        configMapKeyRef?: {
+          key: string;
+          name?: string;
+          optional?: boolean;
+        };
+        fieldRef?: {
+          apiVersion?: string;
+          fieldPath: string;
+        };
+        resourceFieldRef?: {
+          containerName?: string;
+          divisor?: any;
+          resource: string;
+        };
+        secretKeyRef?: {
+          key: string;
+          name?: string;
+          optional?: boolean;
+        };
+      };
+    }[];
+    exposeServices?: {
+      console?: boolean;
+      minio?: boolean;
+    };
+    externalCaCertSecret?: {
+      name: string;
+      type?: string;
+    }[];
+    externalCertSecret?: {
+      name: string;
+      type?: string;
+    }[];
+    externalClientCertSecret?: {
+      name: string;
+      type?: string;
+    };
+    externalClientCertSecrets?: {
+      name: string;
+      type?: string;
+    }[];
+    features?: {
+      bucketDNS?: boolean;
+      domains?: {
+        console?: string;
+        minio?: string[];
+      };
+      enableSFTP?: boolean;
+    };
+    image?: string;
+    imagePullPolicy?: string;
+    imagePullSecret?: {
+      name?: string;
+    };
+    initContainers?: {
+      args?: string[];
+      command?: string[];
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      envFrom?: {
+        configMapRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+        prefix?: string;
+        secretRef?: {
+          name?: string;
+          optional?: boolean;
+        };
+      }[];
+      image?: string;
+      imagePullPolicy?: string;
+      lifecycle?: {
+        postStart?: {
+          exec?: {
+            command?: string[];
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          sleep?: {
+            seconds: number;
+          };
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+        };
+        preStop?: {
+          exec?: {
+            command?: string[];
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          sleep?: {
+            seconds: number;
+          };
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+        };
+      };
+      livenessProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      name: string;
+      ports?: {
+        containerPort: number;
+        hostIP?: string;
+        hostPort?: number;
+        name?: string;
+        protocol?: string;
+      }[];
+      readinessProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      resizePolicy?: {
+        resourceName: string;
+        restartPolicy: string;
+      }[];
+      resources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      restartPolicy?: string;
+      securityContext?: {
+        allowPrivilegeEscalation?: boolean;
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        capabilities?: {
+          add?: string[];
+          drop?: string[];
+        };
+        privileged?: boolean;
+        procMount?: string;
+        readOnlyRootFilesystem?: boolean;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      startupProbe?: {
+        exec?: {
+          command?: string[];
+        };
+        failureThreshold?: number;
+        grpc?: {
+          port: number;
+          service?: string;
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        initialDelaySeconds?: number;
+        periodSeconds?: number;
+        successThreshold?: number;
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+        terminationGracePeriodSeconds?: number;
+        timeoutSeconds?: number;
+      };
+      stdin?: boolean;
+      stdinOnce?: boolean;
+      terminationMessagePath?: string;
+      terminationMessagePolicy?: string;
+      tty?: boolean;
+      volumeDevices?: {
+        devicePath: string;
+        name: string;
+      }[];
+      volumeMounts?: {
+        mountPath: string;
+        mountPropagation?: string;
+        name: string;
+        readOnly?: boolean;
+        recursiveReadOnly?: string;
+        subPath?: string;
+        subPathExpr?: string;
+      }[];
+      workingDir?: string;
+    }[];
+    kes?: {
+      affinity?: {
+        nodeAffinity?: {
+          preferredDuringSchedulingIgnoredDuringExecution?: {
+            preference: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchFields?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+            };
+            weight: number;
+          }[];
+          requiredDuringSchedulingIgnoredDuringExecution?: {
+            nodeSelectorTerms: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchFields?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+            }[];
+          };
+        };
+        podAffinity?: {
+          preferredDuringSchedulingIgnoredDuringExecution?: {
+            podAffinityTerm: {
+              labelSelector?: {
+                matchExpressions?: {
+                  key: string;
+                  operator: string;
+                  values?: string[];
+                }[];
+                matchLabels?: {
+                  [key: string]: unknown;
+                };
+              };
+              matchLabelKeys?: string[];
+              mismatchLabelKeys?: string[];
+              namespaceSelector?: {
+                matchExpressions?: {
+                  key: string;
+                  operator: string;
+                  values?: string[];
+                }[];
+                matchLabels?: {
+                  [key: string]: unknown;
+                };
+              };
+              namespaces?: string[];
+              topologyKey: string;
+            };
+            weight: number;
+          }[];
+          requiredDuringSchedulingIgnoredDuringExecution?: {
+            labelSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            matchLabelKeys?: string[];
+            mismatchLabelKeys?: string[];
+            namespaceSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            namespaces?: string[];
+            topologyKey: string;
+          }[];
+        };
+        podAntiAffinity?: {
+          preferredDuringSchedulingIgnoredDuringExecution?: {
+            podAffinityTerm: {
+              labelSelector?: {
+                matchExpressions?: {
+                  key: string;
+                  operator: string;
+                  values?: string[];
+                }[];
+                matchLabels?: {
+                  [key: string]: unknown;
+                };
+              };
+              matchLabelKeys?: string[];
+              mismatchLabelKeys?: string[];
+              namespaceSelector?: {
+                matchExpressions?: {
+                  key: string;
+                  operator: string;
+                  values?: string[];
+                }[];
+                matchLabels?: {
+                  [key: string]: unknown;
+                };
+              };
+              namespaces?: string[];
+              topologyKey: string;
+            };
+            weight: number;
+          }[];
+          requiredDuringSchedulingIgnoredDuringExecution?: {
+            labelSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            matchLabelKeys?: string[];
+            mismatchLabelKeys?: string[];
+            namespaceSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            namespaces?: string[];
+            topologyKey: string;
+          }[];
+        };
+      };
+      annotations?: {
+        [key: string]: unknown;
+      };
+      clientCertSecret?: {
+        name: string;
+        type?: string;
+      };
+      containerSecurityContext?: {
+        allowPrivilegeEscalation?: boolean;
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        capabilities?: {
+          add?: string[];
+          drop?: string[];
+        };
+        privileged?: boolean;
+        procMount?: string;
+        readOnlyRootFilesystem?: boolean;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      env?: {
+        name: string;
+        value?: string;
+        valueFrom?: {
+          configMapKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+          fieldRef?: {
+            apiVersion?: string;
+            fieldPath: string;
+          };
+          resourceFieldRef?: {
+            containerName?: string;
+            divisor?: any;
+            resource: string;
+          };
+          secretKeyRef?: {
+            key: string;
+            name?: string;
+            optional?: boolean;
+          };
+        };
+      }[];
+      externalCertSecret?: {
+        name: string;
+        type?: string;
+      };
+      gcpCredentialSecretName?: string;
+      gcpWorkloadIdentityPool?: string;
+      image?: string;
+      imagePullPolicy?: string;
+      kesSecret: {
+        name?: string;
+      };
+      keyName?: string;
+      labels?: {
+        [key: string]: unknown;
+      };
+      nodeSelector?: {
+        [key: string]: unknown;
+      };
+      replicas?: number;
+      resources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      securityContext?: {
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        fsGroup?: number;
+        fsGroupChangePolicy?: string;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxChangePolicy?: string;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        supplementalGroups?: number[];
+        supplementalGroupsPolicy?: string;
+        sysctls?: {
+          name: string;
+          value: string;
+        }[];
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      serviceAccountName?: string;
+      tolerations?: {
+        effect?: string;
+        key?: string;
+        operator?: string;
+        tolerationSeconds?: number;
+        value?: string;
+      }[];
+      topologySpreadConstraints?: {
+        labelSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: string;
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        matchLabelKeys?: string[];
+        maxSkew: number;
+        minDomains?: number;
+        nodeAffinityPolicy?: string;
+        nodeTaintsPolicy?: string;
+        topologyKey: string;
+        whenUnsatisfiable: string;
+      }[];
+    };
+    lifecycle?: {
+      postStart?: {
+        exec?: {
+          command?: string[];
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        sleep?: {
+          seconds: number;
+        };
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+      };
+      preStop?: {
+        exec?: {
+          command?: string[];
+        };
+        httpGet?: {
+          host?: string;
+          httpHeaders?: {
+            name: string;
+            value: string;
+          }[];
+          path?: string;
+          port: any;
+          scheme?: string;
+        };
+        sleep?: {
+          seconds: number;
+        };
+        tcpSocket?: {
+          host?: string;
+          port: any;
+        };
+      };
+    };
+    liveness?: {
+      exec?: {
+        command?: string[];
+      };
+      failureThreshold?: number;
+      grpc?: {
+        port: number;
+        service?: string;
+      };
+      httpGet?: {
+        host?: string;
+        httpHeaders?: {
+          name: string;
+          value: string;
+        }[];
+        path?: string;
+        port: any;
+        scheme?: string;
+      };
+      initialDelaySeconds?: number;
+      periodSeconds?: number;
+      successThreshold?: number;
+      tcpSocket?: {
+        host?: string;
+        port: any;
+      };
+      terminationGracePeriodSeconds?: number;
+      timeoutSeconds?: number;
+    };
+    logging?: {
+      anonymous?: boolean;
+      json?: boolean;
+      quiet?: boolean;
+    };
+    mountPath?: string;
+    podManagementPolicy?: string;
+    pools: {
+      affinity?: {
+        nodeAffinity?: {
+          preferredDuringSchedulingIgnoredDuringExecution?: {
+            preference: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchFields?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+            };
+            weight: number;
+          }[];
+          requiredDuringSchedulingIgnoredDuringExecution?: {
+            nodeSelectorTerms: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchFields?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+            }[];
+          };
+        };
+        podAffinity?: {
+          preferredDuringSchedulingIgnoredDuringExecution?: {
+            podAffinityTerm: {
+              labelSelector?: {
+                matchExpressions?: {
+                  key: string;
+                  operator: string;
+                  values?: string[];
+                }[];
+                matchLabels?: {
+                  [key: string]: unknown;
+                };
+              };
+              matchLabelKeys?: string[];
+              mismatchLabelKeys?: string[];
+              namespaceSelector?: {
+                matchExpressions?: {
+                  key: string;
+                  operator: string;
+                  values?: string[];
+                }[];
+                matchLabels?: {
+                  [key: string]: unknown;
+                };
+              };
+              namespaces?: string[];
+              topologyKey: string;
+            };
+            weight: number;
+          }[];
+          requiredDuringSchedulingIgnoredDuringExecution?: {
+            labelSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            matchLabelKeys?: string[];
+            mismatchLabelKeys?: string[];
+            namespaceSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            namespaces?: string[];
+            topologyKey: string;
+          }[];
+        };
+        podAntiAffinity?: {
+          preferredDuringSchedulingIgnoredDuringExecution?: {
+            podAffinityTerm: {
+              labelSelector?: {
+                matchExpressions?: {
+                  key: string;
+                  operator: string;
+                  values?: string[];
+                }[];
+                matchLabels?: {
+                  [key: string]: unknown;
+                };
+              };
+              matchLabelKeys?: string[];
+              mismatchLabelKeys?: string[];
+              namespaceSelector?: {
+                matchExpressions?: {
+                  key: string;
+                  operator: string;
+                  values?: string[];
+                }[];
+                matchLabels?: {
+                  [key: string]: unknown;
+                };
+              };
+              namespaces?: string[];
+              topologyKey: string;
+            };
+            weight: number;
+          }[];
+          requiredDuringSchedulingIgnoredDuringExecution?: {
+            labelSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            matchLabelKeys?: string[];
+            mismatchLabelKeys?: string[];
+            namespaceSelector?: {
+              matchExpressions?: {
+                key: string;
+                operator: string;
+                values?: string[];
+              }[];
+              matchLabels?: {
+                [key: string]: unknown;
+              };
+            };
+            namespaces?: string[];
+            topologyKey: string;
+          }[];
+        };
+      };
+      annotations?: {
+        [key: string]: unknown;
+      };
+      containerSecurityContext?: {
+        allowPrivilegeEscalation?: boolean;
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        capabilities?: {
+          add?: string[];
+          drop?: string[];
+        };
+        privileged?: boolean;
+        procMount?: string;
+        readOnlyRootFilesystem?: boolean;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      labels?: {
+        [key: string]: unknown;
+      };
+      name: string;
+      nodeSelector?: {
+        [key: string]: unknown;
+      };
+      resources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      runtimeClassName?: string;
+      securityContext?: {
+        appArmorProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        fsGroup?: number;
+        fsGroupChangePolicy?: string;
+        runAsGroup?: number;
+        runAsNonRoot?: boolean;
+        runAsUser?: number;
+        seLinuxChangePolicy?: string;
+        seLinuxOptions?: {
+          level?: string;
+          role?: string;
+          type?: string;
+          user?: string;
+        };
+        seccompProfile?: {
+          localhostProfile?: string;
+          type: string;
+        };
+        supplementalGroups?: number[];
+        supplementalGroupsPolicy?: string;
+        sysctls?: {
+          name: string;
+          value: string;
+        }[];
+        windowsOptions?: {
+          gmsaCredentialSpec?: string;
+          gmsaCredentialSpecName?: string;
+          hostProcess?: boolean;
+          runAsUserName?: string;
+        };
+      };
+      servers: number;
+      tolerations?: {
+        effect?: string;
+        key?: string;
+        operator?: string;
+        tolerationSeconds?: number;
+        value?: string;
+      }[];
+      topologySpreadConstraints?: {
+        labelSelector?: {
+          matchExpressions?: {
+            key: string;
+            operator: string;
+            values?: string[];
+          }[];
+          matchLabels?: {
+            [key: string]: unknown;
+          };
+        };
+        matchLabelKeys?: string[];
+        maxSkew: number;
+        minDomains?: number;
+        nodeAffinityPolicy?: string;
+        nodeTaintsPolicy?: string;
+        topologyKey: string;
+        whenUnsatisfiable: string;
+      }[];
+      volumeClaimTemplate: {
+        apiVersion?: string;
+        kind?: string;
+        metadata?: {
+          annotations?: {
+            [key: string]: unknown;
+          };
+          finalizers?: string[];
+          labels?: {
+            [key: string]: unknown;
+          };
+          name?: string;
+          namespace?: string;
+        };
+        spec?: {
+          accessModes?: string[];
+          dataSource?: {
+            apiGroup?: string;
+            kind: string;
+            name: string;
+          };
+          dataSourceRef?: {
+            apiGroup?: string;
+            kind: string;
+            name: string;
+            namespace?: string;
+          };
+          resources?: {
+            limits?: {
+              [key: string]: unknown;
+            };
+            requests?: {
+              [key: string]: unknown;
+            };
+          };
+          selector?: {
+            matchExpressions?: {
+              key: string;
+              operator: string;
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+          storageClassName?: string;
+          volumeAttributesClassName?: string;
+          volumeMode?: string;
+          volumeName?: string;
+        };
+        status?: {
+          accessModes?: string[];
+          allocatedResourceStatuses?: {
+            [key: string]: unknown;
+          };
+          allocatedResources?: {
+            [key: string]: unknown;
+          };
+          capacity?: {
+            [key: string]: unknown;
+          };
+          conditions?: {
+            lastProbeTime?: string;
+            lastTransitionTime?: string;
+            message?: string;
+            reason?: string;
+            status: string;
+            type: string;
+          }[];
+          currentVolumeAttributesClassName?: string;
+          modifyVolumeStatus?: {
+            status: string;
+            targetVolumeAttributesClassName?: string;
+          };
+          phase?: string;
+        };
+      };
+      volumesPerServer: number;
+    }[];
+    poolsMetadata?: {
+      annotations?: {
+        [key: string]: unknown;
+      };
+      labels?: {
+        [key: string]: unknown;
+      };
+    };
+    priorityClassName?: string;
+    prometheusOperator?: boolean;
+    prometheusOperatorScrapeMetricsPaths?: string[];
+    readiness?: {
+      exec?: {
+        command?: string[];
+      };
+      failureThreshold?: number;
+      grpc?: {
+        port: number;
+        service?: string;
+      };
+      httpGet?: {
+        host?: string;
+        httpHeaders?: {
+          name: string;
+          value: string;
+        }[];
+        path?: string;
+        port: any;
+        scheme?: string;
+      };
+      initialDelaySeconds?: number;
+      periodSeconds?: number;
+      successThreshold?: number;
+      tcpSocket?: {
+        host?: string;
+        port: any;
+      };
+      terminationGracePeriodSeconds?: number;
+      timeoutSeconds?: number;
+    };
+    requestAutoCert?: boolean;
+    serviceAccountName?: string;
+    serviceMetadata?: {
+      consoleServiceAnnotations?: {
+        [key: string]: unknown;
+      };
+      consoleServiceLabels?: {
+        [key: string]: unknown;
+      };
+      kesServiceAnnotations?: {
+        [key: string]: unknown;
+      };
+      kesServiceLabels?: {
+        [key: string]: unknown;
+      };
+      minioServiceAnnotations?: {
+        [key: string]: unknown;
+      };
+      minioServiceLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    sideCars?: {
+      containers?: {
+        args?: string[];
+        command?: string[];
+        env?: {
+          name: string;
+          value?: string;
+          valueFrom?: {
+            configMapKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+            fieldRef?: {
+              apiVersion?: string;
+              fieldPath: string;
+            };
+            resourceFieldRef?: {
+              containerName?: string;
+              divisor?: any;
+              resource: string;
+            };
+            secretKeyRef?: {
+              key: string;
+              name?: string;
+              optional?: boolean;
+            };
+          };
+        }[];
+        envFrom?: {
+          configMapRef?: {
+            name?: string;
+            optional?: boolean;
+          };
+          prefix?: string;
+          secretRef?: {
+            name?: string;
+            optional?: boolean;
+          };
+        }[];
+        image?: string;
+        imagePullPolicy?: string;
+        lifecycle?: {
+          postStart?: {
+            exec?: {
+              command?: string[];
+            };
+            httpGet?: {
+              host?: string;
+              httpHeaders?: {
+                name: string;
+                value: string;
+              }[];
+              path?: string;
+              port: any;
+              scheme?: string;
+            };
+            sleep?: {
+              seconds: number;
+            };
+            tcpSocket?: {
+              host?: string;
+              port: any;
+            };
+          };
+          preStop?: {
+            exec?: {
+              command?: string[];
+            };
+            httpGet?: {
+              host?: string;
+              httpHeaders?: {
+                name: string;
+                value: string;
+              }[];
+              path?: string;
+              port: any;
+              scheme?: string;
+            };
+            sleep?: {
+              seconds: number;
+            };
+            tcpSocket?: {
+              host?: string;
+              port: any;
+            };
+          };
+        };
+        livenessProbe?: {
+          exec?: {
+            command?: string[];
+          };
+          failureThreshold?: number;
+          grpc?: {
+            port: number;
+            service?: string;
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          initialDelaySeconds?: number;
+          periodSeconds?: number;
+          successThreshold?: number;
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+          terminationGracePeriodSeconds?: number;
+          timeoutSeconds?: number;
+        };
+        name: string;
+        ports?: {
+          containerPort: number;
+          hostIP?: string;
+          hostPort?: number;
+          name?: string;
+          protocol?: string;
+        }[];
+        readinessProbe?: {
+          exec?: {
+            command?: string[];
+          };
+          failureThreshold?: number;
+          grpc?: {
+            port: number;
+            service?: string;
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          initialDelaySeconds?: number;
+          periodSeconds?: number;
+          successThreshold?: number;
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+          terminationGracePeriodSeconds?: number;
+          timeoutSeconds?: number;
+        };
+        resizePolicy?: {
+          resourceName: string;
+          restartPolicy: string;
+        }[];
+        resources?: {
+          claims?: {
+            name: string;
+            request?: string;
+          }[];
+          limits?: {
+            [key: string]: unknown;
+          };
+          requests?: {
+            [key: string]: unknown;
+          };
+        };
+        restartPolicy?: string;
+        securityContext?: {
+          allowPrivilegeEscalation?: boolean;
+          appArmorProfile?: {
+            localhostProfile?: string;
+            type: string;
+          };
+          capabilities?: {
+            add?: string[];
+            drop?: string[];
+          };
+          privileged?: boolean;
+          procMount?: string;
+          readOnlyRootFilesystem?: boolean;
+          runAsGroup?: number;
+          runAsNonRoot?: boolean;
+          runAsUser?: number;
+          seLinuxOptions?: {
+            level?: string;
+            role?: string;
+            type?: string;
+            user?: string;
+          };
+          seccompProfile?: {
+            localhostProfile?: string;
+            type: string;
+          };
+          windowsOptions?: {
+            gmsaCredentialSpec?: string;
+            gmsaCredentialSpecName?: string;
+            hostProcess?: boolean;
+            runAsUserName?: string;
+          };
+        };
+        startupProbe?: {
+          exec?: {
+            command?: string[];
+          };
+          failureThreshold?: number;
+          grpc?: {
+            port: number;
+            service?: string;
+          };
+          httpGet?: {
+            host?: string;
+            httpHeaders?: {
+              name: string;
+              value: string;
+            }[];
+            path?: string;
+            port: any;
+            scheme?: string;
+          };
+          initialDelaySeconds?: number;
+          periodSeconds?: number;
+          successThreshold?: number;
+          tcpSocket?: {
+            host?: string;
+            port: any;
+          };
+          terminationGracePeriodSeconds?: number;
+          timeoutSeconds?: number;
+        };
+        stdin?: boolean;
+        stdinOnce?: boolean;
+        terminationMessagePath?: string;
+        terminationMessagePolicy?: string;
+        tty?: boolean;
+        volumeDevices?: {
+          devicePath: string;
+          name: string;
+        }[];
+        volumeMounts?: {
+          mountPath: string;
+          mountPropagation?: string;
+          name: string;
+          readOnly?: boolean;
+          recursiveReadOnly?: string;
+          subPath?: string;
+          subPathExpr?: string;
+        }[];
+        workingDir?: string;
+      }[];
+      resources?: {
+        claims?: {
+          name: string;
+          request?: string;
+        }[];
+        limits?: {
+          [key: string]: unknown;
+        };
+        requests?: {
+          [key: string]: unknown;
+        };
+      };
+      volumeClaimTemplates?: {
+        apiVersion?: string;
+        kind?: string;
+        metadata?: {
+          annotations?: {
+            [key: string]: unknown;
+          };
+          finalizers?: string[];
+          labels?: {
+            [key: string]: unknown;
+          };
+          name?: string;
+          namespace?: string;
+        };
+        spec?: {
+          accessModes?: string[];
+          dataSource?: {
+            apiGroup?: string;
+            kind: string;
+            name: string;
+          };
+          dataSourceRef?: {
+            apiGroup?: string;
+            kind: string;
+            name: string;
+            namespace?: string;
+          };
+          resources?: {
+            limits?: {
+              [key: string]: unknown;
+            };
+            requests?: {
+              [key: string]: unknown;
+            };
+          };
+          selector?: {
+            matchExpressions?: {
+              key: string;
+              operator: string;
+              values?: string[];
+            }[];
+            matchLabels?: {
+              [key: string]: unknown;
+            };
+          };
+          storageClassName?: string;
+          volumeAttributesClassName?: string;
+          volumeMode?: string;
+          volumeName?: string;
+        };
+        status?: {
+          accessModes?: string[];
+          allocatedResourceStatuses?: {
+            [key: string]: unknown;
+          };
+          allocatedResources?: {
+            [key: string]: unknown;
+          };
+          capacity?: {
+            [key: string]: unknown;
+          };
+          conditions?: {
+            lastProbeTime?: string;
+            lastTransitionTime?: string;
+            message?: string;
+            reason?: string;
+            status: string;
+            type: string;
+          }[];
+          currentVolumeAttributesClassName?: string;
+          modifyVolumeStatus?: {
+            status: string;
+            targetVolumeAttributesClassName?: string;
+          };
+          phase?: string;
+        };
+      }[];
+      volumes?: {
+        awsElasticBlockStore?: {
+          fsType?: string;
+          partition?: number;
+          readOnly?: boolean;
+          volumeID: string;
+        };
+        azureDisk?: {
+          cachingMode?: string;
+          diskName: string;
+          diskURI: string;
+          fsType?: string;
+          kind?: string;
+          readOnly?: boolean;
+        };
+        azureFile?: {
+          readOnly?: boolean;
+          secretName: string;
+          shareName: string;
+        };
+        cephfs?: {
+          monitors: string[];
+          path?: string;
+          readOnly?: boolean;
+          secretFile?: string;
+          secretRef?: {
+            name?: string;
+          };
+          user?: string;
+        };
+        cinder?: {
+          fsType?: string;
+          readOnly?: boolean;
+          secretRef?: {
+            name?: string;
+          };
+          volumeID: string;
+        };
+        configMap?: {
+          defaultMode?: number;
+          items?: {
+            key: string;
+            mode?: number;
+            path: string;
+          }[];
+          name?: string;
+          optional?: boolean;
+        };
+        csi?: {
+          driver: string;
+          fsType?: string;
+          nodePublishSecretRef?: {
+            name?: string;
+          };
+          readOnly?: boolean;
+          volumeAttributes?: {
+            [key: string]: unknown;
+          };
+        };
+        downwardAPI?: {
+          defaultMode?: number;
+          items?: {
+            fieldRef?: {
+              apiVersion?: string;
+              fieldPath: string;
+            };
+            mode?: number;
+            path: string;
+            resourceFieldRef?: {
+              containerName?: string;
+              divisor?: any;
+              resource: string;
+            };
+          }[];
+        };
+        emptyDir?: {
+          medium?: string;
+          sizeLimit?: any;
+        };
+        ephemeral?: {
+          volumeClaimTemplate?: {
+            metadata?: {
+              annotations?: {
+                [key: string]: unknown;
+              };
+              finalizers?: string[];
+              labels?: {
+                [key: string]: unknown;
+              };
+              name?: string;
+              namespace?: string;
+            };
+            spec: {
+              accessModes?: string[];
+              dataSource?: {
+                apiGroup?: string;
+                kind: string;
+                name: string;
+              };
+              dataSourceRef?: {
+                apiGroup?: string;
+                kind: string;
+                name: string;
+                namespace?: string;
+              };
+              resources?: {
+                limits?: {
+                  [key: string]: unknown;
+                };
+                requests?: {
+                  [key: string]: unknown;
+                };
+              };
+              selector?: {
+                matchExpressions?: {
+                  key: string;
+                  operator: string;
+                  values?: string[];
+                }[];
+                matchLabels?: {
+                  [key: string]: unknown;
+                };
+              };
+              storageClassName?: string;
+              volumeAttributesClassName?: string;
+              volumeMode?: string;
+              volumeName?: string;
+            };
+          };
+        };
+        fc?: {
+          fsType?: string;
+          lun?: number;
+          readOnly?: boolean;
+          targetWWNs?: string[];
+          wwids?: string[];
+        };
+        flexVolume?: {
+          driver: string;
+          fsType?: string;
+          options?: {
+            [key: string]: unknown;
+          };
+          readOnly?: boolean;
+          secretRef?: {
+            name?: string;
+          };
+        };
+        flocker?: {
+          datasetName?: string;
+          datasetUUID?: string;
+        };
+        gcePersistentDisk?: {
+          fsType?: string;
+          partition?: number;
+          pdName: string;
+          readOnly?: boolean;
+        };
+        gitRepo?: {
+          directory?: string;
+          repository: string;
+          revision?: string;
+        };
+        glusterfs?: {
+          endpoints: string;
+          path: string;
+          readOnly?: boolean;
+        };
+        hostPath?: {
+          path: string;
+          type?: string;
+        };
+        image?: {
+          pullPolicy?: string;
+          reference?: string;
+        };
+        iscsi?: {
+          chapAuthDiscovery?: boolean;
+          chapAuthSession?: boolean;
+          fsType?: string;
+          initiatorName?: string;
+          iqn: string;
+          iscsiInterface?: string;
+          lun: number;
+          portals?: string[];
+          readOnly?: boolean;
+          secretRef?: {
+            name?: string;
+          };
+          targetPortal: string;
+        };
+        name: string;
+        nfs?: {
+          path: string;
+          readOnly?: boolean;
+          server: string;
+        };
+        persistentVolumeClaim?: {
+          claimName: string;
+          readOnly?: boolean;
+        };
+        photonPersistentDisk?: {
+          fsType?: string;
+          pdID: string;
+        };
+        portworxVolume?: {
+          fsType?: string;
+          readOnly?: boolean;
+          volumeID: string;
+        };
+        projected?: {
+          defaultMode?: number;
+          sources?: {
+            clusterTrustBundle?: {
+              labelSelector?: {
+                matchExpressions?: {
+                  key: string;
+                  operator: string;
+                  values?: string[];
+                }[];
+                matchLabels?: {
+                  [key: string]: unknown;
+                };
+              };
+              name?: string;
+              optional?: boolean;
+              path: string;
+              signerName?: string;
+            };
+            configMap?: {
+              items?: {
+                key: string;
+                mode?: number;
+                path: string;
+              }[];
+              name?: string;
+              optional?: boolean;
+            };
+            downwardAPI?: {
+              items?: {
+                fieldRef?: {
+                  apiVersion?: string;
+                  fieldPath: string;
+                };
+                mode?: number;
+                path: string;
+                resourceFieldRef?: {
+                  containerName?: string;
+                  divisor?: any;
+                  resource: string;
+                };
+              }[];
+            };
+            secret?: {
+              items?: {
+                key: string;
+                mode?: number;
+                path: string;
+              }[];
+              name?: string;
+              optional?: boolean;
+            };
+            serviceAccountToken?: {
+              audience?: string;
+              expirationSeconds?: number;
+              path: string;
+            };
+          }[];
+        };
+        quobyte?: {
+          group?: string;
+          readOnly?: boolean;
+          registry: string;
+          tenant?: string;
+          user?: string;
+          volume: string;
+        };
+        rbd?: {
+          fsType?: string;
+          image: string;
+          keyring?: string;
+          monitors: string[];
+          pool?: string;
+          readOnly?: boolean;
+          secretRef?: {
+            name?: string;
+          };
+          user?: string;
+        };
+        scaleIO?: {
+          fsType?: string;
+          gateway: string;
+          protectionDomain?: string;
+          readOnly?: boolean;
+          secretRef: {
+            name?: string;
+          };
+          sslEnabled?: boolean;
+          storageMode?: string;
+          storagePool?: string;
+          system: string;
+          volumeName?: string;
+        };
+        secret?: {
+          defaultMode?: number;
+          items?: {
+            key: string;
+            mode?: number;
+            path: string;
+          }[];
+          optional?: boolean;
+          secretName?: string;
+        };
+        storageos?: {
+          fsType?: string;
+          readOnly?: boolean;
+          secretRef?: {
+            name?: string;
+          };
+          volumeName?: string;
+          volumeNamespace?: string;
+        };
+        vsphereVolume?: {
+          fsType?: string;
+          storagePolicyID?: string;
+          storagePolicyName?: string;
+          volumePath: string;
+        };
+      }[];
+    };
+    startup?: {
+      exec?: {
+        command?: string[];
+      };
+      failureThreshold?: number;
+      grpc?: {
+        port: number;
+        service?: string;
+      };
+      httpGet?: {
+        host?: string;
+        httpHeaders?: {
+          name: string;
+          value: string;
+        }[];
+        path?: string;
+        port: any;
+        scheme?: string;
+      };
+      initialDelaySeconds?: number;
+      periodSeconds?: number;
+      successThreshold?: number;
+      tcpSocket?: {
+        host?: string;
+        port: any;
+      };
+      terminationGracePeriodSeconds?: number;
+      timeoutSeconds?: number;
+    };
+    subPath?: string;
+    users?: {
+      name?: string;
+    }[];
+  };
+  status?: {
+    availableReplicas: number;
+    certificates?: any;
+    currentState: string;
+    drivesHealing?: number;
+    drivesOffline?: number;
+    drivesOnline?: number;
+    healthMessage?: string;
+    healthStatus?: string;
+    pools?: any;
+    provisionedBuckets?: boolean;
+    provisionedUsers?: boolean;
+    revision: number;
+    syncVersion: string;
+    usage?: {
+      capacity?: number;
+      rawCapacity?: number;
+      rawUsage?: number;
+      tiers?: {
+        Name: string;
+        Type?: string;
+        totalSize: number;
+      }[];
+      usage?: number;
+    };
+    waitingOnReady?: string;
+    writeQuorum?: number;
+  };
+}
+/* io.min.minio.v2.TenantList */
+/* TenantList is a list of Tenant */
+export interface MinioMinIoV2TenantList {
+  apiVersion?: string;
+  items: MinioMinIoV2Tenant[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+export interface StsMinIoV1alpha1PolicyBinding {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    application: {
+      namespace: string;
+      serviceaccount: string;
+    };
+    policies: string[];
+  };
+  status?: {
+    currentState: string;
+    usage?: any;
+  };
+}
+/* io.min.sts.v1alpha1.PolicyBindingList */
+/* PolicyBindingList is a list of PolicyBinding */
+export interface StsMinIoV1alpha1PolicyBindingList {
+  apiVersion?: string;
+  items: StsMinIoV1alpha1PolicyBinding[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+export interface StsMinIoV1beta1PolicyBinding {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    application: {
+      namespace: string;
+      serviceaccount: string;
+    };
+    policies: string[];
+  };
+  status?: {
+    currentState: string;
+    usage?: any;
+  };
+}
+/* io.min.sts.v1beta1.PolicyBindingList */
+/* PolicyBindingList is a list of PolicyBinding */
+export interface StsMinIoV1beta1PolicyBindingList {
+  apiVersion?: string;
+  items: StsMinIoV1beta1PolicyBinding[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.AIService */
+/* AIService is a Kubernetes-like Service to interact with a text-based LLM provider. It defines the parameters and credentials required to interact with various LLM providers. */
+export interface HubTraefikIoV1alpha1AIService {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    anthropic?: {
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      token: string;
+    };
+    azureOpenai?: {
+      apiKey: string;
+      baseUrl: string;
+      deploymentName: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+    };
+    bedrock?: {
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      region?: string;
+      systemMessage?: boolean;
+    };
+    cohere?: {
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      token: string;
+    };
+    deepSeek?: {
+      baseUrl?: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      token: string;
+    };
+    gemini?: {
+      apiKey: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+    };
+    mistral?: {
+      apiKey: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+    };
+    ollama?: {
+      baseUrl: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+    };
+    openai?: {
+      baseUrl?: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      token: string;
+    };
+    qWen?: {
+      baseUrl?: string;
+      model?: string;
+      params?: {
+        frequencyPenalty?: number;
+        maxTokens?: number;
+        presencePenalty?: number;
+        temperature?: number;
+        topP?: number;
+      };
+      token: string;
+    };
+  };
+}
+/* io.traefik.hub.v1alpha1.AIServiceList */
+/* AIServiceList is a list of AIService */
+export interface HubTraefikIoV1alpha1AIServiceList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1AIService[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.API */
+/* API defines an HTTP interface that is exposed to external clients. It specifies the supported versions
+and provides instructions for accessing its documentation. Once instantiated, an API object is associated
+with an Ingress, IngressRoute, or HTTPRoute resource, enabling the exposure of the described API to the outside world. */
+export interface HubTraefikIoV1alpha1API {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    cors?: {
+      addVaryHeader?: boolean;
+      allowCredentials?: boolean;
+      allowHeadersList?: string[];
+      allowMethodsList?: string[];
+      allowOriginListRegex?: string[];
+      allowOriginsList?: string[];
+      exposeHeadersList?: string[];
+      maxAge?: number;
+    };
+    description?: string;
+    openApiSpec?: {
+      operationSets?: {
+        matchers: {
+          methods?: string[];
+          path?: string;
+          pathPrefix?: string;
+          pathRegex?: string;
+        }[];
+        name: string;
+      }[];
+      override?: {
+        servers: {
+          url: string;
+        }[];
+      };
+      path?: string;
+      url?: string;
+      validateRequestMethodAndPath?: boolean;
+    };
+    title?: string;
+    versions?: {
+      name: string;
+    }[];
+  };
+  status?: {
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIAccess */
+/* APIAccess defines who can access to a set of APIs. */
+export interface HubTraefikIoV1alpha1APIAccess {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiBundles?: {
+      name: string;
+    }[];
+    apiPlan?: {
+      name: string;
+    };
+    apiSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    apis?: {
+      name: string;
+    }[];
+    everyone?: boolean;
+    groups?: string[];
+    operationFilter?: {
+      include?: string[];
+    };
+    weight?: number;
+  };
+  status?: {
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIAccessList */
+/* APIAccessList is a list of APIAccess */
+export interface HubTraefikIoV1alpha1APIAccessList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1APIAccess[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIBundle */
+/* APIBundle defines a set of APIs. */
+export interface HubTraefikIoV1alpha1APIBundle {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    apis?: {
+      name: string;
+    }[];
+    title?: string;
+  };
+  status?: {
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIBundleList */
+/* APIBundleList is a list of APIBundle */
+export interface HubTraefikIoV1alpha1APIBundleList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1APIBundle[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APICatalogItem */
+/* APICatalogItem defines APIs that will be part of the API catalog on the portal. */
+export interface HubTraefikIoV1alpha1APICatalogItem {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiBundles?: {
+      name: string;
+    }[];
+    apiPlan?: {
+      name: string;
+    };
+    apiSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    apis?: {
+      name: string;
+    }[];
+    everyone?: boolean;
+    groups?: string[];
+    operationFilter?: {
+      include?: string[];
+    };
+  };
+  status?: {
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APICatalogItemList */
+/* APICatalogItemList is a list of APICatalogItem */
+export interface HubTraefikIoV1alpha1APICatalogItemList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1APICatalogItem[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIList */
+/* APIList is a list of API */
+export interface HubTraefikIoV1alpha1APIList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1API[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIPlan */
+/* APIPlan defines API Plan policy. */
+export interface HubTraefikIoV1alpha1APIPlan {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    description?: string;
+    quota?: {
+      limit: number;
+      period?: string;
+    };
+    rateLimit?: {
+      limit: number;
+      period?: string;
+    };
+    title: string;
+  };
+  status?: {
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIPlanList */
+/* APIPlanList is a list of APIPlan */
+export interface HubTraefikIoV1alpha1APIPlanList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1APIPlan[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIPortal */
+/* APIPortal defines a developer portal for accessing the documentation of APIs. */
+export interface HubTraefikIoV1alpha1APIPortal {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    description?: string;
+    title?: string;
+    trustedUrls: string[];
+    ui?: {
+      logoUrl?: string;
+    };
+  };
+  status?: {
+    hash?: string;
+    oidc?: {
+      clientId?: string;
+      companyClaim?: string;
+      emailClaim?: string;
+      firstnameClaim?: string;
+      generic?: boolean;
+      groupsClaim?: string;
+      issuer?: string;
+      lastnameClaim?: string;
+      scopes?: string;
+      secretName?: string;
+      syncedAttributes?: string[];
+      userIdClaim?: string;
+    };
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIPortalList */
+/* APIPortalList is a list of APIPortal */
+export interface HubTraefikIoV1alpha1APIPortalList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1APIPortal[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIRateLimit */
+/* APIRateLimit defines how group of consumers are rate limited on a set of APIs. */
+export interface HubTraefikIoV1alpha1APIRateLimit {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    apis?: {
+      name: string;
+    }[];
+    everyone?: boolean;
+    groups?: string[];
+    limit: number;
+    period?: string;
+    strategy?: "local" | "distributed";
+  };
+  status?: {
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIRateLimitList */
+/* APIRateLimitList is a list of APIRateLimit */
+export interface HubTraefikIoV1alpha1APIRateLimitList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1APIRateLimit[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.APIVersion */
+/* APIVersion defines a version of an API. */
+export interface HubTraefikIoV1alpha1APIVersion {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    cors?: {
+      addVaryHeader?: boolean;
+      allowCredentials?: boolean;
+      allowHeadersList?: string[];
+      allowMethodsList?: string[];
+      allowOriginListRegex?: string[];
+      allowOriginsList?: string[];
+      exposeHeadersList?: string[];
+      maxAge?: number;
+    };
+    description?: string;
+    openApiSpec?: {
+      operationSets?: {
+        matchers: {
+          methods?: string[];
+          path?: string;
+          pathPrefix?: string;
+          pathRegex?: string;
+        }[];
+        name: string;
+      }[];
+      override?: {
+        servers: {
+          url: string;
+        }[];
+      };
+      path?: string;
+      url?: string;
+      validateRequestMethodAndPath?: boolean;
+    };
+    release: string;
+    title?: string;
+  };
+  status?: {
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.APIVersionList */
+/* APIVersionList is a list of APIVersion */
+export interface HubTraefikIoV1alpha1APIVersionList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1APIVersion[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.AccessControlPolicy */
+/* AccessControlPolicy defines an access control policy. */
+export interface HubTraefikIoV1alpha1AccessControlPolicy {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiKey?: {
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      keySource: {
+        cookie?: string;
+        header?: string;
+        headerAuthScheme?: string;
+        query?: string;
+      };
+      keys?: {
+        id: string;
+        metadata?: {
+          [key: string]: unknown;
+        };
+        value: string;
+      }[];
+    };
+    basicAuth?: {
+      forwardUsernameHeader?: string;
+      realm?: string;
+      stripAuthorizationHeader?: boolean;
+      users?: string[];
+    };
+    jwt?: {
+      claims?: string;
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      jwksFile?: string;
+      jwksUrl?: string;
+      publicKey?: string;
+      signingSecret?: string;
+      signingSecretBase64Encoded?: boolean;
+      stripAuthorizationHeader?: boolean;
+      tokenQueryKey?: string;
+    };
+    oAuthIntro?: {
+      claims?: string;
+      clientConfig: {
+        headers?: {
+          [key: string]: unknown;
+        };
+        maxRetries?: number;
+        timeoutSeconds?: number;
+        tls?: {
+          ca?: string;
+          insecureSkipVerify?: boolean;
+        };
+        tokenTypeHint?: string;
+        url: string;
+      };
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      tokenSource: {
+        cookie?: string;
+        header?: string;
+        headerAuthScheme?: string;
+        query?: string;
+      };
+    };
+    oidc?: {
+      authParams?: {
+        [key: string]: unknown;
+      };
+      claims?: string;
+      clientId?: string;
+      disableAuthRedirectionPaths?: string[];
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      issuer?: string;
+      logoutUrl?: string;
+      redirectUrl?: string;
+      scopes?: string[];
+      secret?: {
+        name?: string;
+        namespace?: string;
+      };
+      session?: {
+        domain?: string;
+        path?: string;
+        refresh?: boolean;
+        sameSite?: string;
+        secure?: boolean;
+      };
+      stateCookie?: {
+        domain?: string;
+        path?: string;
+        sameSite?: string;
+        secure?: boolean;
+      };
+    };
+    oidcGoogle?: {
+      authParams?: {
+        [key: string]: unknown;
+      };
+      clientId?: string;
+      emails?: string[];
+      forwardHeaders?: {
+        [key: string]: unknown;
+      };
+      logoutUrl?: string;
+      redirectUrl?: string;
+      secret?: {
+        name?: string;
+        namespace?: string;
+      };
+      session?: {
+        domain?: string;
+        path?: string;
+        refresh?: boolean;
+        sameSite?: string;
+        secure?: boolean;
+      };
+      stateCookie?: {
+        domain?: string;
+        path?: string;
+        sameSite?: string;
+        secure?: boolean;
+      };
+    };
+  };
+  status?: {
+    specHash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.AccessControlPolicyList */
+/* AccessControlPolicyList is a list of AccessControlPolicy */
+export interface HubTraefikIoV1alpha1AccessControlPolicyList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1AccessControlPolicy[];
+  kind?: string;
+  metadata?: ListMeta;
+}
+/* io.traefik.hub.v1alpha1.ManagedSubscription */
+/* ManagedSubscription defines a Subscription managed by the API manager as the result of a pre-negotiation with its
+API consumers. This subscription grant consuming access to a set of APIs to a set of Applications. */
+export interface HubTraefikIoV1alpha1ManagedSubscription {
+  apiVersion?: string;
+  kind?: string;
+  metadata?: ObjectMeta;
+  spec?: {
+    apiBundles?: {
+      name: string;
+    }[];
+    apiPlan: {
+      name: string;
+    };
+    apiSelector?: {
+      matchExpressions?: {
+        key: string;
+        operator: string;
+        values?: string[];
+      }[];
+      matchLabels?: {
+        [key: string]: unknown;
+      };
+    };
+    apis?: {
+      name: string;
+    }[];
+    applications: {
+      appId: string;
+    }[];
+    claims?: string;
+    operationFilter?: {
+      include?: string[];
+    };
+    weight?: number;
+  };
+  status?: {
+    hash?: string;
+    syncedAt?: string;
+    version?: string;
+  };
+}
+/* io.traefik.hub.v1alpha1.ManagedSubscriptionList */
+/* ManagedSubscriptionList is a list of ManagedSubscription */
+export interface HubTraefikIoV1alpha1ManagedSubscriptionList {
+  apiVersion?: string;
+  items: HubTraefikIoV1alpha1ManagedSubscription[];
+  kind?: string;
+  metadata?: ListMeta;
+}
 /* io.traefik.v1alpha1.IngressRoute */
 /* IngressRoute is the CRD implementation of a Traefik HTTP Router. */
 export interface TraefikIoV1alpha1IngressRoute {
@@ -29009,11 +35157,6 @@ export interface TraefikIoV1alpha1IngressRoute {
   metadata: ObjectMeta;
   spec: {
     entryPoints?: string[];
-    ingressClassName?: string;
-    parentRefs?: {
-      name: string;
-      namespace?: string;
-    }[];
     routes: {
       kind?: "Rule";
       match: string;
@@ -29024,7 +35167,6 @@ export interface TraefikIoV1alpha1IngressRoute {
       observability?: {
         accessLogs?: boolean;
         metrics?: boolean;
-        traceVerbosity?: "minimal" | "detailed";
         tracing?: boolean;
       };
       priority?: number;
@@ -29043,22 +35185,13 @@ export interface TraefikIoV1alpha1IngressRoute {
           scheme?: string;
           status?: number;
           timeout?: any;
-          unhealthyInterval?: any;
         };
         kind?: "Service" | "TraefikService";
-        middlewares?: {
-          name: string;
-          namespace?: string;
-        }[];
         name: string;
         namespace?: string;
         nativeLB?: boolean;
         nodePortLB?: boolean;
         passHostHeader?: boolean;
-        passiveHealthCheck?: {
-          failureWindow?: any;
-          maxFailedAttempts?: number;
-        };
         port?: any;
         responseForwarding?: {
           flushInterval?: string;
@@ -29067,16 +35200,15 @@ export interface TraefikIoV1alpha1IngressRoute {
         serversTransport?: string;
         sticky?: {
           cookie?: {
-            domain?: string;
             httpOnly?: boolean;
             maxAge?: number;
             name?: string;
             path?: string;
-            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            sameSite?: string;
             secure?: boolean;
           };
         };
-        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        strategy?: string;
         weight?: number;
       }[];
       syntax?: string;
@@ -29115,7 +35247,6 @@ export interface TraefikIoV1alpha1IngressRouteTCP {
   metadata: ObjectMeta;
   spec: {
     entryPoints?: string[];
-    ingressClassName?: string;
     routes: {
       match: string;
       middlewares?: {
@@ -29137,7 +35268,7 @@ export interface TraefikIoV1alpha1IngressRouteTCP {
         tls?: boolean;
         weight?: number;
       }[];
-      syntax?: "v3" | "v2";
+      syntax?: string;
     }[];
     tls?: {
       certResolver?: string;
@@ -29174,7 +35305,6 @@ export interface TraefikIoV1alpha1IngressRouteUDP {
   metadata: ObjectMeta;
   spec: {
     entryPoints?: string[];
-    ingressClassName?: string;
     routes: {
       services?: {
         name: string;
@@ -29197,7 +35327,7 @@ export interface TraefikIoV1alpha1IngressRouteUDPList {
 }
 /* io.traefik.v1alpha1.Middleware */
 /* Middleware is the CRD implementation of a Traefik Middleware.
-More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/http/middlewares/overview/ */
+More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/overview/ */
 export interface TraefikIoV1alpha1Middleware {
   apiVersion?: string;
   kind?: string;
@@ -29248,15 +35378,6 @@ export interface TraefikIoV1alpha1Middleware {
       removeHeader?: boolean;
       secret?: string;
     };
-    encodedCharacters?: {
-      allowEncodedBackSlash?: boolean;
-      allowEncodedHash?: boolean;
-      allowEncodedNullCharacter?: boolean;
-      allowEncodedPercent?: boolean;
-      allowEncodedQuestionMark?: boolean;
-      allowEncodedSemicolon?: boolean;
-      allowEncodedSlash?: boolean;
-    };
     errors?: {
       query?: string;
       service?: {
@@ -29274,22 +35395,13 @@ export interface TraefikIoV1alpha1Middleware {
           scheme?: string;
           status?: number;
           timeout?: any;
-          unhealthyInterval?: any;
         };
         kind?: "Service" | "TraefikService";
-        middlewares?: {
-          name: string;
-          namespace?: string;
-        }[];
         name: string;
         namespace?: string;
         nativeLB?: boolean;
         nodePortLB?: boolean;
         passHostHeader?: boolean;
-        passiveHealthCheck?: {
-          failureWindow?: any;
-          maxFailedAttempts?: number;
-        };
         port?: any;
         responseForwarding?: {
           flushInterval?: string;
@@ -29298,22 +35410,18 @@ export interface TraefikIoV1alpha1Middleware {
         serversTransport?: string;
         sticky?: {
           cookie?: {
-            domain?: string;
             httpOnly?: boolean;
             maxAge?: number;
             name?: string;
             path?: string;
-            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            sameSite?: string;
             secure?: boolean;
           };
         };
-        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        strategy?: string;
         weight?: number;
       };
       status?: string[];
-      statusRewrites?: {
-        [key: string]: unknown;
-      };
     };
     forwardAuth?: {
       addAuthCookiesToResponse?: string[];
@@ -29321,13 +35429,10 @@ export interface TraefikIoV1alpha1Middleware {
       authRequestHeaders?: string[];
       authResponseHeaders?: string[];
       authResponseHeadersRegex?: string;
-      authSigninURL?: string;
       forwardBody?: boolean;
       headerField?: string;
       maxBodySize?: number;
-      maxResponseBodySize?: number;
       preserveLocationHeader?: boolean;
-      preserveRequestMethod?: boolean;
       tls?: {
         caOptional?: boolean;
         caSecret?: string;
@@ -29444,22 +35549,6 @@ export interface TraefikIoV1alpha1Middleware {
       average?: number;
       burst?: number;
       period?: any;
-      redis?: {
-        db?: number;
-        dialTimeout?: any;
-        endpoints?: string[];
-        maxActiveConns?: number;
-        minIdleConns?: number;
-        poolSize?: number;
-        readTimeout?: any;
-        secret?: string;
-        tls?: {
-          caSecret?: string;
-          certSecret?: string;
-          insecureSkipVerify?: boolean;
-        };
-        writeTimeout?: any;
-      };
       sourceCriterion?: {
         ipStrategy?: {
           depth?: number;
@@ -29489,12 +35578,7 @@ export interface TraefikIoV1alpha1Middleware {
     };
     retry?: {
       attempts?: number;
-      disableRetryOnNetworkError?: boolean;
       initialInterval?: any;
-      maxRequestBodyBytes?: number;
-      retryNonIdempotentMethod?: boolean;
-      status?: string[];
-      timeout?: any;
     };
     stripPrefix?: {
       forceSlash?: boolean;
@@ -29515,7 +35599,7 @@ export interface TraefikIoV1alpha1MiddlewareList {
 }
 /* io.traefik.v1alpha1.MiddlewareTCP */
 /* MiddlewareTCP is the CRD implementation of a Traefik TCP middleware.
-More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/tcp/middlewares/overview/ */
+More info: https://doc.traefik.io/traefik/v3.3/middlewares/overview/ */
 export interface TraefikIoV1alpha1MiddlewareTCP {
   apiVersion?: string;
   kind?: string;
@@ -29544,14 +35628,13 @@ export interface TraefikIoV1alpha1MiddlewareTCPList {
 /* ServersTransport is the CRD implementation of a ServersTransport.
 If no serversTransport is specified, the default@internal will be used.
 The default@internal serversTransport is created from the static configuration.
-More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/http/load-balancing/serverstransport/ */
+More info: https://doc.traefik.io/traefik/v3.3/routing/services/#serverstransport_1 */
 export interface TraefikIoV1alpha1ServersTransport {
   apiVersion?: string;
   kind?: string;
   metadata: ObjectMeta;
   spec: {
     certificatesSecrets?: string[];
-    cipherSuites?: string[];
     disableHTTP2?: boolean;
     forwardingTimeouts?: {
       dialTimeout?: any;
@@ -29562,13 +35645,7 @@ export interface TraefikIoV1alpha1ServersTransport {
     };
     insecureSkipVerify?: boolean;
     maxIdleConnsPerHost?: number;
-    maxVersion?: string;
-    minVersion?: string;
     peerCertURI?: string;
-    rootCAs?: {
-      configMap?: string;
-      secret?: string;
-    }[];
     rootCAsSecrets?: string[];
     serverName?: string;
     spiffe?: {
@@ -29589,7 +35666,7 @@ export interface TraefikIoV1alpha1ServersTransportList {
 /* ServersTransportTCP is the CRD implementation of a TCPServersTransport.
 If no tcpServersTransport is specified, a default one named default@internal will be used.
 The default@internal tcpServersTransport can be configured in the static configuration.
-More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/tcp/serverstransport/ */
+More info: https://doc.traefik.io/traefik/v3.3/routing/services/#serverstransport_3 */
 export interface TraefikIoV1alpha1ServersTransportTCP {
   apiVersion?: string;
   kind?: string;
@@ -29597,18 +35674,11 @@ export interface TraefikIoV1alpha1ServersTransportTCP {
   spec: {
     dialKeepAlive?: any;
     dialTimeout?: any;
-    proxyProtocol?: {
-      version?: number;
-    };
     terminationDelay?: any;
     tls?: {
       certificatesSecrets?: string[];
       insecureSkipVerify?: boolean;
       peerCertURI?: string;
-      rootCAs?: {
-        configMap?: string;
-        secret?: string;
-      }[];
       rootCAsSecrets?: string[];
       serverName?: string;
       spiffe?: {
@@ -29628,7 +35698,7 @@ export interface TraefikIoV1alpha1ServersTransportTCPList {
 }
 /* io.traefik.v1alpha1.TLSOption */
 /* TLSOption is the CRD implementation of a Traefik TLS Option, allowing to configure some parameters of the TLS connection.
-More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/http/tls/tls-certificates/#certificates-stores#tls-options */
+More info: https://doc.traefik.io/traefik/v3.3/https/tls/#tls-options */
 export interface TraefikIoV1alpha1TLSOption {
   apiVersion?: string;
   kind?: string;
@@ -29641,7 +35711,6 @@ export interface TraefikIoV1alpha1TLSOption {
       secretNames?: string[];
     };
     curvePreferences?: string[];
-    disableSessionTickets?: boolean;
     maxVersion?: string;
     minVersion?: string;
     preferServerCipherSuites?: boolean;
@@ -29660,7 +35729,7 @@ export interface TraefikIoV1alpha1TLSOptionList {
 /* TLSStore is the CRD implementation of a Traefik TLS Store.
 For the time being, only the TLSStore named default is supported.
 This means that you cannot have two stores that are named default in different Kubernetes namespaces.
-More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/http/tls/tls-certificates/#certificates-stores#certificates-stores */
+More info: https://doc.traefik.io/traefik/v3.3/https/tls/#certificates-stores */
 export interface TraefikIoV1alpha1TLSStore {
   apiVersion?: string;
   kind?: string;
@@ -29694,173 +35763,12 @@ export interface TraefikIoV1alpha1TLSStoreList {
 TraefikService object allows to:
 - Apply weight to Services on load-balancing
 - Mirror traffic on services
-More info: https://doc.traefik.io/traefik/v3.7/reference/routing-configuration/kubernetes/crd/http/traefikservice/ */
+More info: https://doc.traefik.io/traefik/v3.3/routing/providers/kubernetes-crd/#kind-traefikservice */
 export interface TraefikIoV1alpha1TraefikService {
   apiVersion?: string;
   kind?: string;
   metadata: ObjectMeta;
   spec: {
-    failover?: {
-      errors: {
-        maxRequestBodyBytes?: number;
-        status?: string[];
-      };
-      fallback: {
-        healthCheck?: {
-          followRedirects?: boolean;
-          headers?: {
-            [key: string]: unknown;
-          };
-          hostname?: string;
-          interval?: any;
-          method?: string;
-          mode?: string;
-          path?: string;
-          port?: number;
-          scheme?: string;
-          status?: number;
-          timeout?: any;
-          unhealthyInterval?: any;
-        };
-        kind?: "Service" | "TraefikService";
-        middlewares?: {
-          name: string;
-          namespace?: string;
-        }[];
-        name: string;
-        namespace?: string;
-        nativeLB?: boolean;
-        nodePortLB?: boolean;
-        passHostHeader?: boolean;
-        passiveHealthCheck?: {
-          failureWindow?: any;
-          maxFailedAttempts?: number;
-        };
-        port?: any;
-        responseForwarding?: {
-          flushInterval?: string;
-        };
-        scheme?: string;
-        serversTransport?: string;
-        sticky?: {
-          cookie?: {
-            domain?: string;
-            httpOnly?: boolean;
-            maxAge?: number;
-            name?: string;
-            path?: string;
-            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
-            secure?: boolean;
-          };
-        };
-        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
-        weight?: number;
-      };
-      service: {
-        healthCheck?: {
-          followRedirects?: boolean;
-          headers?: {
-            [key: string]: unknown;
-          };
-          hostname?: string;
-          interval?: any;
-          method?: string;
-          mode?: string;
-          path?: string;
-          port?: number;
-          scheme?: string;
-          status?: number;
-          timeout?: any;
-          unhealthyInterval?: any;
-        };
-        kind?: "Service" | "TraefikService";
-        middlewares?: {
-          name: string;
-          namespace?: string;
-        }[];
-        name: string;
-        namespace?: string;
-        nativeLB?: boolean;
-        nodePortLB?: boolean;
-        passHostHeader?: boolean;
-        passiveHealthCheck?: {
-          failureWindow?: any;
-          maxFailedAttempts?: number;
-        };
-        port?: any;
-        responseForwarding?: {
-          flushInterval?: string;
-        };
-        scheme?: string;
-        serversTransport?: string;
-        sticky?: {
-          cookie?: {
-            domain?: string;
-            httpOnly?: boolean;
-            maxAge?: number;
-            name?: string;
-            path?: string;
-            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
-            secure?: boolean;
-          };
-        };
-        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
-        weight?: number;
-      };
-    };
-    highestRandomWeight?: {
-      services?: {
-        healthCheck?: {
-          followRedirects?: boolean;
-          headers?: {
-            [key: string]: unknown;
-          };
-          hostname?: string;
-          interval?: any;
-          method?: string;
-          mode?: string;
-          path?: string;
-          port?: number;
-          scheme?: string;
-          status?: number;
-          timeout?: any;
-          unhealthyInterval?: any;
-        };
-        kind?: "Service" | "TraefikService";
-        middlewares?: {
-          name: string;
-          namespace?: string;
-        }[];
-        name: string;
-        namespace?: string;
-        nativeLB?: boolean;
-        nodePortLB?: boolean;
-        passHostHeader?: boolean;
-        passiveHealthCheck?: {
-          failureWindow?: any;
-          maxFailedAttempts?: number;
-        };
-        port?: any;
-        responseForwarding?: {
-          flushInterval?: string;
-        };
-        scheme?: string;
-        serversTransport?: string;
-        sticky?: {
-          cookie?: {
-            domain?: string;
-            httpOnly?: boolean;
-            maxAge?: number;
-            name?: string;
-            path?: string;
-            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
-            secure?: boolean;
-          };
-        };
-        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
-        weight?: number;
-      }[];
-    };
     mirroring?: {
       healthCheck?: {
         followRedirects?: boolean;
@@ -29876,14 +35784,9 @@ export interface TraefikIoV1alpha1TraefikService {
         scheme?: string;
         status?: number;
         timeout?: any;
-        unhealthyInterval?: any;
       };
       kind?: "Service" | "TraefikService";
       maxBodySize?: number;
-      middlewares?: {
-        name: string;
-        namespace?: string;
-      }[];
       mirrorBody?: boolean;
       mirrors?: {
         healthCheck?: {
@@ -29900,22 +35803,13 @@ export interface TraefikIoV1alpha1TraefikService {
           scheme?: string;
           status?: number;
           timeout?: any;
-          unhealthyInterval?: any;
         };
         kind?: "Service" | "TraefikService";
-        middlewares?: {
-          name: string;
-          namespace?: string;
-        }[];
         name: string;
         namespace?: string;
         nativeLB?: boolean;
         nodePortLB?: boolean;
         passHostHeader?: boolean;
-        passiveHealthCheck?: {
-          failureWindow?: any;
-          maxFailedAttempts?: number;
-        };
         percent?: number;
         port?: any;
         responseForwarding?: {
@@ -29925,16 +35819,15 @@ export interface TraefikIoV1alpha1TraefikService {
         serversTransport?: string;
         sticky?: {
           cookie?: {
-            domain?: string;
             httpOnly?: boolean;
             maxAge?: number;
             name?: string;
             path?: string;
-            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            sameSite?: string;
             secure?: boolean;
           };
         };
-        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        strategy?: string;
         weight?: number;
       }[];
       name: string;
@@ -29942,10 +35835,6 @@ export interface TraefikIoV1alpha1TraefikService {
       nativeLB?: boolean;
       nodePortLB?: boolean;
       passHostHeader?: boolean;
-      passiveHealthCheck?: {
-        failureWindow?: any;
-        maxFailedAttempts?: number;
-      };
       port?: any;
       responseForwarding?: {
         flushInterval?: string;
@@ -29954,16 +35843,15 @@ export interface TraefikIoV1alpha1TraefikService {
       serversTransport?: string;
       sticky?: {
         cookie?: {
-          domain?: string;
           httpOnly?: boolean;
           maxAge?: number;
           name?: string;
           path?: string;
-          sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+          sameSite?: string;
           secure?: boolean;
         };
       };
-      strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+      strategy?: string;
       weight?: number;
     };
     weighted?: {
@@ -29982,22 +35870,13 @@ export interface TraefikIoV1alpha1TraefikService {
           scheme?: string;
           status?: number;
           timeout?: any;
-          unhealthyInterval?: any;
         };
         kind?: "Service" | "TraefikService";
-        middlewares?: {
-          name: string;
-          namespace?: string;
-        }[];
         name: string;
         namespace?: string;
         nativeLB?: boolean;
         nodePortLB?: boolean;
         passHostHeader?: boolean;
-        passiveHealthCheck?: {
-          failureWindow?: any;
-          maxFailedAttempts?: number;
-        };
         port?: any;
         responseForwarding?: {
           flushInterval?: string;
@@ -30006,26 +35885,24 @@ export interface TraefikIoV1alpha1TraefikService {
         serversTransport?: string;
         sticky?: {
           cookie?: {
-            domain?: string;
             httpOnly?: boolean;
             maxAge?: number;
             name?: string;
             path?: string;
-            sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+            sameSite?: string;
             secure?: boolean;
           };
         };
-        strategy?: "wrr" | "p2c" | "hrw" | "leasttime" | "RoundRobin";
+        strategy?: string;
         weight?: number;
       }[];
       sticky?: {
         cookie?: {
-          domain?: string;
           httpOnly?: boolean;
           maxAge?: number;
           name?: string;
           path?: string;
-          sameSite?: "none" | "lax" | "strict" | "None" | "Lax" | "Strict";
+          sameSite?: string;
           secure?: boolean;
         };
       };
@@ -37531,6 +43408,1477 @@ export interface WatchCertificatesV1CertificateSigningRequestRequest {
     name: string;
   };
 }
+export interface ListCiliumIoV2CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateCiliumIoV2CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: CiliumIoV2CiliumCIDRGroup;
+}
+export interface DeleteCiliumIoV2CollectionCiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadCiliumIoV2CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2CiliumCIDRGroup;
+}
+export interface DeleteCiliumIoV2CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchCiliumIoV2CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2CiliumClusterwideNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateCiliumIoV2CiliumClusterwideNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: CiliumIoV2CiliumClusterwideNetworkPolicy;
+}
+export interface DeleteCiliumIoV2CollectionCiliumClusterwideNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadCiliumIoV2CiliumClusterwideNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2CiliumClusterwideNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2CiliumClusterwideNetworkPolicy;
+}
+export interface DeleteCiliumIoV2CiliumClusterwideNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchCiliumIoV2CiliumClusterwideNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ReadCiliumIoV2CiliumClusterwideNetworkPolicyStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2CiliumClusterwideNetworkPolicyStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2CiliumClusterwideNetworkPolicy;
+}
+export interface PatchCiliumIoV2CiliumClusterwideNetworkPolicyStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2CiliumEndpointForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListCiliumIoV2CiliumIdentityRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateCiliumIoV2CiliumIdentityRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: CiliumIoV2CiliumIdentity;
+}
+export interface DeleteCiliumIoV2CollectionCiliumIdentityRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadCiliumIoV2CiliumIdentityRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2CiliumIdentityRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2CiliumIdentity;
+}
+export interface DeleteCiliumIoV2CiliumIdentityRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchCiliumIoV2CiliumIdentityRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ReadCiliumIoV2CiliumIdentityStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2CiliumIdentityStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2CiliumIdentity;
+}
+export interface PatchCiliumIoV2CiliumIdentityStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateCiliumIoV2CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: CiliumIoV2CiliumLoadBalancerIPPool;
+}
+export interface DeleteCiliumIoV2CollectionCiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadCiliumIoV2CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2CiliumLoadBalancerIPPool;
+}
+export interface DeleteCiliumIoV2CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchCiliumIoV2CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ReadCiliumIoV2CiliumLoadBalancerIPPoolStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2CiliumLoadBalancerIPPoolStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2CiliumLoadBalancerIPPool;
+}
+export interface PatchCiliumIoV2CiliumLoadBalancerIPPoolStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2CiliumNetworkPolicyForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListCiliumIoV2CiliumNodeConfigForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListCiliumIoV2CiliumNodeRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateCiliumIoV2CiliumNodeRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: CiliumIoV2CiliumNode;
+}
+export interface DeleteCiliumIoV2CollectionCiliumNodeRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadCiliumIoV2CiliumNodeRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2CiliumNodeRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2CiliumNode;
+}
+export interface DeleteCiliumIoV2CiliumNodeRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchCiliumIoV2CiliumNodeRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ReadCiliumIoV2CiliumNodeStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2CiliumNodeStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2CiliumNode;
+}
+export interface PatchCiliumIoV2CiliumNodeStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2NamespacedCiliumEndpointRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateCiliumIoV2NamespacedCiliumEndpointRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: CiliumIoV2CiliumEndpoint;
+}
+export interface DeleteCiliumIoV2CollectionNamespacedCiliumEndpointRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadCiliumIoV2NamespacedCiliumEndpointRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceCiliumIoV2NamespacedCiliumEndpointRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: CiliumIoV2CiliumEndpoint;
+}
+export interface DeleteCiliumIoV2NamespacedCiliumEndpointRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchCiliumIoV2NamespacedCiliumEndpointRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2NamespacedCiliumNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateCiliumIoV2NamespacedCiliumNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: CiliumIoV2CiliumNetworkPolicy;
+}
+export interface DeleteCiliumIoV2CollectionNamespacedCiliumNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadCiliumIoV2NamespacedCiliumNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceCiliumIoV2NamespacedCiliumNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: CiliumIoV2CiliumNetworkPolicy;
+}
+export interface DeleteCiliumIoV2NamespacedCiliumNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchCiliumIoV2NamespacedCiliumNetworkPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadCiliumIoV2NamespacedCiliumNetworkPolicyStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceCiliumIoV2NamespacedCiliumNetworkPolicyStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: CiliumIoV2CiliumNetworkPolicy;
+}
+export interface PatchCiliumIoV2NamespacedCiliumNetworkPolicyStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateCiliumIoV2NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: CiliumIoV2CiliumNodeConfig;
+}
+export interface DeleteCiliumIoV2CollectionNamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadCiliumIoV2NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceCiliumIoV2NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: CiliumIoV2CiliumNodeConfig;
+}
+export interface DeleteCiliumIoV2NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchCiliumIoV2NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2alpha1CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateCiliumIoV2alpha1CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: CiliumIoV2alpha1CiliumCIDRGroup;
+}
+export interface DeleteCiliumIoV2alpha1CollectionCiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadCiliumIoV2alpha1CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2alpha1CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2alpha1CiliumCIDRGroup;
+}
+export interface DeleteCiliumIoV2alpha1CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchCiliumIoV2alpha1CiliumCIDRGroupRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: CiliumIoV2alpha1CiliumL2AnnouncementPolicy;
+}
+export interface DeleteCiliumIoV2alpha1CollectionCiliumL2AnnouncementPolicyRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2alpha1CiliumL2AnnouncementPolicy;
+}
+export interface DeleteCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ReadCiliumIoV2alpha1CiliumL2AnnouncementPolicyStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2alpha1CiliumL2AnnouncementPolicyStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2alpha1CiliumL2AnnouncementPolicy;
+}
+export interface PatchCiliumIoV2alpha1CiliumL2AnnouncementPolicyStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: CiliumIoV2alpha1CiliumLoadBalancerIPPool;
+}
+export interface DeleteCiliumIoV2alpha1CollectionCiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2alpha1CiliumLoadBalancerIPPool;
+}
+export interface DeleteCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ReadCiliumIoV2alpha1CiliumLoadBalancerIPPoolStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2alpha1CiliumLoadBalancerIPPoolStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2alpha1CiliumLoadBalancerIPPool;
+}
+export interface PatchCiliumIoV2alpha1CiliumLoadBalancerIPPoolStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2alpha1CiliumNodeConfigForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListCiliumIoV2alpha1CiliumPodIPPoolRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateCiliumIoV2alpha1CiliumPodIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: CiliumIoV2alpha1CiliumPodIPPool;
+}
+export interface DeleteCiliumIoV2alpha1CollectionCiliumPodIPPoolRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadCiliumIoV2alpha1CiliumPodIPPoolRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceCiliumIoV2alpha1CiliumPodIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: CiliumIoV2alpha1CiliumPodIPPool;
+}
+export interface DeleteCiliumIoV2alpha1CiliumPodIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchCiliumIoV2alpha1CiliumPodIPPoolRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: CiliumIoV2alpha1CiliumNodeConfig;
+}
+export interface DeleteCiliumIoV2alpha1CollectionNamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: CiliumIoV2alpha1CiliumNodeConfig;
+}
+export interface DeleteCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
 export interface GetCoordinationAPIGroupRequest {}
 export interface GetCoordinationV1APIResourcesRequest {}
 export interface ListCoordinationV1LeaseForAllNamespacesRequest {
@@ -38351,6 +45699,2492 @@ export interface WatchFlowcontrolApiserverV1PriorityLevelConfigurationRequest {
     name: string;
   };
 }
+export interface ListGatewayNetworkingV1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateGatewayNetworkingV1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: GatewayNetworkingK8sIoV1GatewayClass;
+}
+export interface DeleteGatewayNetworkingV1CollectionGatewayClassRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadGatewayNetworkingV1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: GatewayNetworkingK8sIoV1GatewayClass;
+}
+export interface DeleteGatewayNetworkingV1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchGatewayNetworkingV1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ReadGatewayNetworkingV1GatewayClassStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1GatewayClassStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: GatewayNetworkingK8sIoV1GatewayClass;
+}
+export interface PatchGatewayNetworkingV1GatewayClassStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListGatewayNetworkingV1GatewayForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListGatewayNetworkingV1GRPCRouteForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListGatewayNetworkingV1HTTPRouteForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListGatewayNetworkingV1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateGatewayNetworkingV1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1Gateway;
+}
+export interface DeleteGatewayNetworkingV1CollectionNamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadGatewayNetworkingV1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1Gateway;
+}
+export interface DeleteGatewayNetworkingV1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchGatewayNetworkingV1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadGatewayNetworkingV1NamespacedGatewayStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1NamespacedGatewayStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1Gateway;
+}
+export interface PatchGatewayNetworkingV1NamespacedGatewayStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListGatewayNetworkingV1NamespacedGRPCRouteRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateGatewayNetworkingV1NamespacedGRPCRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1GRPCRoute;
+}
+export interface DeleteGatewayNetworkingV1CollectionNamespacedGRPCRouteRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadGatewayNetworkingV1NamespacedGRPCRouteRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1NamespacedGRPCRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1GRPCRoute;
+}
+export interface DeleteGatewayNetworkingV1NamespacedGRPCRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchGatewayNetworkingV1NamespacedGRPCRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadGatewayNetworkingV1NamespacedGRPCRouteStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1NamespacedGRPCRouteStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1GRPCRoute;
+}
+export interface PatchGatewayNetworkingV1NamespacedGRPCRouteStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListGatewayNetworkingV1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateGatewayNetworkingV1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1HTTPRoute;
+}
+export interface DeleteGatewayNetworkingV1CollectionNamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadGatewayNetworkingV1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1HTTPRoute;
+}
+export interface DeleteGatewayNetworkingV1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchGatewayNetworkingV1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadGatewayNetworkingV1NamespacedHTTPRouteStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1NamespacedHTTPRouteStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1HTTPRoute;
+}
+export interface PatchGatewayNetworkingV1NamespacedHTTPRouteStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListGatewayNetworkingV1beta1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateGatewayNetworkingV1beta1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1GatewayClass;
+}
+export interface DeleteGatewayNetworkingV1beta1CollectionGatewayClassRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadGatewayNetworkingV1beta1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1beta1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1GatewayClass;
+}
+export interface DeleteGatewayNetworkingV1beta1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchGatewayNetworkingV1beta1GatewayClassRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ReadGatewayNetworkingV1beta1GatewayClassStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1beta1GatewayClassStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1GatewayClass;
+}
+export interface PatchGatewayNetworkingV1beta1GatewayClassStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListGatewayNetworkingV1beta1GatewayForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListGatewayNetworkingV1beta1HTTPRouteForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListGatewayNetworkingV1beta1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateGatewayNetworkingV1beta1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1Gateway;
+}
+export interface DeleteGatewayNetworkingV1beta1CollectionNamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadGatewayNetworkingV1beta1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1beta1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1Gateway;
+}
+export interface DeleteGatewayNetworkingV1beta1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchGatewayNetworkingV1beta1NamespacedGatewayRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadGatewayNetworkingV1beta1NamespacedGatewayStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1beta1NamespacedGatewayStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1Gateway;
+}
+export interface PatchGatewayNetworkingV1beta1NamespacedGatewayStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListGatewayNetworkingV1beta1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateGatewayNetworkingV1beta1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1HTTPRoute;
+}
+export interface DeleteGatewayNetworkingV1beta1CollectionNamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadGatewayNetworkingV1beta1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1beta1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1HTTPRoute;
+}
+export interface DeleteGatewayNetworkingV1beta1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchGatewayNetworkingV1beta1NamespacedHTTPRouteRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadGatewayNetworkingV1beta1NamespacedHTTPRouteStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1beta1NamespacedHTTPRouteStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1HTTPRoute;
+}
+export interface PatchGatewayNetworkingV1beta1NamespacedHTTPRouteStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListGatewayNetworkingV1beta1NamespacedReferenceGrantRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateGatewayNetworkingV1beta1NamespacedReferenceGrantRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1ReferenceGrant;
+}
+export interface DeleteGatewayNetworkingV1beta1CollectionNamespacedReferenceGrantRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadGatewayNetworkingV1beta1NamespacedReferenceGrantRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceGatewayNetworkingV1beta1NamespacedReferenceGrantRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: GatewayNetworkingK8sIoV1beta1ReferenceGrant;
+}
+export interface DeleteGatewayNetworkingV1beta1NamespacedReferenceGrantRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchGatewayNetworkingV1beta1NamespacedReferenceGrantRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListGatewayNetworkingV1beta1ReferenceGrantForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1AccessControlPolicyRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1AccessControlPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  body: HubTraefikIoV1alpha1AccessControlPolicy;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionAccessControlPolicyRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1AccessControlPolicyRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1AccessControlPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+  };
+  body: HubTraefikIoV1alpha1AccessControlPolicy;
+}
+export interface DeleteHubTraefikIoV1alpha1AccessControlPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1AccessControlPolicyRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+  };
+  body: Patch;
+}
+export interface ListHubTraefikIoV1alpha1AIServiceForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1APIAccessForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1APIBundleForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1APICatalogItemForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1APIPlanForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1APIPortalForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1APIRateLimitForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1APIForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1APIVersionForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1ManagedSubscriptionForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListHubTraefikIoV1alpha1NamespacedAIServiceRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1NamespacedAIServiceRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1AIService;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionNamespacedAIServiceRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1NamespacedAIServiceRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1NamespacedAIServiceRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1AIService;
+}
+export interface DeleteHubTraefikIoV1alpha1NamespacedAIServiceRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1NamespacedAIServiceRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListHubTraefikIoV1alpha1NamespacedAPIAccessRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1NamespacedAPIAccessRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIAccess;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIAccessRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1NamespacedAPIAccessRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1NamespacedAPIAccessRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIAccess;
+}
+export interface DeleteHubTraefikIoV1alpha1NamespacedAPIAccessRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1NamespacedAPIAccessRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListHubTraefikIoV1alpha1NamespacedAPIBundleRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1NamespacedAPIBundleRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIBundle;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIBundleRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1NamespacedAPIBundleRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1NamespacedAPIBundleRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIBundle;
+}
+export interface DeleteHubTraefikIoV1alpha1NamespacedAPIBundleRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1NamespacedAPIBundleRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APICatalogItem;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionNamespacedAPICatalogItemRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APICatalogItem;
+}
+export interface DeleteHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListHubTraefikIoV1alpha1NamespacedAPIPlanRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1NamespacedAPIPlanRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIPlan;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIPlanRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1NamespacedAPIPlanRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1NamespacedAPIPlanRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIPlan;
+}
+export interface DeleteHubTraefikIoV1alpha1NamespacedAPIPlanRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1NamespacedAPIPlanRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListHubTraefikIoV1alpha1NamespacedAPIPortalRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1NamespacedAPIPortalRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIPortal;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIPortalRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1NamespacedAPIPortalRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1NamespacedAPIPortalRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIPortal;
+}
+export interface DeleteHubTraefikIoV1alpha1NamespacedAPIPortalRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1NamespacedAPIPortalRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIRateLimit;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIRateLimitRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIRateLimit;
+}
+export interface DeleteHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListHubTraefikIoV1alpha1NamespacedAPIRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1NamespacedAPIRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1API;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1NamespacedAPIRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1NamespacedAPIRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1API;
+}
+export interface DeleteHubTraefikIoV1alpha1NamespacedAPIRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1NamespacedAPIRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListHubTraefikIoV1alpha1NamespacedAPIVersionRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1NamespacedAPIVersionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIVersion;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIVersionRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1NamespacedAPIVersionRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1NamespacedAPIVersionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1APIVersion;
+}
+export interface DeleteHubTraefikIoV1alpha1NamespacedAPIVersionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1NamespacedAPIVersionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1ManagedSubscription;
+}
+export interface DeleteHubTraefikIoV1alpha1CollectionNamespacedManagedSubscriptionRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: HubTraefikIoV1alpha1ManagedSubscription;
+}
+export interface DeleteHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListMinioMinIoV2NamespacedTenantRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateMinioMinIoV2NamespacedTenantRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: MinioMinIoV2Tenant;
+}
+export interface DeleteMinioMinIoV2CollectionNamespacedTenantRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadMinioMinIoV2NamespacedTenantRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceMinioMinIoV2NamespacedTenantRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: MinioMinIoV2Tenant;
+}
+export interface DeleteMinioMinIoV2NamespacedTenantRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchMinioMinIoV2NamespacedTenantRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadMinioMinIoV2NamespacedTenantStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceMinioMinIoV2NamespacedTenantStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: MinioMinIoV2Tenant;
+}
+export interface PatchMinioMinIoV2NamespacedTenantStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListMinioMinIoV2TenantForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
 export interface ListMonitoringCoreosComV1AlertmanagerForAllNamespacesRequest {
   query: {
     allowWatchBookmarks?: boolean;
@@ -38638,43 +48472,6 @@ export interface PatchMonitoringCoreosComV1NamespacedPodMonitorRequest {
   };
   body: Patch;
 }
-export interface ReadMonitoringCoreosComV1NamespacedPodMonitorStatusRequest {
-  query: {
-    pretty?: string;
-    resourceVersion?: string;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-}
-export interface ReplaceMonitoringCoreosComV1NamespacedPodMonitorStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-  body: MonitoringCoreosComV1PodMonitor;
-}
-export interface PatchMonitoringCoreosComV1NamespacedPodMonitorStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-  body: Patch;
-}
 export interface ListMonitoringCoreosComV1NamespacedProbeRequest {
   query: {
     pretty?: string;
@@ -38761,43 +48558,6 @@ export interface DeleteMonitoringCoreosComV1NamespacedProbeRequest {
   };
 }
 export interface PatchMonitoringCoreosComV1NamespacedProbeRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-  body: Patch;
-}
-export interface ReadMonitoringCoreosComV1NamespacedProbeStatusRequest {
-  query: {
-    pretty?: string;
-    resourceVersion?: string;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-}
-export interface ReplaceMonitoringCoreosComV1NamespacedProbeStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-  body: MonitoringCoreosComV1Probe;
-}
-export interface PatchMonitoringCoreosComV1NamespacedProbeStatusRequest {
   query: {
     pretty?: string;
     dryRun?: string;
@@ -39070,43 +48830,6 @@ export interface DeleteMonitoringCoreosComV1NamespacedPrometheusRuleRequest {
   };
 }
 export interface PatchMonitoringCoreosComV1NamespacedPrometheusRuleRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-  body: Patch;
-}
-export interface ReadMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest {
-  query: {
-    pretty?: string;
-    resourceVersion?: string;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-}
-export interface ReplaceMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-  body: MonitoringCoreosComV1PrometheusRule;
-}
-export interface PatchMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest {
   query: {
     pretty?: string;
     dryRun?: string;
@@ -39596,43 +49319,6 @@ export interface PatchMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigReq
   };
   body: Patch;
 }
-export interface ReadMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest {
-  query: {
-    pretty?: string;
-    resourceVersion?: string;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-}
-export interface ReplaceMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-  body: MonitoringCoreosComV1alpha1AlertmanagerConfig;
-}
-export interface PatchMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-  body: Patch;
-}
 export interface ListMonitoringCoreosComV1alpha1NamespacedPrometheusAgentRequest {
   query: {
     pretty?: string;
@@ -39892,43 +49578,6 @@ export interface DeleteMonitoringCoreosComV1alpha1NamespacedScrapeConfigRequest 
   };
 }
 export interface PatchMonitoringCoreosComV1alpha1NamespacedScrapeConfigRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-  body: Patch;
-}
-export interface ReadMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest {
-  query: {
-    pretty?: string;
-    resourceVersion?: string;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-}
-export interface ReplaceMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest {
-  query: {
-    pretty?: string;
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-  };
-  path: {
-    name: string;
-    namespace: string;
-  };
-  body: MonitoringCoreosComV1alpha1ScrapeConfig;
-}
-export interface PatchMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest {
   query: {
     pretty?: string;
     dryRun?: string;
@@ -45147,6 +54796,308 @@ export interface WatchStorageV1VolumeAttachmentRequest {
     name: string;
   };
 }
+export interface ListStsMinIoV1alpha1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateStsMinIoV1alpha1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: StsMinIoV1alpha1PolicyBinding;
+}
+export interface DeleteStsMinIoV1alpha1CollectionNamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadStsMinIoV1alpha1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceStsMinIoV1alpha1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: StsMinIoV1alpha1PolicyBinding;
+}
+export interface DeleteStsMinIoV1alpha1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchStsMinIoV1alpha1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadStsMinIoV1alpha1NamespacedPolicyBindingStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceStsMinIoV1alpha1NamespacedPolicyBindingStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: StsMinIoV1alpha1PolicyBinding;
+}
+export interface PatchStsMinIoV1alpha1NamespacedPolicyBindingStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListStsMinIoV1alpha1PolicyBindingForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
+export interface ListStsMinIoV1beta1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface CreateStsMinIoV1beta1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    namespace: string;
+  };
+  body: StsMinIoV1beta1PolicyBinding;
+}
+export interface DeleteStsMinIoV1beta1CollectionNamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+  path: {
+    namespace: string;
+  };
+}
+export interface ReadStsMinIoV1beta1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceStsMinIoV1beta1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: StsMinIoV1beta1PolicyBinding;
+}
+export interface DeleteStsMinIoV1beta1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    gracePeriodSeconds?: number;
+    ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
+    orphanDependents?: boolean;
+    propagationPolicy?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface PatchStsMinIoV1beta1NamespacedPolicyBindingRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ReadStsMinIoV1beta1NamespacedPolicyBindingStatusRequest {
+  query: {
+    pretty?: string;
+    resourceVersion?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+}
+export interface ReplaceStsMinIoV1beta1NamespacedPolicyBindingStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: StsMinIoV1beta1PolicyBinding;
+}
+export interface PatchStsMinIoV1beta1NamespacedPolicyBindingStatusRequest {
+  query: {
+    pretty?: string;
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+  };
+  path: {
+    name: string;
+    namespace: string;
+  };
+  body: Patch;
+}
+export interface ListStsMinIoV1beta1PolicyBindingForAllNamespacesRequest {
+  query: {
+    allowWatchBookmarks?: boolean;
+    continue?: string;
+    fieldSelector?: string;
+    labelSelector?: string;
+    limit?: number;
+    pretty?: string;
+    resourceVersion?: string;
+    resourceVersionMatch?: string;
+    sendInitialEvents?: boolean;
+    timeoutSeconds?: number;
+    watch?: boolean;
+  };
+}
 export interface ListTektonDevV1NamespacedPipelineRunRequest {
   query: {
     pretty?: string;
@@ -50348,6 +60299,470 @@ export class KubernetesClient extends APIClient {
     const path = `/apis/certificates.k8s.io/v1/watch/certificatesigningrequests/${params.path.name}`;
     return await this.get<WatchEvent>(path, null, null, opts);
   }
+  async listCiliumIoV2CiliumCIDRGroup(params: ListCiliumIoV2CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumCIDRGroupList> {
+    const path = `/apis/cilium.io/v2/ciliumcidrgroups`;
+    return await this.get<CiliumIoV2CiliumCIDRGroupList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2CiliumCIDRGroup(params: CreateCiliumIoV2CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumCIDRGroup> {
+    const path = `/apis/cilium.io/v2/ciliumcidrgroups`;
+    return await this.post<CiliumIoV2CiliumCIDRGroup>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CollectionCiliumCIDRGroup(params: DeleteCiliumIoV2CollectionCiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/ciliumcidrgroups`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2CiliumCIDRGroup(params: ReadCiliumIoV2CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumCIDRGroup> {
+    const path = `/apis/cilium.io/v2/ciliumcidrgroups/${params.path.name}`;
+    return await this.get<CiliumIoV2CiliumCIDRGroup>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2CiliumCIDRGroup(params: ReplaceCiliumIoV2CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumCIDRGroup> {
+    const path = `/apis/cilium.io/v2/ciliumcidrgroups/${params.path.name}`;
+    return await this.put<CiliumIoV2CiliumCIDRGroup>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CiliumCIDRGroup(params: DeleteCiliumIoV2CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/ciliumcidrgroups/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2CiliumCIDRGroup(params: PatchCiliumIoV2CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumCIDRGroup> {
+    const path = `/apis/cilium.io/v2/ciliumcidrgroups/${params.path.name}`;
+    return await this.patch<CiliumIoV2CiliumCIDRGroup>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2CiliumClusterwideNetworkPolicy(params: ListCiliumIoV2CiliumClusterwideNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumClusterwideNetworkPolicyList> {
+    const path = `/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies`;
+    return await this.get<CiliumIoV2CiliumClusterwideNetworkPolicyList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2CiliumClusterwideNetworkPolicy(params: CreateCiliumIoV2CiliumClusterwideNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumClusterwideNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies`;
+    return await this.post<CiliumIoV2CiliumClusterwideNetworkPolicy>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CollectionCiliumClusterwideNetworkPolicy(params: DeleteCiliumIoV2CollectionCiliumClusterwideNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2CiliumClusterwideNetworkPolicy(params: ReadCiliumIoV2CiliumClusterwideNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumClusterwideNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies/${params.path.name}`;
+    return await this.get<CiliumIoV2CiliumClusterwideNetworkPolicy>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2CiliumClusterwideNetworkPolicy(params: ReplaceCiliumIoV2CiliumClusterwideNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumClusterwideNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies/${params.path.name}`;
+    return await this.put<CiliumIoV2CiliumClusterwideNetworkPolicy>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CiliumClusterwideNetworkPolicy(params: DeleteCiliumIoV2CiliumClusterwideNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2CiliumClusterwideNetworkPolicy(params: PatchCiliumIoV2CiliumClusterwideNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumClusterwideNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies/${params.path.name}`;
+    return await this.patch<CiliumIoV2CiliumClusterwideNetworkPolicy>(path, params.query, params.body, opts);
+  }
+  async readCiliumIoV2CiliumClusterwideNetworkPolicyStatus(params: ReadCiliumIoV2CiliumClusterwideNetworkPolicyStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumClusterwideNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies/${params.path.name}/status`;
+    return await this.get<CiliumIoV2CiliumClusterwideNetworkPolicy>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2CiliumClusterwideNetworkPolicyStatus(params: ReplaceCiliumIoV2CiliumClusterwideNetworkPolicyStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumClusterwideNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies/${params.path.name}/status`;
+    return await this.put<CiliumIoV2CiliumClusterwideNetworkPolicy>(path, params.query, params.body, opts);
+  }
+  async patchCiliumIoV2CiliumClusterwideNetworkPolicyStatus(params: PatchCiliumIoV2CiliumClusterwideNetworkPolicyStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumClusterwideNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies/${params.path.name}/status`;
+    return await this.patch<CiliumIoV2CiliumClusterwideNetworkPolicy>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2CiliumEndpointForAllNamespaces(params: ListCiliumIoV2CiliumEndpointForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumEndpointList> {
+    const path = `/apis/cilium.io/v2/ciliumendpoints`;
+    return await this.get<CiliumIoV2CiliumEndpointList>(path, null, null, opts);
+  }
+  async listCiliumIoV2CiliumIdentity(params: ListCiliumIoV2CiliumIdentityRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumIdentityList> {
+    const path = `/apis/cilium.io/v2/ciliumidentities`;
+    return await this.get<CiliumIoV2CiliumIdentityList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2CiliumIdentity(params: CreateCiliumIoV2CiliumIdentityRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumIdentity> {
+    const path = `/apis/cilium.io/v2/ciliumidentities`;
+    return await this.post<CiliumIoV2CiliumIdentity>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CollectionCiliumIdentity(params: DeleteCiliumIoV2CollectionCiliumIdentityRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/ciliumidentities`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2CiliumIdentity(params: ReadCiliumIoV2CiliumIdentityRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumIdentity> {
+    const path = `/apis/cilium.io/v2/ciliumidentities/${params.path.name}`;
+    return await this.get<CiliumIoV2CiliumIdentity>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2CiliumIdentity(params: ReplaceCiliumIoV2CiliumIdentityRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumIdentity> {
+    const path = `/apis/cilium.io/v2/ciliumidentities/${params.path.name}`;
+    return await this.put<CiliumIoV2CiliumIdentity>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CiliumIdentity(params: DeleteCiliumIoV2CiliumIdentityRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/ciliumidentities/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2CiliumIdentity(params: PatchCiliumIoV2CiliumIdentityRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumIdentity> {
+    const path = `/apis/cilium.io/v2/ciliumidentities/${params.path.name}`;
+    return await this.patch<CiliumIoV2CiliumIdentity>(path, params.query, params.body, opts);
+  }
+  async readCiliumIoV2CiliumIdentityStatus(params: ReadCiliumIoV2CiliumIdentityStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumIdentity> {
+    const path = `/apis/cilium.io/v2/ciliumidentities/${params.path.name}/status`;
+    return await this.get<CiliumIoV2CiliumIdentity>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2CiliumIdentityStatus(params: ReplaceCiliumIoV2CiliumIdentityStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumIdentity> {
+    const path = `/apis/cilium.io/v2/ciliumidentities/${params.path.name}/status`;
+    return await this.put<CiliumIoV2CiliumIdentity>(path, params.query, params.body, opts);
+  }
+  async patchCiliumIoV2CiliumIdentityStatus(params: PatchCiliumIoV2CiliumIdentityStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumIdentity> {
+    const path = `/apis/cilium.io/v2/ciliumidentities/${params.path.name}/status`;
+    return await this.patch<CiliumIoV2CiliumIdentity>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2CiliumLoadBalancerIPPool(params: ListCiliumIoV2CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumLoadBalancerIPPoolList> {
+    const path = `/apis/cilium.io/v2/ciliumloadbalancerippools`;
+    return await this.get<CiliumIoV2CiliumLoadBalancerIPPoolList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2CiliumLoadBalancerIPPool(params: CreateCiliumIoV2CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2/ciliumloadbalancerippools`;
+    return await this.post<CiliumIoV2CiliumLoadBalancerIPPool>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CollectionCiliumLoadBalancerIPPool(params: DeleteCiliumIoV2CollectionCiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/ciliumloadbalancerippools`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2CiliumLoadBalancerIPPool(params: ReadCiliumIoV2CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2/ciliumloadbalancerippools/${params.path.name}`;
+    return await this.get<CiliumIoV2CiliumLoadBalancerIPPool>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2CiliumLoadBalancerIPPool(params: ReplaceCiliumIoV2CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2/ciliumloadbalancerippools/${params.path.name}`;
+    return await this.put<CiliumIoV2CiliumLoadBalancerIPPool>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CiliumLoadBalancerIPPool(params: DeleteCiliumIoV2CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/ciliumloadbalancerippools/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2CiliumLoadBalancerIPPool(params: PatchCiliumIoV2CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2/ciliumloadbalancerippools/${params.path.name}`;
+    return await this.patch<CiliumIoV2CiliumLoadBalancerIPPool>(path, params.query, params.body, opts);
+  }
+  async readCiliumIoV2CiliumLoadBalancerIPPoolStatus(params: ReadCiliumIoV2CiliumLoadBalancerIPPoolStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2/ciliumloadbalancerippools/${params.path.name}/status`;
+    return await this.get<CiliumIoV2CiliumLoadBalancerIPPool>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2CiliumLoadBalancerIPPoolStatus(params: ReplaceCiliumIoV2CiliumLoadBalancerIPPoolStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2/ciliumloadbalancerippools/${params.path.name}/status`;
+    return await this.put<CiliumIoV2CiliumLoadBalancerIPPool>(path, params.query, params.body, opts);
+  }
+  async patchCiliumIoV2CiliumLoadBalancerIPPoolStatus(params: PatchCiliumIoV2CiliumLoadBalancerIPPoolStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2/ciliumloadbalancerippools/${params.path.name}/status`;
+    return await this.patch<CiliumIoV2CiliumLoadBalancerIPPool>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2CiliumNetworkPolicyForAllNamespaces(params: ListCiliumIoV2CiliumNetworkPolicyForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNetworkPolicyList> {
+    const path = `/apis/cilium.io/v2/ciliumnetworkpolicies`;
+    return await this.get<CiliumIoV2CiliumNetworkPolicyList>(path, null, null, opts);
+  }
+  async listCiliumIoV2CiliumNodeConfigForAllNamespaces(params: ListCiliumIoV2CiliumNodeConfigForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNodeConfigList> {
+    const path = `/apis/cilium.io/v2/ciliumnodeconfigs`;
+    return await this.get<CiliumIoV2CiliumNodeConfigList>(path, null, null, opts);
+  }
+  async listCiliumIoV2CiliumNode(params: ListCiliumIoV2CiliumNodeRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNodeList> {
+    const path = `/apis/cilium.io/v2/ciliumnodes`;
+    return await this.get<CiliumIoV2CiliumNodeList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2CiliumNode(params: CreateCiliumIoV2CiliumNodeRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNode> {
+    const path = `/apis/cilium.io/v2/ciliumnodes`;
+    return await this.post<CiliumIoV2CiliumNode>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CollectionCiliumNode(params: DeleteCiliumIoV2CollectionCiliumNodeRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/ciliumnodes`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2CiliumNode(params: ReadCiliumIoV2CiliumNodeRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNode> {
+    const path = `/apis/cilium.io/v2/ciliumnodes/${params.path.name}`;
+    return await this.get<CiliumIoV2CiliumNode>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2CiliumNode(params: ReplaceCiliumIoV2CiliumNodeRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNode> {
+    const path = `/apis/cilium.io/v2/ciliumnodes/${params.path.name}`;
+    return await this.put<CiliumIoV2CiliumNode>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CiliumNode(params: DeleteCiliumIoV2CiliumNodeRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/ciliumnodes/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2CiliumNode(params: PatchCiliumIoV2CiliumNodeRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNode> {
+    const path = `/apis/cilium.io/v2/ciliumnodes/${params.path.name}`;
+    return await this.patch<CiliumIoV2CiliumNode>(path, params.query, params.body, opts);
+  }
+  async readCiliumIoV2CiliumNodeStatus(params: ReadCiliumIoV2CiliumNodeStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNode> {
+    const path = `/apis/cilium.io/v2/ciliumnodes/${params.path.name}/status`;
+    return await this.get<CiliumIoV2CiliumNode>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2CiliumNodeStatus(params: ReplaceCiliumIoV2CiliumNodeStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNode> {
+    const path = `/apis/cilium.io/v2/ciliumnodes/${params.path.name}/status`;
+    return await this.put<CiliumIoV2CiliumNode>(path, params.query, params.body, opts);
+  }
+  async patchCiliumIoV2CiliumNodeStatus(params: PatchCiliumIoV2CiliumNodeStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNode> {
+    const path = `/apis/cilium.io/v2/ciliumnodes/${params.path.name}/status`;
+    return await this.patch<CiliumIoV2CiliumNode>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2NamespacedCiliumEndpoint(params: ListCiliumIoV2NamespacedCiliumEndpointRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumEndpointList> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumendpoints`;
+    return await this.get<CiliumIoV2CiliumEndpointList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2NamespacedCiliumEndpoint(params: CreateCiliumIoV2NamespacedCiliumEndpointRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumEndpoint> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumendpoints`;
+    return await this.post<CiliumIoV2CiliumEndpoint>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CollectionNamespacedCiliumEndpoint(params: DeleteCiliumIoV2CollectionNamespacedCiliumEndpointRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumendpoints`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2NamespacedCiliumEndpoint(params: ReadCiliumIoV2NamespacedCiliumEndpointRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumEndpoint> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumendpoints/${params.path.name}`;
+    return await this.get<CiliumIoV2CiliumEndpoint>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2NamespacedCiliumEndpoint(params: ReplaceCiliumIoV2NamespacedCiliumEndpointRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumEndpoint> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumendpoints/${params.path.name}`;
+    return await this.put<CiliumIoV2CiliumEndpoint>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2NamespacedCiliumEndpoint(params: DeleteCiliumIoV2NamespacedCiliumEndpointRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumendpoints/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2NamespacedCiliumEndpoint(params: PatchCiliumIoV2NamespacedCiliumEndpointRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumEndpoint> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumendpoints/${params.path.name}`;
+    return await this.patch<CiliumIoV2CiliumEndpoint>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2NamespacedCiliumNetworkPolicy(params: ListCiliumIoV2NamespacedCiliumNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNetworkPolicyList> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnetworkpolicies`;
+    return await this.get<CiliumIoV2CiliumNetworkPolicyList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2NamespacedCiliumNetworkPolicy(params: CreateCiliumIoV2NamespacedCiliumNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnetworkpolicies`;
+    return await this.post<CiliumIoV2CiliumNetworkPolicy>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CollectionNamespacedCiliumNetworkPolicy(params: DeleteCiliumIoV2CollectionNamespacedCiliumNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnetworkpolicies`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2NamespacedCiliumNetworkPolicy(params: ReadCiliumIoV2NamespacedCiliumNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnetworkpolicies/${params.path.name}`;
+    return await this.get<CiliumIoV2CiliumNetworkPolicy>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2NamespacedCiliumNetworkPolicy(params: ReplaceCiliumIoV2NamespacedCiliumNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnetworkpolicies/${params.path.name}`;
+    return await this.put<CiliumIoV2CiliumNetworkPolicy>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2NamespacedCiliumNetworkPolicy(params: DeleteCiliumIoV2NamespacedCiliumNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnetworkpolicies/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2NamespacedCiliumNetworkPolicy(params: PatchCiliumIoV2NamespacedCiliumNetworkPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnetworkpolicies/${params.path.name}`;
+    return await this.patch<CiliumIoV2CiliumNetworkPolicy>(path, params.query, params.body, opts);
+  }
+  async readCiliumIoV2NamespacedCiliumNetworkPolicyStatus(params: ReadCiliumIoV2NamespacedCiliumNetworkPolicyStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnetworkpolicies/${params.path.name}/status`;
+    return await this.get<CiliumIoV2CiliumNetworkPolicy>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2NamespacedCiliumNetworkPolicyStatus(params: ReplaceCiliumIoV2NamespacedCiliumNetworkPolicyStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnetworkpolicies/${params.path.name}/status`;
+    return await this.put<CiliumIoV2CiliumNetworkPolicy>(path, params.query, params.body, opts);
+  }
+  async patchCiliumIoV2NamespacedCiliumNetworkPolicyStatus(params: PatchCiliumIoV2NamespacedCiliumNetworkPolicyStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNetworkPolicy> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnetworkpolicies/${params.path.name}/status`;
+    return await this.patch<CiliumIoV2CiliumNetworkPolicy>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2NamespacedCiliumNodeConfig(params: ListCiliumIoV2NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNodeConfigList> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnodeconfigs`;
+    return await this.get<CiliumIoV2CiliumNodeConfigList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2NamespacedCiliumNodeConfig(params: CreateCiliumIoV2NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNodeConfig> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnodeconfigs`;
+    return await this.post<CiliumIoV2CiliumNodeConfig>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2CollectionNamespacedCiliumNodeConfig(params: DeleteCiliumIoV2CollectionNamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnodeconfigs`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2NamespacedCiliumNodeConfig(params: ReadCiliumIoV2NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNodeConfig> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnodeconfigs/${params.path.name}`;
+    return await this.get<CiliumIoV2CiliumNodeConfig>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2NamespacedCiliumNodeConfig(params: ReplaceCiliumIoV2NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNodeConfig> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnodeconfigs/${params.path.name}`;
+    return await this.put<CiliumIoV2CiliumNodeConfig>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2NamespacedCiliumNodeConfig(params: DeleteCiliumIoV2NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnodeconfigs/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2NamespacedCiliumNodeConfig(params: PatchCiliumIoV2NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2CiliumNodeConfig> {
+    const path = `/apis/cilium.io/v2/namespaces/${params.path.namespace}/ciliumnodeconfigs/${params.path.name}`;
+    return await this.patch<CiliumIoV2CiliumNodeConfig>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2alpha1CiliumCIDRGroup(params: ListCiliumIoV2alpha1CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumCIDRGroupList> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumcidrgroups`;
+    return await this.get<CiliumIoV2alpha1CiliumCIDRGroupList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2alpha1CiliumCIDRGroup(params: CreateCiliumIoV2alpha1CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumCIDRGroup> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumcidrgroups`;
+    return await this.post<CiliumIoV2alpha1CiliumCIDRGroup>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2alpha1CollectionCiliumCIDRGroup(params: DeleteCiliumIoV2alpha1CollectionCiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumcidrgroups`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2alpha1CiliumCIDRGroup(params: ReadCiliumIoV2alpha1CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumCIDRGroup> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumcidrgroups/${params.path.name}`;
+    return await this.get<CiliumIoV2alpha1CiliumCIDRGroup>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2alpha1CiliumCIDRGroup(params: ReplaceCiliumIoV2alpha1CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumCIDRGroup> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumcidrgroups/${params.path.name}`;
+    return await this.put<CiliumIoV2alpha1CiliumCIDRGroup>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2alpha1CiliumCIDRGroup(params: DeleteCiliumIoV2alpha1CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumcidrgroups/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2alpha1CiliumCIDRGroup(params: PatchCiliumIoV2alpha1CiliumCIDRGroupRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumCIDRGroup> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumcidrgroups/${params.path.name}`;
+    return await this.patch<CiliumIoV2alpha1CiliumCIDRGroup>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2alpha1CiliumL2AnnouncementPolicy(params: ListCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumL2AnnouncementPolicyList> {
+    const path = `/apis/cilium.io/v2alpha1/ciliuml2announcementpolicies`;
+    return await this.get<CiliumIoV2alpha1CiliumL2AnnouncementPolicyList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2alpha1CiliumL2AnnouncementPolicy(params: CreateCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumL2AnnouncementPolicy> {
+    const path = `/apis/cilium.io/v2alpha1/ciliuml2announcementpolicies`;
+    return await this.post<CiliumIoV2alpha1CiliumL2AnnouncementPolicy>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2alpha1CollectionCiliumL2AnnouncementPolicy(params: DeleteCiliumIoV2alpha1CollectionCiliumL2AnnouncementPolicyRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2alpha1/ciliuml2announcementpolicies`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2alpha1CiliumL2AnnouncementPolicy(params: ReadCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumL2AnnouncementPolicy> {
+    const path = `/apis/cilium.io/v2alpha1/ciliuml2announcementpolicies/${params.path.name}`;
+    return await this.get<CiliumIoV2alpha1CiliumL2AnnouncementPolicy>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2alpha1CiliumL2AnnouncementPolicy(params: ReplaceCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumL2AnnouncementPolicy> {
+    const path = `/apis/cilium.io/v2alpha1/ciliuml2announcementpolicies/${params.path.name}`;
+    return await this.put<CiliumIoV2alpha1CiliumL2AnnouncementPolicy>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2alpha1CiliumL2AnnouncementPolicy(params: DeleteCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2alpha1/ciliuml2announcementpolicies/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2alpha1CiliumL2AnnouncementPolicy(params: PatchCiliumIoV2alpha1CiliumL2AnnouncementPolicyRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumL2AnnouncementPolicy> {
+    const path = `/apis/cilium.io/v2alpha1/ciliuml2announcementpolicies/${params.path.name}`;
+    return await this.patch<CiliumIoV2alpha1CiliumL2AnnouncementPolicy>(path, params.query, params.body, opts);
+  }
+  async readCiliumIoV2alpha1CiliumL2AnnouncementPolicyStatus(params: ReadCiliumIoV2alpha1CiliumL2AnnouncementPolicyStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumL2AnnouncementPolicy> {
+    const path = `/apis/cilium.io/v2alpha1/ciliuml2announcementpolicies/${params.path.name}/status`;
+    return await this.get<CiliumIoV2alpha1CiliumL2AnnouncementPolicy>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2alpha1CiliumL2AnnouncementPolicyStatus(params: ReplaceCiliumIoV2alpha1CiliumL2AnnouncementPolicyStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumL2AnnouncementPolicy> {
+    const path = `/apis/cilium.io/v2alpha1/ciliuml2announcementpolicies/${params.path.name}/status`;
+    return await this.put<CiliumIoV2alpha1CiliumL2AnnouncementPolicy>(path, params.query, params.body, opts);
+  }
+  async patchCiliumIoV2alpha1CiliumL2AnnouncementPolicyStatus(params: PatchCiliumIoV2alpha1CiliumL2AnnouncementPolicyStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumL2AnnouncementPolicy> {
+    const path = `/apis/cilium.io/v2alpha1/ciliuml2announcementpolicies/${params.path.name}/status`;
+    return await this.patch<CiliumIoV2alpha1CiliumL2AnnouncementPolicy>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2alpha1CiliumLoadBalancerIPPool(params: ListCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumLoadBalancerIPPoolList> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumloadbalancerippools`;
+    return await this.get<CiliumIoV2alpha1CiliumLoadBalancerIPPoolList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2alpha1CiliumLoadBalancerIPPool(params: CreateCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumloadbalancerippools`;
+    return await this.post<CiliumIoV2alpha1CiliumLoadBalancerIPPool>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2alpha1CollectionCiliumLoadBalancerIPPool(params: DeleteCiliumIoV2alpha1CollectionCiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumloadbalancerippools`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2alpha1CiliumLoadBalancerIPPool(params: ReadCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumloadbalancerippools/${params.path.name}`;
+    return await this.get<CiliumIoV2alpha1CiliumLoadBalancerIPPool>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2alpha1CiliumLoadBalancerIPPool(params: ReplaceCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumloadbalancerippools/${params.path.name}`;
+    return await this.put<CiliumIoV2alpha1CiliumLoadBalancerIPPool>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2alpha1CiliumLoadBalancerIPPool(params: DeleteCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumloadbalancerippools/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2alpha1CiliumLoadBalancerIPPool(params: PatchCiliumIoV2alpha1CiliumLoadBalancerIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumloadbalancerippools/${params.path.name}`;
+    return await this.patch<CiliumIoV2alpha1CiliumLoadBalancerIPPool>(path, params.query, params.body, opts);
+  }
+  async readCiliumIoV2alpha1CiliumLoadBalancerIPPoolStatus(params: ReadCiliumIoV2alpha1CiliumLoadBalancerIPPoolStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumloadbalancerippools/${params.path.name}/status`;
+    return await this.get<CiliumIoV2alpha1CiliumLoadBalancerIPPool>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2alpha1CiliumLoadBalancerIPPoolStatus(params: ReplaceCiliumIoV2alpha1CiliumLoadBalancerIPPoolStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumloadbalancerippools/${params.path.name}/status`;
+    return await this.put<CiliumIoV2alpha1CiliumLoadBalancerIPPool>(path, params.query, params.body, opts);
+  }
+  async patchCiliumIoV2alpha1CiliumLoadBalancerIPPoolStatus(params: PatchCiliumIoV2alpha1CiliumLoadBalancerIPPoolStatusRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumLoadBalancerIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumloadbalancerippools/${params.path.name}/status`;
+    return await this.patch<CiliumIoV2alpha1CiliumLoadBalancerIPPool>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2alpha1CiliumNodeConfigForAllNamespaces(params: ListCiliumIoV2alpha1CiliumNodeConfigForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumNodeConfigList> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumnodeconfigs`;
+    return await this.get<CiliumIoV2alpha1CiliumNodeConfigList>(path, null, null, opts);
+  }
+  async listCiliumIoV2alpha1CiliumPodIPPool(params: ListCiliumIoV2alpha1CiliumPodIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumPodIPPoolList> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumpodippools`;
+    return await this.get<CiliumIoV2alpha1CiliumPodIPPoolList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2alpha1CiliumPodIPPool(params: CreateCiliumIoV2alpha1CiliumPodIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumPodIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumpodippools`;
+    return await this.post<CiliumIoV2alpha1CiliumPodIPPool>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2alpha1CollectionCiliumPodIPPool(params: DeleteCiliumIoV2alpha1CollectionCiliumPodIPPoolRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumpodippools`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2alpha1CiliumPodIPPool(params: ReadCiliumIoV2alpha1CiliumPodIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumPodIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumpodippools/${params.path.name}`;
+    return await this.get<CiliumIoV2alpha1CiliumPodIPPool>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2alpha1CiliumPodIPPool(params: ReplaceCiliumIoV2alpha1CiliumPodIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumPodIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumpodippools/${params.path.name}`;
+    return await this.put<CiliumIoV2alpha1CiliumPodIPPool>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2alpha1CiliumPodIPPool(params: DeleteCiliumIoV2alpha1CiliumPodIPPoolRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumpodippools/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2alpha1CiliumPodIPPool(params: PatchCiliumIoV2alpha1CiliumPodIPPoolRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumPodIPPool> {
+    const path = `/apis/cilium.io/v2alpha1/ciliumpodippools/${params.path.name}`;
+    return await this.patch<CiliumIoV2alpha1CiliumPodIPPool>(path, params.query, params.body, opts);
+  }
+  async listCiliumIoV2alpha1NamespacedCiliumNodeConfig(params: ListCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumNodeConfigList> {
+    const path = `/apis/cilium.io/v2alpha1/namespaces/${params.path.namespace}/ciliumnodeconfigs`;
+    return await this.get<CiliumIoV2alpha1CiliumNodeConfigList>(path, params.query, null, opts);
+  }
+  async createCiliumIoV2alpha1NamespacedCiliumNodeConfig(params: CreateCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumNodeConfig> {
+    const path = `/apis/cilium.io/v2alpha1/namespaces/${params.path.namespace}/ciliumnodeconfigs`;
+    return await this.post<CiliumIoV2alpha1CiliumNodeConfig>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2alpha1CollectionNamespacedCiliumNodeConfig(params: DeleteCiliumIoV2alpha1CollectionNamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2alpha1/namespaces/${params.path.namespace}/ciliumnodeconfigs`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readCiliumIoV2alpha1NamespacedCiliumNodeConfig(params: ReadCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumNodeConfig> {
+    const path = `/apis/cilium.io/v2alpha1/namespaces/${params.path.namespace}/ciliumnodeconfigs/${params.path.name}`;
+    return await this.get<CiliumIoV2alpha1CiliumNodeConfig>(path, params.query, null, opts);
+  }
+  async replaceCiliumIoV2alpha1NamespacedCiliumNodeConfig(params: ReplaceCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumNodeConfig> {
+    const path = `/apis/cilium.io/v2alpha1/namespaces/${params.path.namespace}/ciliumnodeconfigs/${params.path.name}`;
+    return await this.put<CiliumIoV2alpha1CiliumNodeConfig>(path, params.query, params.body, opts);
+  }
+  async deleteCiliumIoV2alpha1NamespacedCiliumNodeConfig(params: DeleteCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/cilium.io/v2alpha1/namespaces/${params.path.namespace}/ciliumnodeconfigs/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchCiliumIoV2alpha1NamespacedCiliumNodeConfig(params: PatchCiliumIoV2alpha1NamespacedCiliumNodeConfigRequest, opts?: APIClientRequestOpts): Promise<CiliumIoV2alpha1CiliumNodeConfig> {
+    const path = `/apis/cilium.io/v2alpha1/namespaces/${params.path.namespace}/ciliumnodeconfigs/${params.path.name}`;
+    return await this.patch<CiliumIoV2alpha1CiliumNodeConfig>(path, params.query, params.body, opts);
+  }
   async getCoordinationAPIGroup(params: GetCoordinationAPIGroupRequest, opts?: APIClientRequestOpts): Promise<APIGroup> {
     const path = `/apis/coordination.k8s.io/`;
     return await this.get<APIGroup>(path, null, null, opts);
@@ -50608,6 +61023,730 @@ export class KubernetesClient extends APIClient {
     const path = `/apis/flowcontrol.apiserver.k8s.io/v1/watch/prioritylevelconfigurations/${params.path.name}`;
     return await this.get<WatchEvent>(path, null, null, opts);
   }
+  async listGatewayNetworkingV1GatewayClass(params: ListGatewayNetworkingV1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GatewayClassList> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gatewayclasses`;
+    return await this.get<GatewayNetworkingK8sIoV1GatewayClassList>(path, params.query, null, opts);
+  }
+  async createGatewayNetworkingV1GatewayClass(params: CreateGatewayNetworkingV1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gatewayclasses`;
+    return await this.post<GatewayNetworkingK8sIoV1GatewayClass>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1CollectionGatewayClass(params: DeleteGatewayNetworkingV1CollectionGatewayClassRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gatewayclasses`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readGatewayNetworkingV1GatewayClass(params: ReadGatewayNetworkingV1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gatewayclasses/${params.path.name}`;
+    return await this.get<GatewayNetworkingK8sIoV1GatewayClass>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1GatewayClass(params: ReplaceGatewayNetworkingV1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gatewayclasses/${params.path.name}`;
+    return await this.put<GatewayNetworkingK8sIoV1GatewayClass>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1GatewayClass(params: DeleteGatewayNetworkingV1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gatewayclasses/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchGatewayNetworkingV1GatewayClass(params: PatchGatewayNetworkingV1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gatewayclasses/${params.path.name}`;
+    return await this.patch<GatewayNetworkingK8sIoV1GatewayClass>(path, params.query, params.body, opts);
+  }
+  async readGatewayNetworkingV1GatewayClassStatus(params: ReadGatewayNetworkingV1GatewayClassStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gatewayclasses/${params.path.name}/status`;
+    return await this.get<GatewayNetworkingK8sIoV1GatewayClass>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1GatewayClassStatus(params: ReplaceGatewayNetworkingV1GatewayClassStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gatewayclasses/${params.path.name}/status`;
+    return await this.put<GatewayNetworkingK8sIoV1GatewayClass>(path, params.query, params.body, opts);
+  }
+  async patchGatewayNetworkingV1GatewayClassStatus(params: PatchGatewayNetworkingV1GatewayClassStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gatewayclasses/${params.path.name}/status`;
+    return await this.patch<GatewayNetworkingK8sIoV1GatewayClass>(path, params.query, params.body, opts);
+  }
+  async listGatewayNetworkingV1GatewayForAllNamespaces(params: ListGatewayNetworkingV1GatewayForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GatewayList> {
+    const path = `/apis/gateway.networking.k8s.io/v1/gateways`;
+    return await this.get<GatewayNetworkingK8sIoV1GatewayList>(path, null, null, opts);
+  }
+  async listGatewayNetworkingV1GRPCRouteForAllNamespaces(params: ListGatewayNetworkingV1GRPCRouteForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GRPCRouteList> {
+    const path = `/apis/gateway.networking.k8s.io/v1/grpcroutes`;
+    return await this.get<GatewayNetworkingK8sIoV1GRPCRouteList>(path, null, null, opts);
+  }
+  async listGatewayNetworkingV1HTTPRouteForAllNamespaces(params: ListGatewayNetworkingV1HTTPRouteForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1HTTPRouteList> {
+    const path = `/apis/gateway.networking.k8s.io/v1/httproutes`;
+    return await this.get<GatewayNetworkingK8sIoV1HTTPRouteList>(path, null, null, opts);
+  }
+  async listGatewayNetworkingV1NamespacedGateway(params: ListGatewayNetworkingV1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GatewayList> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/gateways`;
+    return await this.get<GatewayNetworkingK8sIoV1GatewayList>(path, params.query, null, opts);
+  }
+  async createGatewayNetworkingV1NamespacedGateway(params: CreateGatewayNetworkingV1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/gateways`;
+    return await this.post<GatewayNetworkingK8sIoV1Gateway>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1CollectionNamespacedGateway(params: DeleteGatewayNetworkingV1CollectionNamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/gateways`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readGatewayNetworkingV1NamespacedGateway(params: ReadGatewayNetworkingV1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/gateways/${params.path.name}`;
+    return await this.get<GatewayNetworkingK8sIoV1Gateway>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1NamespacedGateway(params: ReplaceGatewayNetworkingV1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/gateways/${params.path.name}`;
+    return await this.put<GatewayNetworkingK8sIoV1Gateway>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1NamespacedGateway(params: DeleteGatewayNetworkingV1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/gateways/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchGatewayNetworkingV1NamespacedGateway(params: PatchGatewayNetworkingV1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/gateways/${params.path.name}`;
+    return await this.patch<GatewayNetworkingK8sIoV1Gateway>(path, params.query, params.body, opts);
+  }
+  async readGatewayNetworkingV1NamespacedGatewayStatus(params: ReadGatewayNetworkingV1NamespacedGatewayStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/gateways/${params.path.name}/status`;
+    return await this.get<GatewayNetworkingK8sIoV1Gateway>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1NamespacedGatewayStatus(params: ReplaceGatewayNetworkingV1NamespacedGatewayStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/gateways/${params.path.name}/status`;
+    return await this.put<GatewayNetworkingK8sIoV1Gateway>(path, params.query, params.body, opts);
+  }
+  async patchGatewayNetworkingV1NamespacedGatewayStatus(params: PatchGatewayNetworkingV1NamespacedGatewayStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/gateways/${params.path.name}/status`;
+    return await this.patch<GatewayNetworkingK8sIoV1Gateway>(path, params.query, params.body, opts);
+  }
+  async listGatewayNetworkingV1NamespacedGRPCRoute(params: ListGatewayNetworkingV1NamespacedGRPCRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GRPCRouteList> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/grpcroutes`;
+    return await this.get<GatewayNetworkingK8sIoV1GRPCRouteList>(path, params.query, null, opts);
+  }
+  async createGatewayNetworkingV1NamespacedGRPCRoute(params: CreateGatewayNetworkingV1NamespacedGRPCRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GRPCRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/grpcroutes`;
+    return await this.post<GatewayNetworkingK8sIoV1GRPCRoute>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1CollectionNamespacedGRPCRoute(params: DeleteGatewayNetworkingV1CollectionNamespacedGRPCRouteRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/grpcroutes`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readGatewayNetworkingV1NamespacedGRPCRoute(params: ReadGatewayNetworkingV1NamespacedGRPCRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GRPCRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/grpcroutes/${params.path.name}`;
+    return await this.get<GatewayNetworkingK8sIoV1GRPCRoute>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1NamespacedGRPCRoute(params: ReplaceGatewayNetworkingV1NamespacedGRPCRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GRPCRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/grpcroutes/${params.path.name}`;
+    return await this.put<GatewayNetworkingK8sIoV1GRPCRoute>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1NamespacedGRPCRoute(params: DeleteGatewayNetworkingV1NamespacedGRPCRouteRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/grpcroutes/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchGatewayNetworkingV1NamespacedGRPCRoute(params: PatchGatewayNetworkingV1NamespacedGRPCRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GRPCRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/grpcroutes/${params.path.name}`;
+    return await this.patch<GatewayNetworkingK8sIoV1GRPCRoute>(path, params.query, params.body, opts);
+  }
+  async readGatewayNetworkingV1NamespacedGRPCRouteStatus(params: ReadGatewayNetworkingV1NamespacedGRPCRouteStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GRPCRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/grpcroutes/${params.path.name}/status`;
+    return await this.get<GatewayNetworkingK8sIoV1GRPCRoute>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1NamespacedGRPCRouteStatus(params: ReplaceGatewayNetworkingV1NamespacedGRPCRouteStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GRPCRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/grpcroutes/${params.path.name}/status`;
+    return await this.put<GatewayNetworkingK8sIoV1GRPCRoute>(path, params.query, params.body, opts);
+  }
+  async patchGatewayNetworkingV1NamespacedGRPCRouteStatus(params: PatchGatewayNetworkingV1NamespacedGRPCRouteStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1GRPCRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/grpcroutes/${params.path.name}/status`;
+    return await this.patch<GatewayNetworkingK8sIoV1GRPCRoute>(path, params.query, params.body, opts);
+  }
+  async listGatewayNetworkingV1NamespacedHTTPRoute(params: ListGatewayNetworkingV1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1HTTPRouteList> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/httproutes`;
+    return await this.get<GatewayNetworkingK8sIoV1HTTPRouteList>(path, params.query, null, opts);
+  }
+  async createGatewayNetworkingV1NamespacedHTTPRoute(params: CreateGatewayNetworkingV1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/httproutes`;
+    return await this.post<GatewayNetworkingK8sIoV1HTTPRoute>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1CollectionNamespacedHTTPRoute(params: DeleteGatewayNetworkingV1CollectionNamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/httproutes`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readGatewayNetworkingV1NamespacedHTTPRoute(params: ReadGatewayNetworkingV1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/httproutes/${params.path.name}`;
+    return await this.get<GatewayNetworkingK8sIoV1HTTPRoute>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1NamespacedHTTPRoute(params: ReplaceGatewayNetworkingV1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/httproutes/${params.path.name}`;
+    return await this.put<GatewayNetworkingK8sIoV1HTTPRoute>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1NamespacedHTTPRoute(params: DeleteGatewayNetworkingV1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/httproutes/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchGatewayNetworkingV1NamespacedHTTPRoute(params: PatchGatewayNetworkingV1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/httproutes/${params.path.name}`;
+    return await this.patch<GatewayNetworkingK8sIoV1HTTPRoute>(path, params.query, params.body, opts);
+  }
+  async readGatewayNetworkingV1NamespacedHTTPRouteStatus(params: ReadGatewayNetworkingV1NamespacedHTTPRouteStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/httproutes/${params.path.name}/status`;
+    return await this.get<GatewayNetworkingK8sIoV1HTTPRoute>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1NamespacedHTTPRouteStatus(params: ReplaceGatewayNetworkingV1NamespacedHTTPRouteStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/httproutes/${params.path.name}/status`;
+    return await this.put<GatewayNetworkingK8sIoV1HTTPRoute>(path, params.query, params.body, opts);
+  }
+  async patchGatewayNetworkingV1NamespacedHTTPRouteStatus(params: PatchGatewayNetworkingV1NamespacedHTTPRouteStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1/namespaces/${params.path.namespace}/httproutes/${params.path.name}/status`;
+    return await this.patch<GatewayNetworkingK8sIoV1HTTPRoute>(path, params.query, params.body, opts);
+  }
+  async listGatewayNetworkingV1beta1GatewayClass(params: ListGatewayNetworkingV1beta1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1GatewayClassList> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gatewayclasses`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1GatewayClassList>(path, params.query, null, opts);
+  }
+  async createGatewayNetworkingV1beta1GatewayClass(params: CreateGatewayNetworkingV1beta1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gatewayclasses`;
+    return await this.post<GatewayNetworkingK8sIoV1beta1GatewayClass>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1beta1CollectionGatewayClass(params: DeleteGatewayNetworkingV1beta1CollectionGatewayClassRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gatewayclasses`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readGatewayNetworkingV1beta1GatewayClass(params: ReadGatewayNetworkingV1beta1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gatewayclasses/${params.path.name}`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1GatewayClass>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1beta1GatewayClass(params: ReplaceGatewayNetworkingV1beta1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gatewayclasses/${params.path.name}`;
+    return await this.put<GatewayNetworkingK8sIoV1beta1GatewayClass>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1beta1GatewayClass(params: DeleteGatewayNetworkingV1beta1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gatewayclasses/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchGatewayNetworkingV1beta1GatewayClass(params: PatchGatewayNetworkingV1beta1GatewayClassRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gatewayclasses/${params.path.name}`;
+    return await this.patch<GatewayNetworkingK8sIoV1beta1GatewayClass>(path, params.query, params.body, opts);
+  }
+  async readGatewayNetworkingV1beta1GatewayClassStatus(params: ReadGatewayNetworkingV1beta1GatewayClassStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gatewayclasses/${params.path.name}/status`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1GatewayClass>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1beta1GatewayClassStatus(params: ReplaceGatewayNetworkingV1beta1GatewayClassStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gatewayclasses/${params.path.name}/status`;
+    return await this.put<GatewayNetworkingK8sIoV1beta1GatewayClass>(path, params.query, params.body, opts);
+  }
+  async patchGatewayNetworkingV1beta1GatewayClassStatus(params: PatchGatewayNetworkingV1beta1GatewayClassStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1GatewayClass> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gatewayclasses/${params.path.name}/status`;
+    return await this.patch<GatewayNetworkingK8sIoV1beta1GatewayClass>(path, params.query, params.body, opts);
+  }
+  async listGatewayNetworkingV1beta1GatewayForAllNamespaces(params: ListGatewayNetworkingV1beta1GatewayForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1GatewayList> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/gateways`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1GatewayList>(path, null, null, opts);
+  }
+  async listGatewayNetworkingV1beta1HTTPRouteForAllNamespaces(params: ListGatewayNetworkingV1beta1HTTPRouteForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1HTTPRouteList> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/httproutes`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1HTTPRouteList>(path, null, null, opts);
+  }
+  async listGatewayNetworkingV1beta1NamespacedGateway(params: ListGatewayNetworkingV1beta1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1GatewayList> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/gateways`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1GatewayList>(path, params.query, null, opts);
+  }
+  async createGatewayNetworkingV1beta1NamespacedGateway(params: CreateGatewayNetworkingV1beta1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/gateways`;
+    return await this.post<GatewayNetworkingK8sIoV1beta1Gateway>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1beta1CollectionNamespacedGateway(params: DeleteGatewayNetworkingV1beta1CollectionNamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/gateways`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readGatewayNetworkingV1beta1NamespacedGateway(params: ReadGatewayNetworkingV1beta1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/gateways/${params.path.name}`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1Gateway>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1beta1NamespacedGateway(params: ReplaceGatewayNetworkingV1beta1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/gateways/${params.path.name}`;
+    return await this.put<GatewayNetworkingK8sIoV1beta1Gateway>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1beta1NamespacedGateway(params: DeleteGatewayNetworkingV1beta1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/gateways/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchGatewayNetworkingV1beta1NamespacedGateway(params: PatchGatewayNetworkingV1beta1NamespacedGatewayRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/gateways/${params.path.name}`;
+    return await this.patch<GatewayNetworkingK8sIoV1beta1Gateway>(path, params.query, params.body, opts);
+  }
+  async readGatewayNetworkingV1beta1NamespacedGatewayStatus(params: ReadGatewayNetworkingV1beta1NamespacedGatewayStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/gateways/${params.path.name}/status`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1Gateway>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1beta1NamespacedGatewayStatus(params: ReplaceGatewayNetworkingV1beta1NamespacedGatewayStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/gateways/${params.path.name}/status`;
+    return await this.put<GatewayNetworkingK8sIoV1beta1Gateway>(path, params.query, params.body, opts);
+  }
+  async patchGatewayNetworkingV1beta1NamespacedGatewayStatus(params: PatchGatewayNetworkingV1beta1NamespacedGatewayStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1Gateway> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/gateways/${params.path.name}/status`;
+    return await this.patch<GatewayNetworkingK8sIoV1beta1Gateway>(path, params.query, params.body, opts);
+  }
+  async listGatewayNetworkingV1beta1NamespacedHTTPRoute(params: ListGatewayNetworkingV1beta1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1HTTPRouteList> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/httproutes`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1HTTPRouteList>(path, params.query, null, opts);
+  }
+  async createGatewayNetworkingV1beta1NamespacedHTTPRoute(params: CreateGatewayNetworkingV1beta1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/httproutes`;
+    return await this.post<GatewayNetworkingK8sIoV1beta1HTTPRoute>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1beta1CollectionNamespacedHTTPRoute(params: DeleteGatewayNetworkingV1beta1CollectionNamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/httproutes`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readGatewayNetworkingV1beta1NamespacedHTTPRoute(params: ReadGatewayNetworkingV1beta1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/httproutes/${params.path.name}`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1HTTPRoute>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1beta1NamespacedHTTPRoute(params: ReplaceGatewayNetworkingV1beta1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/httproutes/${params.path.name}`;
+    return await this.put<GatewayNetworkingK8sIoV1beta1HTTPRoute>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1beta1NamespacedHTTPRoute(params: DeleteGatewayNetworkingV1beta1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/httproutes/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchGatewayNetworkingV1beta1NamespacedHTTPRoute(params: PatchGatewayNetworkingV1beta1NamespacedHTTPRouteRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/httproutes/${params.path.name}`;
+    return await this.patch<GatewayNetworkingK8sIoV1beta1HTTPRoute>(path, params.query, params.body, opts);
+  }
+  async readGatewayNetworkingV1beta1NamespacedHTTPRouteStatus(params: ReadGatewayNetworkingV1beta1NamespacedHTTPRouteStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/httproutes/${params.path.name}/status`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1HTTPRoute>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1beta1NamespacedHTTPRouteStatus(params: ReplaceGatewayNetworkingV1beta1NamespacedHTTPRouteStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/httproutes/${params.path.name}/status`;
+    return await this.put<GatewayNetworkingK8sIoV1beta1HTTPRoute>(path, params.query, params.body, opts);
+  }
+  async patchGatewayNetworkingV1beta1NamespacedHTTPRouteStatus(params: PatchGatewayNetworkingV1beta1NamespacedHTTPRouteStatusRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1HTTPRoute> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/httproutes/${params.path.name}/status`;
+    return await this.patch<GatewayNetworkingK8sIoV1beta1HTTPRoute>(path, params.query, params.body, opts);
+  }
+  async listGatewayNetworkingV1beta1NamespacedReferenceGrant(params: ListGatewayNetworkingV1beta1NamespacedReferenceGrantRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1ReferenceGrantList> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/referencegrants`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1ReferenceGrantList>(path, params.query, null, opts);
+  }
+  async createGatewayNetworkingV1beta1NamespacedReferenceGrant(params: CreateGatewayNetworkingV1beta1NamespacedReferenceGrantRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1ReferenceGrant> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/referencegrants`;
+    return await this.post<GatewayNetworkingK8sIoV1beta1ReferenceGrant>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1beta1CollectionNamespacedReferenceGrant(params: DeleteGatewayNetworkingV1beta1CollectionNamespacedReferenceGrantRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/referencegrants`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readGatewayNetworkingV1beta1NamespacedReferenceGrant(params: ReadGatewayNetworkingV1beta1NamespacedReferenceGrantRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1ReferenceGrant> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/referencegrants/${params.path.name}`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1ReferenceGrant>(path, params.query, null, opts);
+  }
+  async replaceGatewayNetworkingV1beta1NamespacedReferenceGrant(params: ReplaceGatewayNetworkingV1beta1NamespacedReferenceGrantRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1ReferenceGrant> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/referencegrants/${params.path.name}`;
+    return await this.put<GatewayNetworkingK8sIoV1beta1ReferenceGrant>(path, params.query, params.body, opts);
+  }
+  async deleteGatewayNetworkingV1beta1NamespacedReferenceGrant(params: DeleteGatewayNetworkingV1beta1NamespacedReferenceGrantRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/referencegrants/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchGatewayNetworkingV1beta1NamespacedReferenceGrant(params: PatchGatewayNetworkingV1beta1NamespacedReferenceGrantRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1ReferenceGrant> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/namespaces/${params.path.namespace}/referencegrants/${params.path.name}`;
+    return await this.patch<GatewayNetworkingK8sIoV1beta1ReferenceGrant>(path, params.query, params.body, opts);
+  }
+  async listGatewayNetworkingV1beta1ReferenceGrantForAllNamespaces(params: ListGatewayNetworkingV1beta1ReferenceGrantForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<GatewayNetworkingK8sIoV1beta1ReferenceGrantList> {
+    const path = `/apis/gateway.networking.k8s.io/v1beta1/referencegrants`;
+    return await this.get<GatewayNetworkingK8sIoV1beta1ReferenceGrantList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1AccessControlPolicy(params: ListHubTraefikIoV1alpha1AccessControlPolicyRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AccessControlPolicyList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/accesscontrolpolicies`;
+    return await this.get<HubTraefikIoV1alpha1AccessControlPolicyList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1AccessControlPolicy(params: CreateHubTraefikIoV1alpha1AccessControlPolicyRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AccessControlPolicy> {
+    const path = `/apis/hub.traefik.io/v1alpha1/accesscontrolpolicies`;
+    return await this.post<HubTraefikIoV1alpha1AccessControlPolicy>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionAccessControlPolicy(params: DeleteHubTraefikIoV1alpha1CollectionAccessControlPolicyRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/accesscontrolpolicies`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1AccessControlPolicy(params: ReadHubTraefikIoV1alpha1AccessControlPolicyRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AccessControlPolicy> {
+    const path = `/apis/hub.traefik.io/v1alpha1/accesscontrolpolicies/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1AccessControlPolicy>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1AccessControlPolicy(params: ReplaceHubTraefikIoV1alpha1AccessControlPolicyRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AccessControlPolicy> {
+    const path = `/apis/hub.traefik.io/v1alpha1/accesscontrolpolicies/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1AccessControlPolicy>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1AccessControlPolicy(params: DeleteHubTraefikIoV1alpha1AccessControlPolicyRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/accesscontrolpolicies/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1AccessControlPolicy(params: PatchHubTraefikIoV1alpha1AccessControlPolicyRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AccessControlPolicy> {
+    const path = `/apis/hub.traefik.io/v1alpha1/accesscontrolpolicies/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1AccessControlPolicy>(path, params.query, params.body, opts);
+  }
+  async listHubTraefikIoV1alpha1AIServiceForAllNamespaces(params: ListHubTraefikIoV1alpha1AIServiceForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AIServiceList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/aiservices`;
+    return await this.get<HubTraefikIoV1alpha1AIServiceList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1APIAccessForAllNamespaces(params: ListHubTraefikIoV1alpha1APIAccessForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIAccessList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/apiaccesses`;
+    return await this.get<HubTraefikIoV1alpha1APIAccessList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1APIBundleForAllNamespaces(params: ListHubTraefikIoV1alpha1APIBundleForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIBundleList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/apibundles`;
+    return await this.get<HubTraefikIoV1alpha1APIBundleList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1APICatalogItemForAllNamespaces(params: ListHubTraefikIoV1alpha1APICatalogItemForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APICatalogItemList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/apicatalogitems`;
+    return await this.get<HubTraefikIoV1alpha1APICatalogItemList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1APIPlanForAllNamespaces(params: ListHubTraefikIoV1alpha1APIPlanForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPlanList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/apiplans`;
+    return await this.get<HubTraefikIoV1alpha1APIPlanList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1APIPortalForAllNamespaces(params: ListHubTraefikIoV1alpha1APIPortalForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPortalList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/apiportals`;
+    return await this.get<HubTraefikIoV1alpha1APIPortalList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1APIRateLimitForAllNamespaces(params: ListHubTraefikIoV1alpha1APIRateLimitForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIRateLimitList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/apiratelimits`;
+    return await this.get<HubTraefikIoV1alpha1APIRateLimitList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1APIForAllNamespaces(params: ListHubTraefikIoV1alpha1APIForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/apis`;
+    return await this.get<HubTraefikIoV1alpha1APIList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1APIVersionForAllNamespaces(params: ListHubTraefikIoV1alpha1APIVersionForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIVersionList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/apiversions`;
+    return await this.get<HubTraefikIoV1alpha1APIVersionList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1ManagedSubscriptionForAllNamespaces(params: ListHubTraefikIoV1alpha1ManagedSubscriptionForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1ManagedSubscriptionList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/managedsubscriptions`;
+    return await this.get<HubTraefikIoV1alpha1ManagedSubscriptionList>(path, null, null, opts);
+  }
+  async listHubTraefikIoV1alpha1NamespacedAIService(params: ListHubTraefikIoV1alpha1NamespacedAIServiceRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AIServiceList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/aiservices`;
+    return await this.get<HubTraefikIoV1alpha1AIServiceList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1NamespacedAIService(params: CreateHubTraefikIoV1alpha1NamespacedAIServiceRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AIService> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/aiservices`;
+    return await this.post<HubTraefikIoV1alpha1AIService>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionNamespacedAIService(params: DeleteHubTraefikIoV1alpha1CollectionNamespacedAIServiceRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/aiservices`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1NamespacedAIService(params: ReadHubTraefikIoV1alpha1NamespacedAIServiceRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AIService> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/aiservices/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1AIService>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1NamespacedAIService(params: ReplaceHubTraefikIoV1alpha1NamespacedAIServiceRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AIService> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/aiservices/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1AIService>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1NamespacedAIService(params: DeleteHubTraefikIoV1alpha1NamespacedAIServiceRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/aiservices/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1NamespacedAIService(params: PatchHubTraefikIoV1alpha1NamespacedAIServiceRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1AIService> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/aiservices/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1AIService>(path, params.query, params.body, opts);
+  }
+  async listHubTraefikIoV1alpha1NamespacedAPIAccess(params: ListHubTraefikIoV1alpha1NamespacedAPIAccessRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIAccessList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiaccesses`;
+    return await this.get<HubTraefikIoV1alpha1APIAccessList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1NamespacedAPIAccess(params: CreateHubTraefikIoV1alpha1NamespacedAPIAccessRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIAccess> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiaccesses`;
+    return await this.post<HubTraefikIoV1alpha1APIAccess>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionNamespacedAPIAccess(params: DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIAccessRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiaccesses`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1NamespacedAPIAccess(params: ReadHubTraefikIoV1alpha1NamespacedAPIAccessRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIAccess> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiaccesses/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1APIAccess>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1NamespacedAPIAccess(params: ReplaceHubTraefikIoV1alpha1NamespacedAPIAccessRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIAccess> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiaccesses/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1APIAccess>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1NamespacedAPIAccess(params: DeleteHubTraefikIoV1alpha1NamespacedAPIAccessRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiaccesses/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1NamespacedAPIAccess(params: PatchHubTraefikIoV1alpha1NamespacedAPIAccessRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIAccess> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiaccesses/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1APIAccess>(path, params.query, params.body, opts);
+  }
+  async listHubTraefikIoV1alpha1NamespacedAPIBundle(params: ListHubTraefikIoV1alpha1NamespacedAPIBundleRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIBundleList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apibundles`;
+    return await this.get<HubTraefikIoV1alpha1APIBundleList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1NamespacedAPIBundle(params: CreateHubTraefikIoV1alpha1NamespacedAPIBundleRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIBundle> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apibundles`;
+    return await this.post<HubTraefikIoV1alpha1APIBundle>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionNamespacedAPIBundle(params: DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIBundleRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apibundles`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1NamespacedAPIBundle(params: ReadHubTraefikIoV1alpha1NamespacedAPIBundleRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIBundle> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apibundles/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1APIBundle>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1NamespacedAPIBundle(params: ReplaceHubTraefikIoV1alpha1NamespacedAPIBundleRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIBundle> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apibundles/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1APIBundle>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1NamespacedAPIBundle(params: DeleteHubTraefikIoV1alpha1NamespacedAPIBundleRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apibundles/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1NamespacedAPIBundle(params: PatchHubTraefikIoV1alpha1NamespacedAPIBundleRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIBundle> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apibundles/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1APIBundle>(path, params.query, params.body, opts);
+  }
+  async listHubTraefikIoV1alpha1NamespacedAPICatalogItem(params: ListHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APICatalogItemList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apicatalogitems`;
+    return await this.get<HubTraefikIoV1alpha1APICatalogItemList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1NamespacedAPICatalogItem(params: CreateHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APICatalogItem> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apicatalogitems`;
+    return await this.post<HubTraefikIoV1alpha1APICatalogItem>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionNamespacedAPICatalogItem(params: DeleteHubTraefikIoV1alpha1CollectionNamespacedAPICatalogItemRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apicatalogitems`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1NamespacedAPICatalogItem(params: ReadHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APICatalogItem> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apicatalogitems/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1APICatalogItem>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1NamespacedAPICatalogItem(params: ReplaceHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APICatalogItem> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apicatalogitems/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1APICatalogItem>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1NamespacedAPICatalogItem(params: DeleteHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apicatalogitems/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1NamespacedAPICatalogItem(params: PatchHubTraefikIoV1alpha1NamespacedAPICatalogItemRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APICatalogItem> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apicatalogitems/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1APICatalogItem>(path, params.query, params.body, opts);
+  }
+  async listHubTraefikIoV1alpha1NamespacedAPIPlan(params: ListHubTraefikIoV1alpha1NamespacedAPIPlanRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPlanList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiplans`;
+    return await this.get<HubTraefikIoV1alpha1APIPlanList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1NamespacedAPIPlan(params: CreateHubTraefikIoV1alpha1NamespacedAPIPlanRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPlan> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiplans`;
+    return await this.post<HubTraefikIoV1alpha1APIPlan>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionNamespacedAPIPlan(params: DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIPlanRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiplans`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1NamespacedAPIPlan(params: ReadHubTraefikIoV1alpha1NamespacedAPIPlanRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPlan> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiplans/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1APIPlan>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1NamespacedAPIPlan(params: ReplaceHubTraefikIoV1alpha1NamespacedAPIPlanRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPlan> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiplans/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1APIPlan>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1NamespacedAPIPlan(params: DeleteHubTraefikIoV1alpha1NamespacedAPIPlanRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiplans/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1NamespacedAPIPlan(params: PatchHubTraefikIoV1alpha1NamespacedAPIPlanRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPlan> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiplans/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1APIPlan>(path, params.query, params.body, opts);
+  }
+  async listHubTraefikIoV1alpha1NamespacedAPIPortal(params: ListHubTraefikIoV1alpha1NamespacedAPIPortalRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPortalList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiportals`;
+    return await this.get<HubTraefikIoV1alpha1APIPortalList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1NamespacedAPIPortal(params: CreateHubTraefikIoV1alpha1NamespacedAPIPortalRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPortal> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiportals`;
+    return await this.post<HubTraefikIoV1alpha1APIPortal>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionNamespacedAPIPortal(params: DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIPortalRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiportals`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1NamespacedAPIPortal(params: ReadHubTraefikIoV1alpha1NamespacedAPIPortalRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPortal> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiportals/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1APIPortal>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1NamespacedAPIPortal(params: ReplaceHubTraefikIoV1alpha1NamespacedAPIPortalRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPortal> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiportals/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1APIPortal>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1NamespacedAPIPortal(params: DeleteHubTraefikIoV1alpha1NamespacedAPIPortalRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiportals/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1NamespacedAPIPortal(params: PatchHubTraefikIoV1alpha1NamespacedAPIPortalRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIPortal> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiportals/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1APIPortal>(path, params.query, params.body, opts);
+  }
+  async listHubTraefikIoV1alpha1NamespacedAPIRateLimit(params: ListHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIRateLimitList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiratelimits`;
+    return await this.get<HubTraefikIoV1alpha1APIRateLimitList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1NamespacedAPIRateLimit(params: CreateHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIRateLimit> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiratelimits`;
+    return await this.post<HubTraefikIoV1alpha1APIRateLimit>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionNamespacedAPIRateLimit(params: DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIRateLimitRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiratelimits`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1NamespacedAPIRateLimit(params: ReadHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIRateLimit> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiratelimits/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1APIRateLimit>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1NamespacedAPIRateLimit(params: ReplaceHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIRateLimit> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiratelimits/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1APIRateLimit>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1NamespacedAPIRateLimit(params: DeleteHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiratelimits/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1NamespacedAPIRateLimit(params: PatchHubTraefikIoV1alpha1NamespacedAPIRateLimitRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIRateLimit> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiratelimits/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1APIRateLimit>(path, params.query, params.body, opts);
+  }
+  async listHubTraefikIoV1alpha1NamespacedAPI(params: ListHubTraefikIoV1alpha1NamespacedAPIRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apis`;
+    return await this.get<HubTraefikIoV1alpha1APIList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1NamespacedAPI(params: CreateHubTraefikIoV1alpha1NamespacedAPIRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1API> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apis`;
+    return await this.post<HubTraefikIoV1alpha1API>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionNamespacedAPI(params: DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apis`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1NamespacedAPI(params: ReadHubTraefikIoV1alpha1NamespacedAPIRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1API> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apis/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1API>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1NamespacedAPI(params: ReplaceHubTraefikIoV1alpha1NamespacedAPIRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1API> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apis/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1API>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1NamespacedAPI(params: DeleteHubTraefikIoV1alpha1NamespacedAPIRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apis/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1NamespacedAPI(params: PatchHubTraefikIoV1alpha1NamespacedAPIRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1API> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apis/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1API>(path, params.query, params.body, opts);
+  }
+  async listHubTraefikIoV1alpha1NamespacedAPIVersion(params: ListHubTraefikIoV1alpha1NamespacedAPIVersionRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIVersionList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiversions`;
+    return await this.get<HubTraefikIoV1alpha1APIVersionList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1NamespacedAPIVersion(params: CreateHubTraefikIoV1alpha1NamespacedAPIVersionRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIVersion> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiversions`;
+    return await this.post<HubTraefikIoV1alpha1APIVersion>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionNamespacedAPIVersion(params: DeleteHubTraefikIoV1alpha1CollectionNamespacedAPIVersionRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiversions`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1NamespacedAPIVersion(params: ReadHubTraefikIoV1alpha1NamespacedAPIVersionRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIVersion> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiversions/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1APIVersion>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1NamespacedAPIVersion(params: ReplaceHubTraefikIoV1alpha1NamespacedAPIVersionRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIVersion> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiversions/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1APIVersion>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1NamespacedAPIVersion(params: DeleteHubTraefikIoV1alpha1NamespacedAPIVersionRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiversions/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1NamespacedAPIVersion(params: PatchHubTraefikIoV1alpha1NamespacedAPIVersionRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1APIVersion> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/apiversions/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1APIVersion>(path, params.query, params.body, opts);
+  }
+  async listHubTraefikIoV1alpha1NamespacedManagedSubscription(params: ListHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1ManagedSubscriptionList> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/managedsubscriptions`;
+    return await this.get<HubTraefikIoV1alpha1ManagedSubscriptionList>(path, params.query, null, opts);
+  }
+  async createHubTraefikIoV1alpha1NamespacedManagedSubscription(params: CreateHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1ManagedSubscription> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/managedsubscriptions`;
+    return await this.post<HubTraefikIoV1alpha1ManagedSubscription>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1CollectionNamespacedManagedSubscription(params: DeleteHubTraefikIoV1alpha1CollectionNamespacedManagedSubscriptionRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/managedsubscriptions`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readHubTraefikIoV1alpha1NamespacedManagedSubscription(params: ReadHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1ManagedSubscription> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/managedsubscriptions/${params.path.name}`;
+    return await this.get<HubTraefikIoV1alpha1ManagedSubscription>(path, params.query, null, opts);
+  }
+  async replaceHubTraefikIoV1alpha1NamespacedManagedSubscription(params: ReplaceHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1ManagedSubscription> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/managedsubscriptions/${params.path.name}`;
+    return await this.put<HubTraefikIoV1alpha1ManagedSubscription>(path, params.query, params.body, opts);
+  }
+  async deleteHubTraefikIoV1alpha1NamespacedManagedSubscription(params: DeleteHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/managedsubscriptions/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchHubTraefikIoV1alpha1NamespacedManagedSubscription(params: PatchHubTraefikIoV1alpha1NamespacedManagedSubscriptionRequest, opts?: APIClientRequestOpts): Promise<HubTraefikIoV1alpha1ManagedSubscription> {
+    const path = `/apis/hub.traefik.io/v1alpha1/namespaces/${params.path.namespace}/managedsubscriptions/${params.path.name}`;
+    return await this.patch<HubTraefikIoV1alpha1ManagedSubscription>(path, params.query, params.body, opts);
+  }
+  async listMinioMinIoV2NamespacedTenant(params: ListMinioMinIoV2NamespacedTenantRequest, opts?: APIClientRequestOpts): Promise<MinioMinIoV2TenantList> {
+    const path = `/apis/minio.min.io/v2/namespaces/${params.path.namespace}/tenants`;
+    return await this.get<MinioMinIoV2TenantList>(path, params.query, null, opts);
+  }
+  async createMinioMinIoV2NamespacedTenant(params: CreateMinioMinIoV2NamespacedTenantRequest, opts?: APIClientRequestOpts): Promise<MinioMinIoV2Tenant> {
+    const path = `/apis/minio.min.io/v2/namespaces/${params.path.namespace}/tenants`;
+    return await this.post<MinioMinIoV2Tenant>(path, params.query, params.body, opts);
+  }
+  async deleteMinioMinIoV2CollectionNamespacedTenant(params: DeleteMinioMinIoV2CollectionNamespacedTenantRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/minio.min.io/v2/namespaces/${params.path.namespace}/tenants`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readMinioMinIoV2NamespacedTenant(params: ReadMinioMinIoV2NamespacedTenantRequest, opts?: APIClientRequestOpts): Promise<MinioMinIoV2Tenant> {
+    const path = `/apis/minio.min.io/v2/namespaces/${params.path.namespace}/tenants/${params.path.name}`;
+    return await this.get<MinioMinIoV2Tenant>(path, params.query, null, opts);
+  }
+  async replaceMinioMinIoV2NamespacedTenant(params: ReplaceMinioMinIoV2NamespacedTenantRequest, opts?: APIClientRequestOpts): Promise<MinioMinIoV2Tenant> {
+    const path = `/apis/minio.min.io/v2/namespaces/${params.path.namespace}/tenants/${params.path.name}`;
+    return await this.put<MinioMinIoV2Tenant>(path, params.query, params.body, opts);
+  }
+  async deleteMinioMinIoV2NamespacedTenant(params: DeleteMinioMinIoV2NamespacedTenantRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/minio.min.io/v2/namespaces/${params.path.namespace}/tenants/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchMinioMinIoV2NamespacedTenant(params: PatchMinioMinIoV2NamespacedTenantRequest, opts?: APIClientRequestOpts): Promise<MinioMinIoV2Tenant> {
+    const path = `/apis/minio.min.io/v2/namespaces/${params.path.namespace}/tenants/${params.path.name}`;
+    return await this.patch<MinioMinIoV2Tenant>(path, params.query, params.body, opts);
+  }
+  async readMinioMinIoV2NamespacedTenantStatus(params: ReadMinioMinIoV2NamespacedTenantStatusRequest, opts?: APIClientRequestOpts): Promise<MinioMinIoV2Tenant> {
+    const path = `/apis/minio.min.io/v2/namespaces/${params.path.namespace}/tenants/${params.path.name}/status`;
+    return await this.get<MinioMinIoV2Tenant>(path, params.query, null, opts);
+  }
+  async replaceMinioMinIoV2NamespacedTenantStatus(params: ReplaceMinioMinIoV2NamespacedTenantStatusRequest, opts?: APIClientRequestOpts): Promise<MinioMinIoV2Tenant> {
+    const path = `/apis/minio.min.io/v2/namespaces/${params.path.namespace}/tenants/${params.path.name}/status`;
+    return await this.put<MinioMinIoV2Tenant>(path, params.query, params.body, opts);
+  }
+  async patchMinioMinIoV2NamespacedTenantStatus(params: PatchMinioMinIoV2NamespacedTenantStatusRequest, opts?: APIClientRequestOpts): Promise<MinioMinIoV2Tenant> {
+    const path = `/apis/minio.min.io/v2/namespaces/${params.path.namespace}/tenants/${params.path.name}/status`;
+    return await this.patch<MinioMinIoV2Tenant>(path, params.query, params.body, opts);
+  }
+  async listMinioMinIoV2TenantForAllNamespaces(params: ListMinioMinIoV2TenantForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<MinioMinIoV2TenantList> {
+    const path = `/apis/minio.min.io/v2/tenants`;
+    return await this.get<MinioMinIoV2TenantList>(path, null, null, opts);
+  }
   async listMonitoringCoreosComV1AlertmanagerForAllNamespaces(params: ListMonitoringCoreosComV1AlertmanagerForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1AlertmanagerList> {
     const path = `/apis/monitoring.coreos.com/v1/alertmanagers`;
     return await this.get<MonitoringCoreosComV1AlertmanagerList>(path, null, null, opts);
@@ -50692,18 +61831,6 @@ export class KubernetesClient extends APIClient {
     const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/podmonitors/${params.path.name}`;
     return await this.patch<MonitoringCoreosComV1PodMonitor>(path, params.query, params.body, opts);
   }
-  async readMonitoringCoreosComV1NamespacedPodMonitorStatus(params: ReadMonitoringCoreosComV1NamespacedPodMonitorStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PodMonitor> {
-    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/podmonitors/${params.path.name}/status`;
-    return await this.get<MonitoringCoreosComV1PodMonitor>(path, params.query, null, opts);
-  }
-  async replaceMonitoringCoreosComV1NamespacedPodMonitorStatus(params: ReplaceMonitoringCoreosComV1NamespacedPodMonitorStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PodMonitor> {
-    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/podmonitors/${params.path.name}/status`;
-    return await this.put<MonitoringCoreosComV1PodMonitor>(path, params.query, params.body, opts);
-  }
-  async patchMonitoringCoreosComV1NamespacedPodMonitorStatus(params: PatchMonitoringCoreosComV1NamespacedPodMonitorStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PodMonitor> {
-    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/podmonitors/${params.path.name}/status`;
-    return await this.patch<MonitoringCoreosComV1PodMonitor>(path, params.query, params.body, opts);
-  }
   async listMonitoringCoreosComV1NamespacedProbe(params: ListMonitoringCoreosComV1NamespacedProbeRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1ProbeList> {
     const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/probes`;
     return await this.get<MonitoringCoreosComV1ProbeList>(path, params.query, null, opts);
@@ -50730,18 +61857,6 @@ export class KubernetesClient extends APIClient {
   }
   async patchMonitoringCoreosComV1NamespacedProbe(params: PatchMonitoringCoreosComV1NamespacedProbeRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1Probe> {
     const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/probes/${params.path.name}`;
-    return await this.patch<MonitoringCoreosComV1Probe>(path, params.query, params.body, opts);
-  }
-  async readMonitoringCoreosComV1NamespacedProbeStatus(params: ReadMonitoringCoreosComV1NamespacedProbeStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1Probe> {
-    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/probes/${params.path.name}/status`;
-    return await this.get<MonitoringCoreosComV1Probe>(path, params.query, null, opts);
-  }
-  async replaceMonitoringCoreosComV1NamespacedProbeStatus(params: ReplaceMonitoringCoreosComV1NamespacedProbeStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1Probe> {
-    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/probes/${params.path.name}/status`;
-    return await this.put<MonitoringCoreosComV1Probe>(path, params.query, params.body, opts);
-  }
-  async patchMonitoringCoreosComV1NamespacedProbeStatus(params: PatchMonitoringCoreosComV1NamespacedProbeStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1Probe> {
-    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/probes/${params.path.name}/status`;
     return await this.patch<MonitoringCoreosComV1Probe>(path, params.query, params.body, opts);
   }
   async listMonitoringCoreosComV1NamespacedPrometheus(params: ListMonitoringCoreosComV1NamespacedPrometheusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PrometheusList> {
@@ -50822,18 +61937,6 @@ export class KubernetesClient extends APIClient {
   }
   async patchMonitoringCoreosComV1NamespacedPrometheusRule(params: PatchMonitoringCoreosComV1NamespacedPrometheusRuleRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PrometheusRule> {
     const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/prometheusrules/${params.path.name}`;
-    return await this.patch<MonitoringCoreosComV1PrometheusRule>(path, params.query, params.body, opts);
-  }
-  async readMonitoringCoreosComV1NamespacedPrometheusRuleStatus(params: ReadMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PrometheusRule> {
-    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/prometheusrules/${params.path.name}/status`;
-    return await this.get<MonitoringCoreosComV1PrometheusRule>(path, params.query, null, opts);
-  }
-  async replaceMonitoringCoreosComV1NamespacedPrometheusRuleStatus(params: ReplaceMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PrometheusRule> {
-    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/prometheusrules/${params.path.name}/status`;
-    return await this.put<MonitoringCoreosComV1PrometheusRule>(path, params.query, params.body, opts);
-  }
-  async patchMonitoringCoreosComV1NamespacedPrometheusRuleStatus(params: PatchMonitoringCoreosComV1NamespacedPrometheusRuleStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1PrometheusRule> {
-    const path = `/apis/monitoring.coreos.com/v1/namespaces/${params.path.namespace}/prometheusrules/${params.path.name}/status`;
     return await this.patch<MonitoringCoreosComV1PrometheusRule>(path, params.query, params.body, opts);
   }
   async listMonitoringCoreosComV1NamespacedServiceMonitor(params: ListMonitoringCoreosComV1NamespacedServiceMonitorRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1ServiceMonitorList> {
@@ -50972,18 +62075,6 @@ export class KubernetesClient extends APIClient {
     const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/alertmanagerconfigs/${params.path.name}`;
     return await this.patch<MonitoringCoreosComV1alpha1AlertmanagerConfig>(path, params.query, params.body, opts);
   }
-  async readMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatus(params: ReadMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1AlertmanagerConfig> {
-    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/alertmanagerconfigs/${params.path.name}/status`;
-    return await this.get<MonitoringCoreosComV1alpha1AlertmanagerConfig>(path, params.query, null, opts);
-  }
-  async replaceMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatus(params: ReplaceMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1AlertmanagerConfig> {
-    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/alertmanagerconfigs/${params.path.name}/status`;
-    return await this.put<MonitoringCoreosComV1alpha1AlertmanagerConfig>(path, params.query, params.body, opts);
-  }
-  async patchMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatus(params: PatchMonitoringCoreosComV1alpha1NamespacedAlertmanagerConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1AlertmanagerConfig> {
-    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/alertmanagerconfigs/${params.path.name}/status`;
-    return await this.patch<MonitoringCoreosComV1alpha1AlertmanagerConfig>(path, params.query, params.body, opts);
-  }
   async listMonitoringCoreosComV1alpha1NamespacedPrometheusAgent(params: ListMonitoringCoreosComV1alpha1NamespacedPrometheusAgentRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1PrometheusAgentList> {
     const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/prometheusagents`;
     return await this.get<MonitoringCoreosComV1alpha1PrometheusAgentList>(path, params.query, null, opts);
@@ -51062,18 +62153,6 @@ export class KubernetesClient extends APIClient {
   }
   async patchMonitoringCoreosComV1alpha1NamespacedScrapeConfig(params: PatchMonitoringCoreosComV1alpha1NamespacedScrapeConfigRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1ScrapeConfig> {
     const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/scrapeconfigs/${params.path.name}`;
-    return await this.patch<MonitoringCoreosComV1alpha1ScrapeConfig>(path, params.query, params.body, opts);
-  }
-  async readMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatus(params: ReadMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1ScrapeConfig> {
-    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/scrapeconfigs/${params.path.name}/status`;
-    return await this.get<MonitoringCoreosComV1alpha1ScrapeConfig>(path, params.query, null, opts);
-  }
-  async replaceMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatus(params: ReplaceMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1ScrapeConfig> {
-    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/scrapeconfigs/${params.path.name}/status`;
-    return await this.put<MonitoringCoreosComV1alpha1ScrapeConfig>(path, params.query, params.body, opts);
-  }
-  async patchMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatus(params: PatchMonitoringCoreosComV1alpha1NamespacedScrapeConfigStatusRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1ScrapeConfig> {
-    const path = `/apis/monitoring.coreos.com/v1alpha1/namespaces/${params.path.namespace}/scrapeconfigs/${params.path.name}/status`;
     return await this.patch<MonitoringCoreosComV1alpha1ScrapeConfig>(path, params.query, params.body, opts);
   }
   async listMonitoringCoreosComV1alpha1PrometheusAgentForAllNamespaces(params: ListMonitoringCoreosComV1alpha1PrometheusAgentForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<MonitoringCoreosComV1alpha1PrometheusAgentList> {
@@ -52628,6 +63707,94 @@ export class KubernetesClient extends APIClient {
     const path = `/apis/storage.k8s.io/v1/watch/volumeattachments/${params.path.name}`;
     return await this.get<WatchEvent>(path, null, null, opts);
   }
+  async listStsMinIoV1alpha1NamespacedPolicyBinding(params: ListStsMinIoV1alpha1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1alpha1PolicyBindingList> {
+    const path = `/apis/sts.min.io/v1alpha1/namespaces/${params.path.namespace}/policybindings`;
+    return await this.get<StsMinIoV1alpha1PolicyBindingList>(path, params.query, null, opts);
+  }
+  async createStsMinIoV1alpha1NamespacedPolicyBinding(params: CreateStsMinIoV1alpha1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1alpha1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1alpha1/namespaces/${params.path.namespace}/policybindings`;
+    return await this.post<StsMinIoV1alpha1PolicyBinding>(path, params.query, params.body, opts);
+  }
+  async deleteStsMinIoV1alpha1CollectionNamespacedPolicyBinding(params: DeleteStsMinIoV1alpha1CollectionNamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/sts.min.io/v1alpha1/namespaces/${params.path.namespace}/policybindings`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readStsMinIoV1alpha1NamespacedPolicyBinding(params: ReadStsMinIoV1alpha1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1alpha1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1alpha1/namespaces/${params.path.namespace}/policybindings/${params.path.name}`;
+    return await this.get<StsMinIoV1alpha1PolicyBinding>(path, params.query, null, opts);
+  }
+  async replaceStsMinIoV1alpha1NamespacedPolicyBinding(params: ReplaceStsMinIoV1alpha1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1alpha1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1alpha1/namespaces/${params.path.namespace}/policybindings/${params.path.name}`;
+    return await this.put<StsMinIoV1alpha1PolicyBinding>(path, params.query, params.body, opts);
+  }
+  async deleteStsMinIoV1alpha1NamespacedPolicyBinding(params: DeleteStsMinIoV1alpha1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/sts.min.io/v1alpha1/namespaces/${params.path.namespace}/policybindings/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchStsMinIoV1alpha1NamespacedPolicyBinding(params: PatchStsMinIoV1alpha1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1alpha1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1alpha1/namespaces/${params.path.namespace}/policybindings/${params.path.name}`;
+    return await this.patch<StsMinIoV1alpha1PolicyBinding>(path, params.query, params.body, opts);
+  }
+  async readStsMinIoV1alpha1NamespacedPolicyBindingStatus(params: ReadStsMinIoV1alpha1NamespacedPolicyBindingStatusRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1alpha1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1alpha1/namespaces/${params.path.namespace}/policybindings/${params.path.name}/status`;
+    return await this.get<StsMinIoV1alpha1PolicyBinding>(path, params.query, null, opts);
+  }
+  async replaceStsMinIoV1alpha1NamespacedPolicyBindingStatus(params: ReplaceStsMinIoV1alpha1NamespacedPolicyBindingStatusRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1alpha1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1alpha1/namespaces/${params.path.namespace}/policybindings/${params.path.name}/status`;
+    return await this.put<StsMinIoV1alpha1PolicyBinding>(path, params.query, params.body, opts);
+  }
+  async patchStsMinIoV1alpha1NamespacedPolicyBindingStatus(params: PatchStsMinIoV1alpha1NamespacedPolicyBindingStatusRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1alpha1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1alpha1/namespaces/${params.path.namespace}/policybindings/${params.path.name}/status`;
+    return await this.patch<StsMinIoV1alpha1PolicyBinding>(path, params.query, params.body, opts);
+  }
+  async listStsMinIoV1alpha1PolicyBindingForAllNamespaces(params: ListStsMinIoV1alpha1PolicyBindingForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1alpha1PolicyBindingList> {
+    const path = `/apis/sts.min.io/v1alpha1/policybindings`;
+    return await this.get<StsMinIoV1alpha1PolicyBindingList>(path, null, null, opts);
+  }
+  async listStsMinIoV1beta1NamespacedPolicyBinding(params: ListStsMinIoV1beta1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1beta1PolicyBindingList> {
+    const path = `/apis/sts.min.io/v1beta1/namespaces/${params.path.namespace}/policybindings`;
+    return await this.get<StsMinIoV1beta1PolicyBindingList>(path, params.query, null, opts);
+  }
+  async createStsMinIoV1beta1NamespacedPolicyBinding(params: CreateStsMinIoV1beta1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1beta1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1beta1/namespaces/${params.path.namespace}/policybindings`;
+    return await this.post<StsMinIoV1beta1PolicyBinding>(path, params.query, params.body, opts);
+  }
+  async deleteStsMinIoV1beta1CollectionNamespacedPolicyBinding(params: DeleteStsMinIoV1beta1CollectionNamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/sts.min.io/v1beta1/namespaces/${params.path.namespace}/policybindings`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async readStsMinIoV1beta1NamespacedPolicyBinding(params: ReadStsMinIoV1beta1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1beta1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1beta1/namespaces/${params.path.namespace}/policybindings/${params.path.name}`;
+    return await this.get<StsMinIoV1beta1PolicyBinding>(path, params.query, null, opts);
+  }
+  async replaceStsMinIoV1beta1NamespacedPolicyBinding(params: ReplaceStsMinIoV1beta1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1beta1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1beta1/namespaces/${params.path.namespace}/policybindings/${params.path.name}`;
+    return await this.put<StsMinIoV1beta1PolicyBinding>(path, params.query, params.body, opts);
+  }
+  async deleteStsMinIoV1beta1NamespacedPolicyBinding(params: DeleteStsMinIoV1beta1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<Status> {
+    const path = `/apis/sts.min.io/v1beta1/namespaces/${params.path.namespace}/policybindings/${params.path.name}`;
+    return await this.delete<Status>(path, params.query, null, opts);
+  }
+  async patchStsMinIoV1beta1NamespacedPolicyBinding(params: PatchStsMinIoV1beta1NamespacedPolicyBindingRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1beta1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1beta1/namespaces/${params.path.namespace}/policybindings/${params.path.name}`;
+    return await this.patch<StsMinIoV1beta1PolicyBinding>(path, params.query, params.body, opts);
+  }
+  async readStsMinIoV1beta1NamespacedPolicyBindingStatus(params: ReadStsMinIoV1beta1NamespacedPolicyBindingStatusRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1beta1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1beta1/namespaces/${params.path.namespace}/policybindings/${params.path.name}/status`;
+    return await this.get<StsMinIoV1beta1PolicyBinding>(path, params.query, null, opts);
+  }
+  async replaceStsMinIoV1beta1NamespacedPolicyBindingStatus(params: ReplaceStsMinIoV1beta1NamespacedPolicyBindingStatusRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1beta1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1beta1/namespaces/${params.path.namespace}/policybindings/${params.path.name}/status`;
+    return await this.put<StsMinIoV1beta1PolicyBinding>(path, params.query, params.body, opts);
+  }
+  async patchStsMinIoV1beta1NamespacedPolicyBindingStatus(params: PatchStsMinIoV1beta1NamespacedPolicyBindingStatusRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1beta1PolicyBinding> {
+    const path = `/apis/sts.min.io/v1beta1/namespaces/${params.path.namespace}/policybindings/${params.path.name}/status`;
+    return await this.patch<StsMinIoV1beta1PolicyBinding>(path, params.query, params.body, opts);
+  }
+  async listStsMinIoV1beta1PolicyBindingForAllNamespaces(params: ListStsMinIoV1beta1PolicyBindingForAllNamespacesRequest, opts?: APIClientRequestOpts): Promise<StsMinIoV1beta1PolicyBindingList> {
+    const path = `/apis/sts.min.io/v1beta1/policybindings`;
+    return await this.get<StsMinIoV1beta1PolicyBindingList>(path, null, null, opts);
+  }
   async listTektonDevV1NamespacedPipelineRun(params: ListTektonDevV1NamespacedPipelineRunRequest, opts?: APIClientRequestOpts): Promise<TektonDevV1PipelineRunList> {
     const path = `/apis/tekton.dev/v1/namespaces/${params.path.namespace}/pipelineruns`;
     return await this.get<TektonDevV1PipelineRunList>(path, params.query, null, opts);
@@ -53522,11 +64689,44 @@ export interface ResourceTypeMap {
   "cert-manager.io/v1/Certificate": CertManagerIoV1Certificate;
   "cert-manager.io/v1/Issuer": CertManagerIoV1Issuer;
   "certificates.k8s.io/v1/CertificateSigningRequest": CertificatesK8sIoV1CertificateSigningRequest;
+  "cilium.io/v2/CiliumCIDRGroup": CiliumIoV2CiliumCIDRGroup;
+  "cilium.io/v2/CiliumClusterwideNetworkPolicy": CiliumIoV2CiliumClusterwideNetworkPolicy;
+  "cilium.io/v2/CiliumIdentity": CiliumIoV2CiliumIdentity;
+  "cilium.io/v2/CiliumLoadBalancerIPPool": CiliumIoV2CiliumLoadBalancerIPPool;
+  "cilium.io/v2/CiliumNode": CiliumIoV2CiliumNode;
+  "cilium.io/v2/CiliumEndpoint": CiliumIoV2CiliumEndpoint;
+  "cilium.io/v2/CiliumNetworkPolicy": CiliumIoV2CiliumNetworkPolicy;
+  "cilium.io/v2/CiliumNodeConfig": CiliumIoV2CiliumNodeConfig;
+  "cilium.io/v2alpha1/CiliumCIDRGroup": CiliumIoV2alpha1CiliumCIDRGroup;
+  "cilium.io/v2alpha1/CiliumL2AnnouncementPolicy": CiliumIoV2alpha1CiliumL2AnnouncementPolicy;
+  "cilium.io/v2alpha1/CiliumLoadBalancerIPPool": CiliumIoV2alpha1CiliumLoadBalancerIPPool;
+  "cilium.io/v2alpha1/CiliumPodIPPool": CiliumIoV2alpha1CiliumPodIPPool;
+  "cilium.io/v2alpha1/CiliumNodeConfig": CiliumIoV2alpha1CiliumNodeConfig;
   "coordination.k8s.io/v1/Lease": CoordinationK8sIoV1Lease;
   "discovery.k8s.io/v1/EndpointSlice": DiscoveryK8sIoV1EndpointSlice;
   "events.k8s.io/v1/Event": EventsK8sIoV1Event;
   "flowcontrol.apiserver.k8s.io/v1/FlowSchema": FlowcontrolApiserverK8sIoV1FlowSchema;
   "flowcontrol.apiserver.k8s.io/v1/PriorityLevelConfiguration": FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration;
+  "gateway.networking.k8s.io/v1/GatewayClass": GatewayNetworkingK8sIoV1GatewayClass;
+  "gateway.networking.k8s.io/v1/Gateway": GatewayNetworkingK8sIoV1Gateway;
+  "gateway.networking.k8s.io/v1/GRPCRoute": GatewayNetworkingK8sIoV1GRPCRoute;
+  "gateway.networking.k8s.io/v1/HTTPRoute": GatewayNetworkingK8sIoV1HTTPRoute;
+  "gateway.networking.k8s.io/v1beta1/GatewayClass": GatewayNetworkingK8sIoV1beta1GatewayClass;
+  "gateway.networking.k8s.io/v1beta1/Gateway": GatewayNetworkingK8sIoV1beta1Gateway;
+  "gateway.networking.k8s.io/v1beta1/HTTPRoute": GatewayNetworkingK8sIoV1beta1HTTPRoute;
+  "gateway.networking.k8s.io/v1beta1/ReferenceGrant": GatewayNetworkingK8sIoV1beta1ReferenceGrant;
+  "hub.traefik.io/v1alpha1/AccessControlPolicy": HubTraefikIoV1alpha1AccessControlPolicy;
+  "hub.traefik.io/v1alpha1/AIService": HubTraefikIoV1alpha1AIService;
+  "hub.traefik.io/v1alpha1/APIAccess": HubTraefikIoV1alpha1APIAccess;
+  "hub.traefik.io/v1alpha1/APIBundle": HubTraefikIoV1alpha1APIBundle;
+  "hub.traefik.io/v1alpha1/APICatalogItem": HubTraefikIoV1alpha1APICatalogItem;
+  "hub.traefik.io/v1alpha1/APIPlan": HubTraefikIoV1alpha1APIPlan;
+  "hub.traefik.io/v1alpha1/APIPortal": HubTraefikIoV1alpha1APIPortal;
+  "hub.traefik.io/v1alpha1/APIRateLimit": HubTraefikIoV1alpha1APIRateLimit;
+  "hub.traefik.io/v1alpha1/API": HubTraefikIoV1alpha1API;
+  "hub.traefik.io/v1alpha1/APIVersion": HubTraefikIoV1alpha1APIVersion;
+  "hub.traefik.io/v1alpha1/ManagedSubscription": HubTraefikIoV1alpha1ManagedSubscription;
+  "minio.min.io/v2/Tenant": MinioMinIoV2Tenant;
   "monitoring.coreos.com/v1/Alertmanager": MonitoringCoreosComV1Alertmanager;
   "monitoring.coreos.com/v1/PodMonitor": MonitoringCoreosComV1PodMonitor;
   "monitoring.coreos.com/v1/Probe": MonitoringCoreosComV1Probe;
@@ -53572,6 +64772,8 @@ export interface ResourceTypeMap {
   "storage.k8s.io/v1/CSIStorageCapacity": StorageK8sIoV1CSIStorageCapacity;
   "storage.k8s.io/v1/StorageClass": StorageK8sIoV1StorageClass;
   "storage.k8s.io/v1/VolumeAttachment": StorageK8sIoV1VolumeAttachment;
+  "sts.min.io/v1alpha1/PolicyBinding": StsMinIoV1alpha1PolicyBinding;
+  "sts.min.io/v1beta1/PolicyBinding": StsMinIoV1beta1PolicyBinding;
   "tekton.dev/v1/PipelineRun": TektonDevV1PipelineRun;
   "tekton.dev/v1/Pipeline": TektonDevV1Pipeline;
   "tekton.dev/v1/TaskRun": TektonDevV1TaskRun;
@@ -53604,4 +64806,4 @@ export interface ResourceTypeMap {
   "authorization.k8s.io/v1/SelfSubjectRulesReview": AuthorizationK8sIoV1SelfSubjectRulesReview;
   "authorization.k8s.io/v1/SubjectAccessReview": AuthorizationK8sIoV1SubjectAccessReview;
 }
-export type KubernetesResource = ComponentStatus | ConfigMap | Endpoints | Event | LimitRange | Namespace | Binding | Status | PersistentVolumeClaim | Pod | PodTemplate | ReplicationController | ResourceQuota | Secret | ServiceAccount | Service | Node | PersistentVolume | AcmeCertManagerIoV1Challenge | AcmeCertManagerIoV1Order | AdmissionregistrationK8sIoV1MutatingWebhookConfiguration | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicy | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicyBinding | AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration | ApiextensionsK8sIoV1CustomResourceDefinition | ApiregistrationK8sIoV1APIService | AppsV1ControllerRevision | AppsV1DaemonSet | AppsV1Deployment | AppsV1ReplicaSet | AppsV1StatefulSet | AutoscalingInternalKnativeDevV1alpha1Metric | AutoscalingInternalKnativeDevV1alpha1PodAutoscaler | AutoscalingV1HorizontalPodAutoscaler | AutoscalingV2HorizontalPodAutoscaler | BatchV1CronJob | BatchV1Job | CachingInternalKnativeDevV1alpha1Image | CertManagerIoV1ClusterIssuer | CertManagerIoV1CertificateRequest | CertManagerIoV1Certificate | CertManagerIoV1Issuer | CertificatesK8sIoV1CertificateSigningRequest | CoordinationK8sIoV1Lease | DiscoveryK8sIoV1EndpointSlice | EventsK8sIoV1Event | FlowcontrolApiserverK8sIoV1FlowSchema | FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration | MonitoringCoreosComV1Alertmanager | MonitoringCoreosComV1PodMonitor | MonitoringCoreosComV1Probe | MonitoringCoreosComV1Prometheus | MonitoringCoreosComV1PrometheusRule | MonitoringCoreosComV1ServiceMonitor | MonitoringCoreosComV1ThanosRuler | MonitoringCoreosComV1alpha1AlertmanagerConfig | MonitoringCoreosComV1alpha1PrometheusAgent | MonitoringCoreosComV1alpha1ScrapeConfig | NetworkingInternalKnativeDevV1alpha1ClusterDomainClaim | NetworkingInternalKnativeDevV1alpha1Certificate | NetworkingInternalKnativeDevV1alpha1Ingress | NetworkingInternalKnativeDevV1alpha1ServerlessService | NetworkingK8sIoV1IngressClass | NetworkingK8sIoV1Ingress | NetworkingK8sIoV1NetworkPolicy | NodeK8sIoV1RuntimeClass | PolicyV1PodDisruptionBudget | PostgresqlCnpgIoV1ClusterImageCatalog | PostgresqlCnpgIoV1Backup | PostgresqlCnpgIoV1Cluster | PostgresqlCnpgIoV1Database | PostgresqlCnpgIoV1ImageCatalog | PostgresqlCnpgIoV1Pooler | PostgresqlCnpgIoV1Publication | PostgresqlCnpgIoV1ScheduledBackup | PostgresqlCnpgIoV1Subscription | RbacAuthorizationK8sIoV1ClusterRoleBinding | RbacAuthorizationK8sIoV1ClusterRole | RbacAuthorizationK8sIoV1RoleBinding | RbacAuthorizationK8sIoV1Role | ResolutionTektonDevV1alpha1ResolutionRequest | ResolutionTektonDevV1beta1ResolutionRequest | SchedulingK8sIoV1PriorityClass | ServingKnativeDevV1Configuration | ServingKnativeDevV1Revision | ServingKnativeDevV1Route | ServingKnativeDevV1Service | ServingKnativeDevV1beta1DomainMapping | StorageK8sIoV1CSIDriver | StorageK8sIoV1CSINode | StorageK8sIoV1CSIStorageCapacity | StorageK8sIoV1StorageClass | StorageK8sIoV1VolumeAttachment | TektonDevV1PipelineRun | TektonDevV1Pipeline | TektonDevV1TaskRun | TektonDevV1Task | TektonDevV1alpha1StepAction | TektonDevV1alpha1VerificationPolicy | TektonDevV1beta1CustomRun | TektonDevV1beta1PipelineRun | TektonDevV1beta1Pipeline | TektonDevV1beta1StepAction | TektonDevV1beta1TaskRun | TektonDevV1beta1Task | TraefikIoV1alpha1IngressRoute | TraefikIoV1alpha1IngressRouteTCP | TraefikIoV1alpha1IngressRouteUDP | TraefikIoV1alpha1Middleware | TraefikIoV1alpha1MiddlewareTCP | TraefikIoV1alpha1ServersTransport | TraefikIoV1alpha1ServersTransportTCP | TraefikIoV1alpha1TLSOption | TraefikIoV1alpha1TLSStore | TraefikIoV1alpha1TraefikService | PolicyV1Eviction | AutoscalingV1Scale | AuthenticationK8sIoV1TokenRequest | AuthenticationK8sIoV1SelfSubjectReview | AuthenticationK8sIoV1TokenReview | AuthorizationK8sIoV1LocalSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectRulesReview | AuthorizationK8sIoV1SubjectAccessReview;
+export type KubernetesResource = ComponentStatus | ConfigMap | Endpoints | Event | LimitRange | Namespace | Binding | Status | PersistentVolumeClaim | Pod | PodTemplate | ReplicationController | ResourceQuota | Secret | ServiceAccount | Service | Node | PersistentVolume | AcmeCertManagerIoV1Challenge | AcmeCertManagerIoV1Order | AdmissionregistrationK8sIoV1MutatingWebhookConfiguration | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicy | AdmissionregistrationK8sIoV1ValidatingAdmissionPolicyBinding | AdmissionregistrationK8sIoV1ValidatingWebhookConfiguration | ApiextensionsK8sIoV1CustomResourceDefinition | ApiregistrationK8sIoV1APIService | AppsV1ControllerRevision | AppsV1DaemonSet | AppsV1Deployment | AppsV1ReplicaSet | AppsV1StatefulSet | AutoscalingInternalKnativeDevV1alpha1Metric | AutoscalingInternalKnativeDevV1alpha1PodAutoscaler | AutoscalingV1HorizontalPodAutoscaler | AutoscalingV2HorizontalPodAutoscaler | BatchV1CronJob | BatchV1Job | CachingInternalKnativeDevV1alpha1Image | CertManagerIoV1ClusterIssuer | CertManagerIoV1CertificateRequest | CertManagerIoV1Certificate | CertManagerIoV1Issuer | CertificatesK8sIoV1CertificateSigningRequest | CiliumIoV2CiliumCIDRGroup | CiliumIoV2CiliumClusterwideNetworkPolicy | CiliumIoV2CiliumIdentity | CiliumIoV2CiliumLoadBalancerIPPool | CiliumIoV2CiliumNode | CiliumIoV2CiliumEndpoint | CiliumIoV2CiliumNetworkPolicy | CiliumIoV2CiliumNodeConfig | CiliumIoV2alpha1CiliumCIDRGroup | CiliumIoV2alpha1CiliumL2AnnouncementPolicy | CiliumIoV2alpha1CiliumLoadBalancerIPPool | CiliumIoV2alpha1CiliumPodIPPool | CiliumIoV2alpha1CiliumNodeConfig | CoordinationK8sIoV1Lease | DiscoveryK8sIoV1EndpointSlice | EventsK8sIoV1Event | FlowcontrolApiserverK8sIoV1FlowSchema | FlowcontrolApiserverK8sIoV1PriorityLevelConfiguration | GatewayNetworkingK8sIoV1GatewayClass | GatewayNetworkingK8sIoV1Gateway | GatewayNetworkingK8sIoV1GRPCRoute | GatewayNetworkingK8sIoV1HTTPRoute | GatewayNetworkingK8sIoV1beta1GatewayClass | GatewayNetworkingK8sIoV1beta1Gateway | GatewayNetworkingK8sIoV1beta1HTTPRoute | GatewayNetworkingK8sIoV1beta1ReferenceGrant | HubTraefikIoV1alpha1AccessControlPolicy | HubTraefikIoV1alpha1AIService | HubTraefikIoV1alpha1APIAccess | HubTraefikIoV1alpha1APIBundle | HubTraefikIoV1alpha1APICatalogItem | HubTraefikIoV1alpha1APIPlan | HubTraefikIoV1alpha1APIPortal | HubTraefikIoV1alpha1APIRateLimit | HubTraefikIoV1alpha1API | HubTraefikIoV1alpha1APIVersion | HubTraefikIoV1alpha1ManagedSubscription | MinioMinIoV2Tenant | MonitoringCoreosComV1Alertmanager | MonitoringCoreosComV1PodMonitor | MonitoringCoreosComV1Probe | MonitoringCoreosComV1Prometheus | MonitoringCoreosComV1PrometheusRule | MonitoringCoreosComV1ServiceMonitor | MonitoringCoreosComV1ThanosRuler | MonitoringCoreosComV1alpha1AlertmanagerConfig | MonitoringCoreosComV1alpha1PrometheusAgent | MonitoringCoreosComV1alpha1ScrapeConfig | NetworkingInternalKnativeDevV1alpha1ClusterDomainClaim | NetworkingInternalKnativeDevV1alpha1Certificate | NetworkingInternalKnativeDevV1alpha1Ingress | NetworkingInternalKnativeDevV1alpha1ServerlessService | NetworkingK8sIoV1IngressClass | NetworkingK8sIoV1Ingress | NetworkingK8sIoV1NetworkPolicy | NodeK8sIoV1RuntimeClass | PolicyV1PodDisruptionBudget | PostgresqlCnpgIoV1ClusterImageCatalog | PostgresqlCnpgIoV1Backup | PostgresqlCnpgIoV1Cluster | PostgresqlCnpgIoV1Database | PostgresqlCnpgIoV1ImageCatalog | PostgresqlCnpgIoV1Pooler | PostgresqlCnpgIoV1Publication | PostgresqlCnpgIoV1ScheduledBackup | PostgresqlCnpgIoV1Subscription | RbacAuthorizationK8sIoV1ClusterRoleBinding | RbacAuthorizationK8sIoV1ClusterRole | RbacAuthorizationK8sIoV1RoleBinding | RbacAuthorizationK8sIoV1Role | ResolutionTektonDevV1alpha1ResolutionRequest | ResolutionTektonDevV1beta1ResolutionRequest | SchedulingK8sIoV1PriorityClass | ServingKnativeDevV1Configuration | ServingKnativeDevV1Revision | ServingKnativeDevV1Route | ServingKnativeDevV1Service | ServingKnativeDevV1beta1DomainMapping | StorageK8sIoV1CSIDriver | StorageK8sIoV1CSINode | StorageK8sIoV1CSIStorageCapacity | StorageK8sIoV1StorageClass | StorageK8sIoV1VolumeAttachment | StsMinIoV1alpha1PolicyBinding | StsMinIoV1beta1PolicyBinding | TektonDevV1PipelineRun | TektonDevV1Pipeline | TektonDevV1TaskRun | TektonDevV1Task | TektonDevV1alpha1StepAction | TektonDevV1alpha1VerificationPolicy | TektonDevV1beta1CustomRun | TektonDevV1beta1PipelineRun | TektonDevV1beta1Pipeline | TektonDevV1beta1StepAction | TektonDevV1beta1TaskRun | TektonDevV1beta1Task | TraefikIoV1alpha1IngressRoute | TraefikIoV1alpha1IngressRouteTCP | TraefikIoV1alpha1IngressRouteUDP | TraefikIoV1alpha1Middleware | TraefikIoV1alpha1MiddlewareTCP | TraefikIoV1alpha1ServersTransport | TraefikIoV1alpha1ServersTransportTCP | TraefikIoV1alpha1TLSOption | TraefikIoV1alpha1TLSStore | TraefikIoV1alpha1TraefikService | PolicyV1Eviction | AutoscalingV1Scale | AuthenticationK8sIoV1TokenRequest | AuthenticationK8sIoV1SelfSubjectReview | AuthenticationK8sIoV1TokenReview | AuthorizationK8sIoV1LocalSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectAccessReview | AuthorizationK8sIoV1SelfSubjectRulesReview | AuthorizationK8sIoV1SubjectAccessReview;

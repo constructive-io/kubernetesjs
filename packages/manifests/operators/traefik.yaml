@@ -15922,7 +15922,6 @@ rules:
       - get
       - list
       - watch
-
 ---
 # Source: traefik/templates/rbac/clusterrolebinding.yaml
 kind: ClusterRoleBinding
@@ -16097,7 +16096,6 @@ spec:
         runAsGroup: 65532
         runAsNonRoot: true
         runAsUser: 65532
-
 ---
 # Source: traefik/templates/ingressclass.yaml
 apiVersion: networking.k8s.io/v1
