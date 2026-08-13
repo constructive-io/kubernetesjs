@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/client@1.2.2...@kubernetesjs/client@1.2.3) (2026-08-13)
+
+### Bug Fixes
+
+- **manifests:** knative v1.22.1 only, on a cluster it can actually start on ([a4e658c](https://github.com/constructive-io/kubernetesjs/commit/a4e658cbe7a914717fc6b813b467265c5fd12783))
+
 ## [1.2.2](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/client@1.2.1...@kubernetesjs/client@1.2.2) (2026-08-13)
 
 **Note:** Version bump only for package @kubernetesjs/client

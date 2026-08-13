@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/ops-dashboard@1.2.2...@kubernetesjs/ops-dashboard@1.2.3) (2026-08-13)
+
+**Note:** Version bump only for package @kubernetesjs/ops-dashboard
+
 ## [1.2.2](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/ops-dashboard@1.2.1...@kubernetesjs/ops-dashboard@1.2.2) (2026-08-13)
 
 **Note:** Version bump only for package @kubernetesjs/ops-dashboard
