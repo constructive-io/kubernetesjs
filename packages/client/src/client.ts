@@ -44,9 +44,6 @@ export class Client {
   constructor(ctx: KubernetesContext = {}) {
     this.ctx = ctx;
     this.kubeClient = new KubernetesClient({
-      kubeconfig: ctx.kubeconfig,
-      namespace: ctx.namespace,
-      context: ctx.context,
       restEndpoint: ctx.restEndpoint || 'http://127.0.0.1:8001'
     });
     this.setupClient = new SetupClient(
