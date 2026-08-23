@@ -30,6 +30,9 @@
     "codegen": "ts-node ./scripts/codegen.ts",
     "openapi:fetch": "ts-node ./scripts/fetch-swagger.ts --out ./scripts/swagger.json"
   },
+  "dependencies": {
+    "kubernetesjs": "workspace:^"
+  },
   "devDependencies": {
     "makage": "^0.1.8",
     "schema-sdk": "^0.16.4"

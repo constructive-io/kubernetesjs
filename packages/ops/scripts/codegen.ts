@@ -23,7 +23,7 @@ if (intOrString && typeof intOrString === 'object') {
 const code = generateOpenApiClient(
   {
     ...options,
-    npmApiClient: './client',
+    npmApiClient: 'kubernetesjs/client',
     opsIndex: {
       enabled: true,
       emptyGroupLabel: 'core',
