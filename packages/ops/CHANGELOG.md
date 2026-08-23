@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/ops@1.2.1...@kubernetesjs/ops@1.2.2) (2026-08-23)
+
+### Bug Fixes
+
+- **ops:** keep the ops/client subpath and IngressRoute.ingressClassName ([01aa7b4](https://github.com/constructive-io/kubernetesjs/commit/01aa7b4e972cd7a5a428efb2902931197b499171))
+
 ## [1.2.1](https://github.com/constructive-io/kubernetesjs/compare/@kubernetesjs/ops@1.2.0...@kubernetesjs/ops@1.2.1) (2026-08-23)
 
 **Note:** Version bump only for package @kubernetesjs/ops
