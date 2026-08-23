@@ -35229,6 +35229,7 @@ export interface TraefikIoV1alpha1IngressRoute {
         namespace?: string;
       };
     };
+    ingressClassName?: string;
   };
 }
 /* io.traefik.v1alpha1.IngressRouteList */

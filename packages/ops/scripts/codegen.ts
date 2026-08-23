@@ -20,6 +20,20 @@ if (intOrString && typeof intOrString === 'object') {
   ];
 }
 
+// The vendored spec is a snapshot of one cluster's CRDs, so a field a newer
+// operator release added is missing until the spec is refetched from a cluster
+// running it. Traefik's IngressRoute gained `spec.ingressClassName` in
+// traefik/traefik#12313; keep it regardless of the snapshot's Traefik version.
+const ingressRouteSpec =
+  patchedSchema?.definitions?.['io.traefik.v1alpha1.IngressRoute']?.properties?.spec;
+if (ingressRouteSpec?.properties) {
+  ingressRouteSpec.properties.ingressClassName = {
+    description:
+      'Defines the IngressClass cluster resource to use. It replaces the deprecated kubernetes.io/ingress.class annotation.',
+    type: 'string',
+  };
+}
+
 const code = generateOpenApiClient(
   {
     ...options,
