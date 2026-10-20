@@ -2,6 +2,16 @@ const SA_TOKEN_PATH = '/var/run/secrets/kubernetes.io/serviceaccount/token';
 const SA_CA_PATH = '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt';
 const DEFAULT_ENDPOINT = 'http://127.0.0.1:8001';
 
+// Resolved at runtime so bundlers never see a `node:fs` import: a static
+// `require('node:fs')` fails browser builds that pull in this client.
+function nodeFs(): typeof import('node:fs') {
+  const fs = typeof process !== 'undefined' ? process.getBuiltinModule?.('node:fs') : undefined;
+  if (!fs) {
+    throw new Error('APIClient: node:fs is not available in this runtime');
+  }
+  return fs;
+}
+
 interface RequestOptions<Params> {
   hostname?: string;
   path: string;
@@ -152,8 +162,7 @@ export class APIClient {
    */
   static readServiceAccountToken(path: string = SA_TOKEN_PATH): string | undefined {
     try {
-      const fs = require('node:fs');
-      return fs.readFileSync(path, 'utf-8').trim();
+      return nodeFs().readFileSync(path, 'utf-8').trim();
     } catch {
       return undefined;
     }
@@ -167,8 +176,7 @@ export class APIClient {
    */
   static getServiceAccountCAPath(): string | undefined {
     try {
-      const fs = require('node:fs');
-      fs.accessSync(SA_CA_PATH);
+      nodeFs().accessSync(SA_CA_PATH);
       return SA_CA_PATH;
     } catch {
       return undefined;
