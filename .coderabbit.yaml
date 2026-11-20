@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: en-US
+reviews:
+  profile: chill
+  high_level_summary: true
+  review_status: true
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: false
+  path_filters:
+    - "!pnpm-lock.yaml"
+    - "!**/dist/**"
+    - "!packages/manifests/src/generated/**"
+    - "!packages/kubernetesjs/src/index.ts"
+    - "!packages/react/src/index.ts"
+    - "!**/*-snapshots/**"
+  path_instructions:
+    - path: "packages/**/*.ts"
+      instructions: >-
+        Follow CLAUDE.md. Keep the core client free of runtime dependencies; change codegen scripts or OpenAPI inputs instead of hand-editing generated clients and hooks. Review API naming and IntOrString handling at the generator inputs.
+chat:
+  art: false
